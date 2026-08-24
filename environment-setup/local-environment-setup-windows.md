@@ -4,17 +4,17 @@ Today, we'll be setting up our local development environment for Windows 10. For
 
 ## Table of Contents
 
-* [Table of Contents](local-environment-setup-windows.md#table-of-contents)
-* [WSL](local-environment-setup-windows.md#wsl)
-  * [Enable WSL](local-environment-setup-windows.md#enable-wsl)
-  * [Download WSL](local-environment-setup-windows.md#download-wsl)
-    * [Upgrade from WSL 1 to WSL 2](local-environment-setup-windows.md#upgrade-from-wsl-1-to-wsl-2)
-* [Visual Studio Code, Node, and Your Local Development Environment](local-environment-setup-windows.md#visual-studio-code-node-and-your-local-development-environment)
-  * [Download VSCode for Windows](local-environment-setup-windows.md#download-vscode-for-windows)
-  * [Familiarize yourself with VS Code](local-environment-setup-windows.md#familiarize-yourself-with-vs-code)
-  * [Configure VS Code](local-environment-setup-windows.md#configure-vs-code)
-  * [Download Node and NPM](local-environment-setup-windows.md#download-node-and-npm)
-  * [Set up local Development directory](local-environment-setup-windows.md#set-up-local-development-directory)
+- [Table of Contents](local-environment-setup-windows.md#table-of-contents)
+- [WSL](local-environment-setup-windows.md#wsl)
+  - [Enable WSL](local-environment-setup-windows.md#enable-wsl)
+  - [Download WSL](local-environment-setup-windows.md#download-wsl)
+    - [Upgrade from WSL 1 to WSL 2](local-environment-setup-windows.md#upgrade-from-wsl-1-to-wsl-2)
+- [Visual Studio Code, Node, and Your Local development Environment](local-environment-setup-windows.md#visual-studio-code-node-and-your-local-development-environment)
+  - [Download VSCode for Windows](local-environment-setup-windows.md#download-vscode-for-windows)
+  - [Familiarize yourself with VS Code](local-environment-setup-windows.md#familiarize-yourself-with-vs-code)
+  - [Configure VS Code](local-environment-setup-windows.md#configure-vs-code)
+  - [Download Node and NPM](local-environment-setup-windows.md#download-node-and-npm)
+  - [Set up local development directory](local-environment-setup-windows.md#set-up-local-development-directory)
 
 ## WSL
 
@@ -61,18 +61,18 @@ If it says version 1, follow these steps below.
 
 If the version is 1, you can change it to version 2 with a command like `wsl --set-version [NAME] [VERSION]`.
 
-* For example, to switch to `Ubuntu` version 2, you would use the command `wsl --set-version Ubuntu 2`
+- For example, to switch to `Ubuntu` version 2, you would use the command `wsl --set-version Ubuntu 2`
 
 You should see "Conversion in progress, this may take a few minutes (it can take as long as 30 minutes or more)
 
-* If you see a warning telling you to install/update the WSL 2 kernel, you may be asked to visit https://aka.ms/wsl2kernel. Do so and install the WSL Linux kernel update package for x64 machines.
-* If you see "Please enable the Virtual Machine Platform Windows feature and ensure virtualization is enabled in the BIOS." do the following:
-  * In the Windows search bar, look for "Turn Windows features on or off"
-  * Scroll down and select "Virtual Machine Platform" and then click "Ok"
-  * Reboot your computer.
-  * Re-open Powershell, check the version with `wsl -l -v` and restart these instructions.
+- If you see a warning telling you to install/update the WSL 2 kernel, you may be asked to visit https://aka.ms/wsl2kernel. Do so and install the WSL Linux kernel update package for x64 machines.
+- If you see "Please enable the Virtual Machine Platform Windows feature and ensure virtualization is enabled in the BIOS." do the following:
+  - In the Windows search bar, look for "Turn Windows features on or off"
+  - Scroll down and select "Virtual Machine Platform" and then click "Ok"
+  - Reboot your computer.
+  - Re-open Powershell, check the version with `wsl -l -v` and restart these instructions.
 
-## Visual Studio Code, Node, and Your Local Development Environment
+## Visual Studio Code, Node, and Your Local development Environment
 
 Visual Studio Code is the standard IDE used by developers.
 
@@ -80,9 +80,9 @@ Visual Studio Code is the standard IDE used by developers.
 
 Visit [this web site](https://code.visualstudio.com/) and download VS Code.
 
-* Download the latest build and install it in your PC.
-* Now open VS Code and press **Ctrl + Shift + P** to open the **Command Palette** and search "WSL".
-* Then, select **WSL: Connect to WSL in New Window**. This should open a new VS Code window running using WSL!
+- Download the latest build and install it in your PC.
+- Now open VS Code and press **Ctrl + Shift + P** to open the **Command Palette** and search "WSL".
+- Then, select **WSL: Connect to WSL in New Window**. This should open a new VS Code window running using WSL!
 
 VS Code should automatically detect your WSL installation and suggest an extension.
 
@@ -108,28 +108,27 @@ You should pin Ubuntu Terminal and VS Code to the taskbar since you'll be using 
 
 Now, let's get to know the VS Code layout!
 
-* Your directories and files are in the left panel. You should see your `Development` folder as the root with your sub-directories listed inside.
-* VS Code has an integrated Terminal application that you can use by selecting **Terminal > New Terminal** from the top menu bar.
-* The VS Code Terminal is _exactly_ the same as your Mac "Terminal". Anything you do in Terminal you can do here as well.
+- Your directories and files are in the left panel. You should see your `development` folder as the root with your sub-directories listed inside.
+- VS Code has an integrated Terminal application that you can use by selecting **Terminal > New Terminal** from the top menu bar.
+- The VS Code Terminal is _exactly_ the same as your Mac "Terminal". Anything you do in Terminal you can do here as well.
 
 ![VS Code on MacOS](../.gitbook/assets/vscode.png)
 
 ### Configure VS Code
 
 1.  Go to your settings (click on the cog in the bottom-left corner) and search for "save".
-
-    * Set **Files: Auto Save** to **onFocusChange**
-    * CHECK the checkbox for **Editor: Format On Save**
+    - Set **Files: Auto Save** to **onFocusChange**
+    - CHECK the checkbox for **Editor: Format On Save**
 
     ![Turn on Auto Save and Format on Save.](../.gitbook/assets/vs-code-save-settings.png)
-2.  Stay in your settings and search for "compact folders":
 
-    * UNCHECK the checkbox for **Explorer: Compact Folders**.
+2.  Stay in your settings and search for "compact folders":
+    - UNCHECK the checkbox for **Explorer: Compact Folders**.
 
     ![Turn off Compact Folders](../.gitbook/assets/vs-code-compact-folders.png)
-3.  Finally, in your settings search for "AI Features"
 
-    * CHECK the checkbox for **Chat: Disable AI Features**.
+3.  Finally, in your settings search for "AI Features"
+    - CHECK the checkbox for **Chat: Disable AI Features**.
 
     ![Disable AI Features](../.gitbook/assets/vs-code-disable-ai-features.png)
 
@@ -147,8 +146,8 @@ From the Extensions view you can search for and brose popular extensions.
 
 Start by installing these extensions:
 
-* **Code Spell Checker** — spelling checker for source code
-* **Error Lens** — highlights errors directly in your code
+- **Code Spell Checker** — spelling checker for source code
+- **Error Lens** — highlights errors directly in your code
 
 ### Download Node and NPM
 
@@ -159,16 +158,17 @@ Start by installing these extensions:
     ```bash
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
     ```
-2. Close the Ubuntu terminal and re-open it
-3. Install the "Long Term Support" version of Node by entering the command `nvm install --lts`.
-4. Confirm that you have Node installed by running the command `node --version` and you should see something like `v18.18.0` in response.
-5. Confirm that you have `npm` installed by running the command `npm --version`, and you should see something like `9.8.1` in response.
+
+2.  Close the Ubuntu terminal and re-open it
+3.  Install the "Long Term Support" version of Node by entering the command `nvm install --lts`.
+4.  Confirm that you have Node installed by running the command `node --version` and you should see something like `v18.18.0` in response.
+5.  Confirm that you have `npm` installed by running the command `npm --version`, and you should see something like `9.8.1` in response.
 
 You are now set up with Node and npm!
 
 ![.node](../.gitbook/assets/node.webp)
 
-### Set up local Development directory
+### Set up local development directory
 
 Every time you open your Terminal, you'll be in the home directory. Run `pwd` to see the current path. You'll see `home/your-user-name`.
 
@@ -176,10 +176,10 @@ Every time you open your Terminal, you'll be in the home directory. Run `pwd` to
 
 Using your Terminal as a command line, create a folder structure where you can put all your Marcy Lab code. You can do using the following commands:
 
-* `cd` to navigate to the home directory.
-* `mkdir Development` to create a folder for _all_ your work.
-* `cd Development` where you will create more subdirectories.
-* `mkdir mod-{0..7}` etc... to make multiple folders at once.
-* `ls` to list the contents of `Development/` and ensure the folders were created.
+- `cd` to navigate to the home directory.
+- `mkdir development` to create a folder for _all_ your work.
+- `cd development` where you will create more subdirectories.
+- `mkdir mod-{0..7}` etc... to make multiple folders at once.
+- `ls` to list the contents of `development/` and ensure the folders were created.
 
-Next, type the command `code .` into your terminal and it will open VS Code at the current directory (your "Development" folder). You'll use this command a lot so remember it!
+Next, type the command `code .` into your terminal and it will open VS Code at the current directory (your "development" folder). You'll use this command a lot so remember it!

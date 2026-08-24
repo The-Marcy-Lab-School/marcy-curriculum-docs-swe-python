@@ -4,45 +4,45 @@ In this lesson, we'll learn how software engineers manage the changes to their p
 
 You will be able to…
 
-* Develop mental models for repositories, Git, and GitHub
-* Differentiate between local and remote repos
-* Create a remote repository on Github
-* Know the steps of the Git workflow
+- Develop mental models for repositories, Git, and GitHub
+- Differentiate between local and remote repos
+- Create a remote repository on Github
+- Know the steps of the Git workflow
 
 **Table of Contents**
 
-* [Setup](2-git-github.md#setup)
-* [Key Terms and Commands](2-git-github.md#key-terms-and-commands)
-* [Mental Model: Git & GitHub](2-git-github.md#mental-model-git--github)
-  * [What is Git?](2-git-github.md#what-is-git)
-  * [What is GitHub?](2-git-github.md#what-is-github)
-* [The Git Workflow](2-git-github.md#the-git-workflow)
-  * [`git init` and `git status`](2-git-github.md#git-init-and-git-status)
-  * [`git add`, `git commit`, and `git log`](2-git-github.md#git-add-git-commit-and-git-log)
-* [The GitHub Workflow](2-git-github.md#the-github-workflow)
-  * [1. Create A Repository On GitHub](2-git-github.md#1-create-a-repository-on-github)
-  * [2. Make A Local Clone Of The Repository with `git clone`](2-git-github.md#2-make-a-local-clone-of-the-repository-with-git-clone)
-  * [3. Use the normal Git Workflow](2-git-github.md#3-use-the-normal-git-workflow)
-  * [4. Upload local commits to GitHub with `git push`](2-git-github.md#4-upload-local-commits-to-github-with-git-push)
-* [Summary](2-git-github.md#summary)
+- [Setup](2-git-github.md#setup)
+- [Key Terms and Commands](2-git-github.md#key-terms-and-commands)
+- [Mental Model: Git & GitHub](2-git-github.md#mental-model-git--github)
+  - [What is Git?](2-git-github.md#what-is-git)
+  - [What is GitHub?](2-git-github.md#what-is-github)
+- [The Git Workflow](2-git-github.md#the-git-workflow)
+  - [`git init` and `git status`](2-git-github.md#git-init-and-git-status)
+  - [`git add`, `git commit`, and `git log`](2-git-github.md#git-add-git-commit-and-git-log)
+- [The GitHub Workflow](2-git-github.md#the-github-workflow)
+  - [1. Create A Repository On GitHub](2-git-github.md#1-create-a-repository-on-github)
+  - [2. Make A Local Clone Of The Repository with `git clone`](2-git-github.md#2-make-a-local-clone-of-the-repository-with-git-clone)
+  - [3. Use the normal Git Workflow](2-git-github.md#3-use-the-normal-git-workflow)
+  - [4. Upload local commits to GitHub with `git push`](2-git-github.md#4-upload-local-commits-to-github-with-git-push)
+- [Summary](2-git-github.md#summary)
 
 ## Setup
 
-To follow along in this lecture, navigate to your `Development/mod-0` folder in your VS Code terminal and create a new folder inside called `2-git-lecture`.
+To follow along in this lecture, navigate to your `development/mod-0` folder in your VS Code terminal and create a new folder inside called `2-git-lecture`.
 
 ## Key Terms and Commands
 
 **Key Terms**
 
-* **Repository (or just "repo")** — a centralized location where files are stored and managed. Any folder can be considered a repository.
-* **Git** — A "version control system" that allows us to manage the history of changes made to a repo through commits.
-* **Commit** — A "snapshot" of the changes made to a repo. A commit is typically created when a key milestone is reached in a project (e.g. a feature is completed).
-* **Staging Area** — A place to temporarily store changed files to include in the next commit.
-* **Github** — An online host of git repositories with tools for managing git projects and features for collaboration.
-* **Local Repository** — A repository stored on a developers computer.
-* **Remote Repository** — A repository stored online on a service like GitHub.
-* **Clone** — Copy a remote repo's files and commit history and store them locally (creates a local repository)
-* **Push** — Send a local repo's commit history to a remote repo to be synchronized.
+- **Repository (or just "repo")** — a centralized location where files are stored and managed. Any folder can be considered a repository.
+- **Git** — A "version control system" that allows us to manage the history of changes made to a repo through commits.
+- **Commit** — A "snapshot" of the changes made to a repo. A commit is typically created when a key milestone is reached in a project (e.g. a feature is completed).
+- **Staging Area** — A place to temporarily store changed files to include in the next commit.
+- **Github** — An online host of git repositories with tools for managing git projects and features for collaboration.
+- **Local Repository** — A repository stored on a developers computer.
+- **Remote Repository** — A repository stored online on a service like GitHub.
+- **Clone** — Copy a remote repo's files and commit history and store them locally (creates a local repository)
+- **Push** — Send a local repo's commit history to a remote repo to be synchronized.
 
 **Important Git commands**
 
@@ -52,19 +52,19 @@ To follow along in this lecture, navigate to your `Development/mod-0` folder in 
 
 ```sh
 # add git to the current repo
-git init            
+git init
 # check the status of changed files in the repo
-git status          
+git status
 # add the given file to the staging area
-git add [filename]  
+git add [filename]
 # add all changed files to the staging area
-git add -A          
+git add -A
 # creates a new commit from the staged files
-git commit -m "[commit message]" 
+git commit -m "[commit message]"
 # upload local commits to the remote (GitHub)
-git push            
+git push
 # download a git repository from the remote (GitHub)
-git clone           
+git clone
 ```
 
 ## Mental Model: Git & GitHub
@@ -113,10 +113,10 @@ The camera app may also allow you to backup your photos and save them online "in
 
 Check out the GitHub repository for [Node](https://github.com/nodejs/node). Here are few things to look for:
 
-* It has \~45000 commits, each with clear messages, and made by many different developers.
-* It has dozens of branches, each for a different version of the software.
-* The README on the front page gives a detailed overview of the project and instructions for downloading and contributing.
-* It has been forked (duplicated) over 30 thousand times
+- It has \~45000 commits, each with clear messages, and made by many different developers.
+- It has dozens of branches, each for a different version of the software.
+- The README on the front page gives a detailed overview of the project and instructions for downloading and contributing.
+- It has been forked (duplicated) over 30 thousand times
 
 So, you'll use Git and GitHub in tandem to manage your projects. You'll use Git on your own computers to manage the changes to your project and then you will upload those changes to GitHub.
 
