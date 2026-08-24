@@ -2,30 +2,30 @@
 
 **Table of Contents:**
 
-* [What is a SWE Assignment?](working-with-assignments.md#what-is-a-swe-assignment)
-  * [Tips for Working on SWE Coding Assignments](working-with-assignments.md#tips-for-working-on-swe-coding-assignments)
-  * [Jest and Testing](working-with-assignments.md#jest-and-testing)
-  * [Feedback on Coding Assignments](working-with-assignments.md#feedback-on-coding-assignments)
-* [What is a SWE-SR Assignment?](working-with-assignments.md#what-is-a-swe-sr-assignment)
-  * [Scoring on Short Response Assignments](working-with-assignments.md#scoring-on-short-response-assignments)
-  * [Feedback on Short Response Assignments](working-with-assignments.md#feedback-on-short-response-assignments)
-  * [Examples of Short Responses](working-with-assignments.md#examples-of-short-responses)
-    * [A Response That Could Use Improvement](working-with-assignments.md#a-response-that-could-use-improvement)
-    * [An Exemplar Response](working-with-assignments.md#an-exemplar-response)
-* [Using AI on Assignments](working-with-assignments.md#using-ai-on-assignments)
-* [Submitting On Time](working-with-assignments.md#submitting-on-time)
-* [How to Work On Assignments](working-with-assignments.md#how-to-work-on-assignments)
-  * [Assignment Setup](working-with-assignments.md#assignment-setup)
-  * [Submitting the Assignment](working-with-assignments.md#submitting-the-assignment)
-  * [How to Undo a Commit to Main and Move Commits to Draft](working-with-assignments.md#how-to-undo-a-commit-to-main-and-move-commits-to-draft)
+- [What is a SWE Assignment?](working-with-assignments.md#what-is-a-swe-assignment)
+  - [Tips for Working on SWE Coding Assignments](working-with-assignments.md#tips-for-working-on-swe-coding-assignments)
+  - [Jest and Testing](working-with-assignments.md#jest-and-testing)
+  - [Feedback on Coding Assignments](working-with-assignments.md#feedback-on-coding-assignments)
+- [What is a SWE-SR Assignment?](working-with-assignments.md#what-is-a-swe-sr-assignment)
+  - [Scoring on Short Response Assignments](working-with-assignments.md#scoring-on-short-response-assignments)
+  - [Feedback on Short Response Assignments](working-with-assignments.md#feedback-on-short-response-assignments)
+  - [Examples of Short Responses](working-with-assignments.md#examples-of-short-responses)
+    - [A Response That Could Use Improvement](working-with-assignments.md#a-response-that-could-use-improvement)
+    - [An Exemplar Response](working-with-assignments.md#an-exemplar-response)
+- [Using AI on Assignments](working-with-assignments.md#using-ai-on-assignments)
+- [Submitting On Time](working-with-assignments.md#submitting-on-time)
+- [How to Work On Assignments](working-with-assignments.md#how-to-work-on-assignments)
+  - [Assignment Setup](working-with-assignments.md#assignment-setup)
+  - [Submitting the Assignment](working-with-assignments.md#submitting-the-assignment)
+  - [How to Undo a Commit to Main and Move Commits to Draft](working-with-assignments.md#how-to-undo-a-commit-to-main-and-move-commits-to-draft)
 
 ## What is a SWE Assignment?
 
 Software Engineering (SWE) code assignments are opportunities for you to practice the skills learned in your Software Engineering fellowship at The Marcy Lab School. In these assignments, you can expect to:
 
-* Create code from scratch
-* Modify existing code
-* Debug broken code
+- Create code from scratch
+- Modify existing code
+- Debug broken code
 
 Code assignments will typically have an `src` directory where you will be writing your code. They will also have a `tests` directory with `.spec.js` test files that will automatically test your code each time you push to your repository.
 
@@ -48,35 +48,33 @@ At Marcy, we use [Jest](https://jestjs.io/) to write automated tests for coding 
 A Jest test is written in a file ending in `.spec.js` or `.test.js` and looks like this:
 
 {% code title="circle-helpers.spec.js" lineNumbers="true" %}
+
 ```javascript
 // Import the functions to be tested
-const {
-  getArea,
-  getDiameter,
-  getCircumference
-} = require('./circle-helpers')
+const { getArea, getDiameter, getCircumference } = require("./circle-helpers");
 
 // Create a "Test Suite" for these functions
-describe('Circle Helper Tests', () => {
+describe("Circle Helper Tests", () => {
   // Test the getArea function with a series of expectations
-  test('getArea returns the Area of a circle', () => {
+  test("getArea returns the Area of a circle", () => {
     // Translation: We expect getArea(2) to return Math.PI * 2 * 2
     expect(getArea(2)).toBe(Math.PI * 2 * 2);
     expect(getArea(3)).toBe(Math.PI * 3 * 3);
 
-    // It is useful to think about what should be returned for "bad" inputs. 
+    // It is useful to think about what should be returned for "bad" inputs.
     expect(getArea()).toBe(NaN);
-    expect(getArea('hello')).toBe(NaN);
+    expect(getArea("hello")).toBe(NaN);
   });
 
   // Test the getDiameter function with a series of expectations
-  test('getDiameter returns the Diameter of a circle', () => {
+  test("getDiameter returns the Diameter of a circle", () => {
     // ...tests for getDiameter
   });
 
   // ...more tests
-})
+});
 ```
+
 {% endcode %}
 
 Each assignment will have automated test files in the `tests` directory. They will show you exactly how we expect your functions to behave. **DO NOT MODIFY THE TESTS**.
@@ -95,9 +93,9 @@ After running this command, you will see the following output. Initially, all te
 
 The test output provides some really useful information.
 
-* We can see which tests failed
-* For each failing test, we can see which `expect()` statement failed
-* We can see what the expected value is (`12.566...`) and what our function actually returned (`undefined`).
+- We can see which tests failed
+- For each failing test, we can see which `expect()` statement failed
+- We can see what the expected value is (`12.566...`) and what our function actually returned (`undefined`).
 
 Armed with this information, we can more confidently build our functions knowing that we have a specific set of targets to aim for. Automated tests allow us to repeatedly run our code against the same set of tests until all expectations are met.
 
@@ -121,58 +119,58 @@ To support you in your growth as a software engineer, your instructor may provid
 
 **<details><summary>Code Quality</summary>**
 
-* Adherence to coding standards and conventions (e.g., ESLint rules)
-* Use of proper naming conventions (variables, functions)
-* Avoidance of code duplication
-* Clear and concise comments
+- Adherence to coding standards and conventions (e.g., ESLint rules)
+- Use of proper naming conventions (variables, functions)
+- Avoidance of code duplication
+- Clear and concise comments
 
 </details>
 
 **<details><summary>Functionality</summary>**
 
-* Does the code meet the project requirements?
-* Does it pass all tests, both automated and edge cases?
-* Correctness of input/output handling
+- Does the code meet the project requirements?
+- Does it pass all tests, both automated and edge cases?
+- Correctness of input/output handling
 
 </details>
 
 **<details><summary>Modularity and Reusability</summary>**
 
-* Proper use of functions or classes
-* Modular and reusable code (avoiding large, monolithic functions)
-* Clear separation of logic
+- Proper use of functions or classes
+- Modular and reusable code (avoiding large, monolithic functions)
+- Clear separation of logic
 
 </details>
 
 **<details><summary>Version Control Practices</summary>**
 
-* Meaningful commit messages
-* Consistent use of branches
-* Proper use of pull requests and code reviews
+- Meaningful commit messages
+- Consistent use of branches
+- Proper use of pull requests and code reviews
 
 </details>
 
 **<details><summary>Code Structure and Organization</summary>**
 
-* File structure
-* Separation of concerns
-* Readability and logical flow
+- File structure
+- Separation of concerns
+- Readability and logical flow
 
 </details>
 
 **<details><summary>Error Handling</summary>**
 
-* Proper use of try-catch blocks
-* Graceful handling of unexpected inputs or states
-* Meaningful error messages
+- Proper use of try-catch blocks
+- Graceful handling of unexpected inputs or states
+- Meaningful error messages
 
 </details>
 
 **<details><summary>Efficiency and Performance</summary>**
 
-* Time and space complexity
-* Use of appropriate data structures and algorithms
-* Avoidance of unnecessary computations
+- Time and space complexity
+- Use of appropriate data structures and algorithms
+- Avoidance of unnecessary computations
 
 </details>
 
@@ -182,10 +180,10 @@ Software Engineering (SWE) Short Response (SR) assignments are opportunities to 
 
 In these assignments, you may encounter the following types of prompts:
 
-* Research a new topic and share your findings.
-* Analyze a programming best practice and list its advantages and disadvantages.
-* Compare and contrast approaches for solving a problem and provide an argument in support of one.
-* Teach a piece of syntax or a concept with examples and analogies.
+- Research a new topic and share your findings.
+- Analyze a programming best practice and list its advantages and disadvantages.
+- Compare and contrast approaches for solving a problem and provide an argument in support of one.
+- Teach a piece of syntax or a concept with examples and analogies.
 
 Your intended audience should be someone with _some_ experience programming but who is still learning. As such, strive to be as clear and concise as possible. There is a fine balance between too much information and just enough but when in doubt, provide more details. Examples and analogies can often help!
 
@@ -196,6 +194,7 @@ Short Response prompts will always be found in the `README.md` file of your assi
 For example:
 
 {% code overflow="wrap" %}
+
 ```md
 ## Prompt 2
 
@@ -205,16 +204,17 @@ Modules let us split up our code into separate files. What are benefits of doing
 
 Response here...
 ```
+
 {% endcode %}
 
 ### Scoring on Short Response Assignments
 
 Every response will be given a score from 0-3 using the following scoring system which grades assignments primarily based on accuracy and completion (rather than on writing quality):
 
-* 0 — Did not attempt to answer the prompt
-* 1 — Did not answer all parts of the prompt AND information and examples provided are inaccurate and non-functional.
-* 2 — Did not answer all parts of the prompt OR information and examples provided are inaccurate and non-functional.
-* 3 — Answered all parts of the prompt AND information and examples provided are accurate and functional.
+- 0 — Did not attempt to answer the prompt
+- 1 — Did not answer all parts of the prompt AND information and examples provided are inaccurate and non-functional.
+- 2 — Did not answer all parts of the prompt OR information and examples provided are inaccurate and non-functional.
+- 3 — Answered all parts of the prompt AND information and examples provided are accurate and functional.
 
 We understand that typos and grammar mistakes can happen, however, you will also lose .5 points on any the prompt where typos or grammar errors are "distracting". Distracting meaning that if you saw this on the job, it would have to be retyped for clarification or for the sake of presentation.
 
@@ -232,39 +232,39 @@ While the score will primarily reflect the accuracy and completion of your respo
 
 **<details><summary>Clarity</summary>**
 
-* Is the main idea or goal of the writing clear?
-* Are technical terms defined or explained for the intended audience?
-* Is the writing free of unnecessary jargon or overly complex language?
+- Is the main idea or goal of the writing clear?
+- Are technical terms defined or explained for the intended audience?
+- Is the writing free of unnecessary jargon or overly complex language?
 
 </details>
 
 **<details><summary>Structure</summary>**
 
-* Does the content follow a logical flow?
-* Are headings, subheadings, and paragraphs effectively used to guide the reader?
-* Are transitions between paragraphs / sections smooth and easy to follow?
+- Does the content follow a logical flow?
+- Are headings, subheadings, and paragraphs effectively used to guide the reader?
+- Are transitions between paragraphs / sections smooth and easy to follow?
 
 </details>
 
 **<details><summary>Engagement</summary>**
 
-* Is the tone appropriate for the audience (e.g., conversational vs. formal)?
-* Does the writing capture and maintain interest?
-* Are examples, analogies and visuals used effectively to enhance understanding?
+- Is the tone appropriate for the audience (e.g., conversational vs. formal)?
+- Does the writing capture and maintain interest?
+- Are examples, analogies and visuals used effectively to enhance understanding?
 
 </details>
 
 **<details><summary>Audience Fit</summary>**
 
-* Does the writing match the knowledge level of the intended audience?
-* Are key questions or concerns the audience might have addressed?
+- Does the writing match the knowledge level of the intended audience?
+- Are key questions or concerns the audience might have addressed?
 
 </details>
 
 **<details><summary>Mechanics</summary>**
 
-* Are there grammar, spelling, or punctuation errors?
-* Is the formatting consistent and professional (e.g., indentation in code snippets, use of backticks and code fences to highlight code, use of bolding and italics to emphasize key words)?
+- Are there grammar, spelling, or punctuation errors?
+- Is the formatting consistent and professional (e.g., indentation in code snippets, use of backticks and code fences to highlight code, use of bolding and italics to emphasize key words)?
 
 </details>
 
@@ -292,9 +292,9 @@ if (true) { console.log('this'); } else { console.log('that'); }
 
 For this response, the following feedback would be provided:
 
-* **Clarity**: Without the prompt, it would be hard to know that "they" is referring to `if` and `else` statements at the beginning of the sentence. Additionally, no explanation of the example is provided, leaving open the possibility that the reader misunderstands the syntax.
-* **Engagement**: The example demonstrates the syntax but the example is hard to relate to a real-world scenario for programming.
-* **Mechanics**: By adding in markdown formatting, key terms could be highlighted and the provided code block can be placed inside of a code fence (see below for an example of this). Look at the rendered markdown above to see how the structure of the code block is lost without a code fence.
+- **Clarity**: Without the prompt, it would be hard to know that "they" is referring to `if` and `else` statements at the beginning of the sentence. Additionally, no explanation of the example is provided, leaving open the possibility that the reader misunderstands the syntax.
+- **Engagement**: The example demonstrates the syntax but the example is hard to relate to a real-world scenario for programming.
+- **Mechanics**: By adding in markdown formatting, key terms could be highlighted and the provided code block can be placed inside of a code fence (see below for an example of this). Look at the rendered markdown above to see how the structure of the code block is lost without a code fence.
 
 #### An Exemplar Response
 
@@ -325,7 +325,7 @@ const random = Math.random();
 // Print out "heads" if the random number is between 0.5 and 1
 if (random > 0.5) {
   console.log("heads");
-} 
+}
 // Otherwise, print tails
 else {
   console.log("tails");
@@ -338,11 +338,11 @@ With the addition of the `else` statement, the program will print out `"tails"` 
 
 Among other things, this response does the following things well:
 
-* It answers all parts of the prompt, the information provided is accurate, and the provided code is functional.
-* The writing is easy to understand and information is presented in a logical order.
-* The provided JavaScript example is engaging as it is highly relatable and demonstrates a practical use case of `if` and `else` statements.
-* The example is explained afterwards.
-* It uses markdown formatting to bold key terms and highlight code with backticks (e.g. `event.target`) and wraps the code blocks in code fences. Look at the rendered markdown above to see how the use of markdown dramatically improves the appearance of the writing.
+- It answers all parts of the prompt, the information provided is accurate, and the provided code is functional.
+- The writing is easy to understand and information is presented in a logical order.
+- The provided JavaScript example is engaging as it is highly relatable and demonstrates a practical use case of `if` and `else` statements.
+- The example is explained afterwards.
+- It uses markdown formatting to bold key terms and highlight code with backticks (e.g. `event.target`) and wraps the code blocks in code fences. Look at the rendered markdown above to see how the use of markdown dramatically improves the appearance of the writing.
 
 ## Using AI on Assignments
 
@@ -365,7 +365,7 @@ For short response and coding assignments, you will create a new branch called `
 Below, you will find detailed instructions for setting up your assignments and for submitting your assignments.
 
 {% hint style="info" %}
-Want to learn more about git branching and making Pull Requests? Check out the [Git Branching & PRs lesson](https://marcylabschool.gitbook.io/marcy-lab-school-docs/mod-0-command-line-interfaces-git-and-github/4-git-branching)!
+Want to learn more about git branching and making Pull Requests? Check out the [Git Branching & PRs lesson](https://marcylabschool.gitbook.io/swe/marcy-lab-school-docs/mod-0-command-line-interfaces-git-and-github/4-git-branching)!
 {% endhint %}
 
 ### Assignment Setup
@@ -374,19 +374,20 @@ Upon receiving any assignment, you should do the following setup steps:
 
 1. Accept the assignment using the provided GitHub classroom link. It should generate a repository that is unique to you.
 2. Clone down your repository and `cd` into your repository.
-3.  (_For coding assignments only_) Run the following commands:
+3. (_For coding assignments only_) Run the following commands:
 
-    ```sh
-    npm i
-    npm test
-    ```
+   ```sh
+   npm i
+   npm test
+   ```
 
-    This will install any necessary dependencies and then show you all the tests you need to work on. We may explain each function in the `README.md`, but always run the tests because they are crucial to explaining what the code literally must do.
-4.  Create and checkout a new branch called `draft`
+   This will install any necessary dependencies and then show you all the tests you need to work on. We may explain each function in the `README.md`, but always run the tests because they are crucial to explaining what the code literally must do.
 
-    ```sh
-    git checkout -b draft
-    ```
+4. Create and checkout a new branch called `draft`
+
+   ```sh
+   git checkout -b draft
+   ```
 
 ### Submitting the Assignment
 
@@ -399,22 +400,27 @@ To submit an assignment, do the following:
     git commit -m "Finished up to problem 5"
     git push
     ```
+
 2.  You may need to set an upstream branch using the command
 
     ```sh
     git push --set-upstream origin draft
     ```
+
 3.  Create a pull request using the **Pull Request** tab (and ignore the "Compare & pull request" button).
 
     ![Create a pull request by clicking on the "Pull Request" tab. Ignore the "Compare & pull request" button.](../.gitbook/assets/assignment-create-a-pr.png)
+
 4.  Change the **compare** branch to be your `draft` branch and then click **Create pull request**!
 
     ![Change the compare branch to be your draft branch](../.gitbook/assets/assignment-select-draft-branch.png)
+
 5.  Tag your instructor as a **Reviewer**.
 
     ![alt text](../.gitbook/assets/assignment-tag-reviewer.png)
-6. Submit the URL of the pull request on canvas. The URL should start with `https://github.com` and end with `/pull/NUMBER`, like this: https://github.com/benspector-mls/hello-world/pull/3
-7. Your instructor will provide feedback on GitHub and will either approve your branch to be merged or will request that you resubmit.
+
+6.  Submit the URL of the pull request on canvas. The URL should start with `https://github.com` and end with `/pull/NUMBER`, like this: https://github.com/benspector-mls/hello-world/pull/3
+7.  Your instructor will provide feedback on GitHub and will either approve your branch to be merged or will request that you resubmit.
 
 ### How to Undo a Commit to Main and Move Commits to Draft
 
@@ -431,9 +437,10 @@ First, do the following to create / update your `draft` branch with the latest c
 Then, do the following to revert your `main` branch back to the initial commit:
 
 1. `git checkout main` and `git log` to see the full commit history.
-2.  Find the commit you want to return to. Copy the commit SHA code (a 40-digit code identifying the commit).
+2. Find the commit you want to return to. Copy the commit SHA code (a 40-digit code identifying the commit).
 
-    ![A git log showing the commit SHA codes](../.gitbook/assets/git-log-commit-sha.png)
+   ![A git log showing the commit SHA codes](../.gitbook/assets/git-log-commit-sha.png)
+
 3. Run the command `git reset --hard <commit_sha>` replacing `<commit_sha>` with the copied SHA from the last step. This will return your `main` branch back to that commit.
 
 {% hint style="danger" %}

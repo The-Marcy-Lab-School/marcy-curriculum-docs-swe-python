@@ -2,11 +2,11 @@
 
 **Table of Contents**
 
-* [Review Branching](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#review-branching)
-* [Creating Branches](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#creating-branches)
-* [Commit Changes](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#commit-changes)
-* [Merge before you push](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#merge-before-you-push)
-* [Push and make a PR](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#push-and-make-a-pr)
+- [Review Branching](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#review-branching)
+- [Creating Branches](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#creating-branches)
+- [Commit Changes](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#commit-changes)
+- [Merge before you push](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#merge-before-you-push)
+- [Push and make a PR](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#push-and-make-a-pr)
 
 ## Review Branching
 
@@ -34,8 +34,8 @@ Merge conflicts occur when we have code that could possibly overwrite code that 
 
 The `main` branch should always have working code so as a best practice...
 
-* Don't work off of the `main` branch.
-* Avoid merging code that hasn't been tested or reviewed into the `main` branch.
+- Don't work off of the `main` branch.
+- Avoid merging code that hasn't been tested or reviewed into the `main` branch.
 
 </details>
 
@@ -123,9 +123,9 @@ Once you have merged `main` into your branch, go ahead and `git push`.
 
 > If it is your first time pushing from this branch, you will be told to use the `--set-upstream` flag.
 
-* Go to Github.com and open up your repository.
-* Then, click on the Pull Requests tab to create a new pull request to merge your branch into `main`.
-* Ask your teammates to review your code and then merge!
-* If you want to continue working on your branch, do NOT delete the branch.
+- Go to Github.com and open up your repository.
+- Then, click on the Pull Requests tab to create a new pull request to merge your branch into `main`.
+- Ask your teammates to review your code and then merge!
+- If you want to continue working on your branch, do NOT delete the branch.
 
-Your teammates can then follow the steps listed in [merge before you push](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#merge-before-you-push) to update their local repositories.
+Your teammates can then follow the steps listed in [merge before you push](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#merge-before-you-push) to update their local repositories.

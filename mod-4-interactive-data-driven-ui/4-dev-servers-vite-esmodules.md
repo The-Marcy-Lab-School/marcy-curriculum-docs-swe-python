@@ -6,45 +6,45 @@ Follow along with code examples [here](https://github.com/The-Marcy-Lab-School/4
 
 **Table of Contents**:
 
-* [Key Concepts](4-dev-servers-vite-esmodules.md#key-concepts)
-* [Background](4-dev-servers-vite-esmodules.md#background)
-  * [What is a Server?](4-dev-servers-vite-esmodules.md#what-is-a-server)
-  * [Development Servers and Deployment](4-dev-servers-vite-esmodules.md#development-servers-and-deployment)
-* [What is Vite?](4-dev-servers-vite-esmodules.md#what-is-vite)
-  * [Vite Quick Starter](4-dev-servers-vite-esmodules.md#vite-quick-starter)
-  * [How the Counter App Uses ES Modules](4-dev-servers-vite-esmodules.md#how-the-counter-app-uses-es-modules)
-* [ES Modules: A Closer Look](4-dev-servers-vite-esmodules.md#es-modules-a-closer-look)
-  * [Why Use Modules?](4-dev-servers-vite-esmodules.md#why-use-modules)
-  * [Import and Export Syntax](4-dev-servers-vite-esmodules.md#import-and-export-syntax)
-  * [Try It: Add a Small Module](4-dev-servers-vite-esmodules.md#try-it-add-a-small-module)
-  * [Importing CSS](4-dev-servers-vite-esmodules.md#importing-css)
-  * [Importing JSON and other Files](4-dev-servers-vite-esmodules.md#importing-json-and-other-files)
-* [Challenge](4-dev-servers-vite-esmodules.md#challenge)
-  * [Starter Code](4-dev-servers-vite-esmodules.md#starter-code)
-  * [Task 1: Render Posts Dynamically](4-dev-servers-vite-esmodules.md#task-1-render-posts-dynamically)
-  * [Task 2: Use Modules](4-dev-servers-vite-esmodules.md#task-2-use-modules)
-  * [Solution](4-dev-servers-vite-esmodules.md#solution)
-* [Additional Reading](4-dev-servers-vite-esmodules.md#additional-reading)
-  * [Module Scripts, CORS, and Live Server](4-dev-servers-vite-esmodules.md#module-scripts-cors-and-live-server)
-  * [Vite's Build Tool and Deployment](4-dev-servers-vite-esmodules.md#vites-build-tool-and-deployment)
-  * [Importing Node Modules](4-dev-servers-vite-esmodules.md#importing-node-modules)
+- [Key Concepts](4-dev-servers-vite-esmodules.md#key-concepts)
+- [Background](4-dev-servers-vite-esmodules.md#background)
+  - [What is a Server?](4-dev-servers-vite-esmodules.md#what-is-a-server)
+  - [Development Servers and Deployment](4-dev-servers-vite-esmodules.md#development-servers-and-deployment)
+- [What is Vite?](4-dev-servers-vite-esmodules.md#what-is-vite)
+  - [Vite Quick Starter](4-dev-servers-vite-esmodules.md#vite-quick-starter)
+  - [How the Counter App Uses ES Modules](4-dev-servers-vite-esmodules.md#how-the-counter-app-uses-es-modules)
+- [ES Modules: A Closer Look](4-dev-servers-vite-esmodules.md#es-modules-a-closer-look)
+  - [Why Use Modules?](4-dev-servers-vite-esmodules.md#why-use-modules)
+  - [Import and Export Syntax](4-dev-servers-vite-esmodules.md#import-and-export-syntax)
+  - [Try It: Add a Small Module](4-dev-servers-vite-esmodules.md#try-it-add-a-small-module)
+  - [Importing CSS](4-dev-servers-vite-esmodules.md#importing-css)
+  - [Importing JSON and other Files](4-dev-servers-vite-esmodules.md#importing-json-and-other-files)
+- [Challenge](4-dev-servers-vite-esmodules.md#challenge)
+  - [Starter Code](4-dev-servers-vite-esmodules.md#starter-code)
+  - [Task 1: Render Posts Dynamically](4-dev-servers-vite-esmodules.md#task-1-render-posts-dynamically)
+  - [Task 2: Use Modules](4-dev-servers-vite-esmodules.md#task-2-use-modules)
+  - [Solution](4-dev-servers-vite-esmodules.md#solution)
+- [Additional Reading](4-dev-servers-vite-esmodules.md#additional-reading)
+  - [Module Scripts, CORS, and Live Server](4-dev-servers-vite-esmodules.md#module-scripts-cors-and-live-server)
+  - [Vite's Build Tool and Deployment](4-dev-servers-vite-esmodules.md#vites-build-tool-and-deployment)
+  - [Importing Node Modules](4-dev-servers-vite-esmodules.md#importing-node-modules)
 
 ## Key Concepts
 
-* **Server** — Any computer that stores, manages, and shares resources over the internet.
-* **Client** — Any computer that requests resources from a server.
-* **HTTP** — Hypertext Transfer Protocol. The protocol used to transfer data between two computers over the internet.
-* **Deploy** — To transfer web application files from one's own computer to a server for the purposes of distribution.
-* **Development Server** — A program that runs on a developer's computer to simulate a deployed project.
-* **ES Modules** — The syntax supported by browsers for organizing code into modules. Lets you use `import` and `export` to share values between files instead of relying on the global namespace.
-* **Module Script** — A script tag with `type="module"`. Enables ES module syntax, loads only the entry file (other files load via imports), and waits for the DOM before running. Requires the page to be served over `http://` (not `file://`) due to CORS.
-* **CORS (Cross-Origin Resource Sharing)** — A browser security feature that restricts webpages from loading resources from a different origin than the one that served the page. Opening HTML via `file://` is treated as a different origin than your own `.js` files, so module loading (and `fetch`) fail until you use a development server.
+- **Server** — Any computer that stores, manages, and shares resources over the internet.
+- **Client** — Any computer that requests resources from a server.
+- **HTTP** — Hypertext Transfer Protocol. The protocol used to transfer data between two computers over the internet.
+- **Deploy** — To transfer web application files from one's own computer to a server for the purposes of distribution.
+- **Development Server** — A program that runs on a developer's computer to simulate a deployed project.
+- **ES Modules** — The syntax supported by browsers for organizing code into modules. Lets you use `import` and `export` to share values between files instead of relying on the global namespace.
+- **Module Script** — A script tag with `type="module"`. Enables ES module syntax, loads only the entry file (other files load via imports), and waits for the DOM before running. Requires the page to be served over `http://` (not `file://`) due to CORS.
+- **CORS (Cross-Origin Resource Sharing)** — A browser security feature that restricts webpages from loading resources from a different origin than the one that served the page. Opening HTML via `file://` is treated as a different origin than your own `.js` files, so module loading (and `fetch`) fail until you use a development server.
 
 **Key Syntax**
 
-* **Default export** — Export the single most important value from a file: `export default theMainFunction;`
-* **Named export** — Export one of many values: `export const oneOfMany = () => {};` or `export anotherOfMany;`
-* **Importing** — You must include the `.js` extension in browser module paths: `import theMainFunction from './the-main-function.js';` and `import { oneOfMany, anotherOfMany } from './named-exports.js';`
+- **Default export** — Export the single most important value from a file: `export default theMainFunction;`
+- **Named export** — Export one of many values: `export const oneOfMany = () => {};` or `export anotherOfMany;`
+- **Importing** — You must include the `.js` extension in browser module paths: `import theMainFunction from './the-main-function.js';` and `import { oneOfMany, anotherOfMany } from './named-exports.js';`
 
 ## Background
 
@@ -89,9 +89,9 @@ With a **local development server**, we can simulate the HTTP protocol to access
 {% hint style="info" %}
 The standard domain name and IP address of a local development server are:
 
-* Domain Name: `http://localhost`
-* IP Address: `127.0.0.1`
-{% endhint %}
+- Domain Name: `http://localhost`
+- IP Address: `127.0.0.1`
+  {% endhint %}
 
 There are important differences between how the browser treats websites served via the `file://` and `http://` protocols. Specifically, the browser prevents us from doing these two things when using the `file://` protocol:
 
@@ -112,9 +112,9 @@ According to the [Vite](https://vite.dev/guide/#getting-started) documentation:
 
 Vite provides a few features that are of great use to us when building web applications:
 
-* A **development server** to serve local files over HTTP and avoid CORS errors. It also comes with "hot reloading" (you don't have to refresh to see your changes).
-* A **project starter template** for quickly getting a project started, organized with ES modules.
-* A **build command that bundles your code**, pre-configured to output highly optimized static assets for production. We'll learn more about this when we are deploying projects.
+- A **development server** to serve local files over HTTP and avoid CORS errors. It also comes with "hot reloading" (you don't have to refresh to see your changes).
+- A **project starter template** for quickly getting a project started, organized with ES modules.
+- A **build command that bundles your code**, pre-configured to output highly optimized static assets for production. We'll learn more about this when we are deploying projects.
 
 Once we learn how Vite works, it can dramatically improve our development and deployment experience. It will be slow at first to use a new development tool, however the long-term benefits often outweigh the short-term frustrations so be patient!
 
@@ -134,30 +134,33 @@ To start a new project using Vite, do the following:
     ```
 
     This will create a folder called `app` that will serve as the "development" version of the application (later, when you are ready to deploy, you will also create a "production" version).
-2. Open up the `app` directory and look around. Vite will have created the following files and directories for you to get started:
-   * `package.json`: defines the scripts and dependencies of your project. Notably, when you run `npm i` in your `app` directory, it will install the `vite` command-line tool. It's the first place to look when working on a new project.
-     * `package-lock.json`: Read more about package lock files [here](https://docs.npmjs.com/cli/v9/configuring-npm/package-lock-json).
-   * `index.html`: the "entry point" of your application. It contains only a `div#app` element and loads the `src/main.js` file. This must remain in the root of your `app` directory.
-   * `.gitignore`: lists filepaths to be ignored when making a commit. Importantly, you'll see that `node_modules/` are ignored.
-   * `public/`: contains files that you want to be publicly accessible. Often, these are images that you reference in your HTML or CSS.
-   * `src/`: contains the JavaScript and CSS that make up your application.
-     * `main.js`: is the "entry point" of your JavaScript code. It **imports** other files—we'll use this to learn how ES modules work.
-     * `style.css`: contains the CSS and is imported into `main.js` (yes, you can import CSS in JavaScript with Vite!).
-     * `counter.js`: defines the counter logic and **exports** a function that `main.js` uses.
-     * `javascript.svg`: a logo used in the starter UI.
+
+2.  Open up the `app` directory and look around. Vite will have created the following files and directories for you to get started:
+    - `package.json`: defines the scripts and dependencies of your project. Notably, when you run `npm i` in your `app` directory, it will install the `vite` command-line tool. It's the first place to look when working on a new project.
+      - `package-lock.json`: Read more about package lock files [here](https://docs.npmjs.com/cli/v9/configuring-npm/package-lock-json).
+    - `index.html`: the "entry point" of your application. It contains only a `div#app` element and loads the `src/main.js` file. This must remain in the root of your `app` directory.
+    - `.gitignore`: lists filepaths to be ignored when making a commit. Importantly, you'll see that `node_modules/` are ignored.
+    - `public/`: contains files that you want to be publicly accessible. Often, these are images that you reference in your HTML or CSS.
+    - `src/`: contains the JavaScript and CSS that make up your application.
+      - `main.js`: is the "entry point" of your JavaScript code. It **imports** other files—we'll use this to learn how ES modules work.
+      - `style.css`: contains the CSS and is imported into `main.js` (yes, you can import CSS in JavaScript with Vite!).
+      - `counter.js`: defines the counter logic and **exports** a function that `main.js` uses.
+      - `javascript.svg`: a logo used in the starter UI.
 3.  `cd` into the `app` directory and install the `vite` command line tool and other dependencies for the project
 
     ```sh
     cd app
     npm i
     ```
+
 4.  Start the Vite development server:
 
     ```sh
     # according to package.json, this runs the vite command
-    npm run dev 
+    npm run dev
     ```
-5. Open up [http://localhost:5173](http://localhost:5173) to view the starter application. As you can see, Vite provides you with a simple counter application to get started.
+
+5.  Open up [http://localhost:5173](http://localhost:5173) to view the starter application. As you can see, Vite provides you with a simple counter application to get started.
 
 ![The Vite starter project is a simple counter application.](../.gitbook/assets/vite-starter-project.png)
 
@@ -195,20 +198,20 @@ We often refer to `main.js` as the **"entry point"**.
 Open `src/main.js`. It might look like this:
 
 ```js
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import "./style.css";
+import javascriptLogo from "./javascript.svg";
+import viteLogo from "/vite.svg";
+import { setupCounter } from "./counter.js";
 
 // ... DOM setup ...
-setupCounter(document.querySelector('#counter'))
+setupCounter(document.querySelector("#counter"));
 ```
 
 The `import` keyword is how we import values when running JavaScript in the browser. It is the equivalent to `require()` in Node.
 
-* `import './style.css'` — loads the CSS (Vite allows importing CSS in JS). No variable name; the import runs for its side effect.
-* `import javascriptLogo from './javascript.svg'` — **default import**: the SVG file exports one value (the URL), so we give it a name.
-* `import { setupCounter } from './counter.js'` — **named import**: `counter.js` exports a function named `setupCounter`, so we pull it out with curly braces.
+- `import './style.css'` — loads the CSS (Vite allows importing CSS in JS). No variable name; the import runs for its side effect.
+- `import javascriptLogo from './javascript.svg'` — **default import**: the SVG file exports one value (the URL), so we give it a name.
+- `import { setupCounter } from './counter.js'` — **named import**: `counter.js` exports a function named `setupCounter`, so we pull it out with curly braces.
 
 With these imports, the code is able to use `setupCounter` to wire up the button without ever touching the global scope—everything comes from _explicit_ imports.
 
@@ -222,13 +225,13 @@ Open `src/counter.js`:
 
 ```js
 export function setupCounter(element) {
-  let counter = 0
+  let counter = 0;
   const setCounter = (count) => {
-    counter = count
-    element.innerHTML = `count is ${counter}`
-  }
-  element.addEventListener('click', () => setCounter(counter + 1))
-  setCounter(0)
+    counter = count;
+    element.innerHTML = `count is ${counter}`;
+  };
+  element.addEventListener("click", () => setCounter(counter + 1));
+  setCounter(0);
 }
 ```
 
@@ -249,9 +252,9 @@ Without modules, you'd load multiple `<script>` tags and rely on each file addin
 
 That leads to:
 
-* Unclear dependencies making it hard to know where a variable comes from
-* Messy global variables with many files mutating the same names.
-* Load order issues (e.g. if `main.js` uses code from `counter.js`, you must load `counter.js` first)
+- Unclear dependencies making it hard to know where a variable comes from
+- Messy global variables with many files mutating the same names.
+- Load order issues (e.g. if `main.js` uses code from `counter.js`, you must load `counter.js` first)
 
 With **ES modules**, you explicitly **export** what you share and **import** what you use. Only the entry file is in the HTML; the rest are loaded via imports. Dependencies are clear and the global namespace stays clean. The counter app is already structured this way and should be emulated for your own projects!
 
@@ -259,26 +262,30 @@ If you've used Node, you've seen **CommonJS** (`module.exports` and `require()`)
 
 ### Import and Export Syntax
 
-*   **Named export** — Use when a file exposes one or more values by name. The counter app uses this for `setupCounter`:
+- **Named export** — Use when a file exposes one or more values by name. The counter app uses this for `setupCounter`:
 
-    ```js
-    export function setupCounter(element) { /* ... */ }
+  ```js
+  export function setupCounter(element) {
+    /* ... */
+  }
 
-    // Or: export const oneOfMany = () => { };  and  export { anotherOfMany };
-    ```
-*   **Default export** — Use when a file has one main value (e.g. a single function or object). The SVG imports use default exports (the file provides one URL):
+  // Or: export const oneOfMany = () => { };  and  export { anotherOfMany };
+  ```
 
-    ```js
-    const theMainThing = () => { };
-    export default theMainThing;
-    ```
-*   **Importing** — Use the path to the file and, for named exports, curly braces. Include the `.js` extension:
+- **Default export** — Use when a file has one main value (e.g. a single function or object). The SVG imports use default exports (the file provides one URL):
 
-    ```js
-    import { setupCounter } from './counter.js';   // named
-    import theMainThing from './the-main-thing.js'; // default
-    import './style.css';                           // side effect only
-    ```
+  ```js
+  const theMainThing = () => {};
+  export default theMainThing;
+  ```
+
+- **Importing** — Use the path to the file and, for named exports, curly braces. Include the `.js` extension:
+
+  ```js
+  import { setupCounter } from "./counter.js"; // named
+  import theMainThing from "./the-main-thing.js"; // default
+  import "./style.css"; // side effect only
+  ```
 
 ### Try It: Add a Small Module
 
@@ -287,19 +294,21 @@ Practice import/export by adding a tiny module the counter app uses.
 1.  Create `src/greeting.js` with a default export:
 
     ```js
-    const greeting = () => 'Hello from a module!';
+    const greeting = () => "Hello from a module!";
     export default greeting;
     ```
+
 2.  In `main.js`, add an import at the top and use it somewhere
 
     ```js
-    import greeting from './greeting.js';
+    import greeting from "./greeting.js";
 
-    const greetingEl = document.createElement('p');
+    const greetingEl = document.createElement("p");
     greetingEl.textContent = greeting();
     document.body.append(greetingEl);
     ```
-3. Save and check the app in the browser. Only `main.js` is in the HTML yet `greeting.js` is loaded automatically when `main.js` imports it.
+
+3.  Save and check the app in the browser. Only `main.js` is in the HTML yet `greeting.js` is loaded automatically when `main.js` imports it.
 
 **Summary:** Use `export` and `export default` to share values, and `import` (with the `.js` extension) to use them. The counter app already follows this pattern; you can extend it or use the same pattern in the Challenge below.
 
@@ -308,7 +317,7 @@ Practice import/export by adding a tiny module the counter app uses.
 As you may have noticed, rather than linking the `style.css` in the `index.html` file, we imported it into `main.js`! For now, compared to linking in HTML, this approach doesn't provide much benefit. However, when we get to React it will provide some benefits.
 
 ```js
-import './style.css';
+import "./style.css";
 ```
 
 ### Importing JSON and other Files
@@ -322,9 +331,9 @@ We can't do this using the `file://` protocol or using simple development server
 {% hint style="info" %}
 **A Note on Storing Static Files**:
 
-* Files stored in the `public` directory are treated as if they were stored in the root of the project. `/` represents the `public` folder so the `vite.svg` file in the root of `public` is accessed like so: `/vite.svg` (see `index.html`).
-* Files stored anywhere else are accessed using a relative file path. For example, `'../../data/example.json'` is referenced as two levels above `main.js`.
-{% endhint %}
+- Files stored in the `public` directory are treated as if they were stored in the root of the project. `/` represents the `public` folder so the `vite.svg` file in the root of `public` is accessed like so: `/vite.svg` (see `index.html`).
+- Files stored anywhere else are accessed using a relative file path. For example, `'../../data/example.json'` is referenced as two levels above `main.js`.
+  {% endhint %}
 
 ## Challenge
 
@@ -361,6 +370,7 @@ Notice the `#total-posts` and `#posts-container` elements. We'll target those us
   <script type="module" src="/src/main.js"></script>
 </body>
 ```
+
 {% endtab %}
 
 {% tab title="CSS" %}
@@ -391,7 +401,8 @@ body {
   font-family: math;
 }
 
-header, footer {
+header,
+footer {
   background-color: slategray;
   padding: 1rem;
 }
@@ -434,6 +445,7 @@ main {
   max-width: 400px;
 }
 ```
+
 {% endtab %}
 {% endtabs %}
 
@@ -441,18 +453,18 @@ main {
 
 Now, take a look at the `data/posts.json` file. It contains photography data that we want to render dynamically. It is your task to use JavaScript in `main.js` to do the following:
 
-* import the post object from the `data/posts.json` file.
-* update the `#total-posts` span element with the proper number of posts
-*   render a `li` for each post object with the following structure:
+- import the post object from the `data/posts.json` file.
+- update the `#total-posts` span element with the proper number of posts
+- render a `li` for each post object with the following structure:
 
-    ```html
-    <li id="post-1">
-      <figure>
-        <img src="https://images.unsplash.com/photo-1684857653651-e80e9ed160d7" alt="A bird washing its feathers">
-        <figcaption>look at this bird!!</figcaption>
-      </figure>
-    </li>
-    ```
+  ```html
+  <li id="post-1">
+    <figure>
+      <img src="https://images.unsplash.com/photo-1684857653651-e80e9ed160d7" alt="A bird washing its feathers" />
+      <figcaption>look at this bird!!</figcaption>
+    </figure>
+  </li>
+  ```
 
 Hint: Use `Object.values(posts).forEach((post) => {})` to iterate through the object of posts
 
@@ -460,10 +472,10 @@ Hint: Use `Object.values(posts).forEach((post) => {})` to iterate through the ob
 
 If you were able to implement this all in the `main.js` file, congrats! Now, take advantage of ES modules and split your code into separate files for better organization:
 
-* Keep the `data/posts.json` import in `main.js`
-* Create a file called `dom-helpers.js` that exports a single DOM helper function called `renderPosts(posts)`
-* `renderPosts` should take in the `posts` object and update the total posts count and render the list items.
-* Import the `renderPosts()` method into `main.js` before invoking it.
+- Keep the `data/posts.json` import in `main.js`
+- Create a file called `dom-helpers.js` that exports a single DOM helper function called `renderPosts(posts)`
+- `renderPosts` should take in the `posts` object and update the total posts count and render the list items.
+- Import the `renderPosts()` method into `main.js` before invoking it.
 
 ### Solution
 
@@ -510,7 +522,7 @@ To see how this distribution version runs, run the command:
 npm run preview
 ```
 
-To deploy this distribution version of your application, check out the article on [How to Deploy on GitHub Pages](https://marcylabschool.gitbook.io/marcy-lab-school-docs/projects/deploying-vite-with-github-pages).
+To deploy this distribution version of your application, check out the article on [How to Deploy on GitHub Pages](https://marcylabschool.gitbook.io/swe/marcy-lab-school-docs/projects/deploying-vite-with-github-pages).
 
 ### Importing Node Modules
 
@@ -525,7 +537,7 @@ This `uuid` package provides functions for generating **Universally Unique IDs**
 Finally, add the following code to `main.js` below the other imports:
 
 ```js
-import { v4 as generateUUID } from 'uuid';
+import { v4 as generateUUID } from "uuid";
 
 const newUUID = generateUUID();
 document.body.append(`your new uuid is ${newUUID}`);

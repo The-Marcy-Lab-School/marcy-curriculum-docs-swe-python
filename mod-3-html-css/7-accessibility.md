@@ -8,19 +8,19 @@ Follow along with code examples [here](https://github.com/The-Marcy-Lab-School/2
 
 **Table of Contents**
 
-* [A11y Commands you'll need](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#a11y-commands-youll-need)
-  * [Voiceover on Mac](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#voiceover-on-mac)
-  * [Chrome Accessibility Inspector](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#chrome-accessibility-inspector)
-  * [Chrome Color Blindness and Font Size](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#chrome-color-blindness-and-font-size)
-* [Part 0: Why A11y?](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-0-why-a11y)
-* [Part 1: Semantic elements](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-1-semantic-elements)
-* [Part 2: A11y tree](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-2-a11y-tree)
-* [Part 3: Voice over](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-3-voice-over)
-* [Part 4: Visual Impairments](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-4-visual-impairments)
-* [Part 5: images](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-5-images)
-* [Part 6: How to fix it](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-6-how-to-fix-it)
-* [Part 7: ARIA and Landmarks](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-7-aria-and-landmarks)
-* [Part 8: Rem vs px](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-3-html-css-dom/accessibility.md#part-8-rem-vs-px)
+- [A11y Commands you'll need](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#a11y-commands-youll-need)
+  - [Voiceover on Mac](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#voiceover-on-mac)
+  - [Chrome Accessibility Inspector](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#chrome-accessibility-inspector)
+  - [Chrome Color Blindness and Font Size](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#chrome-color-blindness-and-font-size)
+- [Part 0: Why A11y?](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-0-why-a11y)
+- [Part 1: Semantic elements](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-1-semantic-elements)
+- [Part 2: A11y tree](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-2-a11y-tree)
+- [Part 3: Voice over](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-3-voice-over)
+- [Part 4: Visual Impairments](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-4-visual-impairments)
+- [Part 5: images](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-5-images)
+- [Part 6: How to fix it](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-6-how-to-fix-it)
+- [Part 7: ARIA and Landmarks](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-7-aria-and-landmarks)
+- [Part 8: Rem vs px](https://marcylabschool.gitbook.io/swe/mod-3-html-css-dom/accessibility.md#part-8-rem-vs-px)
 
 ## A11y Commands you'll need
 
@@ -28,26 +28,26 @@ Follow along with code examples [here](https://github.com/The-Marcy-Lab-School/2
 
 voiceover on mac: command + f5
 
-* `VO` is "ctrl + option" by default
-* Rotor web navigation on mac: `VO` + u
-  * Rotor navigation uses the arrows, left and right to change menus, and up and down to select options on the menu
-  * I _highly_ encourage you to poke around with this as it's tricky!
+- `VO` is "ctrl + option" by default
+- Rotor web navigation on mac: `VO` + u
+  - Rotor navigation uses the arrows, left and right to change menus, and up and down to select options on the menu
+  - I _highly_ encourage you to poke around with this as it's tricky!
 
 To get it to read the page:
 
-* To fully read without prompting, just refresh the tab
-* To read sections on your own, `VO` + right left
+- To fully read without prompting, just refresh the tab
+- To read sections on your own, `VO` + right left
 
 ### Chrome Accessibility Inspector
 
 To enable Accessibility Inspector:
 
-* Open up your chrome console
-* CMD/CTRL + Shift + P and search "Accessibility"
-  * Or...
-  * Go to the "elements" tab
-  * Not on the top bar with elements but the second bar (the one with "styles" and "computed"), click the three dots
-* Click accessibility and check "enable full page accessibility tree" and reload.
+- Open up your chrome console
+- CMD/CTRL + Shift + P and search "Accessibility"
+  - Or...
+  - Go to the "elements" tab
+  - Not on the top bar with elements but the second bar (the one with "styles" and "computed"), click the three dots
+- Click accessibility and check "enable full page accessibility tree" and reload.
 
 Now, you should be able to access the A11y tree by clicking the little person icon when you go to your "elements" tab in the console.
 
@@ -55,15 +55,15 @@ Now, you should be able to access the A11y tree by clicking the little person ic
 
 To color blind with chrome:
 
-* On the JS console tab, click "no issues" part (or if there are issues still click it anyway), that opens up the second nav bar below.
-* Then on the second bar that pops up, click the three dots
-* Then go to rendering
-* Scroll down to "emulate vision deficiencies
+- On the JS console tab, click "no issues" part (or if there are issues still click it anyway), that opens up the second nav bar below.
+- Then on the second bar that pops up, click the three dots
+- Then go to rendering
+- Scroll down to "emulate vision deficiencies
 
 To alter the default system font:
 
-* In chrome browser itself click the 3 dots, then go to settings then in the search bar on the settings page, type "font size"
-* Adjust as necessary on the menu options that pop up!
+- In chrome browser itself click the 3 dots, then go to settings then in the search bar on the settings page, type "font size"
+- Adjust as necessary on the menu options that pop up!
 
 These are obviously not super intuitive, and I encourage you to practice around with them before the lecture.
 
@@ -111,13 +111,13 @@ Real quick, just point out that the broken image on the main page makes the sect
 
 The honestly easiest thing is to just use elements correctly!
 
-* Headings should always be used in order
-* Semantic elements (nav, main, header, li) should always be used when possible
-* Use descriptive link text instead of vague "click" or "here"
-* Always include alt tags
-* Only one h1 on a page
-* Do not use your logo as an h1, that's the same on every page and therefor not helpful, just use a p tag with styling
-* Use rems in your styling to respect the users default font size
+- Headings should always be used in order
+- Semantic elements (nav, main, header, li) should always be used when possible
+- Use descriptive link text instead of vague "click" or "here"
+- Always include alt tags
+- Only one h1 on a page
+- Do not use your logo as an h1, that's the same on every page and therefor not helpful, just use a p tag with styling
+- Use rems in your styling to respect the users default font size
 
 ## Part 7: ARIA and Landmarks
 
@@ -128,7 +128,7 @@ No, what we'll talk about today is `aria-label` and `aria-labelledby` because yo
 Because `section` is still kind of vague, it needs a label to fully be picked up as a region. You have 2 options, either `aria-label` which lets you simply title something inline. This is really only used if you have a section but you really _can't_ include a visible heading (rare).
 
 ```html
-<section aria-label="our products">
+<section aria-label="our products"></section>
 ```
 
 Or you can use `aria-labelledby` (note the weird kebab-non-camel-case, I don't know why, I don't make the rules). This is actually better because it lets you link an element's id and use that text content. This should be a heading tag.
@@ -136,6 +136,7 @@ Or you can use `aria-labelledby` (note the weird kebab-non-camel-case, I don't k
 ```html
 <section aria-labeledby="products">
   <h2 id="products">Our Products</h2>
+</section>
 ```
 
 `aria-labelledby` is preferred because now your screen readers, bots, and users with no sight problems all see the same thing automatically, and you only ever need to update one.

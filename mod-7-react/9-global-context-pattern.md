@@ -6,10 +6,10 @@ Follow along with code examples [here](https://github.com/The-Marcy-Lab-School/7
 
 **Table of Contents**:
 
-* [Global Context Design Pattern](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-7-react/7-global-context-pattern.md#global-context-design-pattern-1)
-  * [1) Create a `ContextProvider` wrapper component](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-7-react/7-global-context-pattern.md#1-create-a-contextprovider-wrapper-component)
-  * [2) Import and Render the ContextProvider component in main.jsx](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-7-react/7-global-context-pattern.md#2-import-and-render-the-contextprovider-component-in-mainjsx)
-  * [3) Refactor other components as necessary](https://github.com/The-Marcy-Lab-School/marcy-curriculum-docs/blob/main/mod-7-react/7-global-context-pattern.md#3-refactor-other-components-as-necessary)
+- [Global Context Design Pattern](https://marcylabschool.gitbook.io/swe/mod-7-react/7-global-context-pattern.md#global-context-design-pattern-1)
+  - [1) Create a `ContextProvider` wrapper component](https://marcylabschool.gitbook.io/swe/mod-7-react/7-global-context-pattern.md#1-create-a-contextprovider-wrapper-component)
+  - [2) Import and Render the ContextProvider component in main.jsx](https://marcylabschool.gitbook.io/swe/mod-7-react/7-global-context-pattern.md#2-import-and-render-the-contextprovider-component-in-mainjsx)
+  - [3) Refactor other components as necessary](https://marcylabschool.gitbook.io/swe/mod-7-react/7-global-context-pattern.md#3-refactor-other-components-as-necessary)
 
 ## Global Context Design Pattern
 
@@ -49,7 +49,7 @@ import InstagramContext from "./context/InstagramContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <InstagramContext.Provider value={"???"}>
     <App />
-  </InstagramContext.Provider>
+  </InstagramContext.Provider>,
 );
 ```
 
@@ -78,18 +78,14 @@ const InstagramContextProvider = ({ children }) => {
     incrementTotalLikes,
   };
 
-  return (
-    <InstagramContext.Provider value={contextValues}>
-      {children}
-    </InstagramContext.Provider>
-  );
+  return <InstagramContext.Provider value={contextValues}>{children}</InstagramContext.Provider>;
 };
 
 export default InstagramContextProvider;
 ```
 
-* All of the global state for this application can be managed by this component.
-* Note how the `children` prop is used. This will become clearer next.
+- All of the global state for this application can be managed by this component.
+- Note how the `children` prop is used. This will become clearer next.
 
 ### 2) Import and Render the ContextProvider component in main.jsx
 
@@ -104,7 +100,7 @@ import InstagramContextProvider from "./context/InstagramContextProvider";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <InstagramContextProvider>
     <App /> {/* <--- This is the `children` */}
-  </InstagramContextProvider>
+  </InstagramContextProvider>,
 );
 ```
 
