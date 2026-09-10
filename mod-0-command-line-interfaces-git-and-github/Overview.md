@@ -2,6 +2,8 @@
 
 At the end of the day, software is just a collection of text files saved on a computer. Before we can learn how to build software, we need to learn the learn how to create, organize, and otherwise manage those files. We'll learn how to interact with your computer's file system using the command line interface (CLI) and manage projects with Git and GitHub.
 
+By the end of this module, you will be able to navigate and modify your computer's file tree from the terminal, run a Python program from the command line, and use Git and GitHub to save your work, share it, collaborate on a branch, and resolve a merge conflict.
+
 ## Chapters
 
 * [1. Command Line Interfaces](1-clis.md)

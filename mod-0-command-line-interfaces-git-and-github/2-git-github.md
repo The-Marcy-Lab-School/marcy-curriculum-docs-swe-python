@@ -1,4 +1,4 @@
-# 2. Git & GitHub
+# 2. Git and GitHub
 
 In this lesson, we'll learn how software engineers manage the changes to their project using a tool called Git. We'll also they can back up and share their projects online using the closest thing to a social network for programmers, GitHub.
 
@@ -11,20 +11,20 @@ You will be able to…
 
 **Table of Contents**
 
-- [Setup](2-git-github.md#setup)
-- [Key Terms and Commands](2-git-github.md#key-terms-and-commands)
-- [Mental Model: Git & GitHub](2-git-github.md#mental-model-git--github)
-  - [What is Git?](2-git-github.md#what-is-git)
-  - [What is GitHub?](2-git-github.md#what-is-github)
-- [The Git Workflow](2-git-github.md#the-git-workflow)
-  - [`git init` and `git status`](2-git-github.md#git-init-and-git-status)
-  - [`git add`, `git commit`, and `git log`](2-git-github.md#git-add-git-commit-and-git-log)
-- [The GitHub Workflow](2-git-github.md#the-github-workflow)
-  - [1. Create A Repository On GitHub](2-git-github.md#1-create-a-repository-on-github)
-  - [2. Make A Local Clone Of The Repository with `git clone`](2-git-github.md#2-make-a-local-clone-of-the-repository-with-git-clone)
-  - [3. Use the normal Git Workflow](2-git-github.md#3-use-the-normal-git-workflow)
-  - [4. Upload local commits to GitHub with `git push`](2-git-github.md#4-upload-local-commits-to-github-with-git-push)
-- [Summary](2-git-github.md#summary)
+- [Setup](#setup)
+- [Key Terms and Commands](#key-terms-and-commands)
+- [Mental Model: Git and GitHub](#mental-model-git-and-github)
+  - [What is Git?](#what-is-git)
+  - [What is GitHub?](#what-is-github)
+- [The Git Workflow](#the-git-workflow)
+  - [`git init` and `git status`](#git-init-and-git-status)
+  - [`git add`, `git commit`, and `git log`](#git-add-git-commit-and-git-log)
+- [The GitHub Workflow](#the-github-workflow)
+  - [1. Create A Repository On GitHub](#1-create-a-repository-on-github)
+  - [2. Make A Local Clone Of The Repository with `git clone`](#2-make-a-local-clone-of-the-repository-with-git-clone)
+  - [3. Use the normal Git Workflow](#3-use-the-normal-git-workflow)
+  - [4. Upload local commits to GitHub with `git push`](#4-upload-local-commits-to-github-with-git-push)
+- [Summary](#summary)
 
 ## Setup
 
@@ -67,7 +67,7 @@ git push
 git clone
 ```
 
-## Mental Model: Git & GitHub
+## Mental Model: Git and GitHub
 
 Imagine you're working on a paper. You've got all of your drafts saved in a folder and it looks something like this:
 
@@ -111,12 +111,12 @@ The camera app may also allow you to backup your photos and save them online "in
 
 <figure><img src="../.gitbook/assets/github.png" alt="GitHub is a social network for developers to backup, share, and collaborate on projects." width="375"><figcaption><p>GitHub is a social network for developers to backup, share, and collaborate on projects.</p></figcaption></figure>
 
-Check out the GitHub repository for [Node](https://github.com/nodejs/node). Here are few things to look for:
+Check out the GitHub repository for [Flask](https://github.com/pallets/flask), a Python tool you will use yourself later in this program. Here are a few things to look for:
 
-- It has \~45000 commits, each with clear messages, and made by many different developers.
-- It has dozens of branches, each for a different version of the software.
-- The README on the front page gives a detailed overview of the project and instructions for downloading and contributing.
-- It has been forked (duplicated) over 30 thousand times
+- It has over 5,500 commits, each with a written message, made by many different developers over more than a decade.
+- The README on the front page explains what the project is, shows a short working example, and gives instructions for installing it and contributing to it.
+- It has been starred by over 72 thousand people and forked (duplicated) 17 thousand times.
+- Every one of those commits was made with the same `git add`, `git commit`, and `git push` commands you are about to learn.
 
 So, you'll use Git and GitHub in tandem to manage your projects. You'll use Git on your own computers to manage the changes to your project and then you will upload those changes to GitHub.
 

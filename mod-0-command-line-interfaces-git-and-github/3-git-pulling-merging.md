@@ -1,4 +1,4 @@
-# 3. Git Pulling & Merging
+# 3. Git Pulling and Merging
 
 GitHub enables developers across the world to collaborate on projects. In this lesson, we'll learn how to use GitHub to create and manage branches, merge branches, create pull requests, and resolve merge conflicts.
 
@@ -9,16 +9,16 @@ You will be able to…
 
 **Table of Contents:**
 
-* [Key Terms & Commands](3-git-pulling-merging.md#key-terms--commands)
-* [Collaborating on a GitHub Repository](3-git-pulling-merging.md#collaborating-on-a-github-repository)
-  * [`git pull` synchronizes local repositories](3-git-pulling-merging.md#git-pull-synchronizes-local-repositories)
-  * [Adding a Collaborator](3-git-pulling-merging.md#adding-a-collaborator)
-  * [Creating a Merge Conflict](3-git-pulling-merging.md#creating-a-merge-conflict)
-  * [Why Can't I Push?](3-git-pulling-merging.md#why-cant-i-push)
-  * [Handling Merge Conflicts](3-git-pulling-merging.md#handling-merge-conflicts)
-* [Tips for success](3-git-pulling-merging.md#tips-for-success)
+- [Key Terms and Commands](#key-terms-and-commands)
+- [Collaborating on a GitHub Repository](#collaborating-on-a-github-repository)
+  - [`git pull` synchronizes local repositories](#git-pull-synchronizes-local-repositories)
+  - [Adding a Collaborator](#adding-a-collaborator)
+  - [Creating a Merge Conflict](#creating-a-merge-conflict)
+  - [Why Can't I Push?](#why-cant-i-push)
+  - [Handling Merge Conflicts](#handling-merge-conflicts)
+- [Tips for success](#tips-for-success)
 
-## Key Terms & Commands
+## Key Terms and Commands
 
 **Key Terms**
 

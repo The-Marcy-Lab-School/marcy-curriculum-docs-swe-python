@@ -1,4 +1,4 @@
-# 4. Git Branching & PRs
+# 4. Git Branching and PRs
 
 GitHub enables developers across the world to collaborate on projects. In this lesson, we'll learn how to use GitHub to create and manage branches, merge branches, create pull requests, and resolve merge conflicts.
 
@@ -12,16 +12,16 @@ You will be able to…
 
 **Table of Contents:**
 
-* [Key Terms & Commands](4-git-branching.md#key-terms--commands)
-* [Intro to Branches](4-git-branching.md#intro-to-branches)
-  * [Keep the Main Branch Stable](4-git-branching.md#keep-the-main-branch-stable)
-  * [Commands for Working with Branches](4-git-branching.md#commands-for-working-with-branches)
-  * [Pull Requests and Code Review](4-git-branching.md#pull-requests-and-code-review)
-  * [Don't Forget to Pull!](4-git-branching.md#dont-forget-to-pull)
-* [How Teams Collaborate Using Branches](4-git-branching.md#how-teams-collaborate-using-branches)
-* [Summary](4-git-branching.md#summary)
+- [Key Terms and Commands](#key-terms-and-commands)
+- [Intro to Branches](#intro-to-branches)
+  - [Keep the Main Branch Stable](#keep-the-main-branch-stable)
+  - [Commands for Working with Branches](#commands-for-working-with-branches)
+  - [Pull Requests and Code Review](#pull-requests-and-code-review)
+  - [Don't Forget to Pull!](#dont-forget-to-pull)
+- [How Teams Collaborate Using Branches](#how-teams-collaborate-using-branches)
+- [Summary](#summary)
 
-## Key Terms & Commands
+## Key Terms and Commands
 
 **Key Terms**
 

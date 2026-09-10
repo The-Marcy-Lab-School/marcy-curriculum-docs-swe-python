@@ -6,44 +6,46 @@ In this lesson, we'll learn about the Terminal, a program for interacting with a
 
 You will be able to…
 
-* Understand what a command line interface (CLI) is.
-* Compare and Contrast CLIs and Graphical User Interfaces (GUIs)
-* Navigate your local file tree
-* Create, copy, delete, and move files and directories
-* How to run a JavaScript program using your CLI
-* Explain what an "argument" is
+- Understand what a command line interface (CLI) is.
+- Compare and Contrast CLIs and Graphical User Interfaces (GUIs)
+- Navigate your local file tree
+- Create, copy, delete, and move files and directories
+- How to run a Python program using your CLI
+- Explain what an "argument" is
 
 **Table of Contents:**
 
-* [Key Terms & Commands](1-clis.md#key-terms--commands)
-* [The File Tree](1-clis.md#the-file-tree)
-  * [Applications for Viewing the File Tree (CLI vs. GUI)](1-clis.md#applications-for-viewing-the-file-tree-cli-vs-gui)
-  * [Using the Terminal in VS Code](1-clis.md#using-the-terminal-in-vs-code)
-* [Essential Commands](1-clis.md#essential-commands)
-  * [Looking at the Working Directory with `pwd` and `ls`](1-clis.md#looking-at-the-working-directory-with-pwd-and-ls)
-  * [Navigating Between Directories with `cd`](1-clis.md#navigating-between-directories-with-cd)
-    * [Be Careful when using the `cd` command!](1-clis.md#be-careful-when-using-the-cd-command)
-  * [Making Files and Directories with `mkdir` and `touch`](1-clis.md#making-files-and-directories-with-mkdir-and-touch)
-  * [Executing JavaScript files with `node`](1-clis.md#executing-javascript-files-with-node)
-    * [Terminating a Program with `Control+C`](1-clis.md#terminating-a-program-with-controlc)
-* [Additional Commands](1-clis.md#additional-commands)
-  * [Unfinished Double Quotes, `echo`, and `>>`](1-clis.md#unfinished-double-quotes-echo-and-)
-  * [The `cat` Command and Combining Commands with `&&`](1-clis.md#the-cat-command-and-combining-commands-with-)
-  * [Removing, Renaming, Moving, and Copying](1-clis.md#removing-renaming-moving-and-copying)
-* [Challenges](1-clis.md#challenges)
+- [Key Terms and Commands](#key-terms-and-commands)
+- [The File Tree](#the-file-tree)
+  - [Applications for Viewing the File Tree (CLI vs. GUI)](#applications-for-viewing-the-file-tree-cli-vs-gui)
+  - [Using the Terminal in VS Code](#using-the-terminal-in-vs-code)
+- [Essential Commands](#essential-commands)
+  - [Looking at the Working Directory with `pwd` and `ls`](#looking-at-the-working-directory-with-pwd-and-ls)
+  - [Navigating Between Directories with `cd`](#navigating-between-directories-with-cd)
+    - [Be Careful when using the `cd` command!](#be-careful-when-using-the-cd-command)
+  - [Making Files and Directories with `mkdir` and `touch`](#making-files-and-directories-with-mkdir-and-touch)
+  - [Executing Python files with `python3`](#executing-python-files-with-python3)
+    - [Terminating a Program with `Control+C`](#terminating-a-program-with-controlc)
+- [Additional Commands](#additional-commands)
+  - [Unfinished Double Quotes, `echo`, and `>>`](#unfinished-double-quotes-echo-and-)
+  - [The `cat` Command and Combining Commands with `&&`](#the-cat-command-and-combining-commands-with-)
+  - [Removing, Renaming, Moving, and Copying](#removing-renaming-moving-and-copying)
+- [Challenges](#challenges)
 
-## Key Terms & Commands
+## Key Terms and Commands
 
 **Key Terms**
 
-* **Terminal** — A program for interacting with a computer's files and executing programs through a command line interface.
-* **Command Line Interface** — a type of user interface (UI) that let's a users perform actions by entering text-based commands.
-* **Graphical User Interface** — a type of user interface that uses visual elements such as icons, buttons, windows, and dialog boxes, allowing users to perform actions such as clicking, drag-and-drop, and more.
-* **Directory** — Another term for a "folder" in your computer that contains references to files or possibly other directories.
-* **Working Directory** — The directory where your commands will be executed.
-* **Command** - A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
-* **Argument** — An additional piece of information provided to a command to change the command's behavior.
-* **Node** — A program for executing JavaScript code directly on your computer (as opposed to in a browser).
+- **Terminal** — A program for interacting with a computer's files and executing programs through a command line interface.
+- **Command Line Interface** — a type of user interface (UI) that let's a users perform actions by entering text-based commands.
+- **Graphical User Interface** — a type of user interface that uses visual elements such as icons, buttons, windows, and dialog boxes, allowing users to perform actions such as clicking, drag-and-drop, and more.
+- **Directory** — Another term for a "folder" in your computer that contains references to files or possibly other directories.
+- **Working Directory** — The directory where your commands will be executed.
+- **Command** - A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
+- **Argument** — An additional piece of information provided to a command to change the command's behavior.
+- **Python** — The programming language you will be writing in for the rest of this program.
+- **Interpreter** — The program that reads a Python file and executes it, one statement at a time.
+- **`python3`** — The command that runs the Python interpreter on a file.
 
 **Important CLI commands**
 
@@ -52,8 +54,8 @@ You will be able to…
 {% endhint %}
 
 ```sh
-# Run a given `.js` file using Node.
-node [filename.js]
+# Run a given `.py` file using the Python interpreter.
+python3 [filename.py]
 
 # Terminate the currently running program
 Control + C
@@ -62,7 +64,7 @@ Control + C
 pwd
 
 # Prints ("lists") the contents of the working directory
-ls    
+ls
 
 # Change directories to the given subdirectory
 cd [subdirectory]
@@ -102,10 +104,10 @@ Most operating systems have an application that lets you view the device's file 
 
 These applications allow you to manage files through a **graphical user interface (GUI)** — a user interface with buttons and icons that let you do things like click and drag-and-drop.
 
-These GUIs are examples of an "abstraction"—a layer that hides complexity—and GUIs present a tradeoff:
+These GUIs are examples of an "abstraction"—an interface that hides complexity and technical detail in favor of ease-of-use—and GUIs present a tradeoff:
 
-* GUIs are easy to use and easy to learn for beginners
-* What you can do with GUIs is limited to how they were designed
+- GUIs are easy to use and easy to learn for beginners
+- What you can do with GUIs is limited to how the designers wanted you to use them
 
 When we want more fine-tuned control over how we interact with our computer's files, we can turn to a **command line interface (CLI)**, often called the **Terminal**. The Terminal is a program for interacting with a computer's files by executing typed-in commands:
 
@@ -151,7 +153,7 @@ While you can use the Terminal application that comes with your laptop, it is of
 
 To open up the Terminal panel, go to **File** > **Terminal** and it should show up at the bottom:
 
-![Use the keyboard shortcut Control+\` to open/close the Terminal](../.gitbook/assets/vscode-terminal.png)
+![Use the keyboard shortcut Control+` to open/close the Terminal](../.gitbook/assets/vscode-terminal.png)
 
 ## Essential Commands
 
@@ -169,13 +171,33 @@ The `pwd` command prints the full file path to the working directory while the `
 
 ![](../.gitbook/assets/ls.png)
 
-\{% hint style="info" %\}
-
+{% hint style="info" %}
 **Note:** In computing, all actions that interact with data fall into one of the four categories called CRUD: **c**reating, **r**eading, **u**pdating, or **d**eleting data.
 
 Which of these actions do you think `pwd` and `ls` are?
+{% endhint %}
 
-\{% endhint %\}
+{% hint style="warning" %}
+**Predict, then run.** Write down your answers to both of these before you run anything.
+
+```sh
+ls ..
+pwd
+```
+
+1. What will `ls ..` print?
+2. After running it, what will `pwd` print?
+
+<details><summary>What actually happens</summary>
+
+`ls ..` prints the contents of the **parent** directory — the folder that contains the one you are currently in.
+
+`pwd` then prints exactly what it printed before. You did not move.
+
+This is the distinction worth taking away: `ls` accepts a directory as an argument and _reports on_ it, while `cd` accepts a directory and _moves you into_ it. A command that looks at somewhere else does not put you there. Beginners frequently expect `ls ..` to have relocated them, and then get lost.
+
+</details>
+{% endhint %}
 
 ### Navigating Between Directories with `cd`
 
@@ -183,11 +205,9 @@ The `cd [directory]` command allows you to move to another directory in the file
 
 An **argument** is an additional piece of information that changes that behavior of a given command. For the `cd` command, we have to also provide a destination.
 
-\{% hint style="info" %\}
-
+{% hint style="info" %}
 Use the Tab key to autocomplete commands and filenames! Just start typing and hit Tab to autocomplete.
-
-\{% endhint %\}
+{% endhint %}
 
 For example, suppose we were located in the `/Users` directory inside the following file system:
 
@@ -248,23 +268,54 @@ touch file1.txt file2.txt
 mkdir dir1 dir2 dir3
 ```
 
-### Executing JavaScript files with `node`
+### Executing Python files with `python3`
 
-A JavaScript program is any file with a `.js` extension, like `hello.js`
+A Python program is any file with a `.py` extension, like `hello.py`
 
-The code can be as simple as `console.log("Hello World")`
+The code can be as simple as `print("Hello World")`
 
-To run the program, use the command `node hello.js`
+To run the program, use the command `python3 hello.py`
+
+{% hint style="info" %}
+**Why `python3` and not `python`?**
+
+Typing `python` on its own will most likely tell you `command not found`. The command always has the 3 on the end.
+
+The reason is historical. `python` used to mean Python 2, an older version of the language that is no longer used and that you will never write. Rather than let one word mean two different languages on two different computers, both macOS and Ubuntu leave `python` undefined and give you `python3` instead.
+{% endhint %}
+
+{% hint style="warning" %}
+**Predict, then run.** Throughout this curriculum you will find boxes like this one. Each asks you to write down what you expect to happen _before_ you run anything.
+
+Do not skip the writing-down part. Predicting silently lets you quietly adjust your prediction once you see the answer, which teaches you nothing. Writing it down first is what makes the gap between your expectation and reality concrete.
+
+Make a file called `broken.py` containing these two lines, then predict what `python3 broken.py` will print:
+
+```python
+print("first line")
+print("second line"
+```
+
+<details><summary>What actually happens</summary>
+
+Nothing is printed. Not even `first line`.
+
+Python reads the _entire_ file and checks that it is valid before it executes any of it. The second `print` is missing its closing parenthesis, so the whole file is rejected and you get a `SyntaxError` instead of any output.
+
+This is worth knowing early: if you expected to see `first line` before the error, your mental model was that Python runs a file line by line from the top. It does execute line by line — but only after it has read and accepted the whole file first.
+
+</details>
+{% endhint %}
 
 #### Terminating a Program with `Control+C`
 
 Many programs will end ("terminate") on their own when each statement has been executed.
 
-Other programs can run forever, requiring us to stop them ourselves. For example, when we use the `node` command on its own, it will start the **Node REPL (Read, Evaluate, Print Loop)** program which just waits for Javascript input, executes it, and then prints the result:
+Other programs can run forever, requiring us to stop them ourselves. For example, when we use the command `python3` on its own — with no file after it — it will start the **Python REPL (Read, Evaluate, Print Loop)** program which just waits for Python input, executes it, and then prints the result:
 
-![The Node REPL is useful for testing out expressions.](../.gitbook/assets/1-node-repl-expressions.png)
+![The Python REPL is useful for testing out expressions.](../.gitbook/assets/1-python-repl-expressions.png)
 
-To terminate the program, use the keyboard shortcut `Control+C` (you may need to cancel twice).
+To terminate the program, use the keyboard shortcut `Control+C` (you may need to cancel twice). You can also leave the Python REPL by entering `exit()`.
 
 ## Additional Commands
 
@@ -282,6 +333,32 @@ For example, this command will take the text `"hello world"` and append it to th
 echo "hello world" >> output.txt
 ```
 
+{% hint style="warning" %}
+**Predict, then run.** Write down what you expect the terminal to print for each of these three commands, in order.
+
+```sh
+echo "hello world"
+echo "hello world" >> output.txt
+echo "hello world" >> output.txt
+```
+
+Then run `cat output.txt` and predict that too.
+
+<details><summary>What actually happens</summary>
+
+The first command prints `hello world` to the terminal.
+
+The second and third commands print **nothing at all**. The terminal stays silent and you get your prompt back.
+
+`cat output.txt` then prints `hello world` twice, on two separate lines.
+
+Two things are going on. First, `>>` _redirects_ the output — the text that would have gone to your screen goes into the file instead, so it cannot do both. Second, `>>` **appends**, meaning it adds to the end of whatever the file already contains rather than replacing it. That is why running the same command twice gives you two lines rather than one.
+
+A command that prints nothing has not necessarily done nothing. Silence in a terminal usually means "it worked."
+
+</details>
+{% endhint %}
+
 ### The `cat` Command and Combining Commands with `&&`
 
 The `cat` command is used to read the contents of a given file.
@@ -293,6 +370,24 @@ ls && cat output.txt
 ```
 
 For example, the command above lists the contents of the current working directory and print the contents of `output.txt`
+
+{% hint style="warning" %}
+**Predict, then run.** Assume there is no directory called `no-such-folder`. What will this print?
+
+```sh
+cd no-such-folder && echo "the second command ran"
+```
+
+<details><summary>What actually happens</summary>
+
+You get an error from `cd` saying that no such file or directory exists, and then **nothing else**. The message `the second command ran` never appears.
+
+`&&` does not mean "run both of these." It means "run the first one, and _then, only if it succeeded_, run the second one." Every command reports back whether it succeeded or failed, and `&&` reads that report before deciding whether to continue.
+
+This matters more than it looks. When you chain commands together (e.g. installing something and then running it, or saving your work and then uploading it) `&&` is what stops the second step from running on top of a first step that failed.
+
+</details>
+{% endhint %}
 
 ### Removing, Renaming, Moving, and Copying
 

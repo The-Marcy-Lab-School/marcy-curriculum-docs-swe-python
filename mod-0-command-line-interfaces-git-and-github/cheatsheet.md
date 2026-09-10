@@ -2,11 +2,86 @@
 
 **Table of Contents**
 
-- [Review Branching](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#review-branching)
-- [Creating Branches](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#creating-branches)
-- [Commit Changes](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#commit-changes)
-- [Merge before you push](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#merge-before-you-push)
-- [Push and make a PR](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/git-cheatsheet.md#push-and-make-a-pr)
+- [Terminal Commands](#terminal-commands)
+- [Running Python](#running-python)
+- [Review Branching](#review-branching)
+- [Creating Branches](#creating-branches)
+- [Commit Changes](#commit-changes)
+- [Merge before you push](#merge-before-you-push)
+- [Push and make a PR](#push-and-make-a-pr)
+
+## Terminal Commands
+
+```sh
+# Print the working directory — where you currently are in the file tree
+pwd
+
+# List the contents of the working directory
+ls
+
+# List the contents of some other directory, without moving there
+ls [directory]
+
+# Move into a subdirectory
+cd [subdirectory]
+
+# Move up to the parent directory
+cd ../
+
+# Move up two levels
+cd ../..
+
+# Make a new directory
+mkdir [directory]
+
+# Make a new file — include the file extension
+touch [filename]
+
+# Print the contents of a file
+cat [filename]
+
+# Print a string to the terminal
+echo "some text"
+
+# Append a string to a file, creating the file if it does not exist
+echo "some text" >> [filename]
+
+# Run the second command only if the first one succeeds
+[command] && [command]
+
+# Delete a file
+rm [filename]
+
+# Delete a directory and everything inside it
+rm -r [directory]
+
+# Rename a file, or move it to another directory
+mv [filename] [new_filename]
+
+# Copy a file into a directory
+cp [filename] [directory]
+
+# Terminate the currently running program
+Control + C
+```
+
+## Running Python
+
+```sh
+# Check which version of Python you have — everyone should be on 3.14
+python3 --version
+
+# Run a Python file
+python3 [filename.py]
+
+# Start the Python REPL, for trying out expressions
+python3
+
+# Leave the Python REPL
+exit()
+```
+
+> Note: the command is always `python3`, with the 3 on the end. Plain `python` is not a command on either macOS or Ubuntu.
 
 ## Review Branching
 
