@@ -10,39 +10,41 @@ Today, we'll be setting up our local development environment for Mac. Click here
   - [Familiarize yourself with VS Code](#familiarize-yourself-with-vs-code)
   - [Configure VS Code](#configure-vs-code)
   - [Download Useful Extensions](#download-useful-extensions)
-- [Download Node and NPM](#download-node-and-npm)
-- [Write your first JavaScript program](#write-your-first-javascript-program)
+- [Install Python](#install-python)
+  - [Write your first Python program](#write-your-first-python-program)
 
 ## Set up local `development` directory
 
-First, let's get familiar with the **Terminal**. It's an application that you can use to manage your file system. At first, it may seem slow but you'll quickly learn how to use it and see how powerful it can be!
+Now, let's get familiar with the **Terminal**. It's an application that you can use to manage your file system. At first, it may seem slow but you'll quickly learn how to use it and see how powerful it can be!
 
-1. Open the Terminal application. You can do this via Spotlight Search (<kbd>Command+Spacebar</kbd>) and search for "Terminal". Once it opens, type in the `ls` command and hit <kbd>Enter</kbd>
+First, open the Terminal application. You can do this via Spotlight Search (<kbd>Command+Spacebar</kbd>) and search for "Terminal". Once it opens, type in the `ls` command and hit <kbd>Enter</kbd>
 
-   ![The list command shows the directories at the root (~) of your file system](../.gitbook/assets/terminal-list.png)
+![The list command shows the directories at the root (~) of your file system](../.gitbook/assets/terminal-list.png)
 
-2. Using your Terminal, create a folder structure where you can put all your Marcy Lab code by entering these commands, one at a time:
+Then, using your Terminal, create a folder structure where you can put all your Marcy Lab code by entering these commands, one at a time:
 
-   ```sh
-   ls
-   mkdir development
-   cd development
-   mkdir mod-{0..7}
-   ls
-   ```
+```sh
+# list the contents of your "working directory" (where your terminal is working in your file system)
+ls
 
-   What do these commands do?
-   - `ls`: list the contents at the root (\~)
-   - `mkdir development`: make a new "development" folder
-   - `cd development`: change your "working" directory, moving into the development folder
-   - `mkdir mod-{0..7}`: create folders called mod-0, mod-1, ..., mod-7
-   - `ls`: list the contents of the development folder
+# make a new directory called "development"
+mkdir development
 
-   When you're done with this step, your folder structure will look something like this if you open up the development folder in your Finder application:
+# change the working directory to "development"
+cd development
 
-   ![folder-structure in Finder](../.gitbook/assets/folder-structure.png)
+# make directories with the names mod-0, mod-1, and mod-2
+mkdir mod-{0..2}
 
-   Pretty cool right? The Terminal is a very powerful tool in the hands of an expert.
+# list the contents of "development". You should see the mod-0, mod-1, and mod-2 folders
+ls
+```
+
+When you're done with this step, your folder structure will look something like this if you open up the development folder in your Finder application:
+
+![folder-structure in Finder](../.gitbook/assets/folder-structure.png)
+
+Pretty cool right? The Terminal is a very powerful tool in the hands of an expert.
 
 ## Download VS Code
 
@@ -108,6 +110,14 @@ First, we'll add the very helpful `code` command which can quickly open up a VS 
 
    ![Disable AI Features](../.gitbook/assets/vs-code-disable-ai-features.png)
 
+   **This does not mean you are working without AI.** It means the AI you use will be something you deliberately open and ask, rather than something that finishes your sentences while you type.
+
+   Inline suggestions complete your code as you go. There is never a moment where you say what you want — the editor infers it from what you have typed so far and offers you the next few lines. That is the opposite of how you will be taught to work here, which begins with writing down what you are building before anything gets generated. It also leaves no trace: suggested code and code you wrote yourself end up interleaved in the same file with no record of which was which, so afterward you genuinely cannot say which parts were yours. Being able to say which parts were yours is most of what this program certifies.
+
+   There is a second reason, and it is about learning rather than accountability. A suggestion appears at exactly the moment you pause to think — and that pause is where the learning happens. A tool you have to go and ask does not interrupt it. A tool that fills it in by default does.
+
+   You will turn this back on later in the program, deliberately, once you are working from written specifications. At that point a completion is filling in something you already decided, which is a different act. Until then, use a chat window as much as you want; the [AI Policy](../guidelines-and-policies/ai-policy.md) explains exactly what that looks like.
+
 ### Download Useful Extensions
 
 VS Code includes a number of features out-of-the-box but it also allows you to customize your experience with **extensions**. VS Code extensions let you add languages, debuggers, and tools to your installation to support your development workflow.
@@ -124,37 +134,66 @@ Start by installing these extensions:
 
 - **Code Spell Checker** — spelling checker for source code
 - **Error Lens** — highlights errors directly in your code
+- **Python** — Python language support from Microsoft
+- **Ruff** — the formatter and linter we use for Python
 
-## Download Node and NPM
+## Install Python
 
-1. [Download Node from their website](https://nodejs.org/en/download). When you visit the site, it should detect your system settings and recommend the appropriate version. You should be able to use the commands below:
+Everyone in your cohort installs Python 3.14. This matters more than it sounds: when something breaks, it breaks the same way for you, for your classmates, and for your instructor, which is the difference between a five-minute fix and an afternoon. The last number in the version may differ slightly between Mac and Windows machines — `3.14.7` and `3.14.3` are both fine. What matters is the `3.14`.
+
+1. Go to the [Python macOS downloads page](https://www.python.org/downloads/macos/) and click the large **Download Python** button at the top of the page. You should get Python 3.14.7.
+
+2. Open the `.pkg` file from your Downloads folder and follow the installer, accepting the defaults.
+
+3. Close your Terminal, open a new one, and confirm the install:
 
    ```sh
-   # Download and install nvm:
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-
-   # in lieu of restarting the shell
-   \. "$HOME/.nvm/nvm.sh"
-
-   # Download and install Node.js:
-   nvm install 22
-
-   # Verify the Node.js version:
-   node -v # Should print "v22.18.0".
-   nvm current # Should print "v22.18.0".
-
-   # Verify npm version:
-   npm -v # Should print "10.9.3".
+   python3 --version
    ```
 
-## Write your first JavaScript program
+   You should see a version beginning with `Python 3.14`.
+
+{% hint style="info" %}
+**If it prints anything other than `3.14`**, stop here and check with an instructor before going further. There are two ways this happens, and they have different fixes.
+
+If it prints an **older** version — `Python 3.12`, say — you have another copy of Python already installed that your Terminal is finding first. Run `which -a python3` to list all of them and show an instructor the output.
+
+If it prints a **newer** version, the download button has moved on to a release published after this guide was written. Go back to the [downloads page](https://www.python.org/downloads/macos/), scroll past the button to the list of stable releases, and download the most recent **3.14** version instead.
+{% endhint %}
+
+### Write your first Python program
 
 Now, in your VS Code Terminal, enter these commands:
 
-1. Type `ls` to see what is in your `development` folder
-2. `cd mod-0` to change directories into the `mod-0` folder
-3. Create a new JavaScript file called "index" by running `touch index.js`.
-   - You should be able to expand the `mod-0` folder and see the new JavaScript file.
-4. Open the file and add `console.log("Hello World!")`
-5. Save the file by pressing `⌘S` or by going to File > Save.
-6. Run the command `node index.js` and see the message!
+```sh
+# See the contents of the "working directory"
+ls
+
+# Change directories to the "mod-0" directory
+cd mod-0
+
+# Create a new Python file called script.py
+touch script.py
+```
+
+You should now see the file in your VS Code File Explorer panel on the left side of the screen. Then, do the following:
+
+1. Click on `script.py` to open it.
+2. Type in the code:
+
+   ```py
+   print("Hello World!")
+   ```
+
+3. Save the file by pressing `Ctrl+S` or by going to File > Save.
+4. Run the command in your Terminal:
+
+   ```sh
+   python3 script.py
+   ```
+
+{% hint style="info" %}
+**A note on `python` versus `python3`.** On macOS, typing `python` on its own usually produces `command not found`. The command you want is always `python3`, with the 3 on the end.
+
+This catches nearly every cohort in week one, and the reason is historical: `python` used to mean Python 2, a version of the language that is no longer used and is not installed on your machine. Rather than let `python` mean two different things on different computers, macOS leaves it undefined. Type `python3` every time and the question never comes up.
+{% endhint %}

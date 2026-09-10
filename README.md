@@ -28,32 +28,35 @@ layout:
 
 Welcome to Marcy Lab School's Fullstack Software Engineering Curriculum! Here, you will find all of the lecture notes, recordings, slides, and code examples as well as cheat sheets, guides, and miscellaneous resources.
 
-Over the next year you will learn how to be a Fullstack software engineer! You'll learn the basics of the JavaScript syntax, how to use JavaScript to solve real problems, and then how to organize and optimize your code like a pro!
+Over the next year you will learn how to be a software engineer who can build real products and direct AI tools to help build them. You'll learn the basics of Python syntax, how to use Python to solve real problems, how to organize and design a system before you build it, and how to read, verify, and defend code — including code you did not personally write.
 
 {% embed url="https://docs.google.com/presentation/d/1ErVMKugQc4ObNVhreLYplYZP3OsA5AmFyNSDcPKr8PA/embed?delayms=3000&loop=false&start=false" %}
 
 ## The Curriculum
 
-In the Software Engineering Fellowship at Marcy Lab School, you will learn how to build full-stack web applications using the PERN stack (Postgres, Express, React, Node). In addition, you will learn a variety of languages, technologies, developer tools, and more including:
+In the Software Engineering Fellowship at Marcy Lab School, you will learn how to build full-stack web applications in Python, and how to work alongside AI coding tools without losing ownership of what you build. Along the way you will learn a variety of languages, technologies, developer tools, and more including:
 
-* **Languages:** Bash, JS, HTML, CSS, SQL
-* **Frameworks & Libraries**: DOM API, React, Express, Knex, Jest, Bcrypt
-* **Technologies**: Nodejs, PostgreSQL
-* **Developer Tools**: VS Code, Git, GitHub, Command-Line, Chrome Developer Tools, Cursor, TablePlus, Postman
+* **Languages:** Python, Bash, HTML, CSS, SQL
+* **Frameworks & Libraries**: Flask, Jinja, pytest, the Python standard library
+* **Technologies**: PostgreSQL
+* **Developer Tools**: VS Code, Git, GitHub, Command-Line, pip, venv, Ruff, AI coding assistants
 
-### Course Modules
+### The Fellowship Arc
 
-The core curriculum is delivered over the course of 9 months with a final 3-month "Capstone" period with individual modules spanning 1 to 6 weeks:
+The core curriculum is delivered over four quarters, with individual modules spanning 1 to 6 weeks.
+
+**Q1 — Computational Thinking & Responsible Use of AI (months 0–3).** The command line, Git and GitHub, Python syntax, the Python ecosystem, and object-oriented programming. Alongside it: how AI actually works, how to prompt it, what it costs, and Marcy's academic honesty policy. This is the quarter where you write code by hand, because it is the quarter that builds your sense of what correct code looks like.
 
 * [Module 0: Command Line Interfaces, Git & GitHub](mod-0-command-line-interfaces-git-and-github/)
-* [Module 1: JavaScript Fundamentals](mod-1-javascript-fundamentals/)
-* [Module 2: Object-Oriented Programming (OOP)](mod-2-oop/)
-* [Module 3: HTML & CSS](mod-3-html-css/)
-* [Module 4: Interactive Web Applications](mod-4-interactive-data-driven-ui/)
-* [Module 5: Server-Side Development](mod-5-servers/)
-* [Module 6: Databases](mod-6-databases/)
-* [Module 7: React](mod-7-react/)
-* [Civic Tech Hackathon](/broken/pages/k3lLo6KOMxpUu80mbJYV)
+* Module 1: Python Fundamentals
+* Module 2: Object-Oriented Programming and System Design
+
+**Q2 — Fullstack & AI-Assisted Development (months 3–6).** HTML and CSS, APIs, servers with Flask, server-side rendering, and Postgres. Alongside it: model selection, context management, and the research-plan-implement-test-refine workflow. AI moves from tutor to implementer, and your job moves to specifying and verifying.
+
+**Q3 — AI-Led Project Building and Systems Design (months 6–9).** You are handed a working application and asked to extend it under a rotation of real constraints: security, testing, cost, sandboxing, and deployment. Each one is a tight loop — understand the constraint, decide, direct AI to implement it, and defend the decision to a practitioner who has solved that problem for real.
+
+**Q4 — Capstone (months 9–11).** A real stakeholder with real, shifting requirements. The first time nobody hands you the problem already framed.
+
 * [Capstone](mod-10-capstone/)
 
 ## Technical Competencies
@@ -123,9 +126,9 @@ Any set of things that work together can be considered a system. Systems can ran
 
 _Thinking in Systems_ is the ability to zoom out and see how a system works as a whole, to break down the system into smaller components, and to identify the dependencies between connected components.
 
-For example, the diagram below represents the layers of a full-stack PERN stack application. As software engineers, we need to be able to view an application in this manner and understand how the layers communicate with each other.
+For example, the diagram below represents the layers of a full-stack web application. As software engineers, we need to be able to view an application in this manner and understand how the layers communicate with each other. The specific technologies in this diagram are from a JavaScript stack rather than the Python one you will learn — which is the point of this competency. The layers, and the questions you ask about how they talk to each other, do not change when the tools do.
 
-![A full-stack PERN application system diagram.](.gitbook/assets/full-stack-diagram.svg)
+![A full-stack application system diagram, showing the layers of a web application and how they communicate.](.gitbook/assets/full-stack-diagram.svg)
 
 Systems-level thinking enables us to design, reason about, implement, and debug complex algorithms all the way up to complex applications. It is what separates “programmers” (those who can write functional code) from “software engineers” (those who can design reliable and maintainable code).
 
@@ -198,20 +201,22 @@ Learning is a skill and, just like any other skill, it can be developed and impr
 
 Generative AI tools can massively increase your learning potential but only if you use them intentionally! You have to be an active participant in your learning — AI can't learn for you. Some strategies for using AI intentionally include.
 
-Ask ChatGPT to help you by...
+Ask an AI assistant to help you by...
 
 * **Making complex topics easier to understand**:
   * "Break down this concept into smaller, digestible parts"
   * "Connect this idea to something I already know"
   * "Provide multiple perspectives or explanations for this topic"
 * **Overcoming challenges with AI support**:
-  * "Here is my code. Identify the mistakes and explain it step-by-step so I can fix it myself"
-  * "Check out my definition for the forEach function. It feels like something is off. Can you check my work for misconceptions?"
-  * "I just studied how JavaScript arrays work. Generate 5 practice questions for me ranging from easy to challenging that test my understanding of array methods."
+  * "Here is my code and here is what I expected it to do. Do not fix it. Ask me questions that will help me find the mistake myself."
+  * "Here is my explanation of what a Python dictionary is. It feels like something is off. Can you check my understanding for misconceptions?"
+  * "I just studied Python lists. Generate 5 practice questions for me ranging from easy to challenging that test my understanding, and do not give me the answers until I have tried."
 * **Planning next steps**
-  * "I am trying to learn about React hooks, what should I master first?"
+  * "I am trying to learn about Python classes, what should I master first?"
   * "I am building a project, where should I start first?"
   * "I've just finished an interview, what should I do to follow up to leave a good impression?"
+
+Notice what all of these have in common: the AI is doing the teaching and you are doing the work. That distinction is the whole of Marcy's AI policy, and it changes at a specific point in the program. Read the [AI Policy](guidelines-and-policies/ai-policy.md) before your first assignment — it explains what is expected of you in each quarter and, more usefully, gives you a one-sentence test you can apply to your own work without having to ask anyone.
 
 ## Tips and Tricks to Success at Marcy
 

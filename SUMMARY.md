@@ -1,5 +1,6 @@
 # Table of contents
 
+
 - [Welcome](README.md)
 - [Environment Setup](environment-setup/README.md)
   - [Local Environment Setup - Mac](environment-setup/local-environment-setup-mac.md)
@@ -9,7 +10,7 @@
   - [Postgres Setup](environment-setup/postgres-setup.md)
 - [Assignment Guides](how-tos/README.md)
   - [Software Engineering Assignments Guide](how-tos/working-with-assignments.md)
-  - [Code Style Guide](how-tos/style-guide.md)
+  <!-- - [Code Style Guide](how-tos/style-guide.md) -->
   - [Debugging & Rubber Ducking Guide](how-tos/how-to-debug.md)
   - [PEDAC Problem Solving Guide](how-tos/how-to-pedac.md)
 - [Project Guides](projects/README.md)
@@ -20,6 +21,9 @@
   - [How to Deploy on GitHub Pages](projects/5-deploying-vite-with-github-pages.md)
   - [How to Deploy on Render](projects/6-deploying-using-render.md)
   - [Agile Methodologies](projects/7-agile-methodologies.md)
+
+## Q1 - Computational Thinking & Responsible Use of AI
+
 - [Mod 0 - Command Line Interfaces, Git, and GitHub](mod-0-command-line-interfaces-git-and-github/README.md)
   - [Overview](mod-0-command-line-interfaces-git-and-github/Overview.md)
   - [1. Command Line Interfaces](mod-0-command-line-interfaces-git-and-github/1-clis.md)
@@ -27,7 +31,9 @@
   - [3. Git Pulling & Merging](mod-0-command-line-interfaces-git-and-github/3-git-pulling-merging.md)
   - [4. Git Branching & PRs](mod-0-command-line-interfaces-git-and-github/4-git-branching.md)
   - [Cheat Sheet](mod-0-command-line-interfaces-git-and-github/cheatsheet.md)
-- [Mod 1 - JavaScript Fundamentals](mod-1-javascript-fundamentals/README.md)
+
+- [(Work in Progress) Mod 1 - JavaScript Fundamentals](mod-1-javascript-fundamentals/README.md)
+<!--
   - [Overview](mod-1-javascript-fundamentals/Overview.md)
   - [1. Intro to Programming](mod-1-javascript-fundamentals/0-intro-to-programming.md)
   - [2. Data Types & Variables](mod-1-javascript-fundamentals/1-data-types-variables.md)
@@ -46,7 +52,9 @@
   - [Project: CLI App](mod-1-javascript-fundamentals/13-project-week.md)
   - [Case Study: CLI Task Manager](mod-1-javascript-fundamentals/case-study.md)
   - [Cheat Sheet](mod-1-javascript-fundamentals/cheatsheet.md)
-- [Mod 2 - Object-Oriented Programming](mod-2-oop/README.md)
+-->
+- [(Work in Progress) Mod 2 - Object-Oriented Programming](mod-2-oop/README.md)
+<!--
   - [Overview](mod-2-oop/Overview.md)
   - [1. Intro to OOP, Encapsulation, and This](mod-2-oop/1-intro-oop-encapsulation-this.md)
   - [2. Data Hiding through Closures](mod-2-oop/2-closures-data-hiding.md)
@@ -69,6 +77,8 @@
   - [7. Accessibility (a11y)](mod-3-html-css/7-accessibility.md)
   - [Project: Personal Portfolio Website](mod-3-html-css/8-personal-portfolio-project.md)
   - [Cheat Sheet](mod-3-html-css/cheatsheet.md)
+-->
+<!--
 - [Mod 4 - Interactive & Data-Driven User Interfaces](mod-4-interactive-data-driven-ui/README.md)
   - [Overview](mod-4-interactive-data-driven-ui/Overview.md)
   - [1. The DOM & Event Handling](mod-4-interactive-data-driven-ui/1-intro-to-interactive-pages.md)
@@ -137,3 +147,4 @@
   - [4. Trees & Breadth-First Search](mod-x-ds-a/4-trees-bfs.md)
   - [5. Trees & Depth-First Search](mod-x-ds-a/5-trees-dfs.md)
   - [6. Recursion](mod-x-ds-a/6-recursion.md)
+-->
