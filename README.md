@@ -36,10 +36,10 @@ Over the next year you will learn how to be a software engineer who can build re
 
 In the Software Engineering Fellowship at Marcy Lab School, you will learn how to build full-stack web applications in Python, and how to work alongside AI coding tools without losing ownership of what you build. Along the way you will learn a variety of languages, technologies, developer tools, and more including:
 
-* **Languages:** Python, Bash, HTML, CSS, SQL
-* **Frameworks & Libraries**: Flask, Jinja, pytest, the Python standard library
-* **Technologies**: PostgreSQL
-* **Developer Tools**: VS Code, Git, GitHub, Command-Line, pip, venv, Ruff, AI coding assistants
+- **Languages:** Python, Bash, HTML, CSS, SQL
+- **Frameworks & Libraries**: Flask, Jinja, pytest, the Python standard library
+- **Technologies**: PostgreSQL
+- **Developer Tools**: VS Code, Git, GitHub, Command-Line, pip, venv, Ruff, AI coding assistants
 
 ### The Fellowship Arc
 
@@ -47,17 +47,15 @@ The core curriculum is delivered over four quarters, with individual modules spa
 
 **Q1 — Computational Thinking & Responsible Use of AI (months 0–3).** The command line, Git and GitHub, Python syntax, the Python ecosystem, and object-oriented programming. Alongside it: how AI actually works, how to prompt it, what it costs, and Marcy's academic honesty policy. This is the quarter where you write code by hand, because it is the quarter that builds your sense of what correct code looks like.
 
-* [Module 0: Command Line Interfaces, Git & GitHub](mod-0-command-line-interfaces-git-and-github/)
-* Module 1: Python Fundamentals
-* Module 2: Object-Oriented Programming and System Design
+- [Module 0: Command Line Interfaces, Git & GitHub](mod-0-command-line-interfaces-git-and-github/)
+- Module 1: Python Fundamentals
+- Module 2: Object-Oriented Programming and System Design
 
 **Q2 — Fullstack & AI-Assisted Development (months 3–6).** HTML and CSS, APIs, servers with Flask, server-side rendering, and Postgres. Alongside it: model selection, context management, and the research-plan-implement-test-refine workflow. AI moves from tutor to implementer, and your job moves to specifying and verifying.
 
 **Q3 — AI-Led Project Building and Systems Design (months 6–9).** You are handed a working application and asked to extend it under a rotation of real constraints: security, testing, cost, sandboxing, and deployment. Each one is a tight loop — understand the constraint, decide, direct AI to implement it, and defend the decision to a practitioner who has solved that problem for real.
 
 **Q4 — Capstone (months 9–11).** A real stakeholder with real, shifting requirements. The first time nobody hands you the problem already framed.
-
-* [Capstone](mod-10-capstone/)
 
 ## Technical Competencies
 
@@ -75,20 +73,20 @@ _Note: these competencies often will overlap and support each other. For example
 
 As a software engineer, you must be able to communicate effectively for a variety of audiences: hiring managers, teammates, junior engineers, AI chatbots. Across the many domains in which you must be able to communicate effectively, the _what_, the _how_, and the _why_ and all three must be delivered with the utmost clarity:
 
-* _Communicating Product Development:_ What are you building and why? What users did you have in mind? How did you prioritize which features to build first and which features did you decide to leave out?
-* _Communicating Tool Selection:_ What specific tools and technologies are you using? What alternatives did you consider and why did you choose this specific stack? What were the tradeoffs?
-* _Communicating Code Structure:_ How is your solution organized? What are the key components and how do they interact? What considerations were you making for the team members who might have to maintain this code?
-* _Communicating Problem Solving:_ What were the key implementation challenges? What limitations did you face? How did you work within or around them?
+- _Communicating Product Development:_ What are you building and why? What users did you have in mind? How did you prioritize which features to build first and which features did you decide to leave out?
+- _Communicating Tool Selection:_ What specific tools and technologies are you using? What alternatives did you consider and why did you choose this specific stack? What were the tradeoffs?
+- _Communicating Code Structure:_ How is your solution organized? What are the key components and how do they interact? What considerations were you making for the team members who might have to maintain this code?
+- _Communicating Problem Solving:_ What were the key implementation challenges? What limitations did you face? How did you work within or around them?
 
 The ability to communicate well improves team collaboration and instills confidence in your competence as an engineer. The impression you make through your communication may be the single most important factor in securing a job. This is true of all industries, not just software engineering.
 
 **Indicators**
 
-* Shares not just what they did, but how they did it and why it matters.
-* Articulates technical decisions and their impact on the project timeline, performance, or user experience
-* Uses effective analogies, diagrams, and code snippets to enhance explanations
-* Adapts communication style based on audience (technical vs. non-technical stakeholders)
-* Can effectively communicate in both writing and in oral presentations.
+- Shares not just what they did, but how they did it and why it matters.
+- Articulates technical decisions and their impact on the project timeline, performance, or user experience
+- Uses effective analogies, diagrams, and code snippets to enhance explanations
+- Adapts communication style based on audience (technical vs. non-technical stakeholders)
+- Can effectively communicate in both writing and in oral presentations.
 
 **Pitfalls:** struggling to explain code clearly, lack of audience awareness, difficulty articulating technical decisions and tradeoffs
 
@@ -106,13 +104,13 @@ Mental models also enable us to organize the great variety of concepts we must l
 
 **Indicators**
 
-* Can illustrate a concept using an analogy or a diagram.
-* Can explain a concept clearly with simplified language.
-* Corrects misconceptions when new evidence emerges.
-* Can communicate algorithms using pseudocode.
-* Can identify essential vs. extraneous details when analyzing a problem.
-* Accurately applies known solutions, data structures, and algorithms to new but similar problems.
-* Makes informed technical decisions based on understanding of high-level tradeoffs.
+- Can illustrate a concept using an analogy or a diagram.
+- Can explain a concept clearly with simplified language.
+- Corrects misconceptions when new evidence emerges.
+- Can communicate algorithms using pseudocode.
+- Can identify essential vs. extraneous details when analyzing a problem.
+- Accurately applies known solutions, data structures, and algorithms to new but similar problems.
+- Makes informed technical decisions based on understanding of high-level tradeoffs.
 
 **Pitfalls:** memorizing syntax without understanding why, holding misconceptions, difficulty transferring knowledge to new situations.
 
@@ -134,11 +132,11 @@ Systems-level thinking enables us to design, reason about, implement, and debug 
 
 **Indicators**
 
-* Sees the big picture and how pieces connect (front-end, back-end, DB, APIs).
-* Anticipates ripple effects of a change.
-* Designs for extensibility, debug-ability, and reliability, not just “getting it to work.”
-* Breaks large problems into smaller ones.
-* Identifies dependencies between subtasks.
+- Sees the big picture and how pieces connect (front-end, back-end, DB, APIs).
+- Anticipates ripple effects of a change.
+- Designs for extensibility, debug-ability, and reliability, not just “getting it to work.”
+- Breaks large problems into smaller ones.
+- Identifies dependencies between subtasks.
 
 **Pitfalls:** tunnel vision on one layer of the stack, failing to anticipate ripple effects, struggling to “zoom out.”
 
@@ -148,21 +146,21 @@ Systems-level thinking enables us to design, reason about, implement, and debug 
 
 <summary><strong>4. Methodical Problem Solving:</strong> Applying a structured, methodical approach to plan, implement, test, and debug, and refine code.</summary>
 
-Mental models may allow you “vibe-code” your way to a sloppily hacked-together application. However, once things break, a real engineer will know how to follow a methodical approach to debug the problem, identify the root cause, and implement a fix. Randomly trying solutions or guessing at the root cause won’t cut it! 
+Mental models may allow you “vibe-code” your way to a sloppily hacked-together application. However, once things break, a real engineer will know how to follow a methodical approach to debug the problem, identify the root cause, and implement a fix. Randomly trying solutions or guessing at the root cause won’t cut it!
 
 Additionally, code that works today can still cause problems tomorrow if it isn't implemented with care. Experienced engineers will carefully plan before they code and then will review, refine, and refactor existing solutions to reduce redundancy, improve their efficiency, and improve readability.
 
 **Indicators**
 
-* Makes a plan before implementing code
-* Can trace through code execution to understand program behavior.
-* Tests solutions comprehensively, ensuring edge cases are covered.
-* Reads error messages and test output carefully and investigates root causes.
-* Tries multiple strategies when initial approach fails.
-* Seeks to understand root causes rather than applying surface-level fixes.
-* Identifies areas where solutions can be improved to reduce redundancy, improve efficiency, or improve readability
+- Makes a plan before implementing code
+- Can trace through code execution to understand program behavior.
+- Tests solutions comprehensively, ensuring edge cases are covered.
+- Reads error messages and test output carefully and investigates root causes.
+- Tries multiple strategies when initial approach fails.
+- Seeks to understand root causes rather than applying surface-level fixes.
+- Identifies areas where solutions can be improved to reduce redundancy, improve efficiency, or improve readability
 
-**Pitfalls:** jumping into code without planning an approach first, frequently “guessing” at what the problem is without systematically finding the root,  ignoring error messages, not asking for help in a timely manner, giving up too quickly when the initial approach doesn’t work, accepting code that works without evaluating it's long-term effectiveness.
+**Pitfalls:** jumping into code without planning an approach first, frequently “guessing” at what the problem is without systematically finding the root, ignoring error messages, not asking for help in a timely manner, giving up too quickly when the initial approach doesn’t work, accepting code that works without evaluating it's long-term effectiveness.
 
 </details>
 
@@ -176,52 +174,14 @@ Quality Discernment is about taking pride in every line of code you write (or AI
 
 **Indicators**
 
-* Reads documentation and instructions thoroughly.
-* Writes clean, organized and readable code that follows established style guides and coding conventions.
-* Creates well-structured, error-free documentation, READMEs, and presentations
-* Double-checks work before submitting for review or presentation.
-* Reviews code generated by AI with a critical eye.
-* Proactively seeks feedback and implements learnings in subsequent work.
-* Follows git best practices
+- Reads documentation and instructions thoroughly.
+- Writes clean, organized and readable code that follows established style guides and coding conventions.
+- Creates well-structured, error-free documentation, READMEs, and presentations
+- Double-checks work before submitting for review or presentation.
+- Reviews code generated by AI with a critical eye.
+- Proactively seeks feedback and implements learnings in subsequent work.
+- Follows git best practices
 
 **Pitfalls:** Submitting code that raises numerous linting flags and doesn’t adhere to known style guides. Creating documentation, technical writing, and technical presentations that are error-filled or contain typos or technical inaccuracies. Repeating the same mistakes without incorporating feedback. Accepting AI-generated code without evaluating it carefully.
 
 </details>
-
-## Learning at Marcy (with AI)
-
-{% embed url="https://docs.google.com/presentation/d/1G0kbcmXU5PUGbXWz5XB5F_XWFdnQDrRcpmxrdz413bs/embed?delayms=3000&loop=false&start=false" %}
-
-Learning is a skill and, just like any other skill, it can be developed and improved upon with intentional practice. At Marcy, we will help you hone your learning skills by encouraging you to follow the 4-step iterative process:
-
-1. Gather Information
-2. Utilize, apply, and organize that information
-3. Reflect on your learnings and gaps
-4. Gather more information to refine your understanding
-
-Generative AI tools can massively increase your learning potential but only if you use them intentionally! You have to be an active participant in your learning — AI can't learn for you. Some strategies for using AI intentionally include.
-
-Ask an AI assistant to help you by...
-
-* **Making complex topics easier to understand**:
-  * "Break down this concept into smaller, digestible parts"
-  * "Connect this idea to something I already know"
-  * "Provide multiple perspectives or explanations for this topic"
-* **Overcoming challenges with AI support**:
-  * "Here is my code and here is what I expected it to do. Do not fix it. Ask me questions that will help me find the mistake myself."
-  * "Here is my explanation of what a Python dictionary is. It feels like something is off. Can you check my understanding for misconceptions?"
-  * "I just studied Python lists. Generate 5 practice questions for me ranging from easy to challenging that test my understanding, and do not give me the answers until I have tried."
-* **Planning next steps**
-  * "I am trying to learn about Python classes, what should I master first?"
-  * "I am building a project, where should I start first?"
-  * "I've just finished an interview, what should I do to follow up to leave a good impression?"
-
-Notice what all of these have in common: the AI is doing the teaching and you are doing the work. That distinction is the whole of Marcy's AI policy, and it changes at a specific point in the program. Read the [AI Policy](guidelines-and-policies/ai-policy.md) before your first assignment — it explains what is expected of you in each quarter and, more usefully, gives you a one-sentence test you can apply to your own work without having to ask anyone.
-
-## Tips and Tricks to Success at Marcy
-
-* [Ben's Teacher User Manual](https://marcylabschool.notion.site/Ben-s-Teaching-User-Manual-afe86d2a9e314c6e91e8fa44ac3b2fa8)
-* [What is Computational Thinking?](https://youtu.be/qbnTZCj0ugI)
-* [How to Boost Your Confidence as a New Programmer](https://marcylabschool.notion.site/marcylabschool/How-to-Boost-Your-Confidence-as-a-New-Programmer-3e08b5dc231444adb5770228696041ac)
-* [The Surprising Truth About Note-taking During Lectures](https://www.youtube.com/watch?v=cRQqH18wJgw\&ab_channel=BenjaminKeep%2CPhD%2CJD)
-* [How to use Notion to create notes for coding](https://www.youtube.com/watch?v=0h-WSrckaq8\&ab_channel=InternetMadeCoder)

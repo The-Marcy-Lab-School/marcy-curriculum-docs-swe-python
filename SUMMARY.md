@@ -2,6 +2,8 @@
 
 
 - [Welcome](README.md)
+- [Guidelines and Policies](./guidelines-and-policies/README.md)
+  - [AI Policy](./guidelines-and-policies/ai-policy.md)
 - [Environment Setup](environment-setup/README.md)
   - [Local Environment Setup - Mac](environment-setup/local-environment-setup-mac.md)
   - [Local Environment Setup - Windows](environment-setup/local-environment-setup-windows.md)

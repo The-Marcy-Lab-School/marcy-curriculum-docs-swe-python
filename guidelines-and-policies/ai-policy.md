@@ -1,113 +1,227 @@
 # AI Policy
 
-## Our Views on AI and Learning
+**Table of Contents**:
 
-Over the last few years, generative AI tools like ChatGPT have become increasingly popular, particularly for tasks like programming. And there are many good reasons for it! AI tools can make us more efficient and can be useful for reviewing, writing, and generating ideas.
+- [What Kind Of Policy Is This?](#what-kind-of-policy-is-this)
+- [The Two Modes](#the-two-modes)
+- [Tutor Mode: The Baseline Standard](#tutor-mode-the-baseline-standard)
+  - [The One-Sentence Test](#the-one-sentence-test)
+  - [The Same Question, Asked Two Ways](#the-same-question-asked-two-ways)
+  - [A Standing Instruction You Can Paste](#a-standing-instruction-you-can-paste)
+  - [A Note on Autocomplete](#a-note-on-autocomplete)
+- [Implementer Mode: The Q2 Standard (But only if you are ready)](#implementer-mode-the-q2-standard-but-only-if-you-are-ready)
+  - [When the Mode Changes](#when-the-mode-changes)
+  - [What Happens If I'm Not Ready?](#what-happens-if-im-not-ready)
+- [Where AI Is Never Permitted](#where-ai-is-never-permitted)
+- [What Happens When the Policy Is Broken](#what-happens-when-the-policy-is-broken)
+- [What the Tools Cost, Stated Plainly](#what-the-tools-cost-stated-plainly)
+- [Where to Learn Things](#where-to-learn-things)
 
-However, Marcy is first and foremost a learning institution, and as such, generative AI tools must be used responsibly and for the purposes of learning, not as a substitute for learning or as a shortcut for completing work.
+## What Kind Of Policy Is This?
 
-So, yes! You can use generative AI tools like ChatGPT at Marcy, but you must know how they will help you and how they can hurt you. Whenever you find yourself using ChatGPT, ask yourself, “Is this helping me learn?”
+This policy defines rules that you are expected to follow. Rules typically carry with them the baggage of punishment and are often created in environments that seek to restrict its subjects and make the lives of those making the rules easier. This policy is different as it is designed to serve _your_ best interests.
 
-### AI makes writing code faster, but there is no shortcut for learning.
+You are going to spend your career working alongside AI coding tools. Marcy is not going to pretend otherwise, and this policy is not an attempt to keep you away from them. Directing an AI tool well is a professional skill, and teaching it is part of what you are here for.
 
-Let us be clear, generative AI is very good at quickly writing simple pieces of code. With basic prompting, you could likely use it to complete 50% of Marcy’s homework assignments. **However, your responsibility at Marcy is to learn, not to complete assignments.**
+But a tool that writes code for you also hides whether you could have written it. That is the problem this policy solves. An engineer who ships code they cannot explain, cannot debug, and cannot defend is not a fast engineer — they are an engineer who has not noticed yet that they are stuck. The industry is currently full of people in exactly that position, and the fastest way to stand out is to not be one of them. Studies have shown time and time again that relying on AI too early eliminates understanding which is precisely what you need to succeed in this career.
 
-If you use ChatGPT to complete your assignments, then you are robbing yourself of the chance to learn on your own. Remember, y**our completed assignments will not get you a job. What you know, what you can do, and your ability to learn will.**
+So this policy does not ask whether you used AI. It asks **what job you gave it.** That question has a different answer in your first three months than it does afterward, and the policy changes with it.
 
-We certainly understand that generative AI coding tools are used by experts in the professional world. However, you must first prove that you can program without those tools before earning the privilege of using them.
+{% hint style="info" %} **Ownership without authorship.** The standard Marcy holds you to, in every quarter, is this: you are responsible for every line of code in your project even if you did not personally type every line of it. You will be asked to explain your code, defend the decisions inside it, and fix it when it breaks. "The AI wrote that part" is never an answer since it is always assumed. {% endhint %}
 
-> _"You can give a carpenter a nail gun and they will drive 100 nails in a minute, but if they don’t know how to design and build a chair, what’s the point?"_ — Ben Spector
+## The Two Modes
 
-Using AI is a privilege earned by those experts who took the time to first master their craft, and then utilized AI to enhance their work. **AI coding tools make experts faster, they can’t make you smarter.**
+At any moment you are using AI in one of two modes.
 
-### AI can make mistakes. Always verify it yourself.
+|                                | Tutor mode                                                            | Implementer mode                                              |
+| :----------------------------- | :-------------------------------------------------------------------- | :------------------------------------------------------------ |
+| What the AI does               | Explains, questions, quizzes, critiques, points you at the right idea | Writes code from a specification you wrote                    |
+| Who writes the code you submit | You do, by hand                                                       | The AI does, under your direction                             |
+| What you are being graded on   | Whether you understand it                                             | Whether you specified it well, verified it, and can defend it |
 
-One of the biggest risks of using ChatGPT is that it can “hallucinate”, meaning it can provide answers that seem reasonable but are completely inaccurate. As such, **ChatGPT should always be checked against another resource or verified yourself.**
+Both modes are professional. Neither is a punishment or a reward. They train different halves of the same job, and "Tutor mode" comes first because the implementation can only come once your personal understanding is sufficient enough to delegate implementation to someone or something else (AI).
 
-Do not trust responses generated by ChatGPT. Instead, find a human who has provided an answer to your questions and **use ChatGPT to summarize the answer in simpler language.**
+## Tutor Mode: The Baseline Standard
 
-### AI can debug simple things, but not everything
+At the start of the year, **AI does not produce code that ends up in your submission.** It can teach you anything you want to know about code. It cannot write it for you.
 
-There will be many times when you want to reach for ChatGPT to help you debug your code. Up to a certain point, it will be quite good at this. However, its usefulness will quickly run out, and you will be left without the critical skills to solve problems on your own.
+### The One-Sentence Test
 
-For example, ChatGPT can likely identify a logical mistake inside of a single function, but it will be much less likely to be able to tell you why the 5 different functions in your full-stack program aren’t working together properly.
+> _Did any content in the file I am submitting arrive there because I copied it from a model, accepted a completion, or typed it out from a model's answer without understanding it first?_
 
-**Debugging is a critical skill that you MUST develop a strategy for.**
+If the answer is yes, that is generation, and it is in violation of the "Tutor Mode" policy. Retyping a model's answer by hand is the same act as pasting it. What matters is whether the understanding came before the keystroke.
 
-### Recommended resources
+If the answer is no, you are inside the policy no matter how much you talked to the model, how many questions you asked it, or how long the conversation ran. Ask it a hundred questions. That is the point.
 
-So, what learning resources do we recommend you use to learn?
+### The Same Question, Asked Two Ways
 
-* If you want to learn about a topic for the first time, we recommend **Eloquent JavaScript**, **W3Schools**, **MDN**, **Codecademy**, and **Freecodecamp**. If you want alternative learning modes, use **YouTube**!
-* When learning about tools and frameworks (like Express, React, Postgres, etc…), use **official documentation.** It will be painful at first, but this is a skill that you must hone.
-* If you have a bug or error code that you don’t understand, Google that too! It is more than likely that someone on **StackOverflow** will have run into the same issue and can provide a direct answer to your question.
+Every situation where you would reach for AI has a tutor-mode version and a generator-mode version. The difference is almost always one sentence in how you ask.
 
-For each of these resources, if you find a definition or explanation confusing, use ChatGPT to summarize it for you!
+**<details><summary>You are stuck and do not know how to start</summary>**
 
-## Our Policy
+**Generator mode:** "Write a function that takes a list of numbers and returns the average."
 
-Any student work submitted using AI tools should clearly indicate what work is the student’s work and what work is generated by the AI. In such cases, no more than 25% of the student work should be generated by AI. Assignments that are in large part quoted from an AI assistant are very unlikely to be evaluated positively. In addition, if a student's work is substantially identical to another student's work, that will be grounds for an investigation of plagiarism regardless of whether the prose was produced by an AI assistant
+**Tutor mode:** "I need to find the average of a list of numbers. I think I need to add them up and divide by how many there are, but I do not know how to add up a list in Python. What should I look up? Do not write the code for me."
 
-Below, you will find the use cases under which you can and cannot use AI at Marcy. When in doubt about permitted usage, please ask for clarification.
-
-### Acceptable Use of AI
-
-The use of generative AI tools like ChatGPT is permitted at Marcy for the following activities (expand each use case to see an example):
-
-**<details><summary>Brainstorming and refining your ideas</summary>**
-
-_ChatGPT is excellent at providing you with ideas for your projects. Make sure to specify the requirements of the projects and explain the desired features._
-
-<img src="../.gitbook/assets/chatgpt-1-brainstorming.png" alt="" data-size="original">
-
-</details>
-
-**<details><summary>Generating example data sets</summary>**
-
-_ChatGPT is excellent at generating well-formatted data sets for your projects! Make sure to specify the data types of the dataset you wish to generate and the language or format of the dataset (JavaScript, Python, JSON, comma-separated values/CSV, etc…)_
-
-<img src="../.gitbook/assets/chatgpt-2-example-data.png" alt="" data-size="original">
+The tutor-mode version gets you the name of the thing you are missing, which is the part you did not have. You still write the function.
 
 </details>
 
-**<details><summary>Simplifying or summarizing technical documentation</summary>**
+**<details><summary>You have an error you do not understand</summary>**
 
-_When you encounter a definition in a piece of technical documentation that confuses you, see if ChatGPT can summarize it for you. The documentation should ALWAYS be your “source of truth”, but ChatGPT can help explain complex concepts in language that may be easier to digest. First, state that you want to simplify a definition and then copy-paste the definition below._
+**Generator mode:** "Fix this error." _(pastes the code and the traceback)_
 
-<img src="../.gitbook/assets/chatgpt-3-simplifying-docs.png" alt="" data-size="original">
+**Tutor mode:** "Here is a traceback I do not understand. Walk me through what each line of it is telling me, starting from the bottom. Do not tell me what the fix is — I want to find it myself."
 
-</details>
-
-**<details><summary>Checking grammar, spelling, and style in writing</summary>**
-
-_Use ChatGPT as a final review before submitting your writing submissions. Specify the question you are answering to provide the necessary context for ChatGPT to potentially correct any incorrect answers you may be providing. Specify that you want it to check for grammar, spelling, and style to reduce the degree to which it will rewrite your work._
-
-<img src="../.gitbook/assets/chatgpt-4-checking-grammar.png" alt="" data-size="original">
+Reading a traceback is a skill with a ceiling you will hit in about two weeks of practice, and then you will have it for the rest of your career. Handing the traceback to a model instead means you never start the two weeks.
 
 </details>
 
-**<details><summary>Checking code style</summary>**
+**<details><summary>You suspect there is a built-in tool for what you are doing by hand</summary>**
 
-_ChatGPT can be used to identify common code style issues such as variable names, spacing, indentation, and best practices. Specify the language that you are programming in to reduce the likelihood of hallucinations._
+**Generator mode:** "Rewrite this loop to be more Pythonic."
 
-<img src="../.gitbook/assets/chatgpt-5-code-style.png" alt="" data-size="original">
+**Tutor mode:** "I wrote a loop that counts how many times each word appears in a list. I have a feeling Python has something built in for this. What should I search the standard library documentation for?"
 
-</details>
-
-**<details><summary>Drafting the structure of emails and other forms of communication</summary>**
-
-_Use ChatGPT to provide a structure for communication with mentors, instructors, and other professionals. We often get feedback from hiring partners that they can tell when applications and emails are written using AI so always review the provided structure and revise it before sending to ensure that the writing sounds like YOU. Review the key points to learn how to write messages like this on your own._
-
-<img src="../.gitbook/assets/chatgpt-6-drafting-messages.png" alt="" data-size="original">
+You are allowed to learn that collections.Counter exists. You are not allowed to have the model swap it into your file.
 
 </details>
 
-### Unacceptable Use of AI
+**<details><summary>You finished and want to know if it is any good ⭐️</summary>**
 
-The use of generative AI tools is not permitted in this course for the following activities:
+**Generator mode:** "Improve this code."
 
-* Writing entire sentences, paragraphs, or papers to complete class assignments.
-* Generating solutions to complete technical homework assignments.
-* Use in any form during a GCF
-* Use in any form on the coding portion of a technical assessment.
-* Use of VS Code AI auto-complete extensions.
+**Tutor mode:** "Here is code I wrote. Do not change it. Ask me five questions about it that I would only be able to answer correctly if I actually understood what I wrote. Then tell me which of my answers were weak."
+
+This is the single highest-value thing you can do with an AI tool in Tutor Mode, and almost nobody does it. A model that quizzes you finds the gap in your understanding faster than you will find it yourself.
+
+</details>
+
+**<details><summary>You do not understand something in the curriculum</summary>**
+
+**Generator mode:** "Explain closures and show me an example." _(then copying the example)_
+
+**Tutor mode:** "Explain closures to me using an analogy that has nothing to do with programming. Then ask me to explain it back to you in my own words and tell me what I got wrong."
+
+Explaining a concept back and being corrected is how you find out that you only half-understood it. Reading a good explanation and nodding along in agreement is not.
+
+</details>
+
+### A Standing Instruction You Can Paste
+
+Paste this at the start of a chat session and it will hold for the rest of the conversation:
+
+```
+I am a student learning Python. For this entire conversation, do not write code
+for me and do not fix my code. You may explain concepts, ask me questions, point
+me at documentation, tell me what to search for, and tell me when my reasoning is
+wrong. If I ask you to write code, remind me of this instruction instead. When I
+share code with you, ask me questions about it rather than rewriting it.
+```
+
+This is a genuinely useful habit, not a compliance step. It changes what the tool is good for.
+
+### A Note on Autocomplete
+
+Your editor's inline suggestions are generation, and the one-sentence test above already covers them: accepting a completion puts content in your file that you did not decide on. Turn the feature off — the setup guide for [Mac](https://file+.vscode-resource.vscode-cdn.net/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python/environment-setup/local-environment-setup-mac.md) and [Windows](https://file+.vscode-resource.vscode-cdn.net/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python/environment-setup/local-environment-setup-windows.md) shows you where.
+
+This is not the same restriction as the one on chat, and the difference is worth understanding rather than memorizing:
+
+- A chat window is something you open and ask, which means your intent comes first and you can hold the answer up against what you expected.
+  - A completion arrives before you have said anything at all. It is guessing your intent from the characters you have typed so far, which means there is no expectation for it to be measured against.
+
+There is a practical consequence too. Suggested code and code you wrote yourself end up interleaved in the same file with no record of which was which, so afterward you genuinely cannot say which parts were yours. Being able to say which parts were yours is most of what this program is looking at.
+
+Later in the program, once you are working from a written specification, completions become reasonable again — because by then they are filling in something you already decided.
+
+## Implementer Mode: The Q2 Standard (But only if you are ready)
+
+In Implementor mode AI writes code for you, and the work _you_ do becomes what happens on either side of what the AI does: the **specification** you write before, and the **verification** you do after.
+
+What changes:
+
+- **You write a specification first.** Before you generate anything, you write down what you are building, what files it touches, what the interface looks like, and what "working" means. That document is submitted alongside the project and is graded on its own.
+- **You are accountable for every line.** You will be asked to explain any part of what you submitted. Code you cannot explain is code you did not own, and it is scored that way regardless of whether it runs.
+- **Over-delivery is a defect.** You ask for a fix and get a refactor. You ask for one route and get a restructured application. Accepting that silently is how you stop being the author of your own architecture. Catching it and rejecting it is part of the job.
+
+This depends on the following workflow becoming a habit: research → plan → implement → test → refine → iterate.
+
+### When the Mode Changes
+
+The rule changes from "Tutor mode" to "Implementor mode" but you must be the judge for yourself when you are ready to make the transition.
+
+Q1 is the only quarter where writing code by hand is the default. That makes it the only quarter that reliably builds the skill of **expectation** — a sense, before you read a piece of code, of what correct code for this problem should look like. How many files. Which functions. Where it is likely to break.
+
+That expectation is necessary for when you transition to using AI in "Implementor Mode". When AI writes 200 lines in four seconds, your job is to look at them and notice that something is off. You cannot notice that something is off if you have no picture of what "on" would have looked like. **A fellow who cannot predict cannot verify, and a fellow who cannot verify is shipping code they do not own.**
+
+Expectation is not a thing you can be told. It is the byproduct of having built things yourself, badly, a few times, and seen what went wrong. Three months is a short time to manufacture it so if you enter Q2 without this skill fully developed, you are not expected to move on to Implementor Mode.
+
+Being ready to make this transition means that you can:
+
+- Predict the shape of correct output before you generate it (and identify how to change it if the output isn't correct)
+- Find a defect in code you did not write.
+- Articulate why output was produced in a particular way
+- Identify "code smell" (code written in unorthodox or non-standard ways)
+
+### What Happens If I'm Not Ready?
+
+If you are not there yet, you still move on to Q2's content — Flask, Postgres, all of it — while spending a few more weeks with AI in tutor mode and doing targeted practice. You are never held back a quarter. The mode is what is adjusted, not your pace and not what you have access to.
+
+If your instructor believes you are not there yet and has evidence from assignments, assessments, and projects, they will tell you plainly and name what specifically is still missing — but your perception is important too.
+
+However, if the evidence says one thing and your gut says another, the evidence is usually right, and the direction people get this wrong is nearly always the same: switching early because there is not enough time, rather than because the skill has arrived.
+
+Running out of time is a real problem and it deserves a real answer. However a conversation about your workload will solve a lack-of-time problem, not a change of mode. Switching early to buy back a few hours costs you the quarter that the rest of the program is built on, and you will not feel that cost until much later, when it is most expensive to fix.
+
+## Where AI Is Never Permitted
+
+In any quarter, in any mode:
+
+- During a GCF.
+- On the coding portion of a technical assessment.
+- To produce writing you submit as your own reflection or short response. You may use it to check grammar and spelling in writing you already wrote.
+- To do a teammate's work, or to complete something you are representing as your own independent work when it is not.
+
+## What Happens When the Policy Is Broken
+
+**The first response is almost never disciplinary.** If you generated code during Q1, we understand that the most likely explanation is that you had a submission due but were out of time (e.g. a late-night work shift, a sick family member, a commute that took the whole evening). That is a rational response to an impossible schedule, and it is a scheduling problem before it is an integrity problem. So the first conversation is about your workload: what is due, what is realistic, and what support you need.
+
+The academic honesty process exists, and it is reserved for the case where that support has been offered and declined. A policy that ignores what is actually going on in someone's life is not enforcing integrity and we are not going to do that.
+
+**Tell us early.** If you are underwater, say so before the deadline rather than after. That conversation is easy. The other one is not. Furthermore, conversations about workload do not end when your fellowship ends. Alerting your manager that a deliverable is going to be late is not uncommon in the work world. But experienced engineers always give a heads up well before the deadline. Start building that habit now\!
+
+## What the Tools Cost, Stated Plainly
+
+Some AI capabilities cost money, and we are going to name which ones rather than let you assume that everyone else has something you do not.
+
+Everything Tutor Mode requires works on a free tier. You do not need a paid subscription to complete any assignment, and you will not be at a disadvantage for not having one.
+
+Later quarters use tools where the paid tier is genuinely more capable, and Marcy covers what the curriculum requires. When you reach a professional setting, know that tooling budgets are a normal thing for a team to have and a normal thing for an engineer to ask for. If a company hands you a worse tool than the one you trained on, that is a resourcing decision on their end — it is not you being behind.
+
+## Where to Learn Things
+
+For each of these resources, if you find a definition or explanation confusing, use AI to summarize it for you. But remember, don’t just ask for an answer. Use AI to help refine your understanding.
+
+- **The lazy way**: asking Claude for the answer.
+- **A step up**: asking Claude to point you to a few expert resources on it.
+- **The way that actually works**: asking Claude to summarize the confusing part, then explaining it back in your own words. If you can't, you don't understand it yet — you've just read it.xt
+
+**Documentation (official, your source of truth).** It might be painful at first, but reading official docs is a skill you must hone; nothing else stays as current or as accurate.
+
+- Python docs — [https://docs.python.org](https://docs.python.org)
+- Official docs for whatever you're building with — Flask, Postgres, etc.
+
+**Courses & books (readability over precision).** Pick one of these two, not both — they cover similar ground.
+
+- [_Automate the Boring Stuff with Python_](https://automatetheboringstuff.com/) _(Al Sweigart)_ — free, fully online, and teaches Python by solving real problems (renaming files, scraping a page) instead of opening with abstract syntax. Best if you want to feel useful in chapter one.
+- _Python Crash Course_ (Eric Matthes) — the more conventional, project-based alternative (you build a game, a data visualization, and a small web app).
+
+**Alternatives, including YouTube (specific people, not just "watch some videos").** These three are each named repeatedly by working developers for teaching why, not just how:
+
+- [Corey Schafer](https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) — widely considered the standard for Python fundamentals and web frameworks (including Flask). He explains what's happening under the hood and why you'd choose one approach over another, not just that a piece of syntax works, which is what separates programmers who can still read their own code six months later from people who have to re-Google basic syntax every session.
+- [ArjanCodes](https://www.youtube.com/arjancodes) — covers SOLID principles applied to Python, common design patterns, dependency injection, and protocol-based interfaces. Go here once you can already write working code and want to know how to structure it well.
+- [mCoding (James Murphy)](https://www.youtube.com/@mCoding) — short, dense, and focused on what's actually happening inside Python. Good for once you want to stop treating the language as a black box.
+
+**Tool acquisition (picking up a new framework or tool)**
+
+- [Scrimba](https://scrimba.com/) — its interactive format lets you pause a lesson and edit the instructor's code inline, which makes it a fast way to get oriented in a new tool before you turn to official docs for the real depth. Its Python catalog is thin, so it's not where you go to learn the language itself — but its React and AI-engineering tracks (LLMs, agents, RAG, prompt engineering, the OpenAI/Claude/MCP tooling you'll be using directly) are well-suited to exactly this: a quick, hands-on first pass at a new tool.
