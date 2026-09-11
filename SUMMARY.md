@@ -24,7 +24,7 @@
   - [How to Deploy on Render](projects/6-deploying-using-render.md)
   - [Agile Methodologies](projects/7-agile-methodologies.md)
 
-## Q1 - Computational Thinking & Responsible Use of AI
+## Q1 - Computational Thinking and Responsible Use of AI
 
 - [Mod 0 - Command Line Interfaces, Git, and GitHub](mod-0-command-line-interfaces-git-and-github/README.md)
   - [Overview](mod-0-command-line-interfaces-git-and-github/Overview.md)
