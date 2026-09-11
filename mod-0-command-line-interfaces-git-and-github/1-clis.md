@@ -15,7 +15,8 @@ You will be able to…
 
 **Table of Contents:**
 
-- [Key Terms and Commands](#key-terms-and-commands)
+- [Key Terms](#key-terms)
+- [Common CLI Commands](#common-cli-commands)
 - [The File Tree](#the-file-tree)
   - [Applications for Viewing the File Tree (CLI vs. GUI)](#applications-for-viewing-the-file-tree-cli-vs-gui)
   - [Using the Terminal in VS Code](#using-the-terminal-in-vs-code)
@@ -32,9 +33,9 @@ You will be able to…
   - [Removing, Renaming, Moving, and Copying](#removing-renaming-moving-and-copying)
 - [Challenges](#challenges)
 
-## Key Terms and Commands
+## Key Terms
 
-**Key Terms**
+You will find a section with key terms at the top of every chapter. These are the definitions that you will be expected to commit to memory but that will take time and practice. When you first read a chapter, skim through these terms and make note of the ones that you are confused about. Then, return to these terms and see which ones you can easily recall and which ones you need to practice.
 
 - **Terminal** — A program for interacting with a computer's files and executing programs through a command line interface.
 - **Command Line Interface** — a type of user interface (UI) that let's a users perform actions by entering text-based commands.
@@ -47,7 +48,7 @@ You will be able to…
 - **Interpreter** — The program that reads a Python file and executes it, one statement at a time.
 - **`python3`** — The command that runs the Python interpreter on a file.
 
-**Important CLI commands**
+## Common CLI Commands
 
 {% hint style="info" %}
 **Note:** In the commands below, argument placeholders will be written like this: `[argument]`. When using these commands, replace the `[argument]` with your desired inputs, making sure to leave out the `[]` as well.
