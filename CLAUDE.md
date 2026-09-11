@@ -42,6 +42,20 @@ Step two, write the three things the tool cannot judge:
 
 **Look here first.** Three to five specific places, ranked, each with a `file.md:line` reference and one sentence on why it needs his eyes. Rank by risk: wholly new prose that no original existed to check against outranks a mechanical substitution. This section is the point of the report — it is what lets him scan rather than read.
 
+## Tables of contents
+
+**Never put a bare `&` in a heading. Write "and".** GitBook drops the ampersand when it builds an anchor, so "Key Terms & Commands" publishes with the broken anchor `#key-terms--commands` and every link to it fails. `scripts/update-toc.py` makes this substitution automatically at every heading level and retargets any link pointing at an anchor it changed. An ampersand inside inline code is left alone, because `` `&&` `` is a shell operator rather than a conjunction, and an ampersand with no surrounding spaces such as "Q&A" is reported for a person to decide rather than mangled into "QandA".
+
+Do not write or edit a table of contents by hand. The "Markdown All in One" extension regenerates them when Ben saves a file, and `scripts/update-toc.py` reproduces its output exactly — it has been checked byte-for-byte against 53 files the extension itself generated, including two with 34 entries.
+
+After changing any heading, run:
+
+```sh
+python3 scripts/update-toc.py <file.md> [<file.md> ...]
+```
+
+Add `--check` to report without writing; it exits non-zero when something is out of date, so it also works as a guard. The script matches `markdown.extension.toc.levels` of `2..6`, a `-` marker, two-space indent, GitHub slugs, and the Prettier pass that escapes a bare `&` but leaves one inside inline code alone. Do not spend tokens reproducing a table of contents in a message or an edit — run the script.
+
 ## Verify before claiming
 
 These documents contain instructions fellows follow literally on their own machines. Run the commands before writing that they work, and read the live page before quoting a version number, a filename, or a repository statistic. When something cannot be verified here — anything needing a Windows machine, a clean install, or a screenshot — say so plainly and put it on the list of things Ben has to check, rather than asserting it.

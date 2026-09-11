@@ -22,6 +22,8 @@ This is a record of what the curriculum does, not a history of what it used to d
 
 **Sentences that survive conversion are left exactly as written**, including the ones that read a little loose. Improving prose that did not need converting is how a document quietly stops sounding like Ben wrote it.
 
+**Headings use "and", never "&".** GitBook strips a bare ampersand when it builds an anchor, leaving a doubled hyphen that no link resolves to. "Git & GitHub" becomes "Git and GitHub". This applies to headings at every level, including the H1 title. An ampersand inside inline code stays as it is — the chapter on combining commands with `` `&&` `` is about the operator, not a conjunction. Run `python3 scripts/update-toc.py <file>` and it makes the change and fixes the affected links.
+
 ## Pedagogical devices
 
 **Hidden `<details>` questions from the original are kept verbatim** where the concept survives. Three of them in the command-line chapter carried over untouched.
