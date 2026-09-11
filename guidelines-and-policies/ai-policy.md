@@ -14,8 +14,7 @@
   - [What Happens If I'm Not Ready?](#what-happens-if-im-not-ready)
 - [Where AI Is Never Permitted](#where-ai-is-never-permitted)
 - [What Happens When the Policy Is Broken](#what-happens-when-the-policy-is-broken)
-- [What the Tools Cost, Stated Plainly](#what-the-tools-cost-stated-plainly)
-- [Where to Learn Things](#where-to-learn-things)
+- [What AI Tools Cost](#what-ai-tools-cost)
 
 ## What Kind Of Policy Is This?
 
@@ -190,38 +189,10 @@ The academic honesty process exists, and it is reserved for the case where that 
 
 **Tell us early.** If you are underwater, say so before the deadline rather than after. That conversation is easy. The other one is not. Furthermore, conversations about workload do not end when your fellowship ends. Alerting your manager that a deliverable is going to be late is not uncommon in the work world. But experienced engineers always give a heads up well before the deadline. Start building that habit now\!
 
-## What the Tools Cost, Stated Plainly
+## What AI Tools Cost
 
 Some AI capabilities cost money, and we are going to name which ones rather than let you assume that everyone else has something you do not.
 
 Everything Tutor Mode requires works on a free tier. You do not need a paid subscription to complete any assignment, and you will not be at a disadvantage for not having one.
 
 Later quarters use tools where the paid tier is genuinely more capable, and Marcy covers what the curriculum requires. When you reach a professional setting, know that tooling budgets are a normal thing for a team to have and a normal thing for an engineer to ask for. If a company hands you a worse tool than the one you trained on, that is a resourcing decision on their end — it is not you being behind.
-
-## Where to Learn Things
-
-For each of these resources, if you find a definition or explanation confusing, use AI to summarize it for you. But remember, don’t just ask for an answer. Use AI to help refine your understanding.
-
-- **The lazy way**: asking Claude for the answer.
-- **A step up**: asking Claude to point you to a few expert resources on it.
-- **The way that actually works**: asking Claude to summarize the confusing part, then explaining it back in your own words. If you can't, you don't understand it yet — you've just read it.xt
-
-**Documentation (official, your source of truth).** It might be painful at first, but reading official docs is a skill you must hone; nothing else stays as current or as accurate.
-
-- Python docs — [https://docs.python.org](https://docs.python.org)
-- Official docs for whatever you're building with — Flask, Postgres, etc.
-
-**Courses & books (readability over precision).** Pick one of these two, not both — they cover similar ground.
-
-- [_Automate the Boring Stuff with Python_](https://automatetheboringstuff.com/) _(Al Sweigart)_ — free, fully online, and teaches Python by solving real problems (renaming files, scraping a page) instead of opening with abstract syntax. Best if you want to feel useful in chapter one.
-- _Python Crash Course_ (Eric Matthes) — the more conventional, project-based alternative (you build a game, a data visualization, and a small web app).
-
-**Alternatives, including YouTube (specific people, not just "watch some videos").** These three are each named repeatedly by working developers for teaching why, not just how:
-
-- [Corey Schafer](https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) — widely considered the standard for Python fundamentals and web frameworks (including Flask). He explains what's happening under the hood and why you'd choose one approach over another, not just that a piece of syntax works, which is what separates programmers who can still read their own code six months later from people who have to re-Google basic syntax every session.
-- [ArjanCodes](https://www.youtube.com/arjancodes) — covers SOLID principles applied to Python, common design patterns, dependency injection, and protocol-based interfaces. Go here once you can already write working code and want to know how to structure it well.
-- [mCoding (James Murphy)](https://www.youtube.com/@mCoding) — short, dense, and focused on what's actually happening inside Python. Good for once you want to stop treating the language as a black box.
-
-**Tool acquisition (picking up a new framework or tool)**
-
-- [Scrimba](https://scrimba.com/) — its interactive format lets you pause a lesson and edit the instructor's code inline, which makes it a fast way to get oriented in a new tool before you turn to official docs for the real depth. Its Python catalog is thin, so it's not where you go to learn the language itself — but its React and AI-engineering tracks (LLMs, agents, RAG, prompt engineering, the OpenAI/Claude/MCP tooling you'll be using directly) are well-suited to exactly this: a quick, hands-on first pass at a new tool.

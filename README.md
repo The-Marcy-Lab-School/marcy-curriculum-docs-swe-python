@@ -185,3 +185,31 @@ Quality Discernment is about taking pride in every line of code you write (or AI
 **Pitfalls:** Submitting code that raises numerous linting flags and doesn’t adhere to known style guides. Creating documentation, technical writing, and technical presentations that are error-filled or contain typos or technical inaccuracies. Repeating the same mistakes without incorporating feedback. Accepting AI-generated code without evaluating it carefully.
 
 </details>
+
+## Additional Learning Resources
+
+For each of these resources, if you find a definition or explanation confusing, use AI to summarize it for you. But remember, don’t just ask for an answer. Use AI to help refine your understanding.
+
+- **The lazy way**: asking Claude for the answer.
+- **A step up**: asking Claude to point you to a few expert resources on it.
+- **The way that actually works**: asking Claude to summarize the confusing part, then explaining it back in your own words. If you can't, you don't understand it yet — you've just read it.xt
+
+**Documentation (official, your source of truth).** It might be painful at first, but reading official docs is a skill you must hone; nothing else stays as current or as accurate.
+
+- Python docs — [https://docs.python.org](https://docs.python.org)
+- Official docs for whatever you're building with — Flask, Postgres, etc.
+
+**Courses & books (readability over precision).** Pick one of these two, not both — they cover similar ground.
+
+- [_Automate the Boring Stuff with Python_](https://automatetheboringstuff.com/) _(Al Sweigart)_ — free, fully online, and teaches Python by solving real problems (renaming files, scraping a page) instead of opening with abstract syntax. Best if you want to feel useful in chapter one.
+- _Python Crash Course_ (Eric Matthes) — the more conventional, project-based alternative (you build a game, a data visualization, and a small web app).
+
+**Alternatives, including YouTube (specific people, not just "watch some videos").** These three are each named repeatedly by working developers for teaching why, not just how:
+
+- [Corey Schafer](https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) — widely considered the standard for Python fundamentals and web frameworks (including Flask). He explains what's happening under the hood and why you'd choose one approach over another, not just that a piece of syntax works, which is what separates programmers who can still read their own code six months later from people who have to re-Google basic syntax every session.
+- [ArjanCodes](https://www.youtube.com/arjancodes) — covers SOLID principles applied to Python, common design patterns, dependency injection, and protocol-based interfaces. Go here once you can already write working code and want to know how to structure it well.
+- [mCoding (James Murphy)](https://www.youtube.com/@mCoding) — short, dense, and focused on what's actually happening inside Python. Good for once you want to stop treating the language as a black box.
+
+**Tool acquisition (picking up a new framework or tool)**
+
+- [Scrimba](https://scrimba.com/) — its interactive format lets you pause a lesson and edit the instructor's code inline, which makes it a fast way to get oriented in a new tool before you turn to official docs for the real depth. Its Python catalog is thin, so it's not where you go to learn the language itself — but its React and AI-engineering tracks (LLMs, agents, RAG, prompt engineering, the OpenAI/Claude/MCP tooling you'll be using directly) are well-suited to exactly this: a quick, hands-on first pass at a new tool.
