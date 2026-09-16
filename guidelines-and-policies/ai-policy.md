@@ -185,7 +185,7 @@ In any quarter, in any mode:
 
 **The first response is almost never disciplinary.** If you generated code during Q1, we understand that the most likely explanation is that you had a submission due but were out of time (e.g. a late-night work shift, a sick family member, a commute that took the whole evening). That is a rational response to an impossible schedule, and it is a scheduling problem before it is an integrity problem. So the first conversation is about your workload: what is due, what is realistic, and what support you need.
 
-The academic honesty process exists, and it is reserved for the case where that support has been offered and declined. A policy that ignores what is actually going on in someone's life is not enforcing integrity and we are not going to do that.
+The academic integrity process exists, and it is reserved for the case where that support has been offered and declined.
 
 **Tell us early.** If you are underwater, say so before the deadline rather than after. That conversation is easy. The other one is not. Furthermore, conversations about workload do not end when your fellowship ends. Alerting your manager that a deliverable is going to be late is not uncommon in the work world. But experienced engineers always give a heads up well before the deadline. Start building that habit now\!
 
