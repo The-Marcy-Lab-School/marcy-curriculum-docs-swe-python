@@ -6,15 +6,18 @@
 - [The Two Modes](#the-two-modes)
 - [Tutor Mode: The Baseline Standard](#tutor-mode-the-baseline-standard)
   - [The One-Sentence Test](#the-one-sentence-test)
-  - [The Same Question, Asked Two Ways](#the-same-question-asked-two-ways)
+  - [What Tutor Mode Looks Like (And What It Doesn't Look Like)](#what-tutor-mode-looks-like-and-what-it-doesnt-look-like)
   - [A Standing Instruction You Can Paste](#a-standing-instruction-you-can-paste)
-  - [A Note on Autocomplete](#a-note-on-autocomplete)
-- [Implementer Mode: The Q2 Standard (But only if you are ready)](#implementer-mode-the-q2-standard-but-only-if-you-are-ready)
+- [Implementer Mode](#implementer-mode)
   - [When the Mode Changes](#when-the-mode-changes)
   - [What Happens If I'm Not Ready?](#what-happens-if-im-not-ready)
 - [Where AI Is Never Permitted](#where-ai-is-never-permitted)
 - [What Happens When the Policy Is Broken](#what-happens-when-the-policy-is-broken)
-- [What AI Tools Cost](#what-ai-tools-cost)
+- [FAQs](#faqs)
+  - [Do I Have to Pay to Use AI?](#do-i-have-to-pay-to-use-ai)
+  - [Can I Use Autocomplete?](#can-i-use-autocomplete)
+  - [Can I Attach an AI Agent to my GitHub?](#can-i-attach-an-ai-agent-to-my-github)
+  - [What Should I Do If My Assignment Doesn't Have a Tutor Mode or Implementor Mode?](#what-should-i-do-if-my-assignment-doesnt-have-a-tutor-mode-or-implementor-mode)
 
 ## What Kind Of Policy Is This?
 
@@ -26,7 +29,11 @@ But a tool that writes code for you also hides whether you could have written it
 
 So this policy does not ask whether you used AI. It asks **what job you gave it.** That question has a different answer in your first three months than it does afterward, and the policy changes with it.
 
-{% hint style="info" %} **Ownership without authorship.** The standard Marcy holds you to, in every quarter, is this: you are responsible for every line of code in your project even if you did not personally type every line of it. You will be asked to explain your code, defend the decisions inside it, and fix it when it breaks. "The AI wrote that part" is never an answer since it is always assumed. {% endhint %}
+{% hint style="info" %}
+
+**Ownership without authorship.** The standard Marcy holds you to is this: you are responsible for every line of code in your project even if you did not personally type every line of it. You will be asked to explain your code, defend the decisions inside it, and fix it when it breaks. "The AI wrote that part" is never an answer since it is always assumed.
+
+{% endhint %}
 
 ## The Two Modes
 
@@ -48,13 +55,24 @@ At the start of the year, **AI does not produce code that ends up in your submis
 
 > _Did any content in the file I am submitting arrive there because I copied it from a model, accepted a completion, or typed it out from a model's answer without understanding it first?_
 
-If the answer is yes, that is generation, and it is in violation of the "Tutor Mode" policy. Retyping a model's answer by hand is the same act as pasting it. What matters is whether the understanding came before the keystroke.
+**If the answer is yes**: that is generation, and it is in violation of the "Tutor Mode" policy. Retyping a model's answer by hand is the same act as pasting it. What matters is whether the understanding came before the keystroke.
 
-If the answer is no, you are inside the policy no matter how much you talked to the model, how many questions you asked it, or how long the conversation ran. Ask it a hundred questions. That is the point.
+**If the answer is no**: you are inside the policy no matter how much you talked to the model, how many questions you asked it, or how long the conversation ran. Ask it a hundred questions. That is the point.
 
-### The Same Question, Asked Two Ways
+### What Tutor Mode Looks Like (And What It Doesn't Look Like)
 
-Every situation where you would reach for AI has a tutor-mode version and a generator-mode version. The difference is almost always one sentence in how you ask.
+Every situation where you would reach for AI has a valid tutor-mode approach. It can also have an approach that we will call "generator-mode".
+
+Unlike Implementor mode where you understand the concepts, have a plan, delegate implementation to AI, and then verify, in generator mode you are handing off the planning, thinking, and verification entirely to AI just to get the answer.
+
+Generator mode shows up in a few recognizable shapes:
+
+- **You ask for the artifact, not the input.** "Write a function that..." / "Fix this" / "Refactor this to be more Pythonic" — the request specifies the output you want, not the piece of understanding you're missing.
+- **You hand over the raw material and wait.** Pasting an error, a spec, or a prompt and letting the model's response become your answer — even if you retype it by hand afterward. Retyping is not the same act as understanding.
+- **You accept without producing.** Tab-completing a suggestion, copying a snippet, or taking a model's rewrite of your own code — the keystroke that puts code in your file happens before your understanding does.
+- **You use the conversation as a shortcut around a skill, not toward one.** Debugging a traceback, learning a standard library tool, restructuring a loop — anything the curriculum is trying to build reps in — gets skipped instead of practiced, even when the model's help felt collaborative in the moment.
+
+Here are some examples of the differences between Generator mode and Tutor mode:
 
 **<details><summary>You are stuck and do not know how to start</summary>**
 
@@ -111,29 +129,10 @@ Explaining a concept back and being corrected is how you find out that you only 
 Paste this at the start of a chat session and it will hold for the rest of the conversation:
 
 ```
-I am a student learning Python. For this entire conversation, do not write code
-for me and do not fix my code. You may explain concepts, ask me questions, point
-me at documentation, tell me what to search for, and tell me when my reasoning is
-wrong. If I ask you to write code, remind me of this instruction instead. When I
-share code with you, ask me questions about it rather than rewriting it.
+I am a student learning Python. For this entire conversation, do not write code for me and do not fix my code. You may explain concepts, ask me questions, point me at documentation, tell me what to search for, and tell me when my reasoning is wrong. If I ask you to write code, remind me of this instruction instead. When I share code with you, ask me questions about it rather than rewriting it.
 ```
 
-This is a genuinely useful habit, not a compliance step. It changes what the tool is good for.
-
-### A Note on Autocomplete
-
-Your editor's inline suggestions are generation, and the one-sentence test above already covers them: accepting a completion puts content in your file that you did not decide on. Turn the feature off — the setup guide for [Mac](https://file+.vscode-resource.vscode-cdn.net/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python/environment-setup/local-environment-setup-mac.md) and [Windows](https://file+.vscode-resource.vscode-cdn.net/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python/environment-setup/local-environment-setup-windows.md) shows you where.
-
-This is not the same restriction as the one on chat, and the difference is worth understanding rather than memorizing:
-
-- A chat window is something you open and ask, which means your intent comes first and you can hold the answer up against what you expected.
-  - A completion arrives before you have said anything at all. It is guessing your intent from the characters you have typed so far, which means there is no expectation for it to be measured against.
-
-There is a practical consequence too. Suggested code and code you wrote yourself end up interleaved in the same file with no record of which was which, so afterward you genuinely cannot say which parts were yours. Being able to say which parts were yours is most of what this program is looking at.
-
-Later in the program, once you are working from a written specification, completions become reasonable again — because by then they are filling in something you already decided.
-
-## Implementer Mode: The Q2 Standard (But only if you are ready)
+## Implementer Mode
 
 In Implementor mode AI writes code for you, and the work _you_ do becomes what happens on either side of what the AI does: the **specification** you write before, and the **verification** you do after.
 
@@ -147,52 +146,71 @@ This depends on the following workflow becoming a habit: research → plan → i
 
 ### When the Mode Changes
 
-The rule changes from "Tutor mode" to "Implementor mode" but you must be the judge for yourself when you are ready to make the transition.
+The rule changes from "Tutor mode" to "Implementor mode" but you must be the judge for yourself when you are ready to make the transition. Being ready to make this transition means that you can:
 
-Q1 is the only quarter where writing code by hand is the default. That makes it the only quarter that reliably builds the skill of **expectation** — a sense, before you read a piece of code, of what correct code for this problem should look like. How many files. Which functions. Where it is likely to break.
+- Explain why the generated code works—not just confirm that it runs.
+- Predict what the solution needs
+- Identify defects or unnecessary complexity in AI-generated code
+- Explain how you would test and fix it.
 
-That expectation is necessary for when you transition to using AI in "Implementor Mode". When AI writes 200 lines in four seconds, your job is to look at them and notice that something is off. You cannot notice that something is off if you have no picture of what "on" would have looked like. **A fellow who cannot predict cannot verify, and a fellow who cannot verify is shipping code they do not own.**
+**If you still need AI to tell you whether its own solution is correct, stay in Tutor Mode.**
 
-Expectation is not a thing you can be told. It is the byproduct of having built things yourself, badly, a few times, and seen what went wrong. Three months is a short time to manufacture it so if you enter Q2 without this skill fully developed, you are not expected to move on to Implementor Mode.
+In implementor mode, when AI writes 200 lines in four seconds, your job is to look at them and notice that something is off. You cannot notice that something is off if you have no picture of what "on" would have looked like. **A fellow who cannot predict cannot verify, and a fellow who cannot verify is shipping code they do not own.**
 
-Being ready to make this transition means that you can:
-
-- Predict the shape of correct output before you generate it (and identify how to change it if the output isn't correct)
-- Find a defect in code you did not write.
-- Articulate why output was produced in a particular way
-- Identify "code smell" (code written in unorthodox or non-standard ways)
+These skills are the byproduct of having built things yourself, messily, a few times, and seen what went wrong.
 
 ### What Happens If I'm Not Ready?
 
-If you are not there yet, you still move on to Q2's content — Flask, Postgres, all of it — while spending a few more weeks with AI in tutor mode and doing targeted practice. You are never held back a quarter. The mode is what is adjusted, not your pace and not what you have access to.
+**How will I know?** Determining if you're ready is collaborative between yourself and instructor. If your instructor believes you are not there yet and has evidence from assignments, assessments, and projects, they will tell you plainly and name what specifically is still missing — but your perception is important too.
 
-If your instructor believes you are not there yet and has evidence from assignments, assessments, and projects, they will tell you plainly and name what specifically is still missing — but your perception is important too.
+If you are still developing your AI skills, you won't be held back from progressing through the curriculum at any point, even if you stay in AI tutor mode. The AI mode that you are at determines _how_ you will leverage AI to support you in assignments. The mode is what is adjusted, not your pace and not what you have access to.
 
-However, if the evidence says one thing and your gut says another, the evidence is usually right, and the direction people get this wrong is nearly always the same: switching early because there is not enough time, rather than because the skill has arrived.
+We expect you to switch back and forth between modes as you develop mastery over new concepts. It is expected and encouraged that you start in AI tutor mode for every new concept and "graduate" to implementor mode as your progress.
 
-Running out of time is a real problem and it deserves a real answer. However a conversation about your workload will solve a lack-of-time problem, not a change of mode. Switching early to buy back a few hours costs you the quarter that the rest of the program is built on, and you will not feel that cost until much later, when it is most expensive to fix.
+Switching to "implementor mode" early to save time costs you the learning that comes from [productive struggle](https://pce.sandiego.edu/productive-struggle-in-the-classroom/). You may have assignments to show for it but it will be difficult to explain your process or understanding of these concepts in an interview.
 
 ## Where AI Is Never Permitted
 
-In any quarter, in any mode:
+In any mode:
 
 - During a GCF.
-- On the coding portion of a technical assessment.
+- When explicitly noted in the assignment.
 - To produce writing you submit as your own reflection or short response. You may use it to check grammar and spelling in writing you already wrote.
 - To do a teammate's work, or to complete something you are representing as your own independent work when it is not.
 
 ## What Happens When the Policy Is Broken
 
-**The first response is almost never disciplinary.** If you generated code during Q1, we understand that the most likely explanation is that you had a submission due but were out of time (e.g. a late-night work shift, a sick family member, a commute that took the whole evening). That is a rational response to an impossible schedule, and it is a scheduling problem before it is an integrity problem. So the first conversation is about your workload: what is due, what is realistic, and what support you need.
+The [Academic Integrity policy](./academic-integrity.md) will go into affect when improper AI use occurs.
 
-The [Academic Integrity policy](./academic-integrity.md) exists, and it is reserved for the case where that support has been offered and declined.
+**Tell us early.** If you are underwater, say so at least 24 hours before the deadline rather than when it is due or after. That conversation is easy. The other one is not. Furthermore, conversations about workload do not end when your fellowship ends. Alerting your manager that a deliverable is going to be late is not uncommon in the work world. But experienced engineers always give a heads up well before the deadline. Start building that habit now!
 
-**Tell us early.** If you are underwater, say so before the deadline rather than after. That conversation is easy. The other one is not. Furthermore, conversations about workload do not end when your fellowship ends. Alerting your manager that a deliverable is going to be late is not uncommon in the work world. But experienced engineers always give a heads up well before the deadline. Start building that habit now\!
+## FAQs
 
-## What AI Tools Cost
+### Do I Have to Pay to Use AI?
 
 Some AI capabilities cost money, and we are going to name which ones rather than let you assume that everyone else has something you do not.
 
 Everything Tutor Mode requires works on a free tier. You do not need a paid subscription to complete any assignment, and you will not be at a disadvantage for not having one.
 
-Later quarters use tools where the paid tier is genuinely more capable, and Marcy covers what the curriculum requires. When you reach a professional setting, know that tooling budgets are a normal thing for a team to have and a normal thing for an engineer to ask for. If a company hands you a worse tool than the one you trained on, that is a resourcing decision on their end — it is not you being behind.
+Later on, you will use tools where the paid tier is genuinely more capable, and Marcy covers what the curriculum requires. When you reach a professional setting, know that tooling budgets are a normal thing for a team to have and a normal thing for an engineer to ask for. If a company hands you a worse tool than the one you trained on, that is a resourcing decision on their end — it is not you being behind.
+
+### Can I Use Autocomplete?
+
+Your editor's inline suggestions are generation, and the one-sentence test above already covers them: accepting a completion puts content in your file that you did not decide on. Turn the feature off — the setup guide for [Mac](https://file+.vscode-resource.vscode-cdn.net/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python/environment-setup/local-environment-setup-mac.md) and [Windows](https://file+.vscode-resource.vscode-cdn.net/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python/environment-setup/local-environment-setup-windows.md) shows you where.
+
+This is not the same restriction as the one on chat, and the difference is worth understanding rather than memorizing:
+
+- A chat window is something you open and ask, which means your intent comes first and you can hold the answer up against what you expected.
+  - A completion arrives before you have said anything at all. It is guessing your intent from the characters you have typed so far, which means there is no expectation for it to be measured against.
+
+There is a practical consequence too. Suggested code and code you wrote yourself end up interleaved in the same file with no record of which was which, so afterward you genuinely cannot say which parts were yours. Being able to say which parts were yours is most of what this program is looking at.
+
+Later in the program, once you are working from a written specification, completions become reasonable again — because by then they are filling in something you already decided.
+
+### Can I Attach an AI Agent to my GitHub?
+
+Using Git and GitHub are skills like any of the others in the curriculum. You must first learn how to use them on your own in "Tutor Mode" before delegating Git and GitHub tasks to an AI agent in "Implementor Mode"
+
+### What Should I Do If My Assignment Doesn't Have a Tutor Mode or Implementor Mode?
+
+Use the AI mode defined on that assignment and ask your instructor for clarity if needed.
