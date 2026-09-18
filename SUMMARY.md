@@ -27,7 +27,7 @@
 
 ## Computational Thinking and Responsible Use of AI
 
-- [0 — Command Line Interfaces, Git, and GitHub](mod-0-command-line-interfaces-git-and-github/README.md)
+- [0. Command Line Interfaces, Git, and GitHub](mod-0-command-line-interfaces-git-and-github/README.md)
   - [Overview](mod-0-command-line-interfaces-git-and-github/Overview.md)
   - [1. Command Line Interfaces](mod-0-command-line-interfaces-git-and-github/1-clis.md)
   - [2. Git & GitHub](mod-0-command-line-interfaces-git-and-github/2-git-github.md)
@@ -35,7 +35,7 @@
   - [4. Git Branching & PRs](mod-0-command-line-interfaces-git-and-github/4-git-branching.md)
   - [Cheat Sheet](mod-0-command-line-interfaces-git-and-github/cheatsheet.md)
 
-- [(🏗️ Under Construction...) 1 — JavaScript Fundamentals](mod-1-javascript-fundamentals/README.md)
+- 1. JavaScript Fundamentals (🏗️ Under Construction...)
 <!--
   - [Overview](mod-1-javascript-fundamentals/Overview.md)
   - [1. Intro to Programming](mod-1-javascript-fundamentals/0-intro-to-programming.md)
@@ -56,7 +56,7 @@
   - [Case Study: CLI Task Manager](mod-1-javascript-fundamentals/case-study.md)
   - [Cheat Sheet](mod-1-javascript-fundamentals/cheatsheet.md)
 -->
-- [(🏗️ Under Construction...) 2 — Object-Oriented Programming](mod-2-oop/README.md)
+- 2. Object-Oriented Programming (🏗️ Under Construction...)
 <!--
   - [Overview](mod-2-oop/Overview.md)
   - [1. Intro to OOP, Encapsulation, and This](mod-2-oop/1-intro-oop-encapsulation-this.md)
@@ -73,10 +73,10 @@
 
 ## Fullstack & AI-Assisted Development
 
-- (🏗️ Under Construction...) 3 — HTML & CSS
-- (🏗️ Under Construction...) 4 — Interactive & Data-Driven User Interfaces
-- (🏗️ Under Construction...) 5 — Server-Side Development
-- (🏗️ Under Construction...) 6 — Databases
+- 3. HTML & CSS (🏗️ Under Construction...)
+- 4. Interactive & Data-Driven User Interfaces (🏗️ Under Construction...)
+- 5. Server-Side Development (🏗️ Under Construction...)
+- 6. Databases (🏗️ Under Construction...)
 
 <!--
 - [Mod 3 - HTML & CSS](./mod-3-html-css/README.md)
@@ -136,10 +136,10 @@
 
 ## System Constraints and System Design
 
-- (🏗️ Under Construction...) 7 — Security
-- (🏗️ Under Construction...) 8 — Testing
-- (🏗️ Under Construction...) 9 — Costs and Bottlenecks
-- (🏗️ Under Construction...) 10 — Deployments & Environments
+- 7. Security (🏗️ Under Construction...)
+- 8. Testing (🏗️ Under Construction...)
+- 9. Costs and Bottlenecks (🏗️ Under Construction...)
+- 10. Deployments & Environments (🏗️ Under Construction...)
 
 ## Capstone
 
