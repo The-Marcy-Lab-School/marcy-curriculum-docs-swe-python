@@ -21,7 +21,7 @@
 
 ## What Kind Of Policy Is This?
 
-This policy defines rules that you are expected to follow. Rules typically carry with them the baggage of punishment and are often created in environments that seek to restrict its subjects and make the lives of those making the rules easier. This policy is different as it is designed to serve _your_ best interests.
+This policy is is designed to serve _your_ best interests as you learn at Marcy and as you grow as a professional.
 
 You are going to spend your career working alongside AI coding tools. Marcy is not going to pretend otherwise, and this policy is not an attempt to keep you away from them. Directing an AI tool well is a professional skill, and teaching it is part of what you are here for.
 
@@ -45,7 +45,7 @@ At any moment you are using AI in one of two modes.
 | Who writes the code you submit | You do, by hand                                                       | The AI does, under your direction                             |
 | What you are being graded on   | Whether you understand it                                             | Whether you specified it well, verified it, and can defend it |
 
-Both modes are professional. Neither is a punishment or a reward. They train different halves of the same job, and "Tutor mode" comes first because the implementation can only come once your personal understanding is sufficient enough to delegate implementation to someone or something else (AI).
+Both modes are professional. They train different halves of the same job, and "Tutor mode" comes first because the implementation can only come once your personal understanding is sufficient enough to delegate implementation to someone or something else (AI).
 
 ## Tutor Mode: The Baseline Standard
 
