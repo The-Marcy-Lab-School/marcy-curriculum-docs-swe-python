@@ -115,7 +115,7 @@ Check out the GitHub repository for [Flask](https://github.com/pallets/flask), a
 
 - It has over 5,500 commits, each with a written message, made by many different developers over more than a decade.
 - The README on the front page explains what the project is, shows a short working example, and gives instructions for installing it and contributing to it.
-- It has been starred by over 72 thousand people and forked (duplicated) 17 thousand times.
+- It has been starred by over 72 thousand people and forked (duplicated and remixed) 17 thousand times.
 - Every one of those commits was made with the same `git add`, `git commit`, and `git push` commands you are about to learn.
 
 So, you'll use Git and GitHub in tandem to manage your projects. You'll use Git on your own computers to manage the changes to your project and then you will upload those changes to GitHub.

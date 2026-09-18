@@ -43,19 +43,15 @@ In the Software Engineering Fellowship at Marcy Lab School, you will learn how t
 
 ### The Fellowship Arc
 
-The core curriculum is delivered over four quarters, with individual modules spanning 1 to 6 weeks.
+The core curriculum is delivered roughly over four quarters, with individual modules spanning 1 to 6 weeks.
 
-**Q1 — Computational Thinking & Responsible Use of AI (months 0–3).** The command line, Git and GitHub, Python syntax, the Python ecosystem, and object-oriented programming. Alongside it: how AI actually works, how to prompt it, what it costs, and Marcy's academic honesty policy. This is the quarter where you write code by hand, because it is the quarter that builds your sense of what correct code looks like.
+**Q1 — Computational Thinking & Responsible Use of AI (~months 0–3).** The command line, Git and GitHub, Python syntax, the Python ecosystem, and object-oriented programming. Alongside it: how AI actually works, how to prompt it, what it costs, and Marcy's academic honesty policy. This is the quarter where you write code by hand, because it is the quarter that builds your sense of what correct code looks like.
 
-- [Module 0: Command Line Interfaces, Git & GitHub](mod-0-command-line-interfaces-git-and-github/)
-- Module 1: Python Fundamentals
-- Module 2: Object-Oriented Programming and System Design
+**Q2 — Fullstack & AI-Assisted Development (~months 3–6).** HTML and CSS, APIs, servers with Flask, server-side rendering, and Postgres. Alongside it: model selection, context management, and the research-plan-implement-test-refine workflow. AI moves from tutor to implementer, and your job moves to specifying and verifying.
 
-**Q2 — Fullstack & AI-Assisted Development (months 3–6).** HTML and CSS, APIs, servers with Flask, server-side rendering, and Postgres. Alongside it: model selection, context management, and the research-plan-implement-test-refine workflow. AI moves from tutor to implementer, and your job moves to specifying and verifying.
+**Q3 — System Constraints and System Design (~months 6–9).** You are handed a working application and asked to extend it under a rotation of real constraints: security, testing, cost, sandboxing, and deployment. Each one is a tight loop — understand the constraint, decide, direct AI to implement it, and defend the decision to a practitioner who has solved that problem for real.
 
-**Q3 — AI-Led Project Building and Systems Design (months 6–9).** You are handed a working application and asked to extend it under a rotation of real constraints: security, testing, cost, sandboxing, and deployment. Each one is a tight loop — understand the constraint, decide, direct AI to implement it, and defend the decision to a practitioner who has solved that problem for real.
-
-**Q4 — Capstone (months 9–11).** A real stakeholder with real, shifting requirements. The first time nobody hands you the problem already framed.
+**Q4 — Capstone (~months 9–12).** A real stakeholder with real, shifting requirements. The first time nobody hands you the problem already framed.
 
 ## Technical Competencies
 

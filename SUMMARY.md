@@ -25,9 +25,9 @@
   - [How to Deploy on Render](projects/6-deploying-using-render.md)
   - [Agile Methodologies](projects/7-agile-methodologies.md)
 
-## Q1 - Computational Thinking and Responsible Use of AI
+## Computational Thinking and Responsible Use of AI
 
-- [Mod 0 - Command Line Interfaces, Git, and GitHub](mod-0-command-line-interfaces-git-and-github/README.md)
+- [0 — Command Line Interfaces, Git, and GitHub](mod-0-command-line-interfaces-git-and-github/README.md)
   - [Overview](mod-0-command-line-interfaces-git-and-github/Overview.md)
   - [1. Command Line Interfaces](mod-0-command-line-interfaces-git-and-github/1-clis.md)
   - [2. Git & GitHub](mod-0-command-line-interfaces-git-and-github/2-git-github.md)
@@ -35,7 +35,7 @@
   - [4. Git Branching & PRs](mod-0-command-line-interfaces-git-and-github/4-git-branching.md)
   - [Cheat Sheet](mod-0-command-line-interfaces-git-and-github/cheatsheet.md)
 
-- [(Work in Progress) Mod 1 - JavaScript Fundamentals](mod-1-javascript-fundamentals/README.md)
+- [(🏗️ Under Construction...) 1 — JavaScript Fundamentals](mod-1-javascript-fundamentals/README.md)
 <!--
   - [Overview](mod-1-javascript-fundamentals/Overview.md)
   - [1. Intro to Programming](mod-1-javascript-fundamentals/0-intro-to-programming.md)
@@ -56,7 +56,7 @@
   - [Case Study: CLI Task Manager](mod-1-javascript-fundamentals/case-study.md)
   - [Cheat Sheet](mod-1-javascript-fundamentals/cheatsheet.md)
 -->
-- [(Work in Progress) Mod 2 - Object-Oriented Programming](mod-2-oop/README.md)
+- [(🏗️ Under Construction...) 2 — Object-Oriented Programming](mod-2-oop/README.md)
 <!--
   - [Overview](mod-2-oop/Overview.md)
   - [1. Intro to OOP, Encapsulation, and This](mod-2-oop/1-intro-oop-encapsulation-this.md)
@@ -69,7 +69,17 @@
   - [8. System Design Strategies and Principles](mod-2-oop/8-system-design-strategies.md)
   - [Case Study: Dragon Slayer](mod-2-oop/8-system-design-strategies.md)
   - [Cheat Sheet](mod-2-oop/cheatsheet.md)
-- [Mod 3 - HTML & CSS](mod-3-html-css/README.md)
+-->
+
+## Fullstack & AI-Assisted Development
+
+- (🏗️ Under Construction...) 3 — HTML & CSS
+- (🏗️ Under Construction...) 4 — Interactive & Data-Driven User Interfaces
+- (🏗️ Under Construction...) 5 — Server-Side Development
+- (🏗️ Under Construction...) 6 — Databases
+
+<!--
+- [Mod 3 - HTML & CSS](./mod-3-html-css/README.md)
   - [Overview](mod-3-html-css/Overview.md)
   - [1. HTML](mod-3-html-css/1-html.md)
   - [2. CSS](mod-3-html-css/2-css.md)
@@ -80,8 +90,6 @@
   - [7. Accessibility (a11y)](mod-3-html-css/7-accessibility.md)
   - [Project: Personal Portfolio Website](mod-3-html-css/8-personal-portfolio-project.md)
   - [Cheat Sheet](mod-3-html-css/cheatsheet.md)
--->
-<!--
 - [Mod 4 - Interactive & Data-Driven User Interfaces](mod-4-interactive-data-driven-ui/README.md)
   - [Overview](mod-4-interactive-data-driven-ui/Overview.md)
   - [1. The DOM & Event Handling](mod-4-interactive-data-driven-ui/1-intro-to-interactive-pages.md)
@@ -124,6 +132,18 @@
   - [13. Production Deployment](mod-6-databases/13-production-deployment.md)
   - [Case Study: Social Bookmark Manager](mod-6-databases/case-study.md)
   - [Cheat Sheet](mod-6-databases/cheatsheet.md)
+-->
+
+## System Constraints and System Design
+
+- (🏗️ Under Construction...) 7 — Security
+- (🏗️ Under Construction...) 8 — Testing
+- (🏗️ Under Construction...) 9 — Costs and Bottlenecks
+- (🏗️ Under Construction...) 10 — Deployments & Environments
+
+## Capstone
+
+<!--
 - [Mod 7 - React](mod-7-react/README.md)
   - [Overview](mod-7-react/Overview.md)
   - [1. Intro to React](mod-7-react/1-intro-to-react.md)
