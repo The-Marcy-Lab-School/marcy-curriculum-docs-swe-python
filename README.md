@@ -30,7 +30,7 @@ Welcome to Marcy Lab School's Fullstack Software Engineering Curriculum! Here, y
 
 Over the next year you will learn how to be a software engineer who can build real products and direct AI tools to help build them. You'll learn the basics of Python syntax, how to use Python to solve real problems, how to organize and design a system before you build it, and how to read, verify, and defend code — including code you did not personally write.
 
-{% embed url="https://docs.google.com/presentation/d/1ErVMKugQc4ObNVhreLYplYZP3OsA5AmFyNSDcPKr8PA/embed?delayms=3000&loop=false&start=false" %}
+{% embed url="https://docs.google.com/presentation/d/1jXlhDoGj1-yVpdM7qWRGJvlWs_GmjqXnZdBEJXQVarY/embed?delayms=3000&loop=false&start=false" %}
 
 ## The Curriculum
 
