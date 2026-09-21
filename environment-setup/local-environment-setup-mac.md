@@ -40,10 +40,6 @@ mkdir mod-{0..2}
 ls
 ```
 
-When you're done with this step, your folder structure will look something like this if you open up the development folder in your Finder application:
-
-![folder-structure in Finder](../.gitbook/assets/folder-structure.png)
-
 Pretty cool right? The Terminal is a very powerful tool in the hands of an expert.
 
 ## Download VS Code
