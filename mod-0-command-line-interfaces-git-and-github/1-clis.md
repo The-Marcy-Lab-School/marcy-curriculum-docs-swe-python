@@ -141,7 +141,7 @@ For this particular task it might be faster to use a GUI file manager like Finde
 For example, try this command below to create 8 folders at once!
 
 ```sh
-mkdir unit_{0..7}
+mkdir mod-{0..7}
 ```
 
 In addition, there are some things that Finder simply can't do, like execute files with code.

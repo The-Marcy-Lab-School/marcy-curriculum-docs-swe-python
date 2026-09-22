@@ -4,8 +4,8 @@ GitHub enables developers across the world to collaborate on projects. In this l
 
 You will be able to…
 
-* Pull changes from a repository
-* Resolve merge conflicts
+- Pull changes from a repository
+- Resolve merge conflicts
 
 **Table of Contents:**
 
@@ -22,9 +22,9 @@ You will be able to…
 
 **Key Terms**
 
-* **Pull** — to download changes from a remote repository
-* **Merge** - to combine two or more branches into one
-* **Merge Conflict** — a situation in which two or more branches need to be merged but have modified the same lines of code, causing the merge to fail. This happens all the time and can be resolved through the Github GUI or the CLI.
+- **Pull** — to download changes from a remote repository
+- **Merge** - to combine two or more branches into one
+- **Merge Conflict** — a situation in which two or more branches need to be merged but have modified the same lines of code, causing the merge to fail. This happens all the time and can be resolved through the Github GUI or the CLI.
 
 **Important Git commands**
 
@@ -47,10 +47,10 @@ Just like downloading an app, anyone can download a repo from GitHub using the `
 To demonstrate this, find a partner (or simply play the role of two developers). Then do the following:
 
 1. Have one developer create a new repo called **git-pulling-practice**. Make sure it includes a `README.md` file. Then, share the URL with their partner.
-2. Have both developers use their VS Code Terminal to navigate to their `unit-0` folder and clone the repo onto their computers using `git clone`
-   * If working solo, clone the repo a second time but rename the second copy. You can do this by adding an additional input to the `git clone` command for the new name, resulting in something like this: `git clone <git_repo_url> git-pulling-practice-copy`.
+2. Have both developers use their VS Code Terminal to navigate to their `mod-0` folder and clone the repo onto their computers using `git clone`
+   - If working solo, clone the repo a second time but rename the second copy. You can do this by adding an additional input to the `git clone` command for the new name, resulting in something like this: `git clone <git_repo_url> git-pulling-practice-copy`.
 3. Have both developers navigate into the repo using the `cd` command.
-   * If working solo, open two VS Code Terminal windows for this, navigating each terminal to one of the copies of the repo so that you can easily switch back and forth between "developer 1" (the first clone) and "developer 2" (the second clone).
+   - If working solo, open two VS Code Terminal windows for this, navigating each terminal to one of the copies of the repo so that you can easily switch back and forth between "developer 1" (the first clone) and "developer 2" (the second clone).
 
 Tada! Now you have the same repository on two computers!
 
@@ -63,13 +63,14 @@ In the last lesson, you learned about the `git push` command which uploads a loc
 Let's put this into practice. With your partner do the following:
 
 1. Have the developer who first created the repo on GitHub make some edits to `README.md`.
-2.  That same developer should then stage their changes, commit, and push:
+2. That same developer should then stage their changes, commit, and push:
 
-    ```sh
-    git add README.md
-    git commit -m "[description of your commit]"
-    git push
-    ```
+   ```sh
+   git add README.md
+   git commit -m "[description of your commit]"
+   git push
+   ```
+
 3. Double check on GitHub that the commit shows up on the remote repository's commit history.
 4. **Now, the second developer should run the command `git pull`** (if working solo, switch over to the location of the second copy of the repo and run `git pull`)
 
@@ -139,23 +140,23 @@ VS Code provides a nice UI to help us resolve the conflict:
 
 Let's break down what we see here:
 
-* The three "markers" outline the two conflicting pieces of code:
-  * `<<<<<<< HEAD` on line 1
-  * `=======` on line 3
-  * `>>>>>>> b737ff...` on line 5
-* The "current change" is the code already in my local repo.
-* The "incoming change" is the code that I'm trying to merge into my local repo (from the remote repository).
+- The three "markers" outline the two conflicting pieces of code:
+  - `<<<<<<< HEAD` on line 1
+  - `=======` on line 3
+  - `>>>>>>> b737ff...` on line 5
+- The "current change" is the code already in my local repo.
+- The "incoming change" is the code that I'm trying to merge into my local repo (from the remote repository).
 
 To resolve this conflict we can:
 
 1. Use the buttons that VS Code provides:
-   * "Accept Current Change" — replace the code from the remote with your code.
-   * "Accept Incoming Change" — replace your code with the code from the remote.
-   * "Accept Both Changes" — keep both!
-   * "Compare Changes" — see the changes side by side
+   - "Accept Current Change" — replace the code from the remote with your code.
+   - "Accept Incoming Change" — replace your code with the code from the remote.
+   - "Accept Both Changes" — keep both!
+   - "Compare Changes" — see the changes side by side
 2. Alternatively, we can just delete the markers and keep the code you want to keep!
 3. Once you've made your choice, save the file, stage the changes, commit them, and push the changes.
-   * Typically, you can use the commit message `"resolving merge conflicts"`
+   - Typically, you can use the commit message `"resolving merge conflicts"`
 
 ![](../.gitbook/assets/resolving-merge-conflict.gif)
 
@@ -163,4 +164,4 @@ Hurrayy!!! You've solved the merge conflict! Piece of cake.
 
 ## Tips for success
 
-* Pay attention to the details and take notes! Do not shy away from the messages in your terminal. Seek to understand them and you'll gain so much more confidence.
+- Pay attention to the details and take notes! Do not shy away from the messages in your terminal. Seek to understand them and you'll gain so much more confidence.
