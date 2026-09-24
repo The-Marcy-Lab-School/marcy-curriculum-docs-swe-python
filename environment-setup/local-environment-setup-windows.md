@@ -42,12 +42,17 @@ Type the following commands in the **Windows PowerShell** application:
 
 ```powershell
 wsl --update
+```
+
+Then, once that is done run this command:
+
+```powershell
 wsl --install
 ```
 
-This will update and install WSL on your computer!
+This will update and install WSL on your computer! Close powershell and then open it again.
 
-When WSL finishes installing, run this command to check your version (take note of the value under `NAME` and `VERSION`):
+Then, run this command to check your version (take note of the value under `NAME` and `VERSION`):
 
 ```powershell
 wsl -l -v
