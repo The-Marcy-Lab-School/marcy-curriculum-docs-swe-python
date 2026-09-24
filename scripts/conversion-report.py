@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Compare a converted Python document against its JavaScript original.
 
-Usage:  python3 scripts/conversion-report.py <path-relative-to-repo-root>
+Usage:  python3 scripts/conversion-report.py <path-relative-to-repo-root> [<original-path-relative-to-old-repo>]
 Example: python3 scripts/conversion-report.py mod-0-command-line-interfaces-git-and-github/1-clis.md
+Example: python3 scripts/conversion-report.py mod-1-python-fundamentals/8-lists.md mod-1-javascript-fundamentals/6-arrays.md
+
+The second argument is for a converted document whose directory or file name
+differs from the original's. Without it, the same relative path is used.
 
 Reports the objective half of a conversion review: which headings and which
 pedagogical devices exist in each version, and what JavaScript residue is left.
@@ -83,20 +87,21 @@ def section(title, rows):
 
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
     rel = sys.argv[1]
+    old_rel = sys.argv[2] if len(sys.argv) == 3 else rel
     new = read(rel)
     if new is None:
         sys.exit("No converted file at %s" % rel)
-    old = read(os.path.join(OLD_REPO, rel))
+    old = read(os.path.join(OLD_REPO, old_rel))
 
     print("=" * 72)
     print("CONVERSION REPORT  %s" % rel)
     print("=" * 72)
 
     if old is None:
-        print("\nNo JavaScript original at %s/%s." % (OLD_REPO, rel))
+        print("\nNo JavaScript original at %s/%s." % (OLD_REPO, old_rel))
         print("This document is new or was rewritten from scratch, so there is no")
         print("coverage baseline. Review it as original writing.")
     else:

@@ -49,3 +49,23 @@ This is a record of what the curriculum does, not a history of what it used to d
 **The AI policy is stated as mode, not prohibition** — tutor mode first, implementer mode once a fellow judges the skill of expectation to be there, with the program supplying prediction-accuracy and defect-detection evidence so the judgement is informed. Chapters that mention AI use should be consistent with `guidelines-and-policies/ai-policy.md` and should not restate its rules, which drift.
 
 **Inline autocomplete is off in Q1** and returns once a fellow works from a written specification. Chat is unrestricted throughout Q1.
+
+## Decisions from Mod 1
+
+**Fellows do not know JavaScript.** The Python curriculum is their first language, so converted prose never says "unlike JavaScript" or explains a Python feature by contrast with a JavaScript one. Where the original's teaching point was a JavaScript quirk (hoisting, `var`, `"1" + 1` producing `"11"`, `typeof null`), the conversion teaches the corresponding Python behaviour on its own terms, usually as a predict-then-run box.
+
+**Follow-along repositories are not linked until they exist.** The original chapters open with a hint linking a `The-Marcy-Lab-School/1-N-topic` repository. No Python equivalents exist yet, so the hint is dropped rather than left pointing at JavaScript code, and the report for each chapter names the repository that would need creating. Code that a chapter depends on is reproduced in full in the chapter itself (the case study does this for all three of its files).
+
+**Python is described as "raising" an error.** The original says "thrown". Python's own vocabulary is `raise`, and fellows will read it in every traceback, so converted prose says raised, and notes once, in the errors chapter, that "thrown" means the same thing.
+
+**User input arrives in the modules chapter.** `input()` is a built-in, so it needs no package, but it is introduced where the original introduced `prompt-sync` so that the madlib challenge and everything after it line up. Every chapter after it that reads a number from the user converts with `int()` and, once the errors chapter has happened, catches `ValueError`.
+
+**The demonstration package for the ecosystem chapter is `rich`.** It replaces `prompt-sync`. It has a visible effect, it is on PyPI, and it pulls in `markdown-it-py`, `pygments`, and `mdurl`, which gives the sub-dependency lesson something real to point at. Version numbers quoted in that chapter came from a live install and carry a "may vary" note.
+
+**Tests run with `python3 -m pytest`, never bare `pytest`.** With `src/` and `tests/` folders and no `__init__.py` files, the bare `pytest` command fails on `from src.calc import add` with `ModuleNotFoundError`, because it does not put the project root on the import path. `python3 -m pytest` does. Every chapter, cheat sheet, and project instruction uses the `-m` form and the testing chapter explains why in a callout.
+
+**Screenshots of Node tooling are dropped, not relabelled.** The two Run and Debug screenshots showing `index.js` and the "JavaScript Debug Terminal" button are left out of the intro chapter; the language-neutral SVG of the debugger controls stays. Recapturing them against a `.py` file is on Ben's list.
+
+**Mutability replaces "reference vs. primitive" as the organising idea.** Python has no primitive/reference split in its vocabulary. The lists chapter teaches mutable vs. immutable, `is` and `id()`, and copying, and the dictionaries chapter refers back to it. The slide deck embedded in the original arrays chapter is JavaScript-specific and is not embedded; the heap explanation is carried in prose.
+
+**Comprehensions replace array higher-order methods.** `map`, `filter`, `find`, `reduce`, and `sort` become list comprehensions, comprehensions with `if`, a loop with early `return` (with `next()` in a callout), `sum()`/`min()`/`max()` plus the accumulator pattern, and `sorted()`/`.sort()` with `key`. The built-in `map()` and `filter()` are named once, in a callout, as things fellows will recognise but should not prefer.

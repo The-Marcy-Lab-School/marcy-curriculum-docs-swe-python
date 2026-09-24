@@ -35,8 +35,14 @@
   - [4. Git Branching & PRs](mod-0-command-line-interfaces-git-and-github/4-git-branching.md)
   - [Cheat Sheet](mod-0-command-line-interfaces-git-and-github/cheatsheet.md)
 
-- 1. JavaScript Fundamentals (🏗️ Under Construction...)
-<!--
+- [1. Python Fundamentals](mod-1-python-fundamentals/README.md)
+  - [Overview](mod-1-python-fundamentals/Overview.md)
+  - [1. Intro to Programming](mod-1-python-fundamentals/1-intro-to-programming.md)
+  - [2. Data Types and Variables](mod-1-python-fundamentals/2-data-types-variables.md)
+  - [3. Functions](mod-1-python-fundamentals/3-functions.md)
+  - [Cheat Sheet](mod-1-python-fundamentals/cheatsheet.md)
+
+<!-- JavaScript original, kept for reference until the Python folder is approved
   - [Overview](mod-1-javascript-fundamentals/Overview.md)
   - [1. Intro to Programming](mod-1-javascript-fundamentals/0-intro-to-programming.md)
   - [2. Data Types & Variables](mod-1-javascript-fundamentals/1-data-types-variables.md)

@@ -9,6 +9,7 @@ There are so many terms and concepts to learn about programming. In this lesson,
 - [What is a program?](#what-is-a-program)
 - [Running a file with the Python interpreter](#running-a-file-with-the-python-interpreter)
 - [Printing to the Terminal with `print()`](#printing-to-the-terminal-with-print)
+  - [Printing Values Inside Text with f-strings](#printing-values-inside-text-with-f-strings)
   - [Debunking The `print()` Myth](#debunking-the-print-myth)
 - [Control Flow](#control-flow)
 - [Code Style and Readability](#code-style-and-readability)
@@ -40,6 +41,13 @@ There are so many terms and concepts to learn about programming. In this lesson,
 
   ```py
   print("hello world") # prints hello world
+  ```
+
+- An **f-string** is a string with an `f` before the opening quote. Any expression written inside `{}` is evaluated and its value is placed into the text.
+
+  ```py
+  x = 10
+  print(f"x is {x}") # prints x is 10
   ```
 
 - **Control Flow** refers to the order in which lines of code are executed. Control flow runs from the top of a file to the bottom.
@@ -118,11 +126,33 @@ print("hello world!")
 The `print()` function is used primarily to verify the output of a program for debugging purposes. For example, this code converts 212° Fahrenheit to Celsius which should produce the result 100°C. Do you expect it to work?
 
 ```python
-fahrenheit = 100
+fahrenheit = 212
 celsius = fahrenheit - 32 * 5 / 9
 ```
 
 With `print(celsius)` we can verify whether or not we performed the calculation properly.
+
+**<details><summary>Q: So, does it work?</summary>**
+
+No. `print(celsius)` shows `194.22222222222223`, not `100.0`. Multiplication and division happen before subtraction, so Python computed `32 * 5 / 9` first and subtracted that from 212. The fix is parentheses: `(fahrenheit - 32) * 5 / 9`.
+
+Without the `print()`, this bug would have gone unnoticed, and that is exactly what `print()` is for.
+
+</details>
+
+### Printing Values Inside Text with f-strings
+
+Most of the time you want to print a value with some words around it, not on its own. Put an `f` in front of the opening quote, and Python fills in any expression you write inside curly braces `{}`:
+
+```python
+fahrenheit = 212
+celsius = (fahrenheit - 32) * 5 / 9
+
+print(f"{fahrenheit}°F is {celsius}°C")
+# Output: 212°F is 100.0°C
+```
+
+This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now. Chapter 4 covers strings in full.
 
 ### Debunking The `print()` Myth
 
@@ -195,6 +225,7 @@ A `for` loop can cause a statement (or multiple) to be executed more than once
 
 ```py
 # A loop with 100 million iterations will take a few seconds to run! Increase that number to a billion and it could take a minute or more.
+x = 0
 for i in range(100_000_000):
     x += 1
 ```
@@ -208,7 +239,7 @@ We'll dive deeper into `if` statements and `for` loops later on but for now, the
 
 **Readability** is how easy it is for another engineer to read and understand your code (including future you).
 
-Indentation shows the scope of each line of code. In Python it does more than that: indentation is how the interpreter knows which lines belong to which block. Whenever a line ends with a colon `:`, the lines that belong to it must be indented underneath it. The convention, written down in PEP 8, is four spaces per level.
+Indentation shows the scope of each line of code, and it is how the interpreter knows which lines belong to which block. Whenever a line ends with a colon `:`, the lines that belong to it must be indented underneath it. The convention, written down in PEP 8, is four spaces per level.
 
 ```python
 def can_vote(age):
@@ -236,7 +267,7 @@ if age >= 18:
 IndentationError: expected an indented block after function definition on line 1
 ```
 
-Nothing runs. The interpreter cannot tell what belongs to `can_vote`, so it refuses the whole file before executing a single line. In Python, indentation is not a style choice you make for your readers. It is part of the language, and getting it wrong is a syntax error.
+Nothing runs. The interpreter cannot tell what belongs to `can_vote`, so it refuses the whole file before executing a single line. Indentation is not a style choice you make for your readers. It is part of the language, and getting it wrong is a syntax error.
 
 </details>
 {% endhint %}
