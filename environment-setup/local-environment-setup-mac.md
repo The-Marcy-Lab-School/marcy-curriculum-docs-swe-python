@@ -5,6 +5,7 @@ Today, we'll be setting up our local development environment for Mac. Click here
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [What you are setting up](#what-you-are-setting-up)
 - [Set up local `development` directory](#set-up-local-development-directory)
 - [Download VS Code](#download-vs-code)
   - [Familiarize yourself with VS Code](#familiarize-yourself-with-vs-code)
@@ -12,14 +13,40 @@ Today, we'll be setting up our local development environment for Mac. Click here
   - [Download Useful Extensions](#download-useful-extensions)
 - [Install Python](#install-python)
   - [Write your first Python program](#write-your-first-python-program)
+- [Before you move on](#before-you-move-on)
+
+## What you are setting up
+
+By the end of this document and the [GitHub Setup](github-setup.md) document, your computer will be able to do four things. Every step below exists to serve one of them:
+
+1. **Open VS Code**, the program you will write all of your code in for the next nine months.
+2. **Keep your work in one predictable place** — a `development` folder with a sub-folder for each module.
+3. **Run Python**, so that a file of code you have written actually executes and prints something.
+4. **Connect to your GitHub account**, so that you can download (clone) the repositories we assign and upload (push) the work you do in them. That fourth one is covered in [GitHub Setup](github-setup.md), which comes after this document.
+
+Three separate programs are involved, and it is worth knowing which is which before you begin:
+
+- **The Terminal** is a program for giving your computer typed commands. You will use it to move between folders, create files, and run your Python programs.
+- **VS Code** is a program for editing the contents of files. It also contains its own copy of the Terminal, so in practice you will spend nearly all of your time inside VS Code.
+- **Python** is the program that reads a file of Python code and carries out the instructions in it.
 
 ## Set up local `development` directory
+
+This section covers the second goal above: one folder that holds all of your Marcy Lab work, with a sub-folder for each module. Keeping everything in one predictable place saves a surprising amount of trouble later. Every command you type runs _somewhere_ in your file system, and most of the confusion fellows hit in the first few weeks comes from typing a command in a different folder from the one their files are in.
 
 Now, let's get familiar with the **Terminal**. It's an application that you can use to manage your file system. At first, it may seem slow but you'll quickly learn how to use it and see how powerful it can be!
 
 First, open the Terminal application. You can do this via Spotlight Search (<kbd>Command+Spacebar</kbd>) and search for "Terminal". Once it opens, type in the `ls` command and hit <kbd>Enter</kbd>
 
 ![The list command shows the directories at the root (~) of your file system](../.gitbook/assets/terminal-list.png)
+
+The Terminal is always "in" exactly one folder at a time, and that folder is called the **working directory**. It is the folder your commands act on: `ls` lists what is inside the working directory, and a file you create lands in the working directory. When you first open the Terminal, the working directory is your **home directory** — the folder belonging to your user account, which has the short name `~`. Run `pwd` (short for "print working directory") whenever you want to know where you are:
+
+```sh
+pwd
+```
+
+You should see a path like `/Users/your-name`.
 
 Then, using your Terminal, create a folder structure where you can put all your Marcy Lab code by entering these commands, one at a time:
 
@@ -40,11 +67,23 @@ mkdir mod-{0..2}
 ls
 ```
 
+You have just built this structure inside your home directory:
+
+```
+~
+└── development
+    ├── mod-0
+    ├── mod-1
+    └── mod-2
+```
+
+Notice what `cd development` did: it moved the working directory one level down, which is why `mkdir mod-{0..2}` created those three folders inside `development` rather than beside it. Every command you type is interpreted relative to wherever `cd` has left you. `cd ..` moves back up one level, and `cd ~` returns you to your home directory from anywhere.
+
 Pretty cool right? The Terminal is a very powerful tool in the hands of an expert.
 
 ## Download VS Code
 
-While the Terminal can be used to manage files, we'll use VS Code to actually write code.
+This section covers the first goal: getting VS Code onto your computer and configured the same way as everyone else in your cohort. While the Terminal can be used to manage files, we'll use VS Code to actually write code.
 
 VS Code is a code editor we can use to edit files and write programs. First, make sure that you don't already have VS Code installed.
 
@@ -71,9 +110,11 @@ Now, let's get to know the VS Code layout!
 
 ![VS Code on MacOS](../.gitbook/assets/vscode.png)
 
+One detail here will save you a great deal of trouble later: a Terminal opened inside VS Code starts in whatever folder VS Code has open. If VS Code is open on your `development` folder, then the working directory of that Terminal is `development`. Clicking a file open in the left panel does **not** change the working directory, so the file you are looking at and the folder your Terminal is working in are two separate things.
+
 ### Configure VS Code
 
-First, we'll add the very helpful `code` command which can quickly open up a VS Code window from the Terminal.
+First, we'll add the very helpful `code` command, which opens a VS Code window from the Terminal. You give the command the name of a folder, and VS Code opens with that folder as its root — the folder shown at the top of the left panel, and the folder its integrated Terminal starts in.
 
 1. Open VS Code and open the Command Palette by typing Shift+Command+P (⇧⌘P). Then type 'shell command' to find the Shell Command: Install 'code' command in PATH command. Click it to install.
 
@@ -126,7 +167,7 @@ From the Extensions view you can search for and brose popular extensions.
 
 ![Browse the VS Code Extensions Marketplace](https://code.visualstudio.com/assets/docs/configure/extensions/extension-marketplace/extensions-popular.png)
 
-Start by installing these extensions:
+On its own, VS Code is a general-purpose text editor that treats a Python file as plain text. The Python and Ruff extensions below are what let it recognize Python specifically, so that it can color your code, point out mistakes as you type, and tidy the formatting each time you save. Start by installing these extensions:
 
 - **Code Spell Checker** — spelling checker for source code
 - **Error Lens** — highlights errors directly in your code
@@ -135,7 +176,9 @@ Start by installing these extensions:
 
 ## Install Python
 
-Everyone in your cohort installs Python 3.14. This matters more than it sounds: when something breaks, it breaks the same way for you, for your classmates, and for your instructor, which is the difference between a five-minute fix and an afternoon. The last number in the version may differ slightly between Mac and Windows machines — `3.14.7` and `3.14.3` are both fine. What matters is the `3.14`.
+This section covers the third goal. Installing Python means adding a program called `python3` to your computer. When you later type `python3 script.py`, that program opens the file `script.py`, reads it from top to bottom, and carries out each instruction it finds.
+
+Everyone in your cohort installs Python 3.14. This matters more than it sounds: when something breaks, it breaks the same way for you, for your classmates, and for your instructor. The last number in the version may differ slightly between Mac and Windows machines — `3.14.7` and `3.14.3` are both fine. What matters is the `3.14`.
 
 1. Go to the [Python macOS downloads page](https://www.python.org/downloads/macos/) and click the large **Download Python** button at the top of the page. You should get Python 3.14.7.
 
@@ -158,6 +201,8 @@ If it prints a **newer** version, the download button has moved on to a release 
 {% endhint %}
 
 ### Write your first Python program
+
+This last section brings the other three together: VS Code has your `development` folder open, the Terminal inside it is working in that folder, and Python is installed. You are going to create a file, type one line of code into it, and run it.
 
 Now, in your VS Code Terminal, enter these commands:
 
@@ -188,8 +233,33 @@ You should now see the file in your VS Code File Explorer panel on the left side
    python3 script.py
    ```
 
+   `Hello World!` should be printed in your Terminal.
+
+{% hint style="warning" %}
+**`python3 script.py` only looks in the working directory.** That command means "find a file named `script.py` in the folder I am currently working in, and run it." It does not search the rest of your computer for a file with that name. So if you see a message like this one:
+
+```
+can't open file '/Users/your-name/script.py': [Errno 2] No such file or directory
+```
+
+then the file exists, but your Terminal is working in a different folder from the one holding it. Read the path in the message — it tells you exactly where Python looked. Then run `pwd` to see where you are, `ls` to see what is in that folder, and `cd` to move to the folder your file is actually in.
+
+This is the most common problem fellows run into in the first two weeks, and the fix is always those same three commands.
+{% endhint %}
+
 {% hint style="info" %}
 **A note on `python` versus `python3`.** On macOS, typing `python` on its own usually produces `command not found`. The command you want is always `python3`, with the 3 on the end.
 
 This catches nearly every cohort in week one, and the reason is historical: `python` used to mean Python 2, a version of the language that is no longer used and is not installed on your machine. Rather than let `python` mean two different things on different computers, macOS leaves it undefined. Type `python3` every time and the question never comes up.
 {% endhint %}
+
+## Before you move on
+
+You should now be able to do all of the following:
+
+- Open VS Code on your `development` folder, either from your Applications folder or by running `code ~/development` in the Terminal.
+- Open a Terminal inside VS Code and say, using `pwd`, which folder it is working in.
+- Move between folders with `cd` and see what is inside them with `ls`.
+- Create a `.py` file, write a `print()` statement in it, and run it with `python3`.
+
+That is three of the four goals. The last one is connecting your computer to your GitHub account so that you can download the repositories we assign and upload your work back to them. Continue to [GitHub Setup](github-setup.md).
