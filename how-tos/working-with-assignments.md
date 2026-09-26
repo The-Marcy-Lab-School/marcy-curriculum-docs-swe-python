@@ -209,14 +209,39 @@ Response here...
 
 ### Scoring on Short Response Assignments
 
-Every response will be given a score from 0-3 using the following scoring system which grades assignments primarily based on accuracy and completion (rather than on writing quality):
+Your short response work is graded in two categories:
+
+- **Technical Score:** Each of your responses is scored out of 3 points for the technical accuracy and precision of its content.
+- **Writing Quality Score:** Your entire submission is scored once, out of 3 points, for whether it was proofread and whether your sentences say what you meant.
+
+For example, an assignment with 4 questions is worth 15 points: 3 technical points for each of the 4 questions, plus 3 writing quality points for the whole submission.
+
+#### Technical Score
+
+Each question asked in a Short Response assignment is given up to 3 points based on the technical accuracy and precision of your writing:
 
 - 0 — Did not attempt to answer the prompt
 - 1 — Did not answer all parts of the prompt AND information and examples provided are inaccurate and non-functional.
 - 2 — Did not answer all parts of the prompt OR information and examples provided are inaccurate and non-functional.
 - 3 — Answered all parts of the prompt AND information and examples provided are accurate and functional.
 
-We understand that typos and grammar mistakes can happen, however, you will also lose .5 points on any the prompt where typos or grammar errors are "distracting". Distracting meaning that if you saw this on the job, it would have to be retyped for clarification or for the sake of presentation.
+### Writing Quality Score
+
+Writing Quality does not include correctness, required terminology, or conceptual precision. Those belong to the Technical Score.
+
+Your whole submission is scored once, by checking whether each of these two areas has a problem:
+
+- **Proofreading.** Anything a spell checker or a markdown preview would catch: a misspelled word, a missing or duplicated word, an unclosed backtick, a code fence with the wrong language, or an escaped character that breaks rendering. This area counts against you when these mistakes appear in more than one answer, or more than twice within a single answer.
+- **Clarity.** At least one sentence that contradicts another statement in your submission, or whose meaning is still wrong even after its grammar is corrected.
+
+| Score              | Criteria                                                  |
+| ------------------ | --------------------------------------------------------- |
+| **3 - Exemplary**  | No problems in either area.                               |
+| **2 - Proficient** | Problems in one area (proofreading or clarity, not both). |
+| **1 - Developing** | Problems in both areas.                                   |
+| **0 - Incomplete** | The submission cannot be understood as written.           |
+
+**These are feedback, never deductions:** a run-on sentence, a comma splice, a long-winded explanation, weak organization or flow, and markdown that renders correctly but is not used effectively. Your grader may mention them to help you improve, but they do not change your score. The test is the one above: if a spell checker or a markdown preview would not catch it, and the meaning is not wrong once the grammar is corrected, it is feedback.
 
 {% hint style="info" %}
 In order for a short response assignment to be marked as "Complete", you must score at least a 75% on the assignment.
