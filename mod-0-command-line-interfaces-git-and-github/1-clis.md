@@ -1,22 +1,10 @@
 # 1. Command Line Interfaces
 
-At the end of the day, a program is just a text file on a computer. So, before we begin programming, we need to learn how programmers create, organize, and otherwise manage the files on their computers.
-
-In this lesson, we'll learn about the Terminal, a program for interacting with a computer's files and executing programs through a command line interface (CLI).
-
-You will be able to…
-
-- Understand what a command line interface (CLI) is.
-- Compare and Contrast CLIs and Graphical User Interfaces (GUIs)
-- Navigate your local file tree
-- Create, copy, delete, and move files and directories
-- How to run a Python program using your CLI
-- Explain what an "argument" is
-
 **Table of Contents:**
 
 - [Key Terms](#key-terms)
 - [Common CLI Commands](#common-cli-commands)
+- [Introduction](#introduction)
 - [The File Tree](#the-file-tree)
   - [Applications for Viewing the File Tree (CLI vs. GUI)](#applications-for-viewing-the-file-tree-cli-vs-gui)
   - [Using the Terminal in VS Code](#using-the-terminal-in-vs-code)
@@ -27,6 +15,7 @@ You will be able to…
   - [Making Files and Directories with `mkdir` and `touch`](#making-files-and-directories-with-mkdir-and-touch)
   - [Executing Python files with `python3`](#executing-python-files-with-python3)
     - [Terminating a Program with `Control+C`](#terminating-a-program-with-controlc)
+    - [Flags vs. Arguments](#flags-vs-arguments)
 - [Additional Commands](#additional-commands)
   - [Unfinished Double Quotes, `echo`, and `>>`](#unfinished-double-quotes-echo-and-)
   - [The `cat` Command and Combining Commands with `&&`](#the-cat-command-and-combining-commands-with-)
@@ -43,7 +32,8 @@ You will find a section with key terms at the top of every chapter. These are th
 - **Directory** — Another term for a "folder" in your computer that contains references to files or possibly other directories.
 - **Working Directory** — The directory where your commands will be executed.
 - **Command** - A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
-- **Argument** — An additional piece of information provided to a command to change the command's behavior.
+- **Argument** — An input that the command operates on
+- **Flag** — A part of a command that acts as a modifier or a switch to turn a feature on or off
 - **Python** — The programming language you will be writing in for the rest of this program.
 - **Interpreter** — The program that reads a Python file and executes it, one statement at a time.
 - **`python3`** — The command that runs the Python interpreter on a file.
@@ -82,6 +72,28 @@ touch [filename]
 # Move a file to the given directory
 cp [file] [dest]
 ```
+
+## Introduction
+
+When setting up your `development/` folder, you were interacting with the **Terminal**, an application that let you manipulate your file structure with text commands. This lesson will explore many of the commands that you were running.
+
+So first, reflect on that activity.
+
+**<details><summary>Q: What were some of the ways that you were changing your computer's file system while setting up your environment? What were some of the commands that you used?</summary>**
+
+Among other things, you were
+
+- Creating folders with `mkdir <dir_name>`
+- Creating files with `touch <file_name>`
+- Looking at the contents of files with `ls`
+- Looking at the current directory path with `pwd` (print working directory)
+- Changing the working directory with `cd <destination>`
+- Running Python files with `python3 script.py`
+- Checking the version of Python with `python3 --version`
+
+In this lesson, we'll learn the core concepts beneath these commands!
+
+</details>
 
 ## The File Tree
 
@@ -204,7 +216,7 @@ This is the distinction worth taking away: `ls` accepts a directory as an argume
 
 The `cd [directory]` command allows you to move to another directory in the file system. However, unlike the previous commands, it requires an **argument**.
 
-An **argument** is an additional piece of information that changes that behavior of a given command. For the `cd` command, we have to also provide a destination.
+An **argument** is an input to a command that the command operates on. For the `cd` command, we provide the destination as an argument and the command takes us there.
 
 {% hint style="info" %}
 Use the Tab key to autocomplete commands and filenames! Just start typing and hit Tab to autocomplete.
@@ -317,6 +329,29 @@ Other programs can run forever, requiring us to stop them ourselves. For example
 ![The Python REPL is useful for testing out expressions.](../.gitbook/assets/1-python-repl-expressions.png)
 
 To terminate the program, use the keyboard shortcut `Control+C` (you may need to cancel twice). You can also leave the Python REPL by entering `exit()`.
+
+#### Flags vs. Arguments
+
+During your environment setup you used the command `python3` in two ways:
+
+1. To execute a file called `script.py` with `python3 script.py`
+2. To check the current version of Python with `python3 --version`
+
+**<details><summary>Q: For the first command, what do we call `script.py`?</summary>**
+
+`script.py` is an argument. It is an input that the command `python3` operates on. `python3` executes that file.
+
+</details>
+
+`--version` is an example of a **flag**. A **flag** is a part of a command that acts as a modifier to change the behavior of the command itself. `--version` tells `python3` to switch to a different mode of operation. Instead of running an interactive shell or executing code, it simply prints the installed Python version and exits immediately.
+
+Flags are often provided with a single or double hyphen `-`.
+
+The `ls` command can also be used with flags:
+
+- `ls -a`: The `-a` (`--all`) flag tells ls to include hidden files (files starting with a .).
+
+- `ls -l`: The `-l` flag switches to "long listing" format, showing permissions, file sizes, and modification dates instead of just names.
 
 ## Additional Commands
 
