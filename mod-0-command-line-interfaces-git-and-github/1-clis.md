@@ -27,13 +27,13 @@
 You will find a section with key terms at the top of every chapter. These are the definitions that you will be expected to commit to memory but that will take time and practice. When you first read a chapter, skim through these terms and make note of the ones that you are confused about. Then, return to these terms and see which ones you can easily recall and which ones you need to practice.
 
 - **Terminal** — A program for interacting with a computer's files and executing programs through a command line interface.
-- **Command Line Interface** — a type of user interface (UI) that let's a users perform actions by entering text-based commands.
+- **Command Line Interface** — a type of user interface (UI) that lets users perform actions by entering text-based commands.
 - **Graphical User Interface** — a type of user interface that uses visual elements such as icons, buttons, windows, and dialog boxes, allowing users to perform actions such as clicking, drag-and-drop, and more.
 - **Directory** — Another term for a "folder" in your computer that contains references to files or possibly other directories.
 - **Working Directory** — The directory where your commands will be executed.
-- **Command** - A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
-- **Argument** — An input that the command operates on
-- **Flag** — A part of a command that acts as a modifier or a switch to turn a feature on or off
+- **Command** — A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
+- **Argument** — An input that the command operates on.
+- **Flag** — An option, written with one or two leading hyphens, that changes how a command behaves. Some flags take a value of their own, such as the message after `git commit -m`.
 - **Python** — The programming language you will be writing in for the rest of this program.
 - **Interpreter** — The program that reads a Python file and executes it, one statement at a time.
 - **`python3`** — The command that runs the Python interpreter on a file.
@@ -90,6 +90,9 @@ Among other things, you were
 - Changing the working directory with `cd <destination>`
 - Running Python files with `python3 script.py`
 - Checking the version of Python with `python3 --version`
+- Generating an SSH key with `ssh-keygen`
+- Cloning a repository with `git clone <repo_name>`
+- Making changes to your repository with `git add`, `git commit -m 'message'` and `git push`
 
 In this lesson, we'll learn the core concepts beneath these commands!
 
@@ -343,15 +346,17 @@ During your environment setup you used the command `python3` in two ways:
 
 </details>
 
-`--version` is an example of a **flag**. A **flag** is a part of a command that acts as a modifier to change the behavior of the command itself. `--version` tells `python3` to switch to a different mode of operation. Instead of running an interactive shell or executing code, it simply prints the installed Python version and exits immediately.
+`--version` is an example of a **flag**. A **flag** is an option, written with one or two leading hyphens, that changes how a command behaves. `--version` tells `python3` to switch to a different mode of operation. Instead of starting the REPL or running a file, it simply prints the installed Python version and exits immediately. Some flags take a value of their own: in the next lesson you will use `git commit -m "[message]"`, where the text after `-m` is the value of the `-m` flag.
 
-Flags are often provided with a single or double hyphen `-`.
+Flags usually begin with a hyphen. A short flag uses one hyphen and one letter (`-a`); a long flag uses two hyphens and a word (`--all`).
 
 The `ls` command can also be used with flags:
 
-- `ls -a`: The `-a` (`--all`) flag tells ls to include hidden files (files starting with a .).
+- `ls -a`: The `-a` (`--all`) flag tells `ls` to include hidden files (files whose names begin with `.`). The list also includes `.` and `..`, the current directory and its parent directory.
 
 - `ls -l`: The `-l` flag switches to "long listing" format, showing permissions, file sizes, and modification dates instead of just names.
+
+A command can take flags and arguments at the same time. For example, `ls -a ..` lists every file in the parent directory, hidden files included. Here `-a` is a flag that changes how `ls` behaves, and `..` is an argument that tells `ls` which directory to report on. By convention, flags come before arguments.
 
 ## Additional Commands
 

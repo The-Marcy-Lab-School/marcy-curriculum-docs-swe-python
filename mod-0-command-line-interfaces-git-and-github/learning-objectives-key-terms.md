@@ -36,8 +36,9 @@ You will find a section with key terms at the top of every chapter. These are th
 - **Graphical User Interface** — a type of user interface that uses visual elements such as icons, buttons, windows, and dialog boxes, allowing users to perform actions such as clicking, drag-and-drop, and more.
 - **Directory** — Another term for a "folder" in your computer that contains references to files or possibly other directories.
 - **Working Directory** — The directory where your commands will be executed.
-- **Command** - A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
-- **Argument** — An additional piece of information provided to a command to change the command's behavior.
+- **Command** — A single action to be performed on your computer. Examples include creating a new file, listing the contents of the current directory, navigating to a different directory, or executing a program.
+- **Argument** — An input that the command operates on.
+- **Flag** — An option, written with one or two leading hyphens, that changes how a command behaves. Some flags take a value of their own, such as the message after `git commit -m`.
 - **Python** — The programming language you will be writing in for the rest of this program.
 - **Interpreter** — The program that reads a Python file and executes it, one statement at a time.
 - **`python3`** — The command that runs the Python interpreter on a file.
