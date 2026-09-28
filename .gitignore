@@ -1,7 +1,3 @@
 node_modules/
 .DS_Store
 __pycache__/
-scope-and-sequence.md
-conversion-decisions.md
-*/CONVERSION-REVIEW.md
-*/REVIEW-SUGGESTIONS.md

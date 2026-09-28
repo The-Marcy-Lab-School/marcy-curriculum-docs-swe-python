@@ -42,6 +42,17 @@ Step two, write the three things the tool cannot judge:
 
 **Look here first.** Three to five specific places, ranked, each with a `file.md:line` reference and one sentence on why it needs his eyes. Rank by risk: wholly new prose that no original existed to check against outranks a mechanical substitution. This section is the point of the report — it is what lets him scan rather than read.
 
+## The module document comes first
+
+Once every chapter of a module has been converted, write `learning-objectives-key-terms.md` in the module's directory before reporting the module as done. It is the first thing Ben reviews for a module, before any chapter, because it shows in two pages whether the module teaches the right things in the right order.
+
+It has one entry per chapter, including the case study and the project, in chapter order. Each entry has two parts:
+
+- **Key terms**, copied verbatim from the chapter's Key Terms section, definitions included. `scripts/sync-key-terms.py <module-dir>` does the copying: each entry carries a `<!-- key-terms-from: <chapter>.md -->` marker under its heading, and the script replaces the block between `**Key terms**` and `**You will be able to…**` with the chapter's section. Edit terms in the chapter, never in this document, and rerun the script. If a chapter has no Key Terms section, add one to the chapter first.
+- **Learning objectives**, which the chapters do not state and which this document supplies. Write each as a "You will be able to…" bullet that could be checked with a short task: predict this output, write this function, explain this error. Follow the chapter's predict-then-run boxes and challenges closely, since those are the tasks an instructor will reach for. Split each list into _In the session_, the three or four objectives the 90-minute lecture must introduce, practice, and check, and _By the end of the module_, the rest, which the reading, the assignments, and the project carry.
+
+`mod-1-python-fundamentals/learning-objectives-key-terms.md` is the model. Rerun `python3 scripts/sync-key-terms.py <module-dir>` whenever a chapter's Key Terms section changes; `--check` reports without writing.
+
 ## Tables of contents
 
 **Never put a bare `&` in a heading. Write "and".** GitBook drops the ampersand when it builds an anchor, so "Key Terms & Commands" publishes with the broken anchor `#key-terms--commands` and every link to it fails. `scripts/update-toc.py` makes this substitution automatically at every heading level and retargets any link pointing at an anchor it changed. An ampersand inside inline code is left alone, because `` `&&` `` is a shell operator rather than a conjunction, and an ampersand with no surrounding spaces such as "Q&A" is reported for a person to decide rather than mangled into "QandA".
