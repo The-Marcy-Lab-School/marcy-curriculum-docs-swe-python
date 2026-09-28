@@ -12,6 +12,7 @@
   <!-- * [Postgres Setup](environment-setup/postgres-setup.md) -->
 * [Assignment Guides](how-tos/README.md)
   * [Software Engineering Assignments Guide](how-tos/working-with-assignments.md)
+  * [Markdown Guide](how-tos/how-to-write-markdown.md)
   * [Debugging & Rubber Ducking Guide](how-tos/how-to-debug.md)
   * [PEDAC Problem Solving Guide](how-tos/how-to-pedac.md)
 <!-- * [Project Guides](projects/README.md) -->
