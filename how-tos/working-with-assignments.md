@@ -189,7 +189,7 @@ Your intended audience should be someone with _some_ experience programming but 
 
 Strive to do more than just answer the prompts. Use the prompts as opportunities to practice your technical communication. While anyone can write functional code, not everyone can communicate clearly so take pride in this work!
 
-Short Response prompts will always be found in the `README.md` file of your assignment. Each prompt will be listed under a `## Prompt X` heading and you should add your responses under the `### Response X` heading using Markdown ([read about Markdown syntax here](https://www.markdownguide.org/basic-syntax/)).
+Short Response prompts will always be found in the `README.md` file of your assignment. Each prompt will be listed under a `## Prompt X` heading and you should add your responses under the `### Response X` heading using Markdown ([read about Markdown syntax here](./how-to-write-markdown.md)).
 
 For example:
 
