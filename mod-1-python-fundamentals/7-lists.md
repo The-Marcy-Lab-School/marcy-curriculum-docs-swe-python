@@ -1,4 +1,4 @@
-# 8. Lists
+# 7. Lists
 
 **Table of Contents**
 

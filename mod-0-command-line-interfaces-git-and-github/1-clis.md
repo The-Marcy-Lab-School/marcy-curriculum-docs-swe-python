@@ -346,7 +346,7 @@ During your environment setup you used the command `python3` in two ways:
 
 </details>
 
-`--version` is an example of a **flag**. A **flag** is an option, written with one or two leading hyphens, that changes how a command behaves. `--version` tells `python3` to switch to a different mode of operation. Instead of starting the REPL or running a file, it simply prints the installed Python version and exits immediately. Some flags take a value of their own: in the next lesson you will use `git commit -m "[message]"`, where the text after `-m` is the value of the `-m` flag.
+`--version` is an example of a **flag**. A **flag** is an option, written with one or two leading hyphens, that changes how a command behaves. `--version` tells `python3` to switch to a different mode of operation. Instead of starting the REPL or running a file, it simply prints the installed Python version and exits immediately. Some flags take a value of their own: in the next lesson you will use `git commit -m "[message]"`, where the message in quotes after `-m` is the value of the `-m` flag.
 
 Flags usually begin with a hyphen. A short flag uses one hyphen and one letter (`-a`); a long flag uses two hyphens and a word (`--all`).
 
@@ -356,7 +356,12 @@ The `ls` command can also be used with flags:
 
 - `ls -l`: The `-l` flag switches to "long listing" format, showing permissions, file sizes, and modification dates instead of just names.
 
-A command can take flags and arguments at the same time. For example, `ls -a ..` lists every file in the parent directory, hidden files included. Here `-a` is a flag that changes how `ls` behaves, and `..` is an argument that tells `ls` which directory to report on. By convention, flags come before arguments.
+A command can take flags and arguments at the same time. For example, `ls -a ..` lists every file in the parent directory, hidden files included.
+
+- `-a` is a flag that changes how `ls` behaves
+- `..` is an argument that tells `ls` which directory to report on.
+
+By convention, flags come before arguments.
 
 ## Additional Commands
 

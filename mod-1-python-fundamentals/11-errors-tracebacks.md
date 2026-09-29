@@ -25,6 +25,7 @@ Writing code with errors is a natural part of programming. But rather than avoid
 - [Handling Errors](#handling-errors)
   - [The Error You Will Catch Most: `ValueError` from `input()`](#the-error-you-will-catch-most-valueerror-from-input)
 - [Raising Your Own Errors](#raising-your-own-errors)
+  - [Testing That a Function Raises](#testing-that-a-function-raises)
 
 ## Key Terms
 
@@ -33,6 +34,7 @@ Writing code with errors is a natural part of programming. But rather than avoid
 - Common error types include **`SyntaxError`** (invalid Python), **`NameError`** (undefined variables), **`TypeError`** (wrong data types), **`ValueError`** (right type, wrong value), **`IndexError`** and **`KeyError`** (missing positions and keys), and **`FileNotFoundError`** (operating system constraints).
 - A **traceback** is the report Python prints when an error is raised. Reading it from the bottom up tells you the error type, the message, and the chain of function calls that led there.
 - Errors can be manually raised using the `raise` keyword, and uncaught errors will cause programs to crash. `try` and `except` let a program catch an error and decide what to do instead.
+- **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
 
 ## What is an error? Why are they "raised"?
 
@@ -365,7 +367,7 @@ people = ask_for_number("How many people? ")
 
 The `return` inside the `try` ends the loop and the function the moment the conversion succeeds. If it fails, the `except` prints a message and the `while True` asks again. This function will appear, in some form, in your project.
 
-**<details><summary>Q: Chapter 5 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
+**<details><summary>Q: Chapter 6 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
 
 `.isdigit()` only accepts strings made entirely of digits, so it rejects `-5` and `5` even though `int()` would happily convert both. The `try`/`except` version lets `int()` be the judge of what it can convert, which is exactly the right judge. Use `.isdigit()` when you specifically want non-negative whole numbers with no surprises; use `try`/`except` when you want "whatever `int()` accepts."
 
@@ -383,3 +385,40 @@ def withdraw(balance, amount):
 ```
 
 The caller can then choose to catch it or let it crash. Either way, the failure happens where the mistake is, with a message that says what went wrong, instead of three functions later with a confusing one. Pick the built-in error type whose meaning is closest: `ValueError` for a bad value, `TypeError` for a bad type.
+
+### Testing That a Function Raises
+
+An error that a function raises on purpose is part of what the function does, so it deserves a test like any other behavior. In the `9-testing` project from chapter 9, put `withdraw` in `src/bank.py` and write `tests/test_bank.py`:
+
+```python
+import pytest
+from src.bank import withdraw
+
+
+def test_withdraw():
+    """withdraw - subtracts the amount from the balance"""
+    assert withdraw(100, 30) == 70
+
+
+def test_withdraw_overdraft():
+    """withdraw - raises a ValueError when the amount is more than the balance"""
+    with pytest.raises(ValueError):
+        withdraw(100, 500)
+```
+
+`with pytest.raises(ValueError):` means "the indented code below must raise a `ValueError`." If it does, pytest catches the error and the test passes. If it does not, the test fails. It is the same `with` statement that opened files in chapter 9: it sets something up, runs the indented block, and then checks what happened.
+
+{% hint style="warning" %}
+**Predict, then run.** Delete the `raise` line from `withdraw` so that it quietly allows the overdraft, and run the tests again. What does pytest report?
+
+<details><summary>What actually happens</summary>
+
+```
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+```
+
+`test_withdraw` still passes, and `test_withdraw_overdraft` fails. The function no longer does what the test says it should, and pytest tells you exactly which promise it broke. Put the `raise` back before moving on.
+
+</details>
+{% endhint %}

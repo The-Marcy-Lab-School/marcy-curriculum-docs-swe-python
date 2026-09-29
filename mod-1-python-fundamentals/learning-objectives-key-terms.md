@@ -53,7 +53,7 @@ _By the end of the module:_
 - Read an `IndentationError` and explain why the interpreter refused the whole file.
 - Rewrite a badly formatted function to follow PEP 8: four-space indentation, spaces around operators, `snake_case` names.
 
-## 2. Data Types and Variables
+## 2. Data Types, Variables, and Operators
 
 <!-- key-terms-from: 2-data-types-variables.md -->
 
@@ -112,40 +112,30 @@ _By the end of the module:_
 - Explain why a function must be defined before the line that calls it runs, and why two functions can each have a variable with the same name.
 - Explain why assigning to a global variable inside a function raises `UnboundLocalError`, and say why passing values in and returning them out is preferred to `global`.
 
-## 4. Strings and Conditional Statements
+## 4. Conditional Statements
 
-<!-- key-terms-from: 4-strings-conditional-statements.md -->
+<!-- key-terms-from: 4-conditional-statements.md -->
 
 **Key terms**
 
-- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning their characters cannot be changed directly.
-- You can _access_ individual characters of a string with **bracket notation**.
-- You can check the length of a string with **`len(str)`** (and you can use this method on lists and dictionaries too!).
-- **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
-- The **`in` operator** checks whether one string contains another.
 - **Control Flow** refers to the order in which statements of a program are executed, typically top-to-bottom.
 - **Conditional statements** (`if`, `elif`, `else`) let you control the flow of your program based on data values. The order of conditions matters, and only the first true condition in a chain will execute.
 - **Guard clauses** are single `if` statements that return early from a function, simplifying conditional logic.
 - Values can be **truthy** or **falsy** depending on their content. An `if` calls `bool()` on its condition for you, which is what makes `if not name:` work as a guard against empty input.
 - **Conditional expressions** provide a concise way to choose between two values based on a condition.
-- The **`input()`** function gets input from the user. It always returns a string, so converting it to another type is your job.
-- **Type conversion** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
 
 **You will be able to…**
 
 _In the session:_
 
-- Access a character of a string by positive or negative index, take a slice, and predict the `IndexError` for a position that does not exist.
-- Build a message with an f-string, and clean up user input with `strip()`, `lower()`, and `split()`.
 - Write an `if`/`elif`/`else` chain and predict which branch runs, including when the branches are in the wrong order or are separate `if` statements.
-- Read a line of input with `input()`, explain why it is always a string, and convert it with `int()` or `float()` after checking it with `isdigit()`.
+- Rewrite a conditional chain as guard clauses and explain why the last `return` needs no condition.
+- List the falsy values, predict what `if "False":` does, and use `if not value:` as a guard against an empty value.
 
 _By the end of the module:_
 
-- Explain what it means that strings are immutable and predict the `TypeError` from trying to change one in place.
-- Rewrite a conditional chain as guard clauses and explain why the last `return` needs no condition.
-- Predict the `TypeError` from `"1" + 1` and fix it by converting one side.
-- List the falsy values, predict what `if "False":` does, and use `if not value:` as a guard against empty input while knowing when `is None` is the right test instead.
+- Say when `if value is None:` is the right test instead of `if not value:`.
+- Replace an `if`/`else` that assigns one of two values with a conditional expression.
 
 ## 5. Loops
 
@@ -158,7 +148,7 @@ _By the end of the module:_
 - The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
 - **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
 - **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
-- Loop challenges help you practice using loops to solve real problems, such as counting results or building interactive programs.
+- Loop challenges help you practice using loops to solve real problems, such as counting results or repeating until something happens.
 
 **You will be able to…**
 
@@ -166,7 +156,7 @@ _In the session:_
 
 - Rewrite repeated statements as a `for` loop over `range()`, and predict the first and last values `range()` produces.
 - Choose between a `for` loop and a `while` loop from whether the number of repetitions is known in advance.
-- Write a `while True` loop that reads input until the user quits, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
+- Write a `while True` loop that repeats until a random event happens, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
 - Keep a running count across iterations of a loop and report it afterward.
 
 _By the end of the module:_
@@ -175,67 +165,42 @@ _By the end of the module:_
 - Predict the output and the number of iterations of a nested loop.
 - Stop an infinite loop from the Terminal.
 
-## 6. Modules and `if __name__ == "__main__"`
+## 6. Inputs and Outputs
 
-<!-- key-terms-from: 6-modules-main.md -->
+<!-- key-terms-from: 6-inputs-outputs.md -->
 
 **Key terms**
 
-- A **module** is a file containing code, which can then be imported and utilized in other parts of a larger program or system.
-  - Every function and variable defined at the top level of a file can be imported by another file.
-  - A module is imported with `import module_name`, or specific names are imported with `from module_name import name`.
-- Importing a file **runs** it, top to bottom. The variable `__name__` tells a file whether it is being run directly (`"__main__"`) or imported by another file.
-- The `if __name__ == "__main__":` guard is how a file says "only run this part when I am the program being run".
-- `input()` pauses the program, waits for the user to type a line, and returns what they typed as a **string**.
+- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning their characters cannot be changed directly.
+- You can _access_ individual characters of a string with **bracket notation**.
+- You can check the length of a string with **`len(str)`** (and you can use this method on lists and dictionaries too!).
+- **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
+- The **`in` operator** checks whether one string contains another.
+- **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.
+- **f-strings** interpolate the value of any expression written inside `{}` into a string. A **format specifier** after a colon, like `{price:.2f}`, controls how the value is displayed.
+- The **`input()`** function gets input from the user. It always returns a string, so converting it to another type is your job.
+- **Type conversion** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
+- A program is **hard-coded** if the program code must be modified in order to produce a new result.
 
 **You will be able to…**
 
 _In the session:_
 
-- Split a single-file program into modules so that each file has one concern, and say what the concern of each file is.
-- Import a whole module and use dot notation, or import specific names, and explain why `from module import *` is avoided.
-- Predict what prints when a module with top-level code is imported, and explain why importing a file runs it.
-- Explain what `__name__` holds in the file that was run and in a file that was imported, and use the `__main__` guard to keep a module's code from running on import.
+- Access a character of a string by positive or negative index, take a slice, and predict the `IndexError` for a position that does not exist.
+- Print several values in one `print()` call, control what goes between and after them with `sep` and `end`, and build a message with an f-string that formats a decimal with `:.2f`.
+- Read a line of input with `input()`, clean it up with `strip()` and `lower()`, explain why it is always a string, and convert it with `int()` or `float()` after checking it with `isdigit()`.
+- Convert a hard-coded program into one that takes its values from `input()`, turning a `Y`/`N` answer into a boolean.
 
 _By the end of the module:_
 
-- Explain what the `__pycache__` folder is and why it never goes in Git.
-- Convert a hard-coded program into one that takes its values from `input()`, with the logic in its own module.
+- Explain what it means that strings are immutable and predict the `TypeError` from trying to change one in place.
+- Search and change strings with `in`, `find()`, `startswith()`, `endswith()`, `replace()`, and `split()`, and chain two methods in one expression.
+- Predict the `TypeError` from `"1" + 1` and fix it by converting one side.
+- Explain the difference between displaying a number with `:.2f` and changing it with `round()`.
 
-## 7. The Python Ecosystem: pip, venv, and requirements.txt
+## 7. Lists
 
-<!-- key-terms-from: 7-python-ecosystem.md -->
-
-**Key terms**
-
-- The **standard library** is the collection of modules that come with Python. `random`, `math`, `time`, and `json` are examples. They need `import` but no installation.
-- Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
-- A **virtual environment** is a private copy of Python and its packages for one project. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
-  - Installing a package inside an activated virtual environment installs it only there.
-  - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
-- **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
-- The `.venv` folder is never committed to Git. It goes in `.gitignore` and is rebuilt from `requirements.txt` instead.
-- **Developer dependencies** like `pytest` are packages used by the developer(s) of a project but not needed by the people who run it.
-
-**You will be able to…**
-
-_In the session:_
-
-- Create a virtual environment, activate it, confirm from the prompt and from `which python3` that it is active, and deactivate it.
-- Install a package with `pip`, see what was installed with `pip list`, and use `pip show` to find a package's sub-dependencies.
-- Write `requirements.txt` with `pip freeze` and rebuild an environment from it with `pip install -r`.
-- Keep `.venv/` and `__pycache__/` out of Git and explain why the recipe is committed rather than the meal.
-
-_By the end of the module:_
-
-- Distinguish a standard library module from a third-party package and say which needs installing.
-- Save a list or dictionary to a JSON file and read it back with `json.dump()` and `json.load()`.
-- Explain the `ModuleNotFoundError` that appears when the environment is not activated, and check for that first.
-- Explain why `pytest` is a developer dependency.
-
-## 8. Lists
-
-<!-- key-terms-from: 8-lists.md -->
+<!-- key-terms-from: 7-lists.md -->
 
 **Key terms**
 
@@ -262,9 +227,9 @@ _By the end of the module:_
 - Explain when to use a tuple instead of a list, and predict the `TypeError` from changing one.
 - Unpack a list into several variables, including with `*rest`.
 
-## 9. Dictionaries
+## 8. Dictionaries
 
-<!-- key-terms-from: 9-dictionaries.md -->
+<!-- key-terms-from: 8-dictionaries.md -->
 
 **Key terms**
 
@@ -289,6 +254,51 @@ _By the end of the module:_
 - Explain which values can be keys and why a list cannot.
 - Predict the effect of mutating a dictionary through a second variable, and copy a dictionary before changing it in a pure function.
 - Write a function that takes a dictionary and uses only the keys it needs.
+
+## 9. Modules, Virtual Environments, and pytest
+
+<!-- key-terms-from: 9-modules-environments-pytest.md -->
+
+**Key terms**
+
+- A **module** is a file containing code, which can then be imported and utilized in other parts of a larger program or system.
+  - Every function and variable defined at the top level of a file can be imported by another file.
+  - A module is imported with `import module_name`, or specific names are imported with `from module_name import name`.
+- Importing a file **runs** it, top to bottom. The variable `__name__` tells a file whether it is being run directly (`"__main__"`) or imported by another file.
+- The `if __name__ == "__main__":` guard is how a file says "only run this part when I am the program being run".
+- The **standard library** is the collection of modules that come with Python. `random`, `math`, `time`, and `json` are examples. They need `import` but no installation.
+- Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
+- A **virtual environment** is a private copy of Python and its packages for one project. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
+  - Installing a package inside an activated virtual environment installs it only there.
+  - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
+- **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
+- The `.venv` folder is never committed to Git. It goes in `.gitignore` and is rebuilt from `requirements.txt` instead.
+- **Developer dependencies** like `pytest` are packages used by the developer(s) of a project but not needed by the people who run it.
+- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
+- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
+- **`pytest`** is the third-party package that finds and runs test files. It is installed into the project's virtual environment and run with `python3 -m pytest`.
+- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the **docstring** on its first line describes what the test checks.
+- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
+
+**You will be able to…**
+
+_In the session:_
+
+- Split a single-file program into modules so that each file has one concern, import a whole module or specific names, and explain why `from module import *` is avoided.
+- Predict what prints when a module with top-level code is imported, explain what `__name__` holds, and use the `__main__` guard to keep a module's code from running on import.
+- Create and activate a virtual environment, install `pytest` into it with `pip`, and record it in `requirements.txt` with `pip freeze`.
+- Write a test function with `assert` and a docstring, run the tests with `python3 -m pytest`, and read a failure report to find which assertion failed and what the function actually returned.
+
+_By the end of the module:_
+
+- Explain what the `__pycache__` folder is, keep it and `.venv/` out of Git, and explain why the recipe is committed rather than the meal.
+- Distinguish a standard library module from a third-party package and say which needs installing.
+- Save a list or dictionary to a JSON file and read it back with `json.dump()` and `json.load()`.
+- Use `pip list` and `pip show` to see what is installed and what a package requires, and rebuild an environment with `pip install -r requirements.txt`.
+- Explain the `ModuleNotFoundError` that appears when the environment is not activated, and check for that first.
+- Explain why `pytest` is a developer dependency and why the tests are run with `python3 -m pytest` rather than `pytest`.
+- Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
+- Split the madlib program into a module for the story and a `main.py` for the input.
 
 ## 10. Reading Unfamiliar Code
 
@@ -329,6 +339,7 @@ _By the end of the module:_
 - Common error types include **`SyntaxError`** (invalid Python), **`NameError`** (undefined variables), **`TypeError`** (wrong data types), **`ValueError`** (right type, wrong value), **`IndexError`** and **`KeyError`** (missing positions and keys), and **`FileNotFoundError`** (operating system constraints).
 - A **traceback** is the report Python prints when an error is raised. Reading it from the bottom up tells you the error type, the message, and the chain of function calls that led there.
 - Errors can be manually raised using the `raise` keyword, and uncaught errors will cause programs to crash. `try` and `except` let a program catch an error and decide what to do instead.
+- **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
 
 **You will be able to…**
 
@@ -344,6 +355,7 @@ _By the end of the module:_
 - Name the error type that a given mistake produces, and read an error message to say what went wrong.
 - Point at the line where an error occurred and the line where the bad value came from, and say which one the fix belongs on.
 - Raise a `ValueError` or `TypeError` from a function that is handed a value it cannot work with.
+- Test that a function raises an error with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
 
 ## 12. First-Class Functions and Higher-Order Functions
 
@@ -358,6 +370,7 @@ _By the end of the module:_
 - When passing callbacks to HOFs, avoid invoking them (don't use parentheses) - the HOF will handle the invocation with the correct parameters.
 - **`lambda`** creates a small anonymous function in one expression, a concise way to define callbacks when they won't be reused elsewhere.
 - `sorted()`, `min()`, and `max()` are built-in higher-order functions. Their `key` parameter takes a callback that says what to compare.
+- A **wrapper** is a function returned by another function that calls the original and adds behavior around it. Written with an `@` above a definition, it is called a **decorator**.
 
 **You will be able to…**
 
@@ -367,12 +380,14 @@ _In the session:_
 - Write a higher-order function that accepts a callback and calls it, and explain what makes it reusable.
 - Predict the `TypeError` from passing `say_hello()` instead of `say_hello` as a callback, and explain the `None` that causes it.
 - Sort a list of strings by length and find the largest dictionary in a list by one of its values, using `key=`.
+- Write a function that returns a wrapper around another function, and predict when each line of it prints.
 
 _By the end of the module:_
 
 - Replace an `if`/`elif` chain of menu options with a dictionary of functions.
 - Write a short callback as a `lambda` and say when a `def` is the better choice.
-- Implement `for_each(items, callback)` with a `for` loop and `enumerate()`.
+- Explain what `@announce` above a definition does, in terms of `greet = announce(greet)`.
+- Change a wrapper so that it returns the wrapped function's return value, and so that it guards the call with a condition.
 
 ## 13. Comprehensions and Built-in Iteration
 
@@ -387,6 +402,10 @@ _By the end of the module:_
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
 - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.
 - **`enumerate()`**, **`zip()`**, **`any()`**, and **`all()`** cover the other everyday loop shapes without an index in sight.
+- **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
+- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
+- **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
+- **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
 
 **You will be able to…**
 
@@ -403,38 +422,8 @@ _By the end of the module:_
 - Write a function that returns the first element passing a test, and decide what it returns when nothing passes.
 - Build a frequency counter with a dictionary and `.get(key, 0)`.
 - Use `enumerate()`, `zip()`, `any()`, and `all()` in place of index-based loops.
-
-## 14. pytest and Test-Driven Development
-
-<!-- key-terms-from: 14-pytest-tdd.md -->
-
-**Key terms**
-
-- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
-- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
-- **`pytest`** is the third-party package that finds and runs test files. It is installed into the project's virtual environment and run with `python3 -m pytest`.
-- A **test function** is any function in a test file whose name starts with `test_`. Its name is the description of the test, so write it as a sentence.
-- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. There is no other testing vocabulary; the expression is an ordinary comparison.
-- **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
-- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
-- **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
-- **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
-- **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
-
-**You will be able to…**
-
-_In the session:_
-
-- Set up a project with `src/` and `tests/` folders, install `pytest` into a virtual environment, and run the tests with `python3 -m pytest`, explaining why the `-m` form is used.
-- Write a test function with `assert`, name it as a sentence, and read a failure report to find which assertion failed and what the function actually returned.
-- Refactor a working function while keeping its tests green.
+- Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop to a comprehension while its tests stay green.
 - Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
-
-_By the end of the module:_
-
-- Explain what a unit test is and give four reasons test files are better than manual testing.
-- Choose `==` to compare contents and `is`/`is not` to compare identity, and test that a pure function returns a new list.
-- Test that a function raises an error with `pytest.raises`.
 
 ## Case Study: CLI Task Manager
 
@@ -458,7 +447,7 @@ _By the end of the module:_
 
 ## Project: CLI Application
 
-**Key terms:** none new. The project applies the terms from lessons 1 to 14.
+**Key terms:** none new. The project applies the terms from lessons 1 to 13.
 
 **You will be able to…**
 

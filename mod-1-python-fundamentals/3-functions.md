@@ -27,7 +27,15 @@
 
 ## Don't Repeat Yourself (DRY)
 
-Suppose we had a series of temperatures in Celsius that we needed to convert to Fahrenheit? We could just copy and paste the code and swap out the numbers like this:
+Recall this code for converting 100°C to Fahrenheit:
+
+```py
+boiling_point_C = 100
+boiling_point_F = boiling_point_C * 9/5 + 32
+print(boiling_point_F) # Output: 212
+```
+
+Suppose we wanted to also convert 0°C and 20°C to Fahrenheit in the same program. We could just copy and paste the code and swap out the numbers like this:
 
 ```python
 boiling_point_C = 100
@@ -43,12 +51,14 @@ best_temperature_F = best_temperature_C * 9/5 + 32
 print(best_temperature_F) # Output: 68
 ```
 
+But this approach doesn't scale well.
+
 **<details><summary>Q: What isn't great about this code?</summary>**
 
 It breaks the fundamental software engineering principle "DRY" which stands for "Don't Repeat Yourself". Repetition is a problem for two primary reasons:
 
 - If we need to change the format of our print statements, we need to change the format in 3 places.
-- If we need to fix a bug in the code, we need to fix it in 3 places.p[p]
+- If we need to fix a bug in the code, we need to fix it in 3 places.
 
 The solution is to create a function!
 

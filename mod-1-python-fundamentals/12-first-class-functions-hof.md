@@ -10,7 +10,7 @@
   - [Anonymous Functions with `lambda`](#anonymous-functions-with-lambda)
   - [Functions That Return Functions](#functions-that-return-functions)
 - [Higher-Order Functions Built Into Python](#higher-order-functions-built-into-python)
-- [Looping with Callbacks](#looping-with-callbacks)
+- [Wrapping a Function](#wrapping-a-function)
 
 ## Key Terms
 
@@ -21,6 +21,7 @@
 - When passing callbacks to HOFs, avoid invoking them (don't use parentheses) - the HOF will handle the invocation with the correct parameters.
 - **`lambda`** creates a small anonymous function in one expression, a concise way to define callbacks when they won't be reused elsewhere.
 - `sorted()`, `min()`, and `max()` are built-in higher-order functions. Their `key` parameter takes a callback that says what to compare.
+- A **wrapper** is a function returned by another function that calls the original and adds behavior around it. Written with an `@` above a definition, it is called a **decorator**.
 
 ## Functions are "First-Class" Values
 
@@ -92,7 +93,7 @@ print(actions["even"](4))    # True
 This pattern has a name, a **dispatch table**, and it is how a menu program can replace a long chain of `if choice == "1": ... elif choice == "2": ...` with a single dictionary lookup. Keep it in mind for your project.
 
 {% hint style="info" %}
-When a function is attached to a value, we call it a **method**. You have been using methods since chapter 4: `upper` is a function stored inside every string, and `"abc".upper()` looks it up and calls it, the same way `actions["hi"]()` does. In Mod 2 you will learn how to attach functions to values of your own.
+When a function is attached to a value, we call it a **method**. You have been using methods since chapter 6: `upper` is a function stored inside every string, and `"abc".upper()` looks it up and calls it, the same way `actions["hi"]()` does. In Mod 2 you will learn how to attach functions to values of your own.
 {% endhint %}
 
 ### Functions Passed into Other Functions Are "Callbacks". The Function That Receives the Callback is a "Higher Order Function".
@@ -263,7 +264,7 @@ Use `lambda` for a callback that fits comfortably on one line. The moment it nee
 
 ### Functions That Return Functions
 
-The last part of being first-class: a function can be the return value of another function, and the returned function remembers the variables that were in scope when it was made. You will spend a whole session on this at the end of Mod 2, because it is the mechanism behind decorators. For now, notice only that it follows from everything above.
+The last part of being first-class: a function can be the return value of another function. If a function can be stored in a variable, and a `return` statement can hand back whatever is in a variable, then a `return` statement can hand back a function. The last section of this chapter is what that makes possible.
 
 ## Higher-Order Functions Built Into Python
 
@@ -289,77 +290,166 @@ oldest = max(users, key=lambda user: user['age'])
 print(oldest['username'])   # reuben
 ```
 
-The next chapter is about the rest of this family: the built-in ways to loop, transform, filter, and combine data, and when to reach for each one.
+## Wrapping a Function
 
-## Looping with Callbacks
+Everything in this chapter has been building toward one move: a function that takes a function, and hands back a new function with something added.
 
-Here is a higher-order function you can build yourself, and building it shows that a loop and a callback are two spellings of the same idea. Start with a plain loop. This one changes the `is_admin` value of every dictionary in the `users` list:
-
-{% code title="for_each.py" %}
+Here are two functions from a program you are debugging. You want the Terminal to tell you when each one starts and when it finishes.
 
 ```python
-# revoke is_admin status from all users
-users = [
-    {'id': 1, 'username': 'ben', 'is_admin': False},
-    {'id': 2, 'username': 'maya', 'is_admin': True},
-    {'id': 3, 'username': 'reuben', 'is_admin': True},
-    {'id': 4, 'username': 'gonzalo', 'is_admin': False},
-]
+def greet(name):
+    print(f"Hi, {name}!")
 
-for user in users:
-    user['is_admin'] = False
+def farewell(name):
+    print(f"Bye, {name}!")
+```
+
+The obvious fix is to edit both of them:
+
+```python
+def greet(name):
+    print("--- starting ---")
+    print(f"Hi, {name}!")
+    print("--- finished ---")
+```
+
+That works, and it is exactly the repetition chapter 3 warned you about. The announcing has nothing to do with greeting, but it is now tangled up with it, and you will have to pick it back out when you are done debugging.
+
+Instead, write a function whose only job is the announcing, and whose parameter is the function to announce.
+
+{% code title="announce.py" lineNumbers="true" %}
+
+```python
+def announce(func):
+    def wrapper(name):
+        print("--- starting ---")
+        func(name)
+        print("--- finished ---")
+    return wrapper
+
+def greet(name):
+    print(f"Hi, {name}!")
+
+loud_greet = announce(greet)
+loud_greet("Maya")
+
+# --- starting ---
+# Hi, Maya!
+# --- finished ---
 ```
 
 {% endcode %}
 
+Read the order of events carefully, because three functions are involved and only one of them runs at the end:
+
+1. `announce(greet)` is called. Inside it, `func` references the `greet` function itself, not a call to it.
+2. `announce` defines `wrapper` and returns it without calling it. `loud_greet` now references `wrapper`.
+3. `loud_greet("Maya")` calls `wrapper`, which prints a line, calls `func("Maya")`, and prints another line.
+
+`greet` was never edited, and `announce` never mentions greeting. Each one does a single job, and the line `loud_greet = announce(greet)` is what combines them. A function returned this way is called a **wrapper**, because it wraps around the original.
+
+{% hint style="warning" %}
+**Predict, then run.** In what order do these four lines print?
+
+```python
+def announce(func):
+    def wrapper(name):
+        print("--- starting ---")
+        func(name)
+        print("--- finished ---")
+    return wrapper
+
+def greet(name):
+    print(f"Hi, {name}!")
+
+loud_greet = announce(greet)
+print("ready")
+loud_greet("Maya")
+```
+
+<details><summary>What actually happens</summary>
+
+```
+ready
+--- starting ---
+Hi, Maya!
+--- finished ---
+```
+
+`ready` comes first. Calling `announce(greet)` builds `wrapper` and returns it, and building a function prints nothing. The three announcements wait until `loud_greet("Maya")` actually calls the wrapper on the last line.
+
+</details>
+{% endhint %}
+
+This `wrapper` takes one parameter called `name`, so it can only wrap functions that take a single argument. Mod 2 shows you how to write one that works for a function with any parameters at all.
+
+{% hint style="info" %}
+You will see this written a shorter way, with an `@` on the line above a definition:
+
+```python
+@announce
+def greet(name):
+    print(f"Hi, {name}!")
+
+greet("Maya")
+```
+
+That is a **decorator**, and it means exactly `greet = announce(greet)`. Python comes with several, and Mod 2 uses `@property`, `@dataclass`, and `@staticmethod` well before the session that takes decorators apart. Whenever you meet an `@`, come back to this section: a function was handed to another function, and what came back took its name.
+{% endhint %}
+
 **Challenge 1:**
 
-Loop over `users` and update the `username` value for each dictionary such that the first letter is capitalized.
+The `announce` above throws away whatever the wrapped function returns, so it is useless for a function with a `return` statement. Fix `wrapper` so that it hands back the wrapped function's return value.
+
+```python
+def shout(name):
+    return f"HI, {name.upper()}!"
+
+loud_shout = announce(shout)
+message = loud_shout("Maya")
+print(message)   # should print HI, MAYA!
+```
 
 **<details><summary>Solution</summary>**
 
 ```python
-for user in users:
-    user['username'] = user['username'].capitalize()
+def announce(func):
+    def wrapper(name):
+        print("--- starting ---")
+        result = func(name)
+        print("--- finished ---")
+        return result
+    return wrapper
 ```
 
-`capitalize()` is a string method that uppercases the first character and lowercases the rest. Without it: `user['username'][0].upper() + user['username'][1:]`.
+Store the call's value in `result`, print the closing line, then return it. Without the last `return`, `wrapper` returns `None` and the original return value is lost.
 
 </details>
 
 **Challenge 2:**
 
-Implement your own `for_each` function that takes a list `items` and a `callback`:
-
-It should iterate through the input `items` and do the following:
-
-- Invoke the `callback` with the following arguments:
-  - The value at the current index
-  - The current index
-  - The source list itself
-- Return nothing (or manually return `None`)
-
-**Usage Example**
+Write a function `skip_empty` that takes a function and returns a wrapper. The wrapper should call the wrapped function only when it is given a name that is not empty, and print a message otherwise.
 
 ```python
-def for_each(items, callback):
-    # ???
-
-for_each(['a', 'b', 'c'], print)
-# a 0 ['a', 'b', 'c']
-# b 1 ['a', 'b', 'c']
-# c 2 ['a', 'b', 'c']
+safe_greet = skip_empty(greet)
+safe_greet("Maya")   # Hi, Maya!
+safe_greet("")       # No name given, skipping.
 ```
 
 **<details><summary>Solution</summary>**
 
 ```python
-def for_each(items, callback):
-    # Iterate through the input list, with the index of each element
-    for index, value in enumerate(items):
-        callback(value, index, items)
+def skip_empty(func):
+    def wrapper(name):
+        if not name:
+            print("No name given, skipping.")
+            return
+        return func(name)
+    return wrapper
 ```
 
-`print` is passed as the callback, with no parentheses, and `for_each` calls it with three arguments each time. `print` accepts any number of arguments and prints them separated by spaces, which is where the output format comes from.
+The guard clause from chapter 4, now protecting a function that `skip_empty` knows nothing about. This is how a real decorator checks whether a user is logged in before letting a page load.
 
 </details>
+
+The next chapter is about the rest of this family: the built-in ways to loop, transform, filter, and combine data, and when to reach for each one.

@@ -2,7 +2,7 @@
 
 This document assigns every Technical Lecture session of the F26 fellowship to a week, a day, and a topic. Environment setup and virtual environments are covered in orientation, before day 1, so the first Technical Lecture session is Command Line Interfaces. Technical Lecture is one 90-minute session per day, Monday through Thursday. Sessions below are given as a week number within the quarter and a position within that week, so day 1 is the week's first session and day 4 its last. A holiday makes a short week of three sessions rather than moving the days that remain. Technical Interview Prep runs in the daily Code Challenge block and Labs run in their own block, so neither appears here. The fellowship starts on Monday, September 28, 2026 and the capstone begins on Monday, June 7, 2027.
 
-The three breaks fall on the quarter boundaries. Q1 ends on Friday, December 18 before winter recess. Q2 ends on Friday, March 19 before spring break. Q3 ends on Friday, May 28 before the summer office closure. There is no review week between units; every session carries content or assessment, apart from one unassigned session at the end of Q1, week 12 day 4, the last teaching day before winter recess.
+The three breaks fall on the quarter boundaries. Q1 ends on Friday, December 18 before winter recess. Q2 ends on Friday, March 19 before spring break. Q3 ends on Friday, May 28 before the summer office closure. There is no review week between units; every session carries content or assessment, apart from two unassigned sessions in Q1: week 5 day 4, just before the Mod 1 project week, and week 12 day 4, the last teaching day before winter recess.
 
 ## Calendar
 
@@ -19,7 +19,7 @@ Holidays assumed off and removed from the counts below: Indigenous Peoples' Day 
 
 ## Q1: Computational Thinking and Responsible Use of AI
 
-Forty-four sessions. Mod 0 takes four, Mod 1 takes nineteen, the AI foundations take two, Mod 2 takes twelve including decorators and its assessment, and the endgame critique unit takes seven including the Q1 closeout. Week 12 day 4 is unassigned and is the quarter's only buffer.
+Forty-four sessions. Mod 0 takes four, Mod 1 takes eighteen, the AI foundations take two, Mod 2 takes twelve including decorators and its assessment, and the endgame critique unit takes seven including the Q1 closeout. Two sessions are unassigned buffers: week 5 day 4, which gives fellows a day to catch up before the Mod 1 project begins, and week 12 day 4.
 
 The Reading Unfamiliar Code session lands in week 4 as the master plan requires. The endgame unit occupies the final two weeks, 11 and 12, and the Mod 2 assessment sits in the session immediately before it, week 10 day 4, so that fellows critique generated code with their own hand-written OOP work fresh. The CLI application fellows build by hand in the Mod 1 project week is the same application whose features they generate and critique in the endgame.
 
@@ -32,20 +32,20 @@ Three parts of Q1 run outside Technical Lecture. The ethics, ecological, academi
 | 3  | 1    | 3   | Mod 0   | Git Pulling and Merging                                                             |
 | 4  | 1    | 4   | Mod 0   | Git Branching and Pull Requests                                                     |
 | 5  | 2    | 1   | Mod 1   | Intro to Programming                                                                |
-| 6  | 2    | 2   | Mod 1   | Data Types and Variables                                                            |
+| 6  | 2    | 2   | Mod 1   | Data Types, Variables, and Operators                                                |
 | 7  | 2    | 3   | Mod 1   | Functions                                                                           |
-| 8  | 2    | 4   | Mod 1   | Strings and Conditional Statements                                                  |
+| 8  | 2    | 4   | Mod 1   | Conditional Statements                                                              |
 | 9  | 3    | 1   | Mod 1   | Loops                                                                               |
-| 10 | 3    | 2   | Mod 1   | Modules and `if __name__ == "__main__"`                                             |
-| 11 | 3    | 3   | Mod 1   | The Python Ecosystem: pip, venv, and requirements.txt                               |
-| 12 | 4    | 1   | Mod 1   | Lists                                                                               |
-| 13 | 4    | 2   | Mod 1   | Dictionaries                                                                        |
+| 10 | 3    | 2   | Mod 1   | Inputs and Outputs                                                                  |
+| 11 | 3    | 3   | Mod 1   | Lists                                                                               |
+| 12 | 4    | 1   | Mod 1   | Dictionaries                                                                        |
+| 13 | 4    | 2   | Mod 1   | Modules, Virtual Environments, and pytest                                           |
 | 14 | 4    | 3   | Mod 1   | Reading Unfamiliar Code                                                             |
 | 15 | 4    | 4   | Mod 1   | Errors and Tracebacks                                                               |
 | 16 | 5    | 1   | Mod 1   | First-Class Functions and Higher-Order Functions                                    |
 | 17 | 5    | 2   | Mod 1   | Comprehensions and Built-in Iteration                                               |
-| 18 | 5    | 3   | Mod 1   | pytest and Test-Driven Development                                                  |
-| 19 | 5    | 4   | Mod 1   | Case Study: CLI Task Manager                                                        |
+| 18 | 5    | 3   | Mod 1   | Case Study: CLI Task Manager                                                        |
+| 19 | 5    | 4   | Buffer  | Unassigned                                                                          |
 | 20 | 6    | 1   | Mod 1   | Project: CLI Application, day 1                                                     |
 | 21 | 6    | 2   | Mod 1   | Project: CLI Application, day 2                                                     |
 | 22 | 6    | 3   | Mod 1   | Project: CLI Application, day 3                                                     |

@@ -17,7 +17,7 @@
 - The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
 - **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
 - **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
-- Loop challenges help you practice using loops to solve real problems, such as counting results or building interactive programs.
+- Loop challenges help you practice using loops to solve real problems, such as counting results or repeating until something happens.
 
 ## Intro to Iteration
 
@@ -47,7 +47,7 @@ print(f"Flip number 5 was {flip_coin()}")
 # and so on until you reach 100! 🫠
 ```
 
-The first line, `import random`, loads a tool that comes with Python, and `random.choice(["heads", "tails"])` picks one of the two words at random. Chapter 6 explains how importing works. For now, it is a coin.
+The first line, `import random`, loads a tool that comes with Python, and `random.choice(["heads", "tails"])` picks one of the two words at random. Chapter 9 explains how importing works. For now, it is a coin.
 
 But even so, we have to manually update each number. What a pain! If only there was some way to do this more efficiently.
 
@@ -90,7 +90,7 @@ for i in range(5):
 
 Five lines: `0`, `1`, `2`, `3`, `4`.
 
-`range(5)` means "five numbers, starting at zero," so the last one is `4`, not `5`. This is the same reason the first character of a string is at index `0`. Counting from zero is the convention everywhere in Python, and it means the flip counter above printed "Flip number 0" for the first flip. If you want it to say 1, either print `i + 1` or give `range` a starting point.
+`range(5)` means "five numbers, starting at zero," so the last one is `4`, not `5`. Counting from zero is the convention everywhere in Python, and it means the flip counter above printed "Flip number 0" for the first flip. If you want it to say 1, either print `i + 1` or give `range` a starting point.
 
 </details>
 {% endhint %}
@@ -121,15 +121,15 @@ for letter in "hello":
 # o
 ```
 
-In chapter 8, the same loop walks through the elements of a list.
+In chapter 7, the same loop walks through the elements of a list.
 
 ### For Loop Challenge:
 
-Write a program that does the following:
+Write a function called `count_heads` that does the following:
 
-1. Asks the user to enter a number.
+1. Takes in a number of flips as a parameter.
 2. Flips a coin that many times, keeping count of how many times heads was flipped.
-3. Prints back the final number of heads to the user like this:
+3. Prints back the final number of heads like this:
 
 ```
 You flipped [heads flipped] heads out of [total] flips! That is [percent]%!
@@ -143,17 +143,11 @@ import random
 def flip_coin():
     return random.choice(["heads", "tails"])
 
-def main():
-    flips = input('How many times do you want to flip the coin? ')
-
-    # a guard clause that makes sure they entered a number
-    if not flips.isdigit():
-        print(f"Sorry, {flips} is not a number")
-        return
-
+def count_heads(flips):
     # add your code here
 
-main()
+count_heads(10)
+count_heads(100)
 ```
 
 **<details><summary>Check out the solution!</summary>**
@@ -164,18 +158,7 @@ import random
 def flip_coin():
     return random.choice(["heads", "tails"])
 
-def main():
-    # ask the user for flips
-    flips = input('How many times do you want to flip the coin? ')
-
-    # make sure they entered a number
-    if not flips.isdigit():
-        print(f"Sorry, {flips} is not a number")
-        return
-
-    # input() gave us a string. We need a number to count with.
-    flips = int(flips)
-
+def count_heads(flips):
     # We want to use this variable after the loop is done, so we create it outside the loop
     heads = 0
     for i in range(flips):
@@ -184,8 +167,11 @@ def main():
 
     print(f"You flipped {heads} heads out of {flips}. Thats {heads / flips * 100}%!")
 
-main()
+count_heads(10)
+count_heads(100)
 ```
+
+Run it a few times. The more flips you ask for, the closer the percentage gets to 50.
 
 </details>
 
@@ -201,18 +187,22 @@ To ensure that a loop does not go on infinitely, we use these two statements:
 - `continue` prematurely goes to the next iteration of the loop
 
 ```python
+import random
+
 while True:
-    user_input = input("Enter a number or q to quit: ")
-    if user_input == "q":
-        print("Bye!")
+    roll = random.randint(1, 6)
+    if roll == 6:
+        print("A 6! Bye!")
         break  # <--- how is this different from return??
-    if not user_input.isdigit():
-        print("please enter a number")
+    if roll % 2 == 1:
+        print(f"{roll} is odd. Skipping it.")
         continue
-    print(f"{user_input}? That's a great number!")
+    print(f"{roll}? That's a great number!")
 
 print("See you next time!")
 ```
+
+`random.randint(1, 6)` rolls a six-sided die. Nobody knows in advance how many rolls it will take to get a 6, which is exactly the job a `while` loop is for. `while True` is always true, so the only way out of this loop is the `break`.
 
 {% hint style="info" %}
 **Q: How is `break` different from `return`?** A `break` statement will exit the current loop and continue executing code that follows the loop. A `return` statement inside of a loop will exit the current loop AND the current function being executed.
@@ -224,17 +214,17 @@ If you do end up in an infinite loop, `Control+C` in the Terminal stops the prog
 
 ### While Loop Challenge
 
-Write a program that does the following:
+Write a program in which the computer plays a guessing game against itself:
 
-1. Generates a random number from 1-10.
-2. Asks the user to guess the number.
-3. If the user is correct, print a message congratulating them and end the program.
-4. If they are incorrect, ask them again.
+1. Generates a random number from 1-10. This is the secret number.
+2. Guesses a random number from 1-10 and prints the guess.
+3. If the guess is correct, print a message and end the program.
+4. If it is incorrect, guess again.
 
 **Bonus Features**
 
-1. Keep track of their guesses and when they guess correctly, tell them how many guesses it took for them to get it right.
-2. Limit their guesses to 5 guesses. If they guess 5 times incorrectly, they lose!
+1. Keep track of the guesses, and when the guess is correct, print how many guesses it took.
+2. Limit the computer to 5 guesses. If it guesses 5 times incorrectly, it loses!
 
 **<details><summary>Check out the solution!</summary>**
 
@@ -242,7 +232,7 @@ Write a program that does the following:
 import random
 
 random_num = random.randint(1, 10)
-print("I'm thinking of a random number. Guess what it is!")
+print("I'm thinking of a random number. Let me guess what it is!")
 
 # We're going to pull out this `guess` value so we can check it on every loop
 guess = None
@@ -252,34 +242,26 @@ guesses_remaining = 5
 
 # As long as the guess doesn't match the random number above
 while guess != random_num:
-    # Get the user input and do some input checking
-    user_input = input("Enter a number or q to quit: ")
-    if user_input == "q":
-        print("Bye!")
-        break
-    if not user_input.isdigit():
-        print("please enter a number")
-        continue
-
-    # Now that we know we've got a number, we can convert it and decrement the guesses
-    guess = int(user_input)
+    guess = random.randint(1, 10)
     guesses_remaining -= 1
 
-    # If the guess matches, congratulate the user and exit the loop
+    # If the guess matches, celebrate and exit the loop
     if guess == random_num:
-        print(f"You got it!! And with {guesses_remaining} guesses to spare!!!")
+        print(f"{guess}! Got it!! And with {guesses_remaining} guesses to spare!!!")
         break
 
-    # Assuming we didn't exit the loop, break them the bad news
+    # Assuming we didn't exit the loop, break the bad news
     print(f"{guess}? That's a great number! But not mine!")
 
-    # And do a final check to see if they will keep going!
+    # And do a final check to see if the game keeps going!
     if guesses_remaining == 0:
-        print("Sorry, you've ran out of luck :(")
+        print("Out of guesses :(")
         break
 
 print("Thanks for playing!")
 ```
+
+In chapter 6 you will learn to read what the user types, and you can come back and let a person make the guesses.
 
 </details>
 

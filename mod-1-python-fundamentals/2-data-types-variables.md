@@ -1,4 +1,4 @@
-# 2. Data Types and Variables
+# 2. Data Types, Variables, and Operators
 
 **Table of Contents:**
 

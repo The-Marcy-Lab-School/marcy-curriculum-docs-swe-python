@@ -186,7 +186,7 @@ Reading only the `def` lines:
 - `inventory.py` — has a `stock` variable and three functions: `restock`, `sell`, `report`. It is for keeping and changing the stock.
 - `main.py` — has one function, `main`. It is for talking to the user and calling the inventory functions.
 
-You have seen this split before. It is the same separation of concerns as `circle_helpers.py` and `main.py` in chapter 6.
+You have seen this split before. It is the same separation of concerns as `circle_helpers.py` and `main.py` in chapter 9.
 
 ### Step 3: The Data
 
@@ -298,7 +298,7 @@ It prints `invalid`. It prints `invalid` no matter what you type.
 
 `input()` returns a string, so `choice` is `"2"`, and `"2" == 2` is `False`. Every branch fails and the `else` runs. The function is perfectly readable, perfectly plausible, and useless. Either the comparisons need to be against `"1"`, `"2"`, `"3"`, or `choice` needs `int()` first (and then a guard for non-numbers).
 
-You knew this. You have known it since chapter 4. The point is that knowing it did not stop the model, and it will not stop the model next time, so the check has to be yours.
+You knew this. You have known it since chapter 6. The point is that knowing it did not stop the model, and it will not stop the model next time, so the check has to be yours.
 
 </details>
 {% endhint %}

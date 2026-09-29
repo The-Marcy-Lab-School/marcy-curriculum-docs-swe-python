@@ -152,7 +152,7 @@ print(f"{fahrenheit}°F is {celsius}°C")
 # Output: 212°F is 100.0°C
 ```
 
-This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now. Chapter 4 covers strings in full.
+This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now. Chapter 6 covers strings and f-strings in full.
 
 ### Debunking The `print()` Myth
 

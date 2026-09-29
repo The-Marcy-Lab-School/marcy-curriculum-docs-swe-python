@@ -1,4 +1,4 @@
-# 9. Dictionaries
+# 8. Dictionaries
 
 **Table of Contents**:
 

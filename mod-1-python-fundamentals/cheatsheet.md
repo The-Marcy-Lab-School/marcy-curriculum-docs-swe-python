@@ -14,11 +14,11 @@ Use this as a reference while working.
 - [Strings](#strings)
   - [String Basics](#string-basics)
   - [String Methods](#string-methods)
+  - [Input and Output](#input-and-output)
 - [Conditional Statements](#conditional-statements)
 - [Loops](#loops)
 - [Modules and the Ecosystem](#modules-and-the-ecosystem)
   - [Modules](#modules)
-  - [User Input](#user-input)
   - [Files and JSON](#files-and-json)
   - [venv, pip, and requirements.txt](#venv-pip-and-requirementstxt)
 - [Lists](#lists)
@@ -239,6 +239,19 @@ s.replace('World', 'Ada')     # 'Hello Ada'
 '-'.join(['a', 'b'])          # 'a-b'
 ```
 
+### Input and Output
+
+```python
+print("a", "b", "c", sep="-")        # a-b-c   (sep goes between values)
+print("no new line", end="")         # end goes after (default "\n")
+print(f"${5:.2f}")                   # $5.00   (format specifier: 2 decimal places)
+
+name = input("What's your name? ")   # always returns a string
+age = int(input("How old? "))         # convert when you need a number
+```
+
+**Type conversion:** `str()`, `int()`, `float()`, `bool()`. `int("hello")` raises `ValueError`, so check with `.isdigit()` first.
+
 ## Conditional Statements
 
 ```python
@@ -339,13 +352,6 @@ if __name__ == "__main__":
 
 Importing a file runs it. `__name__` is `"__main__"` in the file you ran and the module name everywhere else.
 
-### User Input
-
-```python
-name = input("What's your name? ")   # always returns a string
-age = int(input("How old? "))         # convert when you need a number
-```
-
 ### Files and JSON
 
 ```python
@@ -364,7 +370,7 @@ with open("tasks.json") as file:        # read
 python3 -m venv .venv               # create a virtual environment (once)
 source .venv/bin/activate           # activate it (every new Terminal)
 deactivate                          # turn it off
-pip install rich                    # install a package into it
+pip install pytest                  # install a package into it
 pip list                            # see what is installed
 pip freeze > requirements.txt       # record installed packages
 pip install -r requirements.txt     # install everything a project needs
@@ -559,6 +565,24 @@ sorted(animals, key=len)                       # sort by a callback's result
 max(users, key=lambda user: user['age'])       # largest by a callback's result
 ```
 
+**A function that wraps another function:**
+
+```python
+def announce(func):
+    def wrapper(name):
+        print('--- starting ---')
+        result = func(name)
+        print('--- finished ---')
+        return result
+    return wrapper
+
+loud_greet = announce(greet)   # greet itself is unchanged
+
+@announce                      # the same thing, written with a decorator
+def greet(name):
+    print(f'Hi, {name}!')
+```
+
 ## Comprehensions and Built-in Iteration
 
 | You want to...                  | Use                                   | Returns                |
@@ -631,10 +655,17 @@ python3 -m pytest tests/test_calc.py   # one file
 
 ```python
 # tests/test_calc.py — files and functions start with test_
-from src.calc import add
+import pytest
+from src.calc import add, is_even
 
-def test_adds_two_numbers():
+def test_add():
+    """add - adds two numbers"""          # docstring: what the test checks
     assert add(1, 2) == 3               # == compares contents
+    assert add(0.1, 0.2) == pytest.approx(0.3)   # decimals: close enough
+
+def test_is_even():
+    """is_even - returns True for even numbers"""
+    assert is_even(2) is True           # booleans and None: use is
 
 def test_returns_a_new_list():
     assert double([1, 2]) == [2, 4]
