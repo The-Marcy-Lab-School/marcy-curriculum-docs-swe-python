@@ -196,7 +196,7 @@ There is exactly one piece of data that lives between actions: `stock`, at the t
 
 It is a tradeoff the author made, and you can name both sides of it. Keeping `stock` inside `inventory.py` and never importing it into `main.py` means only three functions can ever touch it, which makes it easy to find every place it changes. The cost is that `restock` and `sell` are impure: calling `sell("apples", 1)` twice gives different results. The case study in two weeks makes the same choice for the same reason, and you will make it in your project too. Knowing the cost is what matters.
 
-Notice also that nothing here needs the `global` keyword. Mutating a dictionary through a global name is allowed; only _reassigning_ the name would need `global`. That is the distinction between mutability and reassignment from chapter 8, showing up in practice.
+Notice also that nothing here needs the `global` keyword. Mutating a dictionary through a global name is allowed; only _reassigning_ the name would need `global`. That is the distinction between mutability and reassignment from chapter 7, showing up in practice.
 
 </details>
 
@@ -237,7 +237,7 @@ True
 
 `sell("eggs", 1)` is `False` because of the first guard: no such key. `restock("eggs", 12)` is where `stock.get(name, 0)` earns its place. `"eggs"` is not in the dictionary, so `.get` returns the default `0`, and `0 + 12` becomes the new entry. Without the default, this line would have raised a `KeyError` on any new item.
 
-Two things in `report()` you may not have seen before: `sorted(stock.items())` puts the pairs in alphabetical order by key, and `"\n".join(lines)` glues a list of strings together with a newline between each. In `main.py`, `choice in ("1", "2")` uses a tuple from chapter 8 as a small fixed set of options. If you did not know those, the right move was to write "I am guessing `sorted` sorts alphabetically" in your list, run it, and move it to "I know."
+Two things in `report()` you may not have seen before: `sorted(stock.items())` puts the pairs in alphabetical order by key, and `"\n".join(lines)` glues a list of strings together with a newline between each. In `main.py`, `choice in ("1", "2")` uses a tuple from chapter 7 as a small fixed set of options. If you did not know those, the right move was to write "I am guessing `sorted` sorts alphabetically" in your list, run it, and move it to "I know."
 
 </details>
 {% endhint %}

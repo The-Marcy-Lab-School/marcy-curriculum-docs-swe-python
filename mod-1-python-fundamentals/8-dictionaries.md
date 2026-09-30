@@ -16,6 +16,8 @@
 ## Key Terms
 
 - **Dictionaries** are data structures that store multiple pieces of data as key-value pairs, useful for representing real-world entities like users or products.
+  - A **key** is the name a value is stored under and looked up by. Each key appears only once in a dictionary.
+  - A **value** is the data stored under a key. It can be any type, including a list or another dictionary.
 - Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead.
 - Dictionaries are **mutable**, meaning you can add, modify, or delete key-value pairs after creation using assignment, `del`, or `.pop()`.
 - Dictionaries can contain **nested data** including lists and other dictionaries, allowing for complex data structures.

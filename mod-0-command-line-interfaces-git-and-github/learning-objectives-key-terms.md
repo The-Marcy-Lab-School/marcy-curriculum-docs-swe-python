@@ -61,6 +61,31 @@ _By the end of the module:_
 - Predict what `cd no-such-folder && echo "ran"` prints, and explain what `&&` waits for.
 - Open the Python REPL, evaluate an expression, and leave it.
 
+### Exit Ticket
+
+**Learning Objective**: Given a file tree and a sequence of `cd` commands, fellows will be able to predict the working directory that `pwd` reports and explain how each command, including `cd ..`, changes it.
+
+**Question**
+
+```
+~/movie-night/
+├── movies/
+│   ├── hackers.txt
+│   └── matrix.txt
+└── snacks/
+    └── popcorn.txt
+```
+
+You start in `movie-night` then `cd movies`, then `cd ../snacks`. What does `pwd` show and why?
+
+**Level 2 Example**
+
+`pwd` shows `snacks` because that was the last folder you moved into.
+
+**Level 3 Example**
+
+`pwd` shows `~/movie-night/snacks`. `cd` is used to change the working directory. Starting from `movie-night`, the user first goes into `movies`. The two dots `..` represent the parent directory allowing the user to go back up a level before going down into the `snacks` subdirectory.
+
 ## 2. Git and GitHub
 
 <!-- key-terms-from: 2-git-github.md -->
@@ -115,6 +140,29 @@ _By the end of the module:_
 - Write a commit message that says what changed and why, at a milestone rather than after every keystroke.
 - Explain the difference between `git add [filename]` and `git add -A`, and choose the right one.
 
+### Exit Ticket
+
+**Learning Objective**: Given a sequence of Git commands run after a file is edited, fellows will be able to explain where the change is after each command (the edited file, the staging area, a local commit, or the remote repository) and identify the missing step when the change does not reach GitHub.
+
+**Question**
+
+You edit `README.md` in a repository you cloned from GitHub. Then you run these two commands:
+
+```sh
+git commit -m "Add project description"
+git push
+```
+
+Your teammate opens the repository on GitHub and does not see your new description. Why not, and what commands would get your change onto GitHub?
+
+**Level 2 Example**
+
+You forgot to run `git add`. You need to run `git add README.md`, then commit and push again.
+
+**Level 3 Example**
+
+`git commit` only saves what is in the staging area, and nothing was staged because `git add` was never run, so Git made no new commit and `git push` had nothing new to send. To fix it, I would run `git add README.md` to stage the file and then run the other commands again.
+
 ## 3. Git Pulling and Merging
 
 <!-- key-terms-from: 3-git-pulling-merging.md -->
@@ -149,17 +197,33 @@ _By the end of the module:_
 - Explain what a merge is and why two people editing the same lines produces a conflict while editing different lines does not.
 - Follow the pull-before-push habit so that conflicts are found locally rather than on GitHub.
 
+### Exit Ticket
+
+**Learning Objective**: Given two collaborators who each commit and push a change to the same file, fellows will be able to predict whether a push is rejected and whether a pull produces a merge conflict, and explain both outcomes in terms of the commits each repository has and the lines each person changed.
+
+**Question**
+
+You and a partner both cloned the same repository. Your partner changes line 1 of `README.md`, commits, and pushes. After that, you change line 5 of `README.md`, commit, and run `git push`. What happens, and what should you do next? Would anything be different if you had both changed line 1?
+
+**Level 2 Example**
+
+The push fails. You have to run `git pull` first and then `git push`. If you both changed line 1 you would get a merge conflict and have to fix it.
+
+**Level 3 Example**
+
+The push is rejected because the remote repository has my partner's commit and my local repository does not. Git only lets me push when my local history already contains everything on the remote, so that my push cannot erase my partner's work. I need to run `git pull`, which downloads my partner's commit and merges it with mine. Because we changed different lines, Git can combine the two versions of the file on its own, and then `git push` works. If we had both changed line 1, Git would not know which version to keep so we would need to resolve the merge conflict, commit, and push.
+
 ## 4. Git Branching and Pull Requests
 
 <!-- key-terms-from: 4-git-branching.md -->
 
 **Key terms**
 
-* **Main Branch** — The main branch of a repository. Whenever anyone visits a repository on GitHub or clones it down, this is what they will see.
-* **Feature Branch** — a copy of a repository at a point in time that allows developers to work on a feature without impacting the rest of the project.
-* **Merge** - to combine the commit history of two or more branches into one.
-* **Pull Request** — a request for another developer to pull down your branch and review your code. If they approve the changes, they will merge your branch into the main branch!
-* **Fork** — a copy of a repository that is disconnected from the main repository. Typically they include the entire commit history of the main repository at the time the fork was created.
+- **Main Branch** — The main branch of a repository. Whenever anyone visits a repository on GitHub or clones it down, this is what they will see.
+- **Feature Branch** — a copy of a repository at a point in time that allows developers to work on a feature without impacting the rest of the project.
+- **Merge** - to combine the commit history of two or more branches into one.
+- **Pull Request** — a request for another developer to pull down your branch and review your code. If they approve the changes, they will merge your branch into the main branch!
+- **Fork** — a copy of a repository that is disconnected from the main repository. Typically they include the entire commit history of the main repository at the time the fork was created.
 
 **Important Git commands**
 
@@ -173,7 +237,7 @@ git branch [branch_name] # create a new branch
 git checkout [branch_name] # switch to a branch
 git checkout -B [branch_name] # create a new branch and switch to it
 git merge [branch_name] # merge a branch into the current branch
-git branch -D [branch_name] # delete a branch 
+git branch -D [branch_name] # delete a branch
 ```
 
 **You will be able to…**
@@ -191,3 +255,21 @@ _By the end of the module:_
 - Resolve a merge conflict through the GitHub interface as well as from the command line.
 - Fork a repository and explain how a fork differs from a branch and from a clone.
 - Describe how a team of several people uses branches and pull requests so that main always works.
+
+###
+
+**Learning Objective**: Compare committing directly to main with working with feature branches and pull requests, and explain how each way affects whether the main branch keeps working for everyone.
+
+**Question**
+
+Your team of three is building a website together. Ana suggests skipping branches to save time: everyone commits straight to `main` and pushes. One day, Ana pushes a new page that has a bug that crashes the whole site.
+
+What happens to the rest of the team under Ana's plan, and how would working on a feature branch with a pull request have changed what happened?
+
+**Level 2 Example**
+
+Everyone would get the broken code. With a feature branch and a pull request, someone would review the code before it was merged, and the bug could be caught.
+
+**Level 3 Example**
+
+The `main` branch is the version that everyone clones and pulls from, so under Ana's plan the crash spreads to every teammate the next time they run `git pull`. If Ana had committed to a feature branch, the bug would exist only on that branch, and `main` would still work for everyone else. Pushing the branch and opening a pull request adds a step before the merge: a teammate reads the changed files and can test the branch, which is where the crash would be found. Ana fixes the bug with another commit on the same branch, and only once the pull request is approved does it get merged into `main`. After that, everyone pulls a `main` that works. Branches keep unfinished work apart from `main`, and pull requests decide what is allowed into it.

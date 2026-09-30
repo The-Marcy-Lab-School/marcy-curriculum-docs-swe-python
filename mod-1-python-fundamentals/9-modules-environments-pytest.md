@@ -36,17 +36,20 @@ In this lesson we'll learn how Python programs are split across multiple files a
 - Importing a file **runs** it, top to bottom. The variable `__name__` tells a file whether it is being run directly (`"__main__"`) or imported by another file.
 - The `if __name__ == "__main__":` guard is how a file says "only run this part when I am the program being run".
 - The **standard library** is the collection of modules that come with Python. `random`, `math`, `time`, and `json` are examples. They need `import` but no installation.
+- A **package** is a folder of modules that someone has published so that other people can install it and import it. `pytest` is a package.
+- A **library** is a collection of code written for other programs to use rather than to be run on its own. The standard library is Python's own library, and many packages, like `pytest`, are libraries too.
 - Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
 - A **virtual environment** is a private copy of Python and its packages for one project. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
   - Installing a package inside an activated virtual environment installs it only there.
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
-- The `.venv` folder is never committed to Git. It goes in `.gitignore` and is rebuilt from `requirements.txt` instead.
+- A **`.gitignore`** file lists the files and folders in a project that Git should not track. The `.venv/` and `__pycache__/` folders go in it. The `.venv` folder is never committed; it is rebuilt from `requirements.txt` instead.
+- **JSON** is a text format for storing lists and dictionaries in a file. The standard library's `json` module writes them with `json.dump()` and reads them back with `json.load()`.
 - **Developer dependencies** like `pytest` are packages used by the developer(s) of a project but not needed by the people who run it.
 - A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
 - A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
 - **`pytest`** is the third-party package that finds and runs test files. It is installed into the project's virtual environment and run with `python3 -m pytest`.
-- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the **docstring** on its first line describes what the test checks.
+- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
 - The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
 
 ## Modules
@@ -358,7 +361,7 @@ print(math.floor(4.8)) # 4
 
 Remember `LAZY_PI = 3.14` from the start of this lesson? `math.pi` is the version that isn't lazy.
 
-One more you will want soon is `json`, which turns lists and dictionaries into text that can be saved in a file, and back again:
+One more you will want soon is `json`, which turns lists and dictionaries into text that can be saved in a file, and back again. That text format is called **JSON**:
 
 ```python
 import json
@@ -385,6 +388,8 @@ Nobody memorizes the standard library. The habit to build is to ask "does Python
 Suppose you wanted a tool that checks every function in your project and tells you which ones return the wrong answer, all with a single command. Do you have the tools to implement that feature on your own?
 
 While you could figure this out, there is no need to reinvent the wheel! Instead, just download an existing package from the **Python Package Index (PyPI)**.
+
+A **package** is a folder of modules that someone has published so that other people can install it and import it into their own programs. Packages, and the standard library, are also called **libraries**: code written for other programs to use, rather than a program you run on its own.
 
 Visit https://pypi.org/ to explore available packages. Start by searching for the "pytest" package. Its page shows a description, usage examples, and the command to install it.
 
@@ -608,7 +613,7 @@ def test_add():
     assert add(10, 5) == 15
 ```
 
-Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is called a **docstring**: a string written as the first line of a function, describing what it does. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
+Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
 
 - `assert expression` checks that the `expression` is truthy. If it is, nothing happens and the test continues.
 - If it is falsy, `assert` raises an `AssertionError`, the test stops, and pytest reports it as a failure.

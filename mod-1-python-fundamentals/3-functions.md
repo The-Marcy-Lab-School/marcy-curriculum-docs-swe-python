@@ -3,6 +3,7 @@
 **Table of Contents:**
 
 - [Key Terms](#key-terms)
+- [What is `print()`?](#what-is-print)
 - [Don't Repeat Yourself (DRY)](#dont-repeat-yourself-dry)
 - [Functions](#functions)
   - [Invoking a Function](#invoking-a-function)
@@ -18,12 +19,31 @@
 
 - **Don't Repeat Yourself (DRY)** is a principle of software engineering aimed at making it easier to maintain, update, and debug code.
 - **Functions** are named containers for statements that can be invoked to execute code, improving readability and reducing repetition.
+- **Built-in functions** like `print()`, `len()`, and `type()` come with Python, so they can be called without being defined first.
+- A **docstring** is a string written on the first line of a function's body that describes what the function does. VS Code and the built-in `help()` function show it to whoever is about to call the function.
 - **Parameters** are placeholders for inputs given to the function. Parameters can be used by their function to change the function's behavior.
 - **Arguments** are the actual values given when invoking a function.
 - **Return statements** allow functions to produce values that can be used elsewhere in your program and terminate function execution. A function with no `return` statement returns `None`.
 - Parameters can have **default values**, and arguments can be passed by **keyword** as well as by position.
-- **Order matters.** A name has to be assigned before the line that uses it runs. Functions are looked up when they are called, not when they are written.
-- **Scope** determines where variables can be accessed. Global scope variables are accessible everywhere, while local scope variables are only accessible within their function.
+- A **`NameError`** is raised when a line uses a name that does not exist at the moment that line runs: the name is misspelled, it belongs to a different function's scope, or it is assigned (or its function is defined) further down the file than the line that uses it.
+- A **`TypeError`** is raised when a value is the wrong type for what the code asks of it, such as adding a string to a number, or when a function is called with the wrong number of arguments.
+- **Scope** determines where variables can be accessed.
+  - **Global scope** is the file, outside of any function. A variable assigned there is reachable anywhere in that file.
+  - **Local scope** is the inside of a function. A variable or parameter assigned there exists only while that function is running and is reachable only within it.
+
+## What is `print()`?
+
+The first program that you wrote in Python looked something like this:
+
+```py
+print("Hello world")
+```
+
+But what exactly is `print`?
+
+`print` is a **function**—a custom-made statement that is designed to do a particular task many times within a program. Since viewing a value within a program is such a common task, the creators of most programming languages provide a **"built-in" function** for printing so that you don't have to make one yourself.
+
+Let's look at how you can build functions ourselves.
 
 ## Don't Repeat Yourself (DRY)
 
@@ -66,7 +86,9 @@ The solution is to create a function!
 
 ## Functions
 
-A **Function** is a reusable block of statements. They are created with the `def` keyword and are followed by:
+A **function** is a reusable block of statements created to do a single task many times within a program.
+
+Functions are created with the `def` keyword and are followed by:
 
 - a descriptive name
 - a list of input variables called "**parameters** inside of parentheses `()`

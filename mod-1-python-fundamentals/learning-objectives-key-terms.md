@@ -61,9 +61,17 @@ _By the end of the module:_
 
 - **State** refers to the data stored by a program at a point in time.
 - **Data types** are categories of values in Python. There are 5 basic types (`str`, `int`, `float`, `bool`, `None`) and 3 types that hold other data or code (`list`, `dict`, and functions). Knowing the type of a value helps determines how you can use that value. Choosing the right type to represent your data is essential.
-- **Operators** are symbols (e.g. `+`, `>=`, `and`) that generate new data from existing values. Arithmetic, comparison, logical, membership, identity, and assignment operators allow you to perform calculations and make decisions.
+- **Operators** are symbols (e.g. `+`, `>=`, `and`) that generate new data from existing values.
+  - **Arithmetic operators** (`+`, `-`, `*`, `/`, `//`, `%`, `**`) calculate a new value from numbers.
+  - **Comparison operators** (`==`, `!=`, `<`, `>`, `<=`, `>=`) compare two values and produce a boolean.
+  - **Logical operators** (`and`, `or`, `not`) combine or reverse conditions.
+  - **Membership operators** (`in`, `not in`) check whether a value is inside a string, list, or dictionary.
+  - **Identity operators** (`is`, `is not`) check whether two names refer to the very same object.
+  - **Assignment operators** (`=`, `+=`, `-=`, and the rest) store a value in a variable.
+- **Operator precedence** is the order in which Python evaluates the operators in an expression, such as multiplication before addition. Parentheses change that order: whatever is inside them is evaluated first.
 - **Variables** are named containers for data. You can reference and reassign variables to store and update information in your program.
   - A variable is created the first time it is assigned. Names in `ALL_CAPS` are a signal to readers that a value is a constant and should not be reassigned.
+- **`snake_case`** is the Python convention for naming variables and functions: lowercase words joined by underscores, like `days_in_each_month`.
 
 **You will be able to…**
 
@@ -77,7 +85,7 @@ _In the session:_
 
 _By the end of the module:_
 
-- Explain why `8 / 2` is `4.0`, why `"3" * 5` is `"33333"`, and why `0.1 + 0.2 == 0.3` is `False`.
+- Identify operators that produce unexpected output, such as `8 / 2`, `"3" * 5`, and `0.1 + 0.2 == 0.3`, and explain each result.
 - Read and write a conditional expression that chooses between two values.
 
 ## 3. Functions
@@ -88,12 +96,17 @@ _By the end of the module:_
 
 - **Don't Repeat Yourself (DRY)** is a principle of software engineering aimed at making it easier to maintain, update, and debug code.
 - **Functions** are named containers for statements that can be invoked to execute code, improving readability and reducing repetition.
+- **Built-in functions** like `print()`, `len()`, and `type()` come with Python, so they can be called without being defined first.
+- A **docstring** is a string written on the first line of a function's body that describes what the function does. VS Code and the built-in `help()` function show it to whoever is about to call the function.
 - **Parameters** are placeholders for inputs given to the function. Parameters can be used by their function to change the function's behavior.
 - **Arguments** are the actual values given when invoking a function.
 - **Return statements** allow functions to produce values that can be used elsewhere in your program and terminate function execution. A function with no `return` statement returns `None`.
 - Parameters can have **default values**, and arguments can be passed by **keyword** as well as by position.
-- **Order matters.** A name has to be assigned before the line that uses it runs. Functions are looked up when they are called, not when they are written.
-- **Scope** determines where variables can be accessed. Global scope variables are accessible everywhere, while local scope variables are only accessible within their function.
+- A **`NameError`** is raised when a line uses a name that does not exist at the moment that line runs: the name is misspelled, it belongs to a different function's scope, or it is assigned (or its function is defined) further down the file than the line that uses it.
+- A **`TypeError`** is raised when a value is the wrong type for what the code asks of it, such as adding a string to a number, or when a function is called with the wrong number of arguments.
+- **Scope** determines where variables can be accessed.
+  - **Global scope** is the file, outside of any function. A variable assigned there is reachable anywhere in that file.
+  - **Local scope** is the inside of a function. A variable or parameter assigned there exists only while that function is running and is reachable only within it.
 
 **You will be able to…**
 
@@ -121,7 +134,8 @@ _By the end of the module:_
 - **Control Flow** refers to the order in which statements of a program are executed, typically top-to-bottom.
 - **Conditional statements** (`if`, `elif`, `else`) let you control the flow of your program based on data values. The order of conditions matters, and only the first true condition in a chain will execute.
 - **Guard clauses** are single `if` statements that return early from a function, simplifying conditional logic.
-- Values can be **truthy** or **falsy** depending on their content. An `if` calls `bool()` on its condition for you, which is what makes `if not name:` work as a guard against empty input.
+- An `if` statement creates a **boolean context** where non-boolean values are converted to Booleans using the `bool()` function.
+- Non-boolean values used in a boolean context are considered **truthy** if they evaluate to `True` or **falsy** if they evaluate to `False`. All values are truthy except for `None`, `False`, the numbers `0` and `0.0`, the empty string `""`, and empty collections such as `[]` and `{}`.
 - **Conditional expressions** provide a concise way to choose between two values based on a condition.
 
 **You will be able to…**
@@ -145,6 +159,7 @@ _By the end of the module:_
 
 - **Loops** allow you to repeat code multiple times, making it easy to automate repetitive tasks and process collections of data.
 - The **`for` loop** with **`range()`** is best for repeating a process a known number of times, such as counting.
+- An **iterable** is any value a `for` loop can walk through one element at a time. A `range()` and a string are both iterables.
 - The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
 - **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
 - **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
@@ -174,6 +189,7 @@ _By the end of the module:_
 - **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning their characters cannot be changed directly.
 - You can _access_ individual characters of a string with **bracket notation**.
 - You can check the length of a string with **`len(str)`** (and you can use this method on lists and dictionaries too!).
+- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
 - **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
 - The **`in` operator** checks whether one string contains another.
 - **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.
@@ -234,6 +250,8 @@ _By the end of the module:_
 **Key terms**
 
 - **Dictionaries** are data structures that store multiple pieces of data as key-value pairs, useful for representing real-world entities like users or products.
+  - A **key** is the name a value is stored under and looked up by. Each key appears only once in a dictionary.
+  - A **value** is the data stored under a key. It can be any type, including a list or another dictionary.
 - Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead.
 - Dictionaries are **mutable**, meaning you can add, modify, or delete key-value pairs after creation using assignment, `del`, or `.pop()`.
 - Dictionaries can contain **nested data** including lists and other dictionaries, allowing for complex data structures.
@@ -267,17 +285,20 @@ _By the end of the module:_
 - Importing a file **runs** it, top to bottom. The variable `__name__` tells a file whether it is being run directly (`"__main__"`) or imported by another file.
 - The `if __name__ == "__main__":` guard is how a file says "only run this part when I am the program being run".
 - The **standard library** is the collection of modules that come with Python. `random`, `math`, `time`, and `json` are examples. They need `import` but no installation.
+- A **package** is a folder of modules that someone has published so that other people can install it and import it. `pytest` is a package.
+- A **library** is a collection of code written for other programs to use rather than to be run on its own. The standard library is Python's own library, and many packages, like `pytest`, are libraries too.
 - Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
 - A **virtual environment** is a private copy of Python and its packages for one project. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
   - Installing a package inside an activated virtual environment installs it only there.
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
-- The `.venv` folder is never committed to Git. It goes in `.gitignore` and is rebuilt from `requirements.txt` instead.
+- A **`.gitignore`** file lists the files and folders in a project that Git should not track. The `.venv/` and `__pycache__/` folders go in it. The `.venv` folder is never committed; it is rebuilt from `requirements.txt` instead.
+- **JSON** is a text format for storing lists and dictionaries in a file. The standard library's `json` module writes them with `json.dump()` and reads them back with `json.load()`.
 - **Developer dependencies** like `pytest` are packages used by the developer(s) of a project but not needed by the people who run it.
 - A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
 - A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
 - **`pytest`** is the third-party package that finds and runs test files. It is installed into the project's virtual environment and run with `python3 -m pytest`.
-- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the **docstring** on its first line describes what the test checks.
+- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
 - The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
 
 **You will be able to…**
@@ -398,6 +419,7 @@ _By the end of the module:_
 - **List comprehensions** provide declarative ways to build new lists from existing ones, making code more readable and reducing the need for explicit loops.
 - `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
 - `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
+- A **dictionary comprehension**, `{key: value for item in items}`, builds a new dictionary the same way a list comprehension builds a new list.
 - Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
 - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.

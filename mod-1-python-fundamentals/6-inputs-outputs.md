@@ -25,6 +25,7 @@ A program takes data in, does something with it, and puts data out. In this less
 - **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning their characters cannot be changed directly.
 - You can _access_ individual characters of a string with **bracket notation**.
 - You can check the length of a string with **`len(str)`** (and you can use this method on lists and dictionaries too!).
+- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
 - **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
 - The **`in` operator** checks whether one string contains another.
 - **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.

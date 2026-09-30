@@ -16,7 +16,8 @@
 - **Control Flow** refers to the order in which statements of a program are executed, typically top-to-bottom.
 - **Conditional statements** (`if`, `elif`, `else`) let you control the flow of your program based on data values. The order of conditions matters, and only the first true condition in a chain will execute.
 - **Guard clauses** are single `if` statements that return early from a function, simplifying conditional logic.
-- Values can be **truthy** or **falsy** depending on their content. An `if` calls `bool()` on its condition for you, which is what makes `if not name:` work as a guard against empty input.
+- An `if` statement creates a **boolean context** where non-boolean values are converted to Booleans using the `bool()` function.
+- Non-boolean values used in a boolean context are considered **truthy** if they evaluate to `True` or **falsy** if they evaluate to `False`. All values are truthy except for `None`, `False`, the numbers `0` and `0.0`, the empty string `""`, and empty collections such as `[]` and `{}`.
 - **Conditional expressions** provide a concise way to choose between two values based on a condition.
 
 ## Conditional Statements

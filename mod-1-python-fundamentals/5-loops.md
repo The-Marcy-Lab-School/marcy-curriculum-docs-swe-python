@@ -14,6 +14,7 @@
 
 - **Loops** allow you to repeat code multiple times, making it easy to automate repetitive tasks and process collections of data.
 - The **`for` loop** with **`range()`** is best for repeating a process a known number of times, such as counting.
+- An **iterable** is any value a `for` loop can walk through one element at a time. A `range()` and a string are both iterables.
 - The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
 - **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
 - **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
@@ -121,7 +122,7 @@ for letter in "hello":
 # o
 ```
 
-In chapter 7, the same loop walks through the elements of a list.
+Anything a `for` loop can walk through one element at a time like this is called an **iterable**. A `range()` is an iterable of numbers, and a string is an iterable of characters. In chapter 7, the same loop walks through the elements of a list, because lists are iterables too.
 
 ### For Loop Challenge:
 
