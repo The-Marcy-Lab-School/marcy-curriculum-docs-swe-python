@@ -1,4 +1,4 @@
-# 6. Inputs and Outputs
+# 1.6 — Inputs and Outputs
 
 A program takes data in, does something with it, and puts data out. In this lesson we'll learn the tools a command-line program uses for both ends of that: strings, which are what the user types and what the program prints; `print()` and f-strings, which put data out; and `input()` and type conversion, which bring data in.
 
@@ -225,7 +225,7 @@ print('4.2'.isdigit())
 
 ## Output with `print()`
 
-You have been calling `print()` since chapter 1 with one value at a time. It can do more than that.
+You have been calling `print()` since chapter 1.1 with one value at a time. It can do more than that.
 
 ### Printing Several Values
 
@@ -315,7 +315,7 @@ print(f"{total:.2f}")
 That `31.400000000000002` is the kind of number you get from arithmetic with decimals, because computers store decimal numbers in a way that is very slightly inexact. The format specifier changes only how the number is _displayed_. The value in `total` is untouched. If you want to change the number itself, `round(total, 2)` returns `31.4`.
 
 {% hint style="warning" %}
-**Predict, then run.** The coin-flip challenge in chapter 5 printed a percentage. Suppose 7 of 12 flips came up heads.
+**Predict, then run.** The coin-flip challenge in chapter 1.5 printed a percentage. Suppose 7 of 12 flips came up heads.
 
 ```python
 heads = 7
@@ -383,7 +383,7 @@ Type `20` when asked. What prints?
 2020
 ```
 
-`input()` **always returns a string**, no matter what the user typed. The user typed `20`, but `age` holds `"20"`, and a string multiplied by `2` is repeated, just like `"3" * 5` in chapter 2.
+`input()` **always returns a string**, no matter what the user typed. The user typed `20`, but `age` holds `"20"`, and a string multiplied by `2` is repeated, just like `"3" * 5` in chapter 1.2.
 
 Every time you take input from a user and want a number, the conversion is your job. Nothing does it for you. That conversion is the next section.
 
@@ -445,7 +445,7 @@ Between kinds of numbers, conversion happens on its own: `5 / 2` produces the fl
 </details>
 {% endhint %}
 
-The fourth conversion function, `bool()`, is the one you met with truthy and falsy values in chapter 4. It is the one conditions use without being asked.
+The fourth conversion function, `bool()`, is the one you met with truthy and falsy values in chapter 1.4. It is the one conditions use without being asked.
 
 ## Madlib Challenge
 
@@ -527,4 +527,4 @@ Notice that `quantity` is left as a string. It only ever gets printed, so there 
 
 </details>
 
-**Bonus:** Go back to the While Loop Challenge in chapter 5. In that version, the computer guesses its own number. Change it so that the user types each guess instead, and check each guess with `.isdigit()` before you convert it.
+**Bonus:** Go back to the While Loop Challenge in chapter 1.5. In that version, the computer guesses its own number. Change it so that the user types each guess instead, and check each guess with `.isdigit()` before you convert it.

@@ -1,4 +1,4 @@
-# 4. Git Branching and PRs
+# 0.4 — Git Branching and PRs
 
 GitHub enables developers across the world to collaborate on projects. In this lesson, we'll learn how to use GitHub to create and manage branches, merge branches, create pull requests, and resolve merge conflicts.
 

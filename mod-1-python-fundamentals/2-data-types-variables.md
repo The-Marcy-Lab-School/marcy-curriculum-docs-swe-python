@@ -1,4 +1,4 @@
-# 2. Data Types, Variables, and Operators
+# 1.2 — Data Types, Variables, and Operators
 
 **Table of Contents:**
 
@@ -187,7 +187,7 @@ True + True + False
 
 0 or "Python"
 # Result: "Python"
-# Why: `or` treats 0 as False and hands back the other value. Chapter 4 explains which values count as false.
+# Why: `or` treats 0 as False and hands back the other value. Chapter 1.4 explains which values count as false.
 
 0.1 + 0.2 == 0.3
 # Result: False
@@ -208,7 +208,7 @@ True + True + False
 
 Operators can be combined to form complex expressions. In these cases, understanding the order in which operators are evaluated — also called **operator precedence** — is crucial.
 
-Chapter 1 had an example of getting it wrong. This code is meant to convert 212°F to 100°C:
+Chapter 1.1 had an example of getting it wrong. This code is meant to convert 212°F to 100°C:
 
 ```python
 fahrenheit = 212
@@ -524,7 +524,7 @@ not True            # False
 5 > 3 and 2 > 1     # True
 ```
 
-In chapter 4 you will learn that `and` and `or` also accept values that are not booleans, using a rule called truthiness. That is what the `[] or "Python"` line in the challenge above was doing.
+In chapter 1.4 you will learn that `and` and `or` also accept values that are not booleans, using a rule called truthiness. That is what the `[] or "Python"` line in the challenge above was doing.
 
 ---
 
@@ -536,7 +536,7 @@ In chapter 4 you will learn that `and` and `or` also accept values that are not 
 | -------- | ------------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `in`     | Membership Test    | Any iterable (`str`, `list`, `dict`,) | Checks if value exists in sequence/container. For `dict`, checks **keys**.                                                         |
 | `not in` | Negated Membership | Any iterable                          | Checks if value does not exist in sequence/container.                                                                              |
-| `is`     | Identity Test      | All data types                        | `True` if both sides are the very same object, not just equal ones. Used mostly as `x is None`. Chapter 7 explains the difference. |
+| `is`     | Identity Test      | All data types                        | `True` if both sides are the very same object, not just equal ones. Used mostly as `x is None`. Chapter 1.7 explains the difference. |
 | `is not` | Negated Identity   | All data types                        | The opposite of `is`.                                                                                                              |
 
 **Examples**:

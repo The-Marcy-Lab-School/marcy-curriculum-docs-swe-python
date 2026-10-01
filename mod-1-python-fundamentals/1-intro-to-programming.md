@@ -1,4 +1,4 @@
-# 1. Intro to Programming
+# 1.1 — Intro to Programming
 
 There are so many terms and concepts to learn about programming. In this lesson, we will learn the fundamental vocabulary and concepts that are shared by practically every programming language. You may see code with syntax that you don't understand and that is fine, you will dig deeper into that code's syntax in later lessons. For now, just focus on learning the vocabulary in the **Key Terms** section.
 
@@ -152,7 +152,7 @@ print(f"{fahrenheit}°F is {celsius}°C")
 # Output: 212°F is 100.0°C
 ```
 
-This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now. Chapter 6 covers strings and f-strings in full.
+This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now. Chapter 1.6 covers strings and f-strings in full.
 
 ### Debunking The `print()` Myth
 

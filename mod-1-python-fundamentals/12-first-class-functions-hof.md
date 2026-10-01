@@ -1,4 +1,4 @@
-# 12. First-Class Functions and Higher-Order Functions
+# 1.12 — First-Class Functions and Higher-Order Functions
 
 **Table of Contents**:
 
@@ -93,7 +93,7 @@ print(actions["even"](4))    # True
 This pattern has a name, a **dispatch table**, and it is how a menu program can replace a long chain of `if choice == "1": ... elif choice == "2": ...` with a single dictionary lookup. Keep it in mind for your project.
 
 {% hint style="info" %}
-When a function is attached to a value, we call it a **method**. You have been using methods since chapter 6: `upper` is a function stored inside every string, and `"abc".upper()` looks it up and calls it, the same way `actions["hi"]()` does. In Mod 2 you will learn how to attach functions to values of your own.
+When a function is attached to a value, we call it a **method**. You have been using methods since chapter 1.6: `upper` is a function stored inside every string, and `"abc".upper()` looks it up and calls it, the same way `actions["hi"]()` does. In Mod 2 you will learn how to attach functions to values of your own.
 {% endhint %}
 
 ### Functions Passed into Other Functions Are "Callbacks". The Function That Receives the Callback is a "Higher Order Function".
@@ -205,7 +205,7 @@ repeat_every(animate_alien, 0.05, 200)
 
 {% endcode %}
 
-Both examples use `global`, which chapter 3 told you to avoid. They need it because each call has to remember where the previous call left off, and a callback that takes no arguments has nowhere else to keep that. In Mod 2 you will learn the right tool for a function that needs memory between calls. For now, treat this as a place where the rule bends and you can see exactly why.
+Both examples use `global`, which chapter 1.3 told you to avoid. They need it because each call has to remember where the previous call left off, and a callback that takes no arguments has nowhere else to keep that. In Mod 2 you will learn the right tool for a function that needs memory between calls. For now, treat this as a place where the rule bends and you can see exactly why.
 
 </details>
 
@@ -313,7 +313,7 @@ def greet(name):
     print("--- finished ---")
 ```
 
-That works, and it is exactly the repetition chapter 3 warned you about. The announcing has nothing to do with greeting, but it is now tangled up with it, and you will have to pick it back out when you are done debugging.
+That works, and it is exactly the repetition chapter 1.3 warned you about. The announcing has nothing to do with greeting, but it is now tangled up with it, and you will have to pick it back out when you are done debugging.
 
 Instead, write a function whose only job is the announcing, and whose parameter is the function to announce.
 
@@ -448,7 +448,7 @@ def skip_empty(func):
     return wrapper
 ```
 
-The guard clause from chapter 4, now protecting a function that `skip_empty` knows nothing about. This is how a real decorator checks whether a user is logged in before letting a page load.
+The guard clause from chapter 1.4, now protecting a function that `skip_empty` knows nothing about. This is how a real decorator checks whether a user is logged in before letting a page load.
 
 </details>
 

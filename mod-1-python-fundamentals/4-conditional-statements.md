@@ -1,4 +1,4 @@
-# 4. Conditional Statements
+# 1.4 — Conditional Statements
 
 **Table of Contents:**
 
@@ -166,7 +166,7 @@ print(greet_friend("Jane"))  # Output: Hi, Jane! Nice to meet you.
 
 `not friend` is `True` when `friend` is the empty string, because `""` is falsy. You will see this shape, `if not something:`, in nearly every program that takes input.
 
-One caution. `if not value:` cannot tell `None` apart from `0` or `""`, because all three are falsy. When the question you are asking is specifically "is this `None`?", write `if value is None:`. That is what the `is` operator from chapter 2 is for.
+One caution. `if not value:` cannot tell `None` apart from `0` or `""`, because all three are falsy. When the question you are asking is specifically "is this `None`?", write `if value is None:`. That is what the `is` operator from chapter 1.2 is for.
 
 {% hint style="warning" %}
 **Predict, then run.**

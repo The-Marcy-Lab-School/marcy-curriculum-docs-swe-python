@@ -1,4 +1,4 @@
-# 5. Loops
+# 1.5 — Loops
 
 **Table of Contents**:
 
@@ -48,7 +48,7 @@ print(f"Flip number 5 was {flip_coin()}")
 # and so on until you reach 100! 🫠
 ```
 
-The first line, `import random`, loads a tool that comes with Python, and `random.choice(["heads", "tails"])` picks one of the two words at random. Chapter 9 explains how importing works. For now, it is a coin.
+The first line, `import random`, loads a tool that comes with Python, and `random.choice(["heads", "tails"])` picks one of the two words at random. Chapter 1.9 explains how importing works. For now, it is a coin.
 
 But even so, we have to manually update each number. What a pain! If only there was some way to do this more efficiently.
 
@@ -122,7 +122,7 @@ for letter in "hello":
 # o
 ```
 
-Anything a `for` loop can walk through one element at a time like this is called an **iterable**. A `range()` is an iterable of numbers, and a string is an iterable of characters. In chapter 7, the same loop walks through the elements of a list, because lists are iterables too.
+Anything a `for` loop can walk through one element at a time like this is called an **iterable**. A `range()` is an iterable of numbers, and a string is an iterable of characters. In chapter 1.7, the same loop walks through the elements of a list, because lists are iterables too.
 
 ### For Loop Challenge:
 
@@ -262,7 +262,7 @@ while guess != random_num:
 print("Thanks for playing!")
 ```
 
-In chapter 6 you will learn to read what the user types, and you can come back and let a person make the guesses.
+In chapter 1.6 you will learn to read what the user types, and you can come back and let a person make the guesses.
 
 </details>
 

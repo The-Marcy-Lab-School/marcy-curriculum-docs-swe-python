@@ -1,4 +1,4 @@
-# 11. Errors and Tracebacks
+# 1.11 — Errors and Tracebacks
 
 Writing code with errors is a natural part of programming. But rather than avoiding them at all costs, we should learn to understand them! Errors provide us valuable information about how we can improve our programs.
 
@@ -367,7 +367,7 @@ people = ask_for_number("How many people? ")
 
 The `return` inside the `try` ends the loop and the function the moment the conversion succeeds. If it fails, the `except` prints a message and the `while True` asks again. This function will appear, in some form, in your project.
 
-**<details><summary>Q: Chapter 6 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
+**<details><summary>Q: Chapter 1.6 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
 
 `.isdigit()` only accepts strings made entirely of digits, so it rejects `-5` and `5` even though `int()` would happily convert both. The `try`/`except` version lets `int()` be the judge of what it can convert, which is exactly the right judge. Use `.isdigit()` when you specifically want non-negative whole numbers with no surprises; use `try`/`except` when you want "whatever `int()` accepts."
 
@@ -388,7 +388,7 @@ The caller can then choose to catch it or let it crash. Either way, the failure 
 
 ### Testing That a Function Raises
 
-An error that a function raises on purpose is part of what the function does, so it deserves a test like any other behavior. In the `9-testing` project from chapter 9, put `withdraw` in `src/bank.py` and write `tests/test_bank.py`:
+An error that a function raises on purpose is part of what the function does, so it deserves a test like any other behavior. In the `9-testing` project from chapter 1.9, put `withdraw` in `src/bank.py` and write `tests/test_bank.py`:
 
 ```python
 import pytest
@@ -406,7 +406,7 @@ def test_withdraw_overdraft():
         withdraw(100, 500)
 ```
 
-`with pytest.raises(ValueError):` means "the indented code below must raise a `ValueError`." If it does, pytest catches the error and the test passes. If it does not, the test fails. It is the same `with` statement that opened files in chapter 9: it sets something up, runs the indented block, and then checks what happened.
+`with pytest.raises(ValueError):` means "the indented code below must raise a `ValueError`." If it does, pytest catches the error and the test passes. If it does not, the test fails. It is the same `with` statement that opened files in chapter 1.9: it sets something up, runs the indented block, and then checks what happened.
 
 {% hint style="warning" %}
 **Predict, then run.** Delete the `raise` line from `withdraw` so that it quietly allows the overdraft, and run the tests again. What does pytest report?

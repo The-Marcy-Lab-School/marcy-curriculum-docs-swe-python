@@ -1,4 +1,4 @@
-# 10. Reading Unfamiliar Code
+# 1.10 — Reading Unfamiliar Code
 
 Every chapter so far has asked you to write code. This one asks you to read it. Specifically, to read code that somebody else wrote, that you have never seen before, and to come away knowing what it does and how it does it.
 
@@ -70,7 +70,7 @@ Ask: what does this program remember? Find every variable that lives at the top 
 
 Pick one thing a user can do. Start at the entry point and follow that one action through every function it touches, in order, until the output appears. Ignore every other branch. You will come back for them, but trying to hold the whole program in your head at once is how you get lost.
 
-This is the same thing you did with the debugger in chapter 3. You can do it with the debugger here, too. Put a breakpoint at the start of `main()` and step through.
+This is the same thing you did with the debugger in chapter 1.3. You can do it with the debugger here, too. Put a breakpoint at the start of `main()` and step through.
 
 ### Step 5: Predict, Then Run, Function by Function
 
@@ -186,17 +186,17 @@ Reading only the `def` lines:
 - `inventory.py` — has a `stock` variable and three functions: `restock`, `sell`, `report`. It is for keeping and changing the stock.
 - `main.py` — has one function, `main`. It is for talking to the user and calling the inventory functions.
 
-You have seen this split before. It is the same separation of concerns as `circle_helpers.py` and `main.py` in chapter 9.
+You have seen this split before. It is the same separation of concerns as `circle_helpers.py` and `main.py` in chapter 1.9.
 
 ### Step 3: The Data
 
 There is exactly one piece of data that lives between actions: `stock`, at the top of `inventory.py`. Its shape is a dictionary from item name (a string) to quantity (an int). Everything the program does is a change to, or a report on, that one dictionary.
 
-**<details><summary>Q: `stock` is a global variable, and `restock` and `sell` change it. Chapter 2 told you to avoid that. Is this program wrong?</summary>**
+**<details><summary>Q: `stock` is a global variable, and `restock` and `sell` change it. Chapter 1.2 told you to avoid that. Is this program wrong?</summary>**
 
 It is a tradeoff the author made, and you can name both sides of it. Keeping `stock` inside `inventory.py` and never importing it into `main.py` means only three functions can ever touch it, which makes it easy to find every place it changes. The cost is that `restock` and `sell` are impure: calling `sell("apples", 1)` twice gives different results. The case study in two weeks makes the same choice for the same reason, and you will make it in your project too. Knowing the cost is what matters.
 
-Notice also that nothing here needs the `global` keyword. Mutating a dictionary through a global name is allowed; only _reassigning_ the name would need `global`. That is the distinction between mutability and reassignment from chapter 7, showing up in practice.
+Notice also that nothing here needs the `global` keyword. Mutating a dictionary through a global name is allowed; only _reassigning_ the name would need `global`. That is the distinction between mutability and reassignment from chapter 1.7, showing up in practice.
 
 </details>
 
@@ -237,7 +237,7 @@ True
 
 `sell("eggs", 1)` is `False` because of the first guard: no such key. `restock("eggs", 12)` is where `stock.get(name, 0)` earns its place. `"eggs"` is not in the dictionary, so `.get` returns the default `0`, and `0 + 12` becomes the new entry. Without the default, this line would have raised a `KeyError` on any new item.
 
-Two things in `report()` you may not have seen before: `sorted(stock.items())` puts the pairs in alphabetical order by key, and `"\n".join(lines)` glues a list of strings together with a newline between each. In `main.py`, `choice in ("1", "2")` uses a tuple from chapter 7 as a small fixed set of options. If you did not know those, the right move was to write "I am guessing `sorted` sorts alphabetically" in your list, run it, and move it to "I know."
+Two things in `report()` you may not have seen before: `sorted(stock.items())` puts the pairs in alphabetical order by key, and `"\n".join(lines)` glues a list of strings together with a newline between each. In `main.py`, `choice in ("1", "2")` uses a tuple from chapter 1.7 as a small fixed set of options. If you did not know those, the right move was to write "I am guessing `sorted` sorts alphabetically" in your list, run it, and move it to "I know."
 
 </details>
 {% endhint %}
@@ -298,7 +298,7 @@ It prints `invalid`. It prints `invalid` no matter what you type.
 
 `input()` returns a string, so `choice` is `"2"`, and `"2" == 2` is `False`. Every branch fails and the `else` runs. The function is perfectly readable, perfectly plausible, and useless. Either the comparisons need to be against `"1"`, `"2"`, `"3"`, or `choice` needs `int()` first (and then a guard for non-numbers).
 
-You knew this. You have known it since chapter 6. The point is that knowing it did not stop the model, and it will not stop the model next time, so the check has to be yours.
+You knew this. You have known it since chapter 1.6. The point is that knowing it did not stop the model, and it will not stop the model next time, so the check has to be yours.
 
 </details>
 {% endhint %}
@@ -371,6 +371,6 @@ There is a third if you look: `int(answer)` on line 13 crashes on a tip like `15
 
 You will learn how to catch these in the next chapter. For now, the skill was finding them, and being able to say on which line and why.
 
-**Something to notice:** `tip_percent=18` is a default parameter value from chapter 3, and the `if answer == ""` branch exists only to leave it out so the default is used. That is the author telling you what the normal case is.
+**Something to notice:** `tip_percent=18` is a default parameter value from chapter 1.3, and the `if answer == ""` branch exists only to leave it out so the default is used. That is the author telling you what the normal case is.
 
 </details>

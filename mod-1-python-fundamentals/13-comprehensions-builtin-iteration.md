@@ -1,4 +1,4 @@
-# 13. Comprehensions and Built-in Iteration
+# 1.13 — Comprehensions and Built-in Iteration
 
 **Table of Contents**
 
@@ -353,7 +353,7 @@ print(len([num * 3 for num in my_nums if num * 3 > 12]))
 
 ### Generating a Frequency Counter
 
-Counting how many times each value appears is the accumulator pattern with a dictionary as the accumulator. The `.get(key, 0)` from chapter 8 is what makes it short:
+Counting how many times each value appears is the accumulator pattern with a dictionary as the accumulator. The `.get(key, 0)` from chapter 1.8 is what makes it short:
 
 ```python
 repeaters = [1, 2, 4, 2, 3, 1, 4, 6, 2]
@@ -425,7 +425,7 @@ Python also has built-in functions called `map()` and `filter()` that take a cal
 
 ## Refactoring with Tests
 
-Every comprehension in this chapter replaced a loop that already worked. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the `pytest` tests from chapter 9.
+Every comprehension in this chapter replaced a loop that already worked. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the `pytest` tests from chapter 1.9.
 
 ### A Pure Function and Its Tests
 
@@ -461,7 +461,7 @@ print(copy_of_nums)
 
 </details>
 
-In the `9-testing` project from chapter 9, put this function in a new file, `src/double_all.py`, and create `tests/test_double_all.py`.
+In the `9-testing` project from chapter 1.9, put this function in a new file, `src/double_all.py`, and create `tests/test_double_all.py`.
 
 Since we are now working with a mutable type (a list), we need to test two different things: that the _contents_ are right, and that the function gave us a _new_ list rather than the one we passed in.
 
@@ -493,7 +493,7 @@ def test_double_all_purely_does_not_mutate():
 This example demonstrates a few new details about `assert` statements.
 
 - `==` compares the contents of lists and dictionaries, element by element. Two different lists with the same values are `==`.
-- `is` compares identity: whether two variables reference the very same object, as you saw with `id()` in chapter 7. `is not` is its opposite.
+- `is` compares identity: whether two variables reference the very same object, as you saw with `id()` in chapter 1.7. `is not` is its opposite.
 - `assert` accepts any expression that produces a boolean, so `not`, `in`, `<`, and every other operator you know work inside it.
 
 ### Refactor with Confidence
@@ -592,4 +592,4 @@ Once the banking assignment is done:
 - Add a `transfer(bank_accounts, transaction)` feature using TDD, where the transaction has `from_owner`, `to_owner`, and `amount` keys.
 - Refactor repetitive lookup logic into a helper function `get_account_by_owner()`.
 - Write new tests to confirm helper behavior.
-- Make `withdraw` raise a `ValueError` on overdraft instead of silently doing nothing, and test it with `pytest.raises` the way chapter 11 did.
+- Make `withdraw` raise a `ValueError` on overdraft instead of silently doing nothing, and test it with `pytest.raises` the way chapter 1.11 did.

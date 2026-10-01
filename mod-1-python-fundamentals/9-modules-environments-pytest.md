@@ -1,4 +1,4 @@
-# 9. Modules, Virtual Environments, and pytest
+# 1.9 — Modules, Virtual Environments, and pytest
 
 In this lesson we'll learn how Python programs are split across multiple files and how those files share code with each other. Then we'll learn where Python code comes from when you didn't write it: the standard library that ships with Python, the packages other people publish, and the virtual environments that keep each project's packages separate. The package we will install is `pytest`, and we will finish by using it to test our own code.
 
@@ -234,7 +234,7 @@ the circumference of a circle with radius 5 is 31.400000000000002
 
 The message from `circle_helpers.py` prints _first_, before anything from `main.py`. When the interpreter reaches `import circle_helpers` on line 1 of `main.py`, it goes and runs all of `circle_helpers.py`. The `def` statements create the functions, and the `print` at the bottom prints. Only then does it return to `main.py` and continue.
 
-(That `31.400000000000002` is the slightly inexact decimal arithmetic from chapter 6, and `{circumference:.2f}` in the f-string would display it as `31.40`.)
+(That `31.400000000000002` is the slightly inexact decimal arithmetic from chapter 1.6, and `{circumference:.2f}` in the f-string would display it as `31.40`.)
 
 </details>
 {% endhint %}
@@ -287,7 +287,7 @@ You will see this guard at the bottom of nearly every Python program you read, a
 
 ### Madlib Challenge, Part 2
 
-Open the `madlib-challenge` folder from chapter 6. Right now, the `madlib` function and the `main` function that asks the user for input share one file.
+Open the `madlib-challenge` folder from chapter 1.6. Right now, the `madlib` function and the `main` function that asks the user for input share one file.
 
 1. Re-organize the code such that the `madlib` function is in its own file called `madlib.py`, and `main.py` imports it.
 2. Replace the `main()` call at the bottom of `main.py` with the `if __name__ == "__main__":` guard.
@@ -613,11 +613,11 @@ def test_add():
     assert add(10, 5) == 15
 ```
 
-Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
+Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 1.3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
 
 - `assert expression` checks that the `expression` is truthy. If it is, nothing happens and the test continues.
 - If it is falsy, `assert` raises an `AssertionError`, the test stops, and pytest reports it as a failure.
-- `add(1, 2) == 3` is an ordinary comparison, the same `==` from chapter 2. There is no special testing vocabulary to learn.
+- `add(1, 2) == 3` is an ordinary comparison, the same `==` from chapter 1.2. There is no special testing vocabulary to learn.
 
 A test can hold as many `assert` statements as you like. The test passes only if every one of them passes.
 
@@ -734,7 +734,7 @@ def test_is_even():
     assert is_even(3) is False
 ```
 
-`is` is the identity operator from chapter 2. There is only one `True` and one `False` in a Python program, so `is True` asks "did the function return the boolean `True` itself?"
+`is` is the identity operator from chapter 1.2. There is only one `True` and one `False` in a Python program, so `is True` asks "did the function return the boolean `True` itself?"
 
 **<details><summary>Q: Suppose `is_even` were written as `return 1 - num % 2`, which returns `1` for even numbers and `0` for odd ones. Would `assert is_even(2) == True` pass? Would `assert is_even(2) is True`?</summary>**
 
@@ -761,7 +761,7 @@ def test_add_decimals():
     assert add(0.1, 0.2) == pytest.approx(0.3)
 ```
 
-Remember from chapter 2 that `0.1 + 0.2 == 0.3` is `False`, because decimals are stored very slightly inexactly. `pytest.approx(0.3)` means "a number close enough to `0.3` that the difference is only that inexactness." Using it requires `import pytest` at the top of the test file.
+Remember from chapter 1.2 that `0.1 + 0.2 == 0.3` is `False`, because decimals are stored very slightly inexactly. `pytest.approx(0.3)` means "a number close enough to `0.3` that the difference is only that inexactness." Using it requires `import pytest` at the top of the test file.
 
 ## The Commands, All Together
 

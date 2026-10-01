@@ -1,4 +1,4 @@
-# 3. Functions
+# 1.3 — Functions
 
 **Table of Contents:**
 
@@ -378,7 +378,7 @@ say_hello(hobby="play the bass", name="Gonzalo")
 # Output: Hi, my name is Gonzalo. I like to play the bass!
 ```
 
-You may recall seeing keyword arguments in chapter 1. `print("a", "b", sep="-")` passes `"a"` and `"b"` by position and `sep` (separator) by keyword. `sep` has a default value of a single space, which is why you never had to write it before.
+You may recall seeing keyword arguments in chapter 1.1. `print("a", "b", sep="-")` passes `"a"` and `"b"` by position and `sep` (separator) by keyword. `sep` has a default value of a single space, which is why you never had to write it before.
 
 **Challenge:** Which of these calls work, and what do they print? Which one crashes, and why?
 
@@ -405,6 +405,28 @@ Hello, Ada...
 The last one crashes with `TypeError: make_greeting() missing 1 required positional argument: 'name'`. `punctuation` has a default, so it can be left out. `name` does not, so it cannot.
 
 </details>
+
+{% hint style="info" %}
+**What are `*args` and `**kwargs`?** You will see these two in documentation and in other people's code. They let a function accept any number of arguments instead of a fixed list of parameters.
+
+- A parameter written with one star, `*args`, collects every extra argument passed **by position**.
+- A parameter written with two stars, `**kwargs` (short for "keyword arguments"), collects every extra argument passed **by keyword**.
+
+```python
+def describe(*args, **kwargs):
+    print(args)
+    print(kwargs)
+
+describe("Ada", 36, city="Brooklyn", hobby="code")
+# Output:
+# ('Ada', 36)
+# {'city': 'Brooklyn', 'hobby': 'code'}
+```
+
+The positional arguments arrive together in a tuple, and the keyword arguments arrive in a dictionary. You will meet tuples in chapter 1.7 and dictionaries in chapter 1.8. The stars are the part that matters, and the names `args` and `kwargs` are only a convention.
+
+This is how `print()` accepts any number of values. Run `help(print)` and, just under the heading, the documentation shows `print(*args, sep=' ', end='\n', file=None, flush=False)`. You won't need to write either one in this module, but now you can read them.
+{% endhint %}
 
 ## Functions Create Local Variable Scope
 

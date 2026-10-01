@@ -6,7 +6,7 @@ One entry per session, preceded by the orientation setup that happens before day
 
 **Key terms**
 
-None listed. Setup runs in orientation rather than as a Technical Lecture session, from the [Mac](../environment-setup/local-environment-setup-mac.md) and [Windows](../environment-setup/local-environment-setup-windows.md) setup documents, which have no Key Terms section. Virtual environments are named in the orientation agenda, but neither setup document teaches them; the Windows document installs `venv` and says it will be used in Mod 1, where chapter 7 teaches it.
+None listed. Setup runs in orientation rather than as a Technical Lecture session, from the [Mac](../environment-setup/local-environment-setup-mac.md) and [Windows](../environment-setup/local-environment-setup-windows.md) setup documents, which have no Key Terms section. Virtual environments are named in the orientation agenda, but neither setup document teaches them; the Windows document installs `venv` and says it will be used in Mod 1, where chapter 1.9 teaches it.
 
 **You will be able to…**
 
@@ -23,7 +23,7 @@ _Before day 1:_
 - Install and use the VS Code extensions the course relies on.
 - Recover from the setup document's "before you move on" checklist without help.
 
-## 1. Command Line Interfaces
+## 0.1 — Command Line Interfaces
 
 <!-- key-terms-from: 1-clis.md -->
 
@@ -86,7 +86,7 @@ You start in `movie-night` then `cd movies`, then `cd ../snacks`. What does `pwd
 
 `pwd` shows `~/movie-night/snacks`. `cd` is used to change the working directory. Starting from `movie-night`, the user first goes into `movies`. The two dots `..` represent the parent directory allowing the user to go back up a level before going down into the `snacks` subdirectory.
 
-## 2. Git and GitHub
+## 0.2 — Git and GitHub
 
 <!-- key-terms-from: 2-git-github.md -->
 
@@ -163,7 +163,7 @@ You forgot to run `git add`. You need to run `git add README.md`, then commit an
 
 `git commit` only saves what is in the staging area, and nothing was staged because `git add` was never run, so Git made no new commit and `git push` had nothing new to send. To fix it, I would run `git add README.md` to stage the file and then run the other commands again.
 
-## 3. Git Pulling and Merging
+## 0.3 — Git Pulling and Merging
 
 <!-- key-terms-from: 3-git-pulling-merging.md -->
 
@@ -213,7 +213,7 @@ The push fails. You have to run `git pull` first and then `git push`. If you 
 
 The push is rejected because the remote repository has my partner's commit and my local repository does not. Git only lets me push when my local history already contains everything on the remote, so that my push cannot erase my partner's work. I need to run `git pull`, which downloads my partner's commit and merges it with mine. Because we changed different lines, Git can combine the two versions of the file on its own, and then `git push` works. If we had both changed line 1, Git would not know which version to keep so we would need to resolve the merge conflict, commit, and push.
 
-## 4. Git Branching and Pull Requests
+## 0.4 — Git Branching and Pull Requests
 
 <!-- key-terms-from: 4-git-branching.md -->
 

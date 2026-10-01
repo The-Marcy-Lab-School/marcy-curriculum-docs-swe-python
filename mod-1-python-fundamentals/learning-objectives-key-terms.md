@@ -2,7 +2,7 @@
 
 One entry per lesson. Key terms are copied from each lesson's **Key Terms** section by `scripts/sync-key-terms.py`, so edit them in the lesson and rerun the script rather than editing them here. Learning objectives are written so that each one could be checked with a short task. Each list is split in two. _In the session_ names the three or four objectives the 90-minute lecture is responsible for: introduced, practiced, and checked before it ends. _By the end of the module_ names the rest, which the chapter's reading, the assignment, and the project carry, and which the Mod 1 assessment can draw on.
 
-## 1. Intro to Programming
+## 1.1 — Intro to Programming
 
 <!-- key-terms-from: 1-intro-to-programming.md -->
 
@@ -53,7 +53,7 @@ _By the end of the module:_
 - Read an `IndentationError` and explain why the interpreter refused the whole file.
 - Rewrite a badly formatted function to follow PEP 8: four-space indentation, spaces around operators, `snake_case` names.
 
-## 2. Data Types, Variables, and Operators
+## 1.2 — Data Types, Variables, and Operators
 
 <!-- key-terms-from: 2-data-types-variables.md -->
 
@@ -88,7 +88,7 @@ _By the end of the module:_
 - Identify operators that produce unexpected output, such as `8 / 2`, `"3" * 5`, and `0.1 + 0.2 == 0.3`, and explain each result.
 - Read and write a conditional expression that chooses between two values.
 
-## 3. Functions
+## 1.3 — Functions
 
 <!-- key-terms-from: 3-functions.md -->
 
@@ -125,7 +125,7 @@ _By the end of the module:_
 - Explain why a function must be defined before the line that calls it runs, and why two functions can each have a variable with the same name.
 - Explain why assigning to a global variable inside a function raises `UnboundLocalError`, and say why passing values in and returning them out is preferred to `global`.
 
-## 4. Conditional Statements
+## 1.4 — Conditional Statements
 
 <!-- key-terms-from: 4-conditional-statements.md -->
 
@@ -151,7 +151,7 @@ _By the end of the module:_
 - Say when `if value is None:` is the right test instead of `if not value:`.
 - Replace an `if`/`else` that assigns one of two values with a conditional expression.
 
-## 5. Loops
+## 1.5 — Loops
 
 <!-- key-terms-from: 5-loops.md -->
 
@@ -180,7 +180,7 @@ _By the end of the module:_
 - Predict the output and the number of iterations of a nested loop.
 - Stop an infinite loop from the Terminal.
 
-## 6. Inputs and Outputs
+## 1.6 — Inputs and Outputs
 
 <!-- key-terms-from: 6-inputs-outputs.md -->
 
@@ -214,7 +214,7 @@ _By the end of the module:_
 - Predict the `TypeError` from `"1" + 1` and fix it by converting one side.
 - Explain the difference between displaying a number with `:.2f` and changing it with `round()`.
 
-## 7. Lists
+## 1.7 — Lists
 
 <!-- key-terms-from: 7-lists.md -->
 
@@ -243,7 +243,7 @@ _By the end of the module:_
 - Explain when to use a tuple instead of a list, and predict the `TypeError` from changing one.
 - Unpack a list into several variables, including with `*rest`.
 
-## 8. Dictionaries
+## 1.8 — Dictionaries
 
 <!-- key-terms-from: 8-dictionaries.md -->
 
@@ -273,7 +273,7 @@ _By the end of the module:_
 - Predict the effect of mutating a dictionary through a second variable, and copy a dictionary before changing it in a pure function.
 - Write a function that takes a dictionary and uses only the keys it needs.
 
-## 9. Modules, Virtual Environments, and pytest
+## 1.9 — Modules, Virtual Environments, and pytest
 
 <!-- key-terms-from: 9-modules-environments-pytest.md -->
 
@@ -321,7 +321,7 @@ _By the end of the module:_
 - Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
 - Split the madlib program into a module for the story and a `main.py` for the input.
 
-## 10. Reading Unfamiliar Code
+## 1.10 — Reading Unfamiliar Code
 
 <!-- key-terms-from: 10-reading-unfamiliar-code.md -->
 
@@ -349,7 +349,7 @@ _By the end of the module:_
 - Find a defect in a plausible, model-written function and describe it as a bug report: concrete input, actual output, expected output, and where.
 - Ask a model about code in tutor mode, using the AI policy's standing instruction.
 
-## 11. Errors and Tracebacks
+## 1.11 — Errors and Tracebacks
 
 <!-- key-terms-from: 11-errors-tracebacks.md -->
 
@@ -378,7 +378,7 @@ _By the end of the module:_
 - Raise a `ValueError` or `TypeError` from a function that is handed a value it cannot work with.
 - Test that a function raises an error with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
 
-## 12. First-Class Functions and Higher-Order Functions
+## 1.12 — First-Class Functions and Higher-Order Functions
 
 <!-- key-terms-from: 12-first-class-functions-hof.md -->
 
@@ -410,7 +410,7 @@ _By the end of the module:_
 - Explain what `@announce` above a definition does, in terms of `greet = announce(greet)`.
 - Change a wrapper so that it returns the wrapped function's return value, and so that it guards the call with a condition.
 
-## 13. Comprehensions and Built-in Iteration
+## 1.13 — Comprehensions and Built-in Iteration
 
 <!-- key-terms-from: 13-comprehensions-builtin-iteration.md -->
 
@@ -457,14 +457,17 @@ _In the session:_
 
 - Set up and run a multi-file Python project from a repository using a virtual environment.
 - Trace a menu choice from `main.py` through `menu.py` to the function in `tasks.py` that handles it.
-- Identify every guard clause in the application and say what would happen without each one.
-- Predict how the program responds to invalid input, and point at the `try`/`except` and the two-condition check that handle it.
+- Identify every guard clause in the application and predict what would happen without each one.
+- Predict how the program responds to invalid input, and identify the `try`/`except` and the two-condition check that handle it.
 
 _By the end of the module:_
 
-- Explain how the task manager's data is represented and argue for the choice of a boolean over a number or a string.
+- Explain how the task manager's data is represented and justify the choice of a boolean over a number or a string.
 - Explain why `tasks` lives in `tasks.py` and is not imported into `menu.py`, and why only `main.py` has the `__main__` guard.
 - Explain why the menu uses a `while` loop, what `is_running` does, and how the same loop could be written with `break`.
+- Debug a model-written `delete_task()` and write a bug report that names the input, the actual output, the expected output, and the line at fault.
+- Plan a dispatch table for the menu and explain which option cannot go into it.
+- Write a list comprehension that selects the completed tasks, and use `all()` to check whether every task is complete.
 - Extend the application with a new feature that respects the existing separation of concerns.
 
 ## Project: CLI Application
