@@ -1,4 +1,4 @@
-# 1.10 — Reading Unfamiliar Code
+# 1.10 Reading Unfamiliar Code
 
 Every chapter so far has asked you to write code. This one asks you to read it. Specifically, to read code that somebody else wrote, that you have never seen before, and to come away knowing what it does and how it does it.
 

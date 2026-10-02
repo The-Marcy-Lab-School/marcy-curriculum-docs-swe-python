@@ -1,4 +1,4 @@
-# 1.7 — Lists
+# 1.7 Lists
 
 **Table of Contents**
 

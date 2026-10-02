@@ -1,4 +1,4 @@
-# 1.8 — Dictionaries
+# 1.8 Dictionaries
 
 **Table of Contents**:
 

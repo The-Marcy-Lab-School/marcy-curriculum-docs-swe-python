@@ -1,4 +1,4 @@
-# 1.3 — Functions
+# 1.3 Functions
 
 **Table of Contents:**
 

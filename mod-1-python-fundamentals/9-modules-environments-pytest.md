@@ -1,4 +1,4 @@
-# 1.9 — Modules, Virtual Environments, and pytest
+# 1.9 Modules, Virtual Environments, and pytest
 
 In this lesson we'll learn how Python programs are split across multiple files and how those files share code with each other. Then we'll learn where Python code comes from when you didn't write it: the standard library that ships with Python, the packages other people publish, and the virtual environments that keep each project's packages separate. The package we will install is `pytest`, and we will finish by using it to test our own code.
 

@@ -1,4 +1,4 @@
-# 1.12 — First-Class Functions and Higher-Order Functions
+# 1.12 First-Class Functions and Higher-Order Functions
 
 **Table of Contents**:
 

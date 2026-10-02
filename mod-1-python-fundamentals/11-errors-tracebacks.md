@@ -1,4 +1,4 @@
-# 1.11 — Errors and Tracebacks
+# 1.11 Errors and Tracebacks
 
 Writing code with errors is a natural part of programming. But rather than avoiding them at all costs, we should learn to understand them! Errors provide us valuable information about how we can improve our programs.
 

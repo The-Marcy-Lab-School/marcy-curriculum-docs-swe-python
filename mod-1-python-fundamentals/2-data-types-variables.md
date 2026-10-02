@@ -1,4 +1,4 @@
-# 1.2 — Data Types, Variables, and Operators
+# 1.2 Data Types, Variables, and Operators
 
 **Table of Contents:**
 
@@ -159,7 +159,7 @@ The fastest way to check a prediction like these is the **Python REPL**. Run `py
 
 "B" > "A"
 # Result: True
-# Why: Alphabetically, B comes after A
+# Why: Strings are compared character by character, using each character's position in Python's character table. "B" comes after "A" in that table. Every uppercase letter comes before every lowercase letter, so "apple" > "Banana" is True too.
 
 2 > 1 and "B" > "A"
 # Result: True
@@ -175,7 +175,7 @@ The fastest way to check a prediction like these is the **Python REPL**. Run `py
 
 "5" + 5
 # Result: TypeError
-# Why: Some operations you simply can't perform. In this case, you can't add different types.
+# Why: + adds two numbers (even different kinds, like 5 + 2.5) or joins two strings, but it has no meaning for a string and a number. Python won't guess whether you meant "55" or 10, so it stops with a TypeError.
 
 True + True + False
 # Result: 2
@@ -524,7 +524,7 @@ not True            # False
 5 > 3 and 2 > 1     # True
 ```
 
-In chapter 1.4 you will learn that `and` and `or` also accept values that are not booleans, using a rule called truthiness. That is what the `[] or "Python"` line in the challenge above was doing.
+In chapter 1.4 you will learn that `and` and `or` also accept values that are not booleans, using a rule called truthiness. That is what the `0 or "Python"` line in the challenge above was doing.
 
 ---
 
@@ -532,12 +532,12 @@ In chapter 1.4 you will learn that `and` and `or` also accept values that are no
 
 **Membership and Identity Operators**: Membership operators (`in`, `not in`) test whether a value exists inside a sequence or container; identity operators (`is`, `is not`) test whether two names refer to the very same object.
 
-| Operator | Name               | Compatible Data Types                 | Behavior & Notes                                                                                                                   |
-| -------- | ------------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `in`     | Membership Test    | Any iterable (`str`, `list`, `dict`,) | Checks if value exists in sequence/container. For `dict`, checks **keys**.                                                         |
-| `not in` | Negated Membership | Any iterable                          | Checks if value does not exist in sequence/container.                                                                              |
+| Operator | Name               | Compatible Data Types                 | Behavior & Notes                                                                                                                     |
+| -------- | ------------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `in`     | Membership Test    | Any iterable (`str`, `list`, `dict`,) | Checks if value exists in sequence/container. For `dict`, checks **keys**.                                                           |
+| `not in` | Negated Membership | Any iterable                          | Checks if value does not exist in sequence/container.                                                                                |
 | `is`     | Identity Test      | All data types                        | `True` if both sides are the very same object, not just equal ones. Used mostly as `x is None`. Chapter 1.7 explains the difference. |
-| `is not` | Negated Identity   | All data types                        | The opposite of `is`.                                                                                                              |
+| `is not` | Negated Identity   | All data types                        | The opposite of `is`.                                                                                                                |
 
 **Examples**:
 

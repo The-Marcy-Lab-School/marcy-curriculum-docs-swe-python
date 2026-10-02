@@ -1,4 +1,4 @@
-# 1.5 — Loops
+# 1.5 Loops
 
 **Table of Contents**:
 
