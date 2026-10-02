@@ -1,4 +1,4 @@
-# 0.1 — Command Line Interfaces
+# 0.1 Command Line Interfaces
 
 **Table of Contents:**
 
@@ -69,7 +69,7 @@ mkdir [subdirectory]
 # Make a new file with the given name
 touch [filename]
 
-# Move a file to the given directory
+# Copy a file into the given directory
 cp [file] [dest]
 ```
 
@@ -265,7 +265,7 @@ cd ../../jones/Desktop
 
 #### Be Careful when using the `cd` command!
 
-Using the `cd` command on its own will send you to the root of your entire file system (`~/`). This is the equivalent of using the command:
+Running the `cd` command on its own, with no argument, takes you to your **home directory**: the folder named after your username, such as `/Users/smith` in the file tree above. Your home directory is not the root directory. `~` is the shortcut name for your home directory, so `cd` on its own does the same thing as this command:
 
 ```sh
 cd ~
@@ -327,11 +327,17 @@ This is worth knowing early: if you expected to see `first line` before the erro
 
 Many programs will end ("terminate") on their own when each statement has been executed.
 
-Other programs can run forever, requiring us to stop them ourselves. For example, when we use the command `python3` on its own — with no file after it — it will start the **Python REPL (Read, Evaluate, Print Loop)** program which just waits for Python input, executes it, and then prints the result:
+Other programs keep running until you stop them yourself. To terminate a running program early, use the keyboard shortcut `Control+C`. Try it with the command below, which waits for 100 seconds and does not give you your prompt back until it finishes. Press `Control+C`, and the prompt comes back right away:
+
+```sh
+sleep 100
+```
+
+The **Python REPL (Read, Evaluate, Print Loop)** is another program that keeps running until you leave it. When you use the command `python3` on its own — with no file after it — it starts the REPL, which waits for Python input, executes it, prints the result, and then waits for more:
 
 ![The Python REPL is useful for testing out expressions.](../.gitbook/assets/1-python-repl-expressions.png)
 
-To terminate the program, use the keyboard shortcut `Control+C` (you may need to cancel twice). You can also leave the Python REPL by entering `exit()`.
+`Control+C` does not leave the REPL. Inside the REPL, `Control+C` only cancels the line you are typing: Python prints `KeyboardInterrupt` and gives you a new `>>>` prompt. To leave the REPL, type `exit()` and press Enter, or press `Control+D`.
 
 #### Flags vs. Arguments
 

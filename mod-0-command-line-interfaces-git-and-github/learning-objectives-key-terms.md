@@ -23,7 +23,7 @@ _Before day 1:_
 - Install and use the VS Code extensions the course relies on.
 - Recover from the setup document's "before you move on" checklist without help.
 
-## 0.1 — Command Line Interfaces
+## 0.1 Command Line Interfaces
 
 <!-- key-terms-from: 1-clis.md -->
 
@@ -32,7 +32,7 @@ _Before day 1:_
 You will find a section with key terms at the top of every chapter. These are the definitions that you will be expected to commit to memory but that will take time and practice. When you first read a chapter, skim through these terms and make note of the ones that you are confused about. Then, return to these terms and see which ones you can easily recall and which ones you need to practice.
 
 - **Terminal** — A program for interacting with a computer's files and executing programs through a command line interface.
-- **Command Line Interface** — a type of user interface (UI) that let's a users perform actions by entering text-based commands.
+- **Command Line Interface** — a type of user interface (UI) that lets users perform actions by entering text-based commands.
 - **Graphical User Interface** — a type of user interface that uses visual elements such as icons, buttons, windows, and dialog boxes, allowing users to perform actions such as clicking, drag-and-drop, and more.
 - **Directory** — Another term for a "folder" in your computer that contains references to files or possibly other directories.
 - **Working Directory** — The directory where your commands will be executed.
@@ -86,7 +86,7 @@ You start in `movie-night` then `cd movies`, then `cd ../snacks`. What does `pwd
 
 `pwd` shows `~/movie-night/snacks`. `cd` is used to change the working directory. Starting from `movie-night`, the user first goes into `movies`. The two dots `..` represent the parent directory allowing the user to go back up a level before going down into the `snacks` subdirectory.
 
-## 0.2 — Git and GitHub
+## 0.2 Git and GitHub
 
 <!-- key-terms-from: 2-git-github.md -->
 
@@ -163,7 +163,7 @@ You forgot to run `git add`. You need to run `git add README.md`, then commit an
 
 `git commit` only saves what is in the staging area, and nothing was staged because `git add` was never run, so Git made no new commit and `git push` had nothing new to send. To fix it, I would run `git add README.md` to stage the file and then run the other commands again.
 
-## 0.3 — Git Pulling and Merging
+## 0.3 Git Pulling and Merging
 
 <!-- key-terms-from: 3-git-pulling-merging.md -->
 
@@ -213,17 +213,17 @@ The push fails. You have to run `git pull` first and then `git push`. If you 
 
 The push is rejected because the remote repository has my partner's commit and my local repository does not. Git only lets me push when my local history already contains everything on the remote, so that my push cannot erase my partner's work. I need to run `git pull`, which downloads my partner's commit and merges it with mine. Because we changed different lines, Git can combine the two versions of the file on its own, and then `git push` works. If we had both changed line 1, Git would not know which version to keep so we would need to resolve the merge conflict, commit, and push.
 
-## 0.4 — Git Branching and Pull Requests
+## 0.4 Git Branching and Pull Requests
 
 <!-- key-terms-from: 4-git-branching.md -->
 
 **Key terms**
 
-- **Main Branch** — The main branch of a repository. Whenever anyone visits a repository on GitHub or clones it down, this is what they will see.
-- **Feature Branch** — a copy of a repository at a point in time that allows developers to work on a feature without impacting the rest of the project.
-- **Merge** - to combine the commit history of two or more branches into one.
-- **Pull Request** — a request for another developer to pull down your branch and review your code. If they approve the changes, they will merge your branch into the main branch!
-- **Fork** — a copy of a repository that is disconnected from the main repository. Typically they include the entire commit history of the main repository at the time the fork was created.
+* **Main Branch** — The main branch of a repository. Whenever anyone visits a repository on GitHub or clones it down, this is what they will see.
+* **Feature Branch** — a copy of a repository at a point in time that allows developers to work on a feature without impacting the rest of the project.
+* **Merge** - to combine the commit history of two or more branches into one.
+* **Pull Request** — a request for another developer to pull down your branch and review your code. If they approve the changes, they will merge your branch into the main branch!
+* **Fork** — a copy of a repository that is disconnected from the main repository. Typically they include the entire commit history of the main repository at the time the fork was created.
 
 **Important Git commands**
 
@@ -235,9 +235,9 @@ The push is rejected because the remote repository has my partner's commit and m
 git branch # see all branches in the local repository
 git branch [branch_name] # create a new branch
 git checkout [branch_name] # switch to a branch
-git checkout -B [branch_name] # create a new branch and switch to it
+git checkout -b [branch_name] # create a new branch and switch to it
 git merge [branch_name] # merge a branch into the current branch
-git branch -D [branch_name] # delete a branch
+git branch -D [branch_name] # delete a branch 
 ```
 
 **You will be able to…**

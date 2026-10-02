@@ -189,14 +189,13 @@ Finally, make a new commit to finish resolving these conflicts:
 ```
 git add -A
 git commit -m 'merging main into my branch'
-git push
 ```
 
 ## Push and make a PR
 
 Once you have merged `main` into your branch, go ahead and `git push`.
 
-> If it is your first time pushing from this branch, you will be told to use the `--set-upstream` flag.
+> The first time you push a new branch, plain `git push` fails with `fatal: The current branch ben-feature-A has no upstream branch.` For that first push, run `git push --set-upstream origin ben-feature-A`, which creates the branch on GitHub and links your local branch to it. After that, plain `git push` works on this branch.
 
 - Go to Github.com and open up your repository.
 - Then, click on the Pull Requests tab to create a new pull request to merge your branch into `main`.

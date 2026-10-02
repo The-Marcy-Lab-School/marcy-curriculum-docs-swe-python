@@ -1,4 +1,4 @@
-# 0.2 — Git and GitHub
+# 0.2 Git and GitHub
 
 In this lesson, we'll learn how software engineers manage the changes to their project using a tool called Git. We'll also they can back up and share their projects online using the closest thing to a social network for programmers, GitHub.
 

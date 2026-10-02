@@ -1,4 +1,4 @@
-# 0.3 — Git Pulling and Merging
+# 0.3 Git Pulling and Merging
 
 GitHub enables developers across the world to collaborate on projects. In this lesson, we'll learn how to use GitHub to create and manage branches, merge branches, create pull requests, and resolve merge conflicts.
 
@@ -119,6 +119,16 @@ In this case, developer 2 is missing the commit from developer 1 in their local 
 ![alt text](../.gitbook/assets/failed-to-push-diagram.png)
 
 So, the developer who pushed last should run `git pull`
+
+{% hint style="warning" %}
+If `git pull` stops with `fatal: Need to specify how to reconcile divergent branches.`, Git has not yet been told how to combine your commits with your partner's commits. Run this command once:
+
+```sh
+git config --global pull.rebase false
+```
+
+This command tells Git to combine the two sets of commits by merging them, and `--global` makes the setting apply to every repository on your computer, so you only need to run it once. Then run `git pull` again.
+{% endhint %}
 
 However, in this situation, the conflict will cause a **Merge Conflict** like this:
 
