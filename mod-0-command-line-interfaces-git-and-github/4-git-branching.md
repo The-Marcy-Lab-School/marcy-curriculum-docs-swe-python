@@ -110,14 +110,14 @@ The first time you push a new branch, plain `git push` fails with `fatal: The cu
 {% hint style="info" %}
 **Read the whole error message.** The `fatal:` line is only the start of it. Git goes on to tell you how to fix the problem:
 
-```
-fatal: The current branch feature-x has no upstream branch.
-To push the current branch and set the remote as upstream, use
+```sh
+# fatal: The current branch feature-x has no upstream branch.
+# To push the current branch and set the remote as upstream, use
 
-    git push --set-upstream origin feature-x
+git push --set-upstream origin feature-x
 
-To have this happen automatically for branches without a tracking
-upstream, see 'push.autoSetupRemote' in 'git help config'.
+# To have this happen automatically for branches without a tracking
+# upstream, see 'push.autoSetupRemote' in 'git help config'.
 ```
 
 The first suggestion is the `--set-upstream` command above. The second names a setting, `push.autoSetupRemote`. When that setting is turned on, a plain `git push` on a branch with no upstream creates the branch on GitHub and sets it as the upstream for you, exactly as `--set-upstream` would. Many developers turn it on with `git config --global push.autoSetupRemote true` once they understand the step it saves them. Whether or not you turn it on, keep the habit this message teaches: when a command fails, read every line of the message, because Git often tells you the fix.
