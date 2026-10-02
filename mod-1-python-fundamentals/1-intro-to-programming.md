@@ -1,4 +1,4 @@
-# 1.1 — Intro to Programming
+# 1.1 Intro to Programming
 
 There are so many terms and concepts to learn about programming. In this lesson, we will learn the fundamental vocabulary and concepts that are shared by practically every programming language. You may see code with syntax that you don't understand and that is fine, you will dig deeper into that code's syntax in later lessons. For now, just focus on learning the vocabulary in the **Key Terms** section.
 
@@ -62,6 +62,10 @@ A program is a text file with instructions that a computer executes to accomplis
 ```python
 # this is a comment
 ```
+
+{% hint style="info" %}
+💡 You can quickly turn any line into a comment by highlighting the line (or any range of lines) and pressing <kbd>Command+/</kbd> (Mac) or <kbd>Control+/</kbd>
+{% endhint %}
 
 **Expressions** are any piece of code that evaluates to a single value. the results of evaluating an operation (e.g. `5 + 5`) or a function call (e.g. `len("hi")`). A standalone values (e.g. the string literal `"hello world"`) is also considered an expression because it evaluates to itself.
 
