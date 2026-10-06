@@ -52,7 +52,7 @@ Recall this code for converting 100°C to Fahrenheit:
 ```py
 boiling_point_C = 100
 boiling_point_F = boiling_point_C * 9/5 + 32
-print(boiling_point_F) # Output: 212
+print(boiling_point_F) # Output: 212.0
 ```
 
 Suppose we wanted to also convert 0°C and 20°C to Fahrenheit in the same program. We could just copy and paste the code and swap out the numbers like this:
@@ -60,15 +60,15 @@ Suppose we wanted to also convert 0°C and 20°C to Fahrenheit in the same progr
 ```python
 boiling_point_C = 100
 boiling_point_F = boiling_point_C * 9/5 + 32
-print(boiling_point_F) # Output: 212
+print(boiling_point_F) # Output: 212.0
 
 freezing_point_C = 0
 freezing_point_F = freezing_point_C * 9/5 + 32
-print(freezing_point_F) # Output: 32
+print(freezing_point_F) # Output: 32.0
 
 best_temperature_C = 20
 best_temperature_F = best_temperature_C * 9/5 + 32
-print(best_temperature_F) # Output: 68
+print(best_temperature_F) # Output: 68.0
 ```
 
 But this approach doesn't scale well.
@@ -96,7 +96,6 @@ Functions are created with the `def` keyword and are followed by:
 
 ```python
 def convert_C_to_F(celsius):
-    celsius = 20
     fahrenheit = celsius * 9/5 + 32
     print(fahrenheit)
 ```
@@ -110,9 +109,9 @@ Notice that we've replaced the _specific_ variable names (`boiling_point_C`, `fr
 A function can be **invoked** to execute its statements by typing the function name and input values within parentheses `()`.
 
 ```python
-convert_C_to_F(100) # 212
-convert_C_to_F(0)   # 32
-convert_C_to_F(20)  # 68
+convert_C_to_F(100) # 212.0
+convert_C_to_F(0)   # 32.0
+convert_C_to_F(20)  # 68.0
 ```
 
 {% hint style="info" %}
@@ -197,7 +196,7 @@ B
 B
 ```
 
-Note that the order in which statements are executed in our code is not always top to bottom. Defining the function doesn't cause the code inside to run. We only execute the code inside of `say_hello` when it is invoked a few lines later.
+Note that the order in which statements are executed in our code is not always top to bottom. Defining the function doesn't cause the code inside to run. We only execute the code inside of `print_B` when it is invoked a few lines later.
 
 </details>
 
@@ -252,7 +251,7 @@ Both crash, with different messages.
 TypeError: can only concatenate str (not "int") to str
 ```
 
-The first call gets as far as `x + y` and then refuses: Python will not add a string and a number, and the next chapter says more about why. Python checks types at the moment an operation runs, not at the moment the function is called.
+The first call gets as far as `x + y` and then refuses: Python will not add a string and a number. Python checks types at the moment an operation runs, not at the moment the function is called.
 
 ```
 TypeError: print_sum() missing 2 required positional arguments: 'x' and 'y'
@@ -407,6 +406,7 @@ The last one crashes with `TypeError: make_greeting() missing 1 required positio
 </details>
 
 {% hint style="info" %}
+
 **What are `*args` and `**kwargs`?** You will see these two in documentation and in other people's code. They let a function accept any number of arguments instead of a fixed list of parameters.
 
 - A parameter written with one star, `*args`, collects every extra argument passed **by position**.
@@ -426,6 +426,7 @@ describe("Ada", 36, city="Brooklyn", hobby="code")
 The positional arguments arrive together in a tuple, and the keyword arguments arrive in a dictionary. You will meet tuples in chapter 1.7 and dictionaries in chapter 1.8. The stars are the part that matters, and the names `args` and `kwargs` are only a convention.
 
 This is how `print()` accepts any number of values. Run `help(print)` and, just under the heading, the documentation shows `print(*args, sep=' ', end='\n', file=None, flush=False)`. You won't need to write either one in this module, but now you can read them.
+
 {% endhint %}
 
 ## Functions Create Local Variable Scope
