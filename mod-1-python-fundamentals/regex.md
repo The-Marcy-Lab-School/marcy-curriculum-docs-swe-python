@@ -70,7 +70,7 @@ def is_only_alphanumeric_regex(string):
 
 > A **regular expression** (or "Reg Ex") is a sequence of characters that specifies a "match pattern" to search for strings in text, extract information, or validate input.
 
-In Python, a regular expression is written as a string, and by convention as a **raw string** with an `r` in front of the quotes. The `r` tells Python not to treat backslashes as escape characters, so that `\w` reaches the `re` module as the two characters `\` and `w` rather than being mangled.
+In Python, a regular expression is written as a string, and by convention as a **raw string** with an `r` in front of the quotes. The `r` tells Python to leave every backslash in the string alone. Without the `r`, Python turns some backslash pairs into special characters before the `re` module ever sees them, the same way `"\n"` becomes a new line in [Inputs and Outputs](6-inputs-outputs.md). Regular expressions use backslashes for their own special characters, and the two meanings collide. In a regular expression, `\b` means "a word break", but in an ordinary string Python turns `"\b"` into a single backspace character. So `re.search("\bcat\b", "the cat sat")` searches for a backspace, `cat`, and another backspace, finds nothing, and returns `None`, while `re.search(r"\bcat\b", "the cat sat")` finds `cat`. Some pairs, such as `\w`, mean nothing special to Python, so they survive without the `r`, and Python only prints a `SyntaxWarning`. Write the `r` every time, and you never have to remember which pairs are which.
 
 ```python
 import re
@@ -183,11 +183,11 @@ Here are some snippets to get started!
 | Character Class | Definition                    |
 | --------------- | ----------------------------- |
 | [0-9]           | Any single digit              |
-| [3-30]          | And number in range           |
+| [3-7]           | Any single digit from 3 to 7  |
 | [a-z]           | Any lowercase letter          |
 | [a-d]           | Any lowercase letter in range |
 | [A-Z]           | Any uppercase letter          |
-| [E-Q]           | Any uppercase letter          |
+| [E-Q]           | Any uppercase letter from E to Q |
 | [a-zA-Z]        | Any letter                    |
 | \d              | Any single digit              |
 | \D              | Any NON digit                 |
@@ -209,7 +209,7 @@ The functions in the `re` module to be aware of are:
 3. `re.findall(pattern, string)` - find every match in a string
 4. `re.sub(pattern, replacement, string)` - replace one or more matches in a string
 
-> Note that every one of these takes the pattern first and the string second.
+> Note that every one of these takes the pattern first. The first three take the string second, while `re.sub` takes the replacement second and the string third.
 
 ### `re.search(pattern, string)` and `re.IGNORECASE`
 

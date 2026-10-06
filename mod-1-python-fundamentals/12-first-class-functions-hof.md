@@ -59,7 +59,7 @@ You can even give a function a second name, and the second name works exactly li
 def say_hi():
     print("Hi")
 
-greet = say_hi  # no parentheses: we are copying the function, not calling it
+greet = say_hi  # no parentheses: greet now refers to the same function as say_hi; nothing is copied or called
 greet()         # Hi
 ```
 
@@ -340,11 +340,13 @@ loud_greet("Maya")
 
 {% endcode %}
 
-Read the order of events carefully, because three functions are involved and only one of them runs at the end:
+Read the order of events carefully, because three functions are involved and they do not all run at once:
 
 1. `announce(greet)` is called. Inside it, `func` references the `greet` function itself, not a call to it.
 2. `announce` defines `wrapper` and returns it without calling it. `loud_greet` now references `wrapper`.
-3. `loud_greet("Maya")` calls `wrapper`, which prints a line, calls `func("Maya")`, and prints another line.
+3. `loud_greet("Maya")` calls `wrapper`, which prints a line, calls `func("Maya")`, and prints another line. Because `func` references `greet`, this last step runs both `wrapper` and `greet`.
+
+Chapter 1.3 said a parameter exists only while its function is running, yet `wrapper` uses `func` in step 3, after `announce` has already returned. A function defined inside another function keeps access to the outer function's variables even after the outer function returns, so `wrapper` still has `func`, and `func` still references `greet`.
 
 `greet` was never edited, and `announce` never mentions greeting. Each one does a single job, and the line `loud_greet = announce(greet)` is what combines them. A function returned this way is called a **wrapper**, because it wraps around the original.
 
@@ -376,7 +378,7 @@ Hi, Maya!
 --- finished ---
 ```
 
-`ready` comes first. Calling `announce(greet)` builds `wrapper` and returns it, and building a function prints nothing. The three announcements wait until `loud_greet("Maya")` actually calls the wrapper on the last line.
+`ready` comes first. Calling `announce(greet)` builds `wrapper` and returns it, and building a function prints nothing. The other three lines wait until `loud_greet("Maya")` actually calls the wrapper on the last line: `wrapper` prints the two announcements, and `greet` prints `Hi, Maya!` between them.
 
 </details>
 {% endhint %}

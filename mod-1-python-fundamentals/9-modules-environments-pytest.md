@@ -39,7 +39,7 @@ In this lesson we'll learn how Python programs are split across multiple files a
 - A **package** is a folder of modules that someone has published so that other people can install it and import it. `pytest` is a package.
 - A **library** is a collection of code written for other programs to use rather than to be run on its own. The standard library is Python's own library, and many packages, like `pytest`, are libraries too.
 - Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
-- A **virtual environment** is a private copy of Python and its packages for one project. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
+- A **virtual environment** is a folder that holds one project's private set of packages, together with a link to the Python installed on your computer. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
   - Installing a package inside an activated virtual environment installs it only there.
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
@@ -232,7 +232,7 @@ the diameter of a circle with radius 5 is 10
 the circumference of a circle with radius 5 is 31.400000000000002
 ```
 
-The message from `circle_helpers.py` prints _first_, before anything from `main.py`. When the interpreter reaches `import circle_helpers` on line 1 of `main.py`, it goes and runs all of `circle_helpers.py`. The `def` statements create the functions, and the `print` at the bottom prints. Only then does it return to `main.py` and continue.
+The message from `circle_helpers.py` prints _first_, before anything from `main.py`. When the interpreter reaches `import circle_helpers` on line 2 of `main.py`, it goes and runs all of `circle_helpers.py`. The `def` statements create the functions, and the `print` at the bottom prints. Only then does it return to `main.py` and continue.
 
 (That `31.400000000000002` is the slightly inexact decimal arithmetic from chapter 1.6, and `{circumference:.2f}` in the f-string would display it as `31.40`.)
 
@@ -240,7 +240,7 @@ The message from `circle_helpers.py` prints _first_, before anything from `main.
 {% endhint %}
 
 {% hint style="info" %}
-**What is that `__pycache__` folder?** The first time you import a module, a folder called `__pycache__` appears next to it, holding a file like `circle_helpers.cpython-314.pyc`. That is a pre-processed copy of the module that Python saves so the next import is faster. It is rebuilt automatically whenever the module changes, you never edit it, and it never belongs in Git. The `.gitignore` section later in this lesson shows how to keep it out.
+**What is that `__pycache__` folder?** The first time you import a module, a folder called `__pycache__` appears next to it, holding a file like `circle_helpers.cpython-312.pyc`. That is a pre-processed copy of the module that Python saves so the next import is faster. It is rebuilt automatically whenever the module changes, you never edit it, and it never belongs in Git. The `.gitignore` section later in this lesson shows how to keep it out.
 {% endhint %}
 
 This is usually fine, because most of what is in a module is `def` statements and defining a function is harmless. But it raises a question: what if a file is _both_ a program you sometimes run directly _and_ a module other files import? `main()` gets called at the bottom of `main.py`. If another file ever imported `main.py`, `main()` would run during the import, which is almost never what anyone wants.
@@ -399,7 +399,7 @@ But before installing anything, we need somewhere to put it.
 
 Every Python project you build will need its own set of packages, often in different versions. If every project installed its packages into the one Python on your computer, they would collide: project A needs version 2 of something, project B needs version 3, and one of them stops working.
 
-A **virtual environment** solves this. It is a folder inside your project that holds a private copy of the interpreter and its own packages. Whatever you install while it is turned on goes there and nowhere else.
+A **virtual environment** solves this. It is a folder inside your project that holds its own packages, along with a `python3` that is a link to the Python interpreter already installed on your computer. Whatever you install while it is turned on goes there and nowhere else.
 
 Create one in your project folder with the `venv` module, which is part of the standard library:
 
@@ -415,7 +415,7 @@ Then turn it on. This is called **activating** the environment:
 source .venv/bin/activate
 ```
 
-Your Terminal prompt changes to show `(.venv)` at the front. That is how you know it is on. If you ever get a `ModuleNotFoundError` for a package you are sure you installed, look at the prompt before you do anything else. Nine times out of ten, `(.venv)` is missing. From now on, in this Terminal window, `python3` and `pip` refer to the copies inside `.venv`:
+Your Terminal prompt changes to show `(.venv)` at the front. That is how you know it is on. If you ever get a `ModuleNotFoundError` for a package you are sure you installed, look at the prompt before you do anything else. Nine times out of ten, `(.venv)` is missing. From now on, in this Terminal window, `python3` and `pip` refer to the ones inside `.venv`:
 
 ```sh
 which python3
@@ -488,7 +488,7 @@ The first time `pytest` tried to `import pluggy`, it would crash with `ModuleNot
 
 ## `requirements.txt`
 
-The `.venv` folder can be big, it contains a copy of Python, and it is specific to your computer. So it is **never** committed to Git. Instead, you commit a small text file that says what to install, and anyone (including future you, on a new laptop) rebuilds the environment from it.
+The `.venv` folder can be big, and it is specific to your computer. So it is **never** committed to Git. Instead, you commit a small text file that says what to install, and anyone (including future you, on a new laptop) rebuilds the environment from it.
 
 That file is `requirements.txt`, and `pip` writes it for you:
 
@@ -537,7 +537,7 @@ Git will then pretend those folders do not exist. The second line covers the `__
 
 **<details><summary>Q: Why not just commit `.venv` so that nobody has to run `pip install`?</summary>**
 
-Three reasons. It is large, often hundreds of megabytes, and Git is built for text files, not for copies of programs. It contains paths and a copy of Python specific to your machine and operating system, so it would not work on a teammate's computer anyway. And it is completely reproducible from `requirements.txt` in a few seconds, so there is nothing to gain.
+Three reasons. It is large: with only `pytest` installed, `.venv` already holds about 30 megabytes in roughly 2,000 files, and it grows with every package you add. Git is built for the files you write, not for installed programs. It is also specific to your machine. `.venv/bin/python3` is a link, a tiny file that points to the place Python is installed on your computer, and the other programs in `.venv/bin` record the full path of the folder `.venv` was created in. On a teammate's computer those paths may lead nowhere, so the environment would not work there anyway. And it is completely reproducible from `requirements.txt` in a few seconds, so there is nothing to gain.
 
 The general rule: commit the recipe, not the meal.
 

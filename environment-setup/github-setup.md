@@ -60,8 +60,11 @@ To do so, we need to connect your Terminal to your GitHub account. There are two
 ```sh
 git config --global user.name "[Your Name]"
 git config --global user.email "[Your GitHub Email Address]"
+git config --global pull.rebase false
 git config --global credential.helper store
 ```
+
+The `pull.rebase false` line tells `git` what to do later in the course, when you download your teammates' work with `git pull` and both of you have made new commits: combine the two sets of commits by merging them. Without this setting, `git pull` stops with an error in that situation instead.
 
 4. Confirm that the configuration was successful by running
 

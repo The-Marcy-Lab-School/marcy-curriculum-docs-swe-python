@@ -138,9 +138,9 @@ Technical details are broken up further into three groups:
 1. Split your code into **at least 3 separate modules** (files)
 2. Use `import` statements to connect your modules, and an `if __name__ == "__main__":` guard in the entry point
 3. Follows a logical file structure:
-  - `main.py` — the entry point of the application that displays a menu to the user.
-  - `menu.py` — handles the main menu loop and handles user input.
-  - A data layer (choose a name!) — handles the logic related to managing the data for your application.
+  - `main.py` — the entry point of the application, which starts the program and calls the menu.
+  - `menu.py` — displays the menu, reads the user's input, and calls the function that matches each choice.
+  - A data layer (choose a name!) — holds your application's data and the functions that manage it.
 4. A `requirements.txt` file exists, and `.venv/` is listed in `.gitignore`
 
 **User Interaction (4 points)**
@@ -456,7 +456,6 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
            elif choice == "2":
                print("You chose option 2")
            elif choice == "3":
-               print("Goodbye!")
                is_running = False
            else:
                print("Invalid choice. Please try again.")

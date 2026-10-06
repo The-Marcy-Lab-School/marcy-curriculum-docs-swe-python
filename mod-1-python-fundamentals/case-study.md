@@ -62,7 +62,7 @@ Before you answer any of the investigation questions, read the program to the be
 1. **Run it.** Run `python3 src/main.py` from the project folder and use every menu option. Give it bad input as well: a letter where a number belongs, a task number that does not exist, an empty description. Then write one sentence, from the user's point of view, saying what the program does.
 2. **Find the entry point and map the files.** For each file in `src/`, read only the `import` lines and the `def` lines, and write one sentence saying what that file is for. Note which file imports which.
 3. **Find the data.** Find every variable that lives at the top level of a file, and write down its shape.
-4. **Trace one action.** Follow Add Task from the `if __name__ == "__main__":` guard in `main.py` to the confirmation message, and list every function it passes through, in order. If you lose your place, put a breakpoint at the start of `show_menu()` and step through with the debugger.
+4. **Trace one action.** Follow Add Task from the `if __name__ == "__main__":` guard in `main.py` to the confirmation message, and list every function it passes through, in order. If you lose your place, add a `print()` as the first line of each function you think the action passes through, run Add Task again, and read the order the messages appear in. Delete those `print()` lines when you are done.
 5. **Predict, then run.** Choose one function in `tasks.py` and predict what it prints for one specific input. For example, predict what `add_task('')` prints. Then check: from the `src` folder, start the REPL with `python3` and run `from tasks import add_task` followed by `add_task('')`.
 6. **Write down what you know and what you are guessing.** Keep two lists. Move an item from "guessing" to "know" only after you have checked it by running code.
 
@@ -133,7 +133,7 @@ Look at the `tasks` list in `tasks.py`. What is the scope of the `tasks` variabl
 
 <details><summary>What actually happens</summary>
 
-It fails before you choose anything, as soon as the menu has printed: `NameError: name 'tasks' is not defined`. `show_menu()` calls `view_tasks()` every time the menu displays, and `view_tasks()` looks for `tasks` in its own local scope and then in the global scope of `tasks.py`, and finds it in neither. The `tasks` inside `add_task()` is local to `add_task()`, so no other function can reach it. Even `add_task()` could not remember anything with it, because every call would start a brand new empty list.
+It fails before you choose anything, as soon as the menu has printed: `NameError: name 'tasks' is not defined. Did you mean: 'task'?` Python suggests `task` because `view_tasks()` has a loop variable with that similar name. `show_menu()` calls `view_tasks()` every time the menu displays, and `view_tasks()` looks for `tasks` in its own local scope and then in the global scope of `tasks.py`, and finds it in neither. The `tasks` inside `add_task()` is local to `add_task()`, so no other function can reach it. Even `add_task()` could not remember anything with it, because every call would start a brand new empty list.
 
 </details>
 {% endhint %}

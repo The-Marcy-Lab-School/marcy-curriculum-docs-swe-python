@@ -1,4 +1,4 @@
-# 1.13 — Comprehensions and Built-in Iteration
+# 1.13 Comprehensions and Built-in Iteration
 
 **Table of Contents**
 
@@ -285,7 +285,7 @@ It prints `None`.
 
 `.sort()` changes `nums` and returns nothing, so `result` gets `None`. This is one of the most common mistakes in Python: writing `x = my_list.sort()` and then wondering where the list went. If you want the sorted list as a value, use `sorted(nums)`. If you want to reorder `nums` itself, call `nums.sort()` on its own line and don't assign it to anything.
 
-The same rule applies to `.append()`, `.reverse()`, and every other method that mutates a list in place: they return `None`.
+`.append()` and `.reverse()` work the same way: they change the list in place and return `None`. `.pop()` is different: it changes the list and also returns the element it removed.
 
 </details>
 {% endhint %}
@@ -304,7 +304,7 @@ print(sorted(animals, key=len))     # ['bear', 'deer', 'cheetah', 'aardvark']
 
 **Challenge**
 
-Sort this list of user dictionaries by age, youngest first, and then by username alphabetically.
+Sort this list of user dictionaries two ways: once by age, youngest first, and once by username, alphabetically.
 
 ```python
 users = [
@@ -416,7 +416,7 @@ print(all([score >= 75 for score in scores]))  # False
 ```
 
 {% hint style="info" %}
-The same syntax with curly braces and a `key: value` expression builds a dictionary: `{user['id']: user['username'] for user in users}` produces `{1: 'ben', 2: 'maya'}`. You will not need it often in this module, but you will recognize it when you see it.
+A comprehension written with curly braces and a `key: value` expression builds a dictionary instead of a list. With the four-user `users` list from the filtering section, `{user['id']: user['username'] for user in users}` produces `{1: 'ben', 2: 'maya', 3: 'reuben', 4: 'gonzalo'}`. You will not need it often in this module, but you will recognize it when you see it.
 {% endhint %}
 
 {% hint style="info" %}
@@ -581,7 +581,7 @@ def double(value):
 
 ## Banking System Challenge
 
-The assignment for this session applies the same cycle to a list of bank account dictionaries: a pure `deposit` function with tests already written, a refactor to a comprehension while the tests stay green, and a `withdraw` function built test-first with an overdraft rule. It is the same three steps you just did, on the data shape your project will use.
+The assignment for this session applies the same cycle to a list of bank account dictionaries: a pure `deposit` function with tests already written, a refactor to a comprehension while the tests stay green, and a `withdraw` function built test-first with an overdraft rule. Those three tasks repeat this chapter's last three sections (testing a pure function, refactoring with tests, and test-driven development), on the data shape your project will use.
 
 ## Extension / Practice
 

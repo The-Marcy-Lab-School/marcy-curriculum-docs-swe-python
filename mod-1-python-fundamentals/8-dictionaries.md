@@ -178,6 +178,7 @@ clone['noise'] = 'BAAAAA'  # mutating the referenced dictionary
 
 print(sheep)  # {'name': 'benny', 'noise': 'BAAAAA'}
 print(clone)  # {'name': 'benny', 'noise': 'BAAAAA'}
+print(sheep is clone)   # True
 ```
 
 We can use the `dict()` function to copy the key-value pairs of one dictionary into a new dictionary. This is particularly useful when creating pure functions:
@@ -194,9 +195,23 @@ clone = make_loud_clone(sheep)
 
 print(sheep)  # {'name': 'benny', 'noise': 'baaaa'}
 print(clone)  # {'name': 'benny', 'noise': 'BAAAA'}
+print(sheep is clone)   # False
 ```
 
 `animal.copy()` and `{**animal}` do the same thing as `dict(animal)`. You will see all three.
+
+All three copy only the outer dictionary. If a value inside it is a list or another dictionary, the copy and the original share that one inner list or dictionary, so changing it through the copy changes the original too:
+
+```python
+user = {'username': 'c0d3rkid', 'friends': ['rubyNinja']}
+clone = dict(user)
+clone['friends'].append('messiGOAT')
+
+print(user['friends'])  # ['rubyNinja', 'messiGOAT']
+print(user['friends'] is clone['friends'])  # True
+```
+
+To change a nested list without touching the original, copy that list as well before you change it: `clone['friends'] = list(user['friends'])`.
 
 ## Iterating Over Keys and Values of a Dictionary
 

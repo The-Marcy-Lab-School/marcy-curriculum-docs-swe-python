@@ -70,7 +70,7 @@ Ask: what does this program remember? Find every variable that lives at the top 
 
 Pick one thing a user can do. Start at the entry point and follow that one action through every function it touches, in order, until the output appears. Ignore every other branch. You will come back for them, but trying to hold the whole program in your head at once is how you get lost.
 
-This is the same thing you did with the debugger in chapter 1.3. You can do it with the debugger here, too. Put a breakpoint at the start of `main()` and step through.
+This is the same thing you did in chapter 1.3 when you predicted the order in which a program's `print` lines run, only now the path crosses more functions.
 
 ### Step 5: Predict, Then Run, Function by Function
 
@@ -192,9 +192,9 @@ You have seen this split before. It is the same separation of concerns as `circl
 
 There is exactly one piece of data that lives between actions: `stock`, at the top of `inventory.py`. Its shape is a dictionary from item name (a string) to quantity (an int). Everything the program does is a change to, or a report on, that one dictionary.
 
-**<details><summary>Q: `stock` is a global variable, and `restock` and `sell` change it. Chapter 1.2 told you to avoid that. Is this program wrong?</summary>**
+**<details><summary>Q: `stock` is a global variable, and `restock` and `sell` change it. Chapter 1.3 told you to avoid that. Is this program wrong?</summary>**
 
-It is a tradeoff the author made, and you can name both sides of it. Keeping `stock` inside `inventory.py` and never importing it into `main.py` means only three functions can ever touch it, which makes it easy to find every place it changes. The cost is that `restock` and `sell` are impure: calling `sell("apples", 1)` twice gives different results. The case study in two weeks makes the same choice for the same reason, and you will make it in your project too. Knowing the cost is what matters.
+It is a tradeoff the author made, and you can name both sides of it. Keeping `stock` inside `inventory.py` and never importing it into `main.py` means only three functions can ever touch it, which makes it easy to find every place it changes. The cost is that `restock` and `sell` are impure: calling `sell("bread", 2)` twice returns `True` the first time and `False` the second, because the first call used up the bread. The case study in two weeks makes the same choice for the same reason, and you will make it in your project too. Knowing the cost is what matters.
 
 Notice also that nothing here needs the `global` keyword. Mutating a dictionary through a global name is allowed; only _reassigning_ the name would need `global`. That is the distinction between mutability and reassignment from chapter 1.7, showing up in practice.
 
@@ -235,7 +235,7 @@ True
 'apples: 5\nbread: 1\neggs: 12\nmilk: 0 (out of stock)'
 ```
 
-`sell("eggs", 1)` is `False` because of the first guard: no such key. `restock("eggs", 12)` is where `stock.get(name, 0)` earns its place. `"eggs"` is not in the dictionary, so `.get` returns the default `0`, and `0 + 12` becomes the new entry. Without the default, this line would have raised a `KeyError` on any new item.
+`sell("eggs", 1)` is `False` because of the first guard: no such key. `restock("eggs", 12)` shows why the author wrote `stock.get(name, 0)`. `"eggs"` is not in the dictionary, so `.get` returns the default `0`, and `0 + 12` becomes the new entry. Without the default, `stock.get(name)` would return `None`, and `None + 12` raises a `TypeError`. With bracket notation instead, `stock[name] + 12` raises a `KeyError`, because the key is missing. Either way, restocking any new item would crash.
 
 Two things in `report()` you may not have seen before: `sorted(stock.items())` puts the pairs in alphabetical order by key, and `"\n".join(lines)` glues a list of strings together with a newline between each. In `main.py`, `choice in ("1", "2")` uses a tuple from chapter 1.7 as a small fixed set of options. If you did not know those, the right move was to write "I am guessing `sorted` sorts alphabetically" in your list, run it, and move it to "I know."
 
@@ -367,7 +367,7 @@ if __name__ == "__main__":
 1. Enter `0` for the number of people. `(total + tip) / 0` raises `ZeroDivisionError: float division by zero` on line 3.
 2. Enter anything that is not a number, like `twenty`, for the bill total. `float("twenty")` raises a `ValueError` on line 8, before `split_bill` is ever called.
 
-There is a third if you look: `int(answer)` on line 13 crashes on a tip like `15.5`.
+There is a third if you look: `int(answer)` on line 14 crashes on a tip like `15.5`.
 
 You will learn how to catch these in the next chapter. For now, the skill was finding them, and being able to say on which line and why.
 

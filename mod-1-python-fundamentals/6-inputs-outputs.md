@@ -221,7 +221,7 @@ print('4.2'.isdigit())
 # Output: False
 ```
 
-`answer.strip().lower()` is two method calls in a row. `strip()` returns a new string, and `.lower()` is called on that new string. This is called **method chaining**, and it works because every one of these methods returns a string.
+`answer.strip().lower()` is two method calls in a row. `strip()` returns a new string, and `.lower()` is called on that new string. This is called **method chaining**, and it works because `strip()` returns a string, which has a `.lower()` method. Not every method returns a string: `split()` returns a list and `isdigit()` returns a boolean, so something like `'a, b'.split(', ').lower()` crashes with an `AttributeError`.
 
 ## Output with `print()`
 
@@ -365,7 +365,7 @@ else:
     print("Okay, see you later.")
 ```
 
-Whether the user types `yes`, `YES`, or `  Yes `, `answer` holds `"yes"`.
+Whether the user types `yes`, `YES`, or ` Yes`, `answer` holds `"yes"`.
 
 {% hint style="warning" %}
 **Predict, then run.**
@@ -440,7 +440,7 @@ print("1" + str(1))   # -> "11"
 print(int("1") + 1)   # -> 2
 ```
 
-Between kinds of numbers, conversion happens on its own: `5 / 2` produces the float `2.5`, and `5 + True` produces `6` because `True` counts as `1` in arithmetic.
+Between kinds of numbers, conversion happens on its own: `5 + 2.5` turns the integer `5` into a float and produces `7.5`, and `5 + True` produces `6` because `True` counts as `1` in arithmetic. Division with `/` is a separate rule: `/` always produces a float, even between two integers, so `4 / 2` produces `2.0`.
 
 </details>
 {% endhint %}
@@ -487,7 +487,7 @@ main()
 Your goal is to do the following in the `madlib-challenge` folder:
 
 1. Replace the hard-coded variables defined in the `main` function with values retrieved from the user via the `input()` function.
-2. `is_happy` has to be a boolean, but the user can only type a string. Ask them to type `Y` or `N`, and turn their answer into `True` or `False`. `y`, `Y`, and ` Y ` should all count as yes.
+2. `is_happy` has to be a boolean, but the user can only type a string. Ask them to type `Y` or `N`, and turn their answer into `True` or `False`. `y`, `Y`, and `Y` should all count as yes.
 
 If you get stuck, you can view the solution below:
 

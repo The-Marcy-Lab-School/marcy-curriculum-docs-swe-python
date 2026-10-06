@@ -202,7 +202,7 @@ They are all kinds of `OSError`. For a comprehensive list, see the [built-in exc
 
 #### `AssertionError`
 
-_Less common in programs, very common in tests._ Indicates the failure of an `assert` statement. When you learn `pytest` at the end of this module, every failing test will be one of these.
+_Less common in programs, very common in tests._ Indicates the failure of an `assert` statement. In chapter 1.9, every `pytest` test that failed at an `assert` line failed with one of these.
 
 ```python
 assert 1 == 2, "one is not two"
@@ -283,7 +283,7 @@ AttributeError: 'str' object has no attribute 'append'
 The rule does not change. Read from the bottom: the error is on line 2 of `helpers.py`, that function was called from line 7 of `main.py`, and that call came from line 10. Where the error _occurred_ and where the bad value _came from_ are now in different files, and both lines are in front of you.
 
 {% hint style="info" %}
-The **call stack** is a data structure that the interpreter uses to keep track of the functions that are called while the program is running. It saves function calls in a last-in-first-out (LIFO) order which means that the most recent function call is always on top, followed by the function that called it, and so on. A traceback is a printout of the call stack at the moment the error was raised.
+The **call stack** is a data structure that the interpreter uses to keep track of the functions that are called while the program is running. It saves function calls in a last-in-first-out (LIFO) order which means that the most recent function call is always on top, followed by the function that called it, and so on. A traceback is a printout of the call stack at the moment the error was raised, printed with the most recent call last. So the top of the stack, the call that was running when the error happened, appears at the bottom of the traceback.
 {% endhint %}
 
 {% hint style="warning" %}
@@ -369,7 +369,7 @@ The `return` inside the `try` ends the loop and the function the moment the conv
 
 **<details><summary>Q: Chapter 1.6 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
 
-`.isdigit()` only accepts strings made entirely of digits, so it rejects `-5` and `5` even though `int()` would happily convert both. The `try`/`except` version lets `int()` be the judge of what it can convert, which is exactly the right judge. Use `.isdigit()` when you specifically want non-negative whole numbers with no surprises; use `try`/`except` when you want "whatever `int()` accepts."
+`.isdigit()` only accepts strings made entirely of digits, so it rejects `-5` and `" 5"` (a 5 with a space in front) even though `int()` would happily convert both. The `try`/`except` version lets `int()` be the judge of what it can convert, which is exactly the right judge. Use `.isdigit()` when you specifically want strings made only of digits, with no minus sign or spaces; use `try`/`except` when you want "whatever `int()` accepts."
 
 </details>
 
@@ -409,7 +409,7 @@ def test_withdraw_overdraft():
 `with pytest.raises(ValueError):` means "the indented code below must raise a `ValueError`." If it does, pytest catches the error and the test passes. If it does not, the test fails. It is the same `with` statement that opened files in chapter 1.9: it sets something up, runs the indented block, and then checks what happened.
 
 {% hint style="warning" %}
-**Predict, then run.** Delete the `raise` line from `withdraw` so that it quietly allows the overdraft, and run the tests again. What does pytest report?
+**Predict, then run.** Delete the whole `if` statement from `withdraw` (both the `if` line and the `raise` line beneath it) so that it quietly allows the overdraft, and run the tests again. What does pytest report?
 
 <details><summary>What actually happens</summary>
 
@@ -418,7 +418,7 @@ def test_withdraw_overdraft():
 E       Failed: DID NOT RAISE ValueError
 ```
 
-`test_withdraw` still passes, and `test_withdraw_overdraft` fails. The function no longer does what the test says it should, and pytest tells you exactly which promise it broke. Put the `raise` back before moving on.
+pytest reports `1 failed, 1 passed`. `test_withdraw` still passes, because `withdraw(100, 30)` never reached the `raise` anyway: 30 is not more than 100. `test_withdraw_overdraft` fails, because `withdraw(100, 500)` now returns `-400` instead of raising a `ValueError`. The function no longer does what the test says it should, and pytest tells you exactly which promise it broke. Put the `if` statement back before moving on.
 
 </details>
 {% endhint %}

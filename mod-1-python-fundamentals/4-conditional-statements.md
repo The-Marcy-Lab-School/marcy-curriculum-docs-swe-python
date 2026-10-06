@@ -117,21 +117,28 @@ is_it_hot(105)
 
 When working with a function that changes the value returned based on a condition, we can avoid using conditional chains and only use `if` statements called "guard clauses".
 
-A **guard clause** is an `if` statement that returns before subsequent return statements have a chance to be executed.
+A **guard clause** is an `if` statement that returns before subsequent return statements have a chance to be executed. As a result, `elif` statements aren't necessary.
 
 ```python
 def is_it_hot(temp):
-    if temp > 75:
-        return "Eh"
-    if temp > 90:
-        return "Yes!"
     if temp > 100:
         return "So Hot!"
+    if temp > 90:
+        return "Yes!"
+    if temp > 75:
+        return "Eh"
     return "Nah"
 
 print(is_it_hot(105))
 # Output: ???
 ```
+
+**<details><summary>Answer</summary>**
+
+It prints `So Hot!`. A `return` statement ends the function the moment it runs, so once one guard clause returns, none of the lines below it get a chance to run. `105 > 100` is `True`, so the first guard clause returns `"So Hot!"` before `temp > 90` and `temp > 75` are ever checked.
+
+Order matters for guard clauses just as it does for an `elif` chain. Start with the narrowest condition first, then move on to less restrictive conditions.
+</details>
 
 **<details><summary>Q: Why doesn't the last return statement need an `if` statement?</summary>**
 

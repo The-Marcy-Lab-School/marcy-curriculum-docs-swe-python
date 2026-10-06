@@ -172,9 +172,7 @@ Lists and dictionaries are considered **mutable types**, and that changes how va
 
 ### How Lists Are Stored in Memory
 
-When a variable is created, a chunk of your computer's memory is assigned to hold some data. Small, immutable values like numbers can effectively be stored as-is. Lists and dictionaries however can grow to be any size and therefore cannot be contained within a single memory slot.
-
-Instead, the data in a list is stored in an area called the **heap** and a **reference to its heap address** is stored in the variable instead. Think of the variable as a slip of paper with an address written on it, not as the house itself.
+Python stores every value, whether it is a number, a string, or a list, in an area of memory called the **heap**. A variable does not hold the value itself. It holds a **reference to the value's heap address**. Before, we might have thought of a variable like a locker with a value stored inside. In reality, the heap is the locker room and the variable stores which locker the value is stored in, not the locker itself.
 
 You can see the address for yourself. The `id()` function returns a number that identifies where a value lives:
 
@@ -187,7 +185,7 @@ print(id(clone))         # the exact same number
 print(nums is clone)     # True: `is` asks whether two variables reference the same object
 ```
 
-As a result, we can mutate the contents of a list without reassigning the variable because the variable doesn't hold the list, it holds a reference to the list!
+Because `nums` and `clone` hold the same reference, they are two names for one list, not two separate lists.
 
 ### Mutability vs. Reassignment
 
@@ -237,7 +235,7 @@ empty_the_list(letters)
 print(letters)  # Prints []
 ```
 
-It is impossible for this behavior to occur when dealing with immutable values like strings, numbers, and booleans.
+A function can never change a caller's string, number, or boolean this way. The parameter still receives a reference, but an immutable value has no method or bracket assignment that changes it in place. The only way to "change" one is to reassign a variable, and reassignment changes only the variable on the left of the `=`, not the immutable value on the right.
 
 ```python
 x = 10
@@ -249,6 +247,14 @@ print(y)  # 11
 ```
 
 In this example, even though it _looks_ like we're mutating the value `y`, we are NOT. We're reassigning `y` to reference a completely different value (`11`). `x` never notices.
+
+```python
+str = 'hello'
+str[0] = 'j'
+# TypeError: 'str' object does not support item assignment
+```
+
+In this example, when we try to reassign the first character in `str`, a `TypeError` is raised.
 
 ### Impure and Pure Functions
 

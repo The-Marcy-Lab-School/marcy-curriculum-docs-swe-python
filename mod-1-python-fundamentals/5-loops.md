@@ -69,7 +69,7 @@ for i in range(100):
     print(f"Flip number {i} was {result}")
 ```
 
-`range(100)` produces the numbers `0`, `1`, `2`, ... up to `99`, and `i` takes each one in turn. Try using the debugger and you will see the order of operations
+`range(100)` produces the numbers `0`, `1`, `2`, ... up to `99`, and `i` takes each one in turn. Each time through the loop, Python does these steps in order:
 
 1. Take the next number from the range and assign it to `i`
 2. Execute the code block
@@ -160,7 +160,7 @@ def flip_coin():
     return random.choice(["heads", "tails"])
 
 def count_heads(flips):
-    # We want to use this variable after the loop is done, so we create it outside the loop
+    # Create heads before the loop. If heads = 0 were inside the loop, it would reset to 0 on every flip.
     heads = 0
     for i in range(flips):
         result = flip_coin()
