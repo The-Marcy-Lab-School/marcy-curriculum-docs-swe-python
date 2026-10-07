@@ -2,7 +2,7 @@
 
 One entry per lesson. Key terms are copied from each lesson's **Key Terms** section by `scripts/sync-key-terms.py`, so edit them in the lesson and rerun the script rather than editing them here. Learning objectives are written so that each one could be checked with a short task. Each list is split in two. _In the session_ names the three or four objectives the 90-minute lecture is responsible for: introduced, practiced, and checked before it ends. _By the end of the module_ names the rest, which the chapter's reading, the assignment, and the project carry, and which the Mod 1 assessment can draw on.
 
-## 1.1 — Intro to Programming
+## 1.1 Intro to Programming
 
 <!-- key-terms-from: 1-intro-to-programming.md -->
 
@@ -53,7 +53,30 @@ _By the end of the module:_
 - Read an `IndentationError` and explain why the interpreter refused the whole file.
 - Rewrite a badly formatted function to follow PEP 8: four-space indentation, spaces around operators, `snake_case` names.
 
-## 1.2 — Data Types, Variables, and Operators
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to explain what the Python interpreter does with each line of a program when the file runs, and justify where a `print()` call must be placed to display a stored value.
+
+**Question**
+
+Maya's `main.py` contains these two lines:
+
+```python
+fahrenheit = 212
+celsius = (fahrenheit - 32) * 5 / 9
+```
+
+Maya runs `python3 main.py`. The Terminal shows nothing, so Maya decides that the program did not run. Is Maya right? What line should Maya add to see the temperature in Celsius, where in the file should that line go, and why there?
+
+**Level 2 Example**
+
+Maya is wrong, the program did run. Maya needs to add `print(celsius)` at the bottom of the file.
+
+**Level 3 Example**
+
+Maya is wrong. When Maya runs `python3 main.py`, the Python interpreter executes the file one statement at a time, from top to bottom. The first line stores `212` in `fahrenheit`. The second line evaluates the expression `(fahrenheit - 32) * 5 / 9` and stores the result in `celsius`. Both lines change the program's state, but neither one displays anything, because only `print()` sends text to the Terminal. Maya should add `print(f"{fahrenheit}°F is {celsius}°C")` as a third line, which displays `212°F is 100.0°C`. The `print()` has to go after the line that calculates `celsius`, because control flow runs top to bottom, and `celsius` does not hold a value until that line has run.
+
+## 1.2 Data Types, Variables, and Operators
 
 <!-- key-terms-from: 2-data-types-variables.md -->
 
@@ -88,7 +111,34 @@ _By the end of the module:_
 - Identify operators that produce unexpected output, such as `8 / 2`, `"3" * 5`, and `0.1 + 0.2 == 0.3`, and explain each result.
 - Read and write a conditional expression that chooses between two values.
 
-## 1.3 — Functions
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the values produced by expressions and explain how operator precedence and the data types determine that result.
+
+**Question**
+
+Andre wants the average of two quiz scores and writes this program:
+
+```python
+quiz_1 = 80
+quiz_2 = 90
+average = quiz_1 + quiz_2 / 2
+print(average)
+```
+
+Andre expected `85`. What does the program print, and why? What would Andre change to get the average? Then suppose `quiz_2` held the string `"90"` instead of the number `90`. What would happen, and why?
+
+**Level 2 Example**
+
+The program prints `125.0` because the division happens first. Andre needs parentheses: `(quiz_1 + quiz_2) / 2`. With `"90"` the program would crash, because you can't divide a string.
+
+**Level 3 Example**
+
+The program prints `125.0`. Python evaluates `/` before `+` because of operator precedence, so it first calculates `quiz_2 / 2`, which is `45.0`, and then adds `80`. To get the average, Andre should use parentheses to add first and then divide: `(quiz_1 + quiz_2) / 2`. Whatever is inside parentheses is evaluated first, so the program adds the scores to get `170` and then divides by `2` to get `85.0`.
+
+If `quiz_2` held the string `"90"`, the program would crash with a `TypeError` on the `average` line. A value's data type decides which operators work on it, and `/` works only on numbers, so Python cannot divide the string `"90"` by `2`, even though the string's characters look like a number.
+
+## 1.3 Functions
 
 <!-- key-terms-from: 3-functions.md -->
 
@@ -125,7 +175,34 @@ _By the end of the module:_
 - Explain why a function must be defined before the line that calls it runs, and why two functions can each have a variable with the same name.
 - Explain why assigning to a global variable inside a function raises `UnboundLocalError`, and say why passing values in and returning them out is preferred to `global`.
 
-## 1.4 — Conditional Statements
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the value a function call produces and explain how `return` and local scope determine which values can leave a function.
+
+**Question**
+
+Priya writes a function to calculate a 20% tip:
+
+```python
+def calculate_tip(bill):
+    tip = bill * 0.2
+    print(tip)
+
+dinner_tip = calculate_tip(50)
+print(f"Leave ${dinner_tip}")
+```
+
+Priya expected the last line to print `Leave $10.0`. What does the program actually print, and why? Priya then tries replacing the last line with `print(f"Leave ${tip}")`. What happens, and why? What change would make the original last line print `Leave $10.0`?
+
+**Level 2 Example**
+
+The program prints `10.0` and then `Leave $None` because the function prints the tip instead of returning it. Using `tip` outside the function gives a `NameError`. Priya should change `print(tip)` to `return tip`.
+
+**Level 3 Example**
+
+The program prints `10.0` and then `Leave $None`. Calling `calculate_tip(50)` runs the function body, so `tip` becomes `10.0` and `print(tip)` shows it in the Terminal. But `print` only shows a value to the person at the Terminal. The function has no `return` statement, so the call produces `None`, and `None` is what gets stored in `dinner_tip`. Writing `print(f"Leave ${tip}")` instead raises `NameError: name 'tip' is not defined`, because `tip` is a local variable. It exists only while `calculate_tip` is running, and it cannot be reached from the global scope. Since the rest of the program cannot reach a function's local variables, the only way to get a value out of a function is to return it. Changing `print(tip)` to `return tip` makes the call `calculate_tip(50)` resolve to `10.0`, so `dinner_tip` holds `10.0` and the last line prints `Leave $10.0`.
+
+## 1.4 Conditional Statements
 
 <!-- key-terms-from: 4-conditional-statements.md -->
 
@@ -151,7 +228,38 @@ _By the end of the module:_
 - Say when `if value is None:` is the right test instead of `if not value:`.
 - Replace an `if`/`else` that assigns one of two values with a conditional expression.
 
-## 1.5 — Loops
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict which branch of a conditional chain or a set of guard clauses runs and explain how the order of the conditions and an early `return` determine it.
+
+**Question**
+
+Jordan writes a function that turns a test score into a letter grade:
+
+```python
+def letter_grade(score):
+    if score >= 70:
+        return "C"
+    if score >= 80:
+        return "B"
+    if score >= 90:
+        return "A"
+    return "F"
+
+print(letter_grade(95))
+```
+
+Jordan expected `A`. What does the program print, and why? How should Jordan fix the function? Why does the last line, `return "F"`, not need an `if`?
+
+**Level 2 Example**
+
+The program prints `C` because `score >= 70` is checked first. Jordan should put `score >= 90` first and `score >= 70` last. The last line doesn't need an `if` because it runs when none of the others do.
+
+**Level 3 Example**
+
+The program prints `C`. Each `if` is a guard clause, and a `return` statement ends the function the moment it runs. So the first condition that is `True` decides the answer, and the conditions below it are never checked. `95 >= 70` is `True`, so the function returns `"C"` before it ever checks `score >= 80` or `score >= 90`. Jordan should put the narrowest condition first: `score >= 90`, then `score >= 80`, then `score >= 70`. Then a score of 95 meets `score >= 90` first and gets `"A"`, while a score of 75 fails the first two checks and still gets `"C"`. The last line needs no condition because the function only reaches it when every guard clause above it was `False`, which means the score must be below 70.
+
+## 1.5 Loops
 
 <!-- key-terms-from: 5-loops.md -->
 
@@ -180,7 +288,38 @@ _By the end of the module:_
 - Predict the output and the number of iterations of a nested loop.
 - Stop an infinite loop from the Terminal.
 
-## 1.6 — Inputs and Outputs
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the result a loop produces, explain how placing a variable inside or outside the loop determines that result, and justify the choice between a `for` loop and a `while` loop.
+
+**Question**
+
+Kiara writes a function that rolls a die many times and counts the sixes:
+
+```python
+import random
+
+def count_sixes(rolls):
+    for i in range(rolls):
+        sixes = 0
+        if random.randint(1, 6) == 6:
+            sixes += 1
+    print(f"{sixes} sixes in {rolls} rolls")
+
+count_sixes(100)
+```
+
+Kiara runs the program several times. The message always reports either 0 or 1 sixes, never anything close to the 16 or 17 sixes that 100 rolls usually produce. Why? How should Kiara fix the function? Next, Kiara wants a program that rolls until the first 6 and then reports how many rolls it took. Should Kiara use a `for` loop or a `while` loop, and why?
+
+**Level 2 Example**
+
+The count is reset to 0 every time the loop runs. Kiara should move `sixes = 0` above the `for` line. For rolling until a 6, Kiara should use a `while` loop.
+
+**Level 3 Example**
+
+A `for` loop runs its whole body once for every number in `range(100)`. `sixes = 0` is inside the body, so it runs at the start of every roll and throws away the count from all the rolls before. By the time the loop ends, `sixes` holds only the result of the last roll: `1` if the last roll was a 6 and `0` if it was not. Kiara should move `sixes = 0` above the `for` line. Then `sixes = 0` runs once, and `sixes += 1` adds to a running count that lasts across all 100 iterations. For rolling until the first 6, Kiara should use a `while` loop, because nobody knows in advance how many rolls it will take, and a `for` loop with `range()` needs the number of repetitions before the loop starts. Kiara could set a `rolls` counter to `0` before a `while True:` loop, add 1 to it on every roll, `break` when the roll is a 6, and print `rolls` after the loop.
+
+## 1.6 Inputs and Outputs
 
 <!-- key-terms-from: 6-inputs-outputs.md -->
 
@@ -214,7 +353,33 @@ _By the end of the module:_
 - Predict the `TypeError` from `"1" + 1` and fix it by converting one side.
 - Explain the difference between displaying a number with `:.2f` and changing it with `round()`.
 
-## 1.7 — Lists
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict how a program handles the value returned by `input()` and explain why that value must be cleaned, checked, and converted before it is used as a number.
+
+**Question**
+
+Luis writes this program:
+
+```python
+age = input("How old are you? ")
+if age >= 18:
+    print("You can vote!")
+else:
+    print("Not yet!")
+```
+
+Luis runs the program and types `21`. What happens, and why? How should Luis change the program so that typing `21` prints `You can vote!`, and typing `twenty` prints a message instead of crashing?
+
+**Level 2 Example**
+
+The program crashes with a `TypeError` because `age` is a string. Luis needs to convert it with `int()`, and check it with `isdigit()` first so that `twenty` doesn't crash.
+
+**Level 3 Example**
+
+The program crashes with `TypeError: '>=' not supported between instances of 'str' and 'int'`. `input()` always returns a string, so even though Luis typed `21`, `age` holds `"21"`. Python will not compare a string with a number, because it does not know whether Luis meant the text or the number. To fix the program, Luis has to convert `age` with `int()` before the comparison. But `int("twenty")` raises a `ValueError`, so Luis should check the string before converting it. I would write `age = input("How old are you? ").strip()` to remove stray spaces, then `if not age.isdigit():` print a message like `twenty is not a number`, and otherwise run `age = int(age)` before the `>= 18` comparison. Then `21` passes `isdigit()`, becomes the integer `21`, and prints `You can vote!`, while `twenty` fails `isdigit()` and gets a message instead of a crash.
+
+## 1.7 Lists
 
 <!-- key-terms-from: 7-lists.md -->
 
@@ -243,7 +408,36 @@ _By the end of the module:_
 - Explain when to use a tuple instead of a list, and predict the `TypeError` from changing one.
 - Unpack a list into several variables, including with `*rest`.
 
-## 1.8 — Dictionaries
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict how a function that receives a list affects the caller's list, explain the result in terms of references, and classify the function as pure or impure.
+
+**Question**
+
+Amara writes a function that adds a bonus score to a list of scores:
+
+```python
+def add_bonus(scores):
+    scores.append(100)
+    return scores
+
+original = [70, 85]
+with_bonus = add_bonus(original)
+print(original)
+print(with_bonus)
+```
+
+Amara expected `original` to still be `[70, 85]`. What do the two `print()` lines show, and why? Is `add_bonus` a pure function? How could Amara change `add_bonus` so that `original` stays `[70, 85]`?
+
+**Level 2 Example**
+
+Both lines print `[70, 85, 100]` because the function changed the original list. `add_bonus` is impure. Amara should make a copy of the list before appending.
+
+**Level 3 Example**
+
+Both lines print `[70, 85, 100]`. A variable does not hold a list, it holds a reference to the list. When Amara calls `add_bonus(original)`, the parameter `scores` receives a reference to the same list that `original` references. `scores.append(100)` mutates that one list in place, and `return scores` hands back the same reference, so `original`, `scores`, and `with_bonus` are three names for one list. `add_bonus` is impure because it has a side effect: it mutates the list it was given. To make it pure, Amara should copy the list and add to the copy, for example by writing `return [*scores, 100]`. Then `with_bonus` references a new list, `[70, 85, 100]`, and `original` still references the unchanged `[70, 85]`.
+
+## 1.8 Dictionaries
 
 <!-- key-terms-from: 8-dictionaries.md -->
 
@@ -273,7 +467,40 @@ _By the end of the module:_
 - Predict the effect of mutating a dictionary through a second variable, and copy a dictionary before changing it in a pure function.
 - Write a function that takes a dictionary and uses only the keys it needs.
 
-## 1.9 — Modules, Virtual Environments, and pytest
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the result of looking up a key in a dictionary and justify when to use bracket notation and when to use `.get()`, based on whether the key is guaranteed to exist.
+
+**Question**
+
+Tomas keeps track of how many copies of each book a small library has:
+
+```python
+library = {"Kindred": 2, "Beloved": 0}
+
+def copies_available(title):
+    return library[title]
+
+print(copies_available("Kindred"))
+print(copies_available("Sula"))
+```
+
+What does the program print, and why? How should Tomas change `copies_available` so that a book the library does not own is reported as having `0` copies? Tomas also has this loop elsewhere in the program. Should Tomas change `library[title]` to use `.get()` here as well? Why or why not?
+
+```python
+for title in library:
+    print(f"{title}: {library[title]} copies")
+```
+
+**Level 2 Example**
+
+The program prints `2` and then crashes with a `KeyError` because `"Sula"` isn't in the dictionary. Tomas should use `library.get(title, 0)`. The loop doesn't need `.get()` because the keys are already in the dictionary.
+
+**Level 3 Example**
+
+The program prints `2` and then crashes with `KeyError: 'Sula'`. Bracket notation requires the key to exist, and `"Sula"` is not one of the keys in `library`. Tomas should write `return library.get(title, 0)`. `.get()` returns the default value `0` when the key is missing, and `0` is also the right answer, because a book the library does not own has zero copies. The loop does not need `.get()`. A `for` loop over a dictionary visits only the keys that are in it, so every `title` the loop hands to `library[title]` is guaranteed to exist. Bracket notation is the right choice whenever the key is guaranteed to exist, and `.get()` is the right choice when the key might be missing.
+
+## 1.9 Modules, Virtual Environments, and pytest
 
 <!-- key-terms-from: 9-modules-environments-pytest.md -->
 
@@ -288,7 +515,7 @@ _By the end of the module:_
 - A **package** is a folder of modules that someone has published so that other people can install it and import it. `pytest` is a package.
 - A **library** is a collection of code written for other programs to use rather than to be run on its own. The standard library is Python's own library, and many packages, like `pytest`, are libraries too.
 - Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
-- A **virtual environment** is a private copy of Python and its packages for one project. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
+- A **virtual environment** is a folder that holds one project's private set of packages, together with a link to the Python installed on your computer. You create one with `python3 -m venv .venv` and turn it on with `source .venv/bin/activate`.
   - Installing a package inside an activated virtual environment installs it only there.
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
@@ -321,7 +548,40 @@ _By the end of the module:_
 - Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
 - Split the madlib program into a module for the story and a `main.py` for the input.
 
-## 1.10 — Reading Unfamiliar Code
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict what runs when one module imports another and explain how importing a file runs it and how the `if __name__ == "__main__":` guard controls what runs.
+
+**Question**
+
+Sofia has two files in the same folder:
+
+```python
+# greetings.py
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("test"))
+```
+
+```python
+# main.py
+from greetings import greet
+
+print(greet("Ada"))
+```
+
+Sofia runs `python3 main.py`. What prints, and why? Sofia wants the line `print(greet("test"))` to run only when `greetings.py` is the file being run with `python3`, and not when another file imports it. How should Sofia change `greetings.py`, and why does that change work?
+
+**Level 2 Example**
+
+The program prints `Hello, test!` and then `Hello, Ada!` because importing `greetings` runs it. Sofia should put the test `print` inside `if __name__ == "__main__":`.
+
+**Level 3 Example**
+
+The program prints `Hello, test!` and then `Hello, Ada!`. Importing a file runs it from top to bottom, so when the interpreter reaches `from greetings import greet` on the first line of `main.py`, it runs all of `greetings.py`. The `def` creates the `greet` function, and the `print` at the bottom prints `Hello, test!`. Only then does Python return to `main.py` and print `Hello, Ada!`. To fix it, Sofia should move the test line inside `if __name__ == "__main__":`. Python sets `__name__` for every file automatically: when `greetings.py` is imported, its `__name__` is `"greetings"`, and when it is the file run with `python3`, its `__name__` is `"__main__"`. So the condition is `True` only when `greetings.py` is the program being run, and `python3 main.py` prints only `Hello, Ada!`.
+
+## 1.10 Reading Unfamiliar Code
 
 <!-- key-terms-from: 10-reading-unfamiliar-code.md -->
 
@@ -349,7 +609,35 @@ _By the end of the module:_
 - Find a defect in a plausible, model-written function and describe it as a bug report: concrete input, actual output, expected output, and where.
 - Ask a model about code in tutor mode, using the AI policy's standing instruction.
 
-## 1.11 — Errors and Tracebacks
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict what an unfamiliar function returns for a specific input, justify why a function's name and docstring are not evidence that it works, and describe a defect as a bug report that names the input, the actual output, the expected output, and the line at fault.
+
+**Question**
+
+Malik asked a model for a function that counts vowels, and the model produced this:
+
+```python
+def count_vowels(word):
+    """Count the vowels in a word."""
+    count = 0
+    for letter in word:
+        if letter in "aeiou":
+            count += 1
+    return count
+```
+
+Malik reads it and decides, "The name and the docstring say it counts vowels, so it works." Predict what `count_vowels("Apple")` returns. Is Malik right? Explain why or why not, and write a bug report for the function.
+
+**Level 2 Example**
+
+`count_vowels("Apple")` returns `1` instead of `2` because it doesn't count the capital `A`, so Malik is wrong. Bug report: `count_vowels("Apple")` returns `1`, expected `2`.
+
+**Level 3 Example**
+
+`count_vowels("Apple")` returns `1`. The loop checks each letter with `letter in "aeiou"`, and that string contains only lowercase vowels, so the capital `A` fails the check and only the `e` gets counted. Malik is wrong. The name and the docstring tell me what the author intended, but only the body tells me what the function actually does, and a model writes a name and a docstring with the same confidence whether the body is right or wrong. The way to check is to predict the output for one specific input and then run the function. My bug report: "`count_vowels("Apple")` returns `1`. Expected `2`. The check on line 5, `if letter in "aeiou"`, skips uppercase vowels." Changing that check to `letter.lower() in "aeiou"` would fix the function.
+
+## 1.11 Errors and Tracebacks
 
 <!-- key-terms-from: 11-errors-tracebacks.md -->
 
@@ -378,7 +666,63 @@ _By the end of the module:_
 - Raise a `ValueError` or `TypeError` from a function that is handed a value it cannot work with.
 - Test that a function raises an error with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
 
-## 1.12 — First-Class Functions and Higher-Order Functions
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to read a traceback from the bottom up and explain which line raised the error, which line supplied the value that caused it, and why output printed before the crash still appeared.
+
+**Question**
+
+Nia's program has two files:
+
+```python
+# stats.py
+def average(scores):
+    return sum(scores) / len(scores)
+```
+
+```python
+# main.py
+from stats import average
+
+def report(name, scores):
+    print(f"{name}: {average(scores)}")
+
+def main():
+    report("Jamal", [90, 80])
+    report("Omar", [])
+
+main()
+```
+
+Running `python3 main.py` prints this:
+
+```
+Jamal: 85.0
+Traceback (most recent call last):
+  File "/Users/nia/mod-1/main.py", line 10, in <module>
+    main()
+  File "/Users/nia/mod-1/main.py", line 8, in main
+    report("Omar", [])
+  File "/Users/nia/mod-1/main.py", line 4, in report
+    print(f"{name}: {average(scores)}")
+                     ^^^^^^^^^^^^^^^
+  File "/Users/nia/mod-1/stats.py", line 2, in average
+    return sum(scores) / len(scores)
+           ~~~~~~~~~~~~^~~~~~~~~~~~~
+ZeroDivisionError: division by zero
+```
+
+Which line raised the error, and which line supplied the value that caused it? Why did `Jamal: 85.0` print even though the program crashed?
+
+**Level 2 Example**
+
+The error is on line 2 of `stats.py`, because `len([])` is `0`. The empty list came from line 8 of `main.py`. `Jamal: 85.0` printed because the first call worked.
+
+**Level 3 Example**
+
+I read the traceback from the bottom up. The last line gives the error type and message, `ZeroDivisionError: division by zero`, and the entry just above it says that the error occurred on line 2 of `stats.py`, inside `average`. `scores` was an empty list, so `len(scores)` was `0`, and dividing by zero raises the error. The entries above that one show how the program got there: `average` was called from `report` on line 4 of `main.py`, and `report` was called on line 8 of `main.py` with `report("Omar", [])`. Line 8 is where the bad value came from, because that call handed an empty list to a function that divides by the list's length. `Jamal: 85.0` printed first because a runtime error happens only when the program reaches the broken line, and the call to `report` on line 7 ran and finished before line 8 was reached.
+
+## 1.12 First-Class Functions and Higher-Order Functions
 
 <!-- key-terms-from: 12-first-class-functions-hof.md -->
 
@@ -410,7 +754,37 @@ _By the end of the module:_
 - Explain what `@announce` above a definition does, in terms of `greet = announce(greet)`.
 - Change a wrapper so that it returns the wrapped function's return value, and so that it guards the call with a condition.
 
-## 1.13 — Comprehensions and Built-in Iteration
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict what a higher-order function does with a callback and explain the difference between passing a function and passing the value that a call to the function returns.
+
+**Question**
+
+Dev writes a higher-order function and a callback:
+
+```python
+def repeat(callback, times):
+    for i in range(times):
+        callback()
+
+def cheer():
+    print("Go team!")
+
+repeat(cheer, 3)
+repeat(cheer(), 3)
+```
+
+What does each of the last two lines print, and why? The second call raises an error, but `Go team!` still appears once before the error. Why?
+
+**Level 2 Example**
+
+The first call prints `Go team!` three times. The second call prints it once and then raises `TypeError: 'NoneType' object is not callable`, because you shouldn't put parentheses on a callback.
+
+**Level 3 Example**
+
+`repeat(cheer, 3)` prints `Go team!` three times. Writing `cheer` without parentheses passes the function itself, because a function is a value like any other. Inside `repeat`, the parameter `callback` refers to `cheer`, and `callback()` calls it once on each pass through the loop. `repeat(cheer(), 3)` behaves differently because Python resolves the arguments before it calls `repeat`. `cheer()` runs first and prints `Go team!` once, and since `cheer` has no `return` statement, the call produces `None`. So `repeat` receives `None` as its callback, and the first `callback()` inside the loop tries to call `None`, which raises `TypeError: 'NoneType' object is not callable`. The single `Go team!` shows that the callback ran too early, before `repeat` ever received it. A higher-order function calls its callback itself, so the callback should be passed without parentheses.
+
+## 1.13 Comprehensions and Built-in Iteration
 
 <!-- key-terms-from: 13-comprehensions-builtin-iteration.md -->
 
@@ -447,6 +821,35 @@ _By the end of the module:_
 - Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop to a comprehension while its tests stay green.
 - Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
 
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the results of `.sort()`, `sorted()`, and list comprehensions, explain the difference between a tool that changes a list in place and a tool that returns a new list, and rewrite a loop that builds a list as a comprehension.
+
+**Question**
+
+Imani has a list of prices and wants a new list with $2 taken off each price, ordered from cheapest to most expensive:
+
+```python
+prices = [12, 3, 8]
+
+discounted = []
+for price in prices:
+    discounted.append(price - 2)
+
+ordered = discounted.sort()
+print(ordered)
+```
+
+Imani expected `[1, 6, 10]`. What does the program print, and why? How should Imani fix it? Then rewrite the `for` loop as a list comprehension, and explain why a comprehension can do the loop's job.
+
+**Level 2 Example**
+
+The program prints `None` because `.sort()` doesn't return anything. Imani should use `sorted(discounted)` instead. The loop can be `discounted = [price - 2 for price in prices]`.
+
+**Level 3 Example**
+
+The program prints `None`. `.sort()` sorts a list in place, which means it changes `discounted` itself and returns nothing, so `ordered` gets `None`. The list in `discounted` is now `[1, 6, 10]`, but Imani never prints it. Imani should write `ordered = sorted(discounted)`, because `sorted()` returns a new sorted list and leaves `discounted` unchanged. Calling `discounted.sort()` on its own line and then printing `discounted` would also work. The loop can become `discounted = [price - 2 for price in prices]`. The loop transforms every value and collects the results in a new list, and that is exactly what a list comprehension does: for each `price` in `prices`, it computes `price - 2` and adds the result to a new list that has as many elements as the source. Combining the two steps, `ordered = sorted([price - 2 for price in prices])` does the whole job in one line.
+
 ## Case Study: CLI Task Manager
 
 **Key terms:** none new. The case study exercises the terms from lessons 1 to 13.
@@ -470,6 +873,28 @@ _By the end of the module:_
 - Write a list comprehension that selects the completed tasks, and use `all()` to check whether every task is complete.
 - Extend the application with a new feature that respects the existing separation of concerns.
 
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the effect of a change to the task manager and justify the application's separation of concerns by explaining what the change would bypass.
+
+**Question**
+
+In the task manager, `menu.py` imports `add_task` from `tasks.py` but does not import the `tasks` list. Carlos suggests a shortcut: add `from tasks import tasks` to `menu.py`, and replace the call to `add_task(description)` in the menu's option `1` branch with this line:
+
+```python
+tasks.append({"description": description, "is_complete": False})
+```
+
+Would Add Task still add tasks? What would happen if the user pressed Enter without typing a description, and why? Why did the author keep the `tasks` list out of `menu.py`?
+
+**Level 2 Example**
+
+Add Task would still work, because `menu.py` would have the same list. But a task with an empty description could be added, because the guard clause in `add_task()` would be skipped. Keeping `tasks` in `tasks.py` is separation of concerns.
+
+**Level 3 Example**
+
+Add Task would still add tasks, because `from tasks import tasks` gives `menu.py` a reference to the same list that `tasks.py` holds, and `.append()` mutates that one list. But Carlos's line skips everything inside `add_task()`. `add_task()` starts with the guard clause `if not description:`, and an empty string is falsy, so the guard clause refuses an empty description and prints `Task description cannot be empty.` Without that guard clause, pressing Enter without typing anything would add a task with a blank description to the list, and the user would no longer see the `Task "..." added!` confirmation either, because `add_task()` prints it. The author kept `tasks` out of `menu.py` so that only the functions in `tasks.py` can change the list. Each module has one concern: `menu.py` talks to the user, and `tasks.py` owns the data and the rules about it. A rule like "no empty descriptions" then lives in exactly one place, no other file can go around it, and anyone looking for the cause of a bad task only has to search `tasks.py`.
+
 ## Project: CLI Application
 
 **Key terms:** none new. The project applies the terms from lessons 1 to 13.
@@ -487,3 +912,19 @@ _By the end of the module:_
 - Validate every piece of user input so that the program never ends with a traceback.
 - Write a `README.md` that lets someone else set up and run the program, and a reflection that explains one concept in plain terms.
 - Describe the program well enough to critique generated additions to it in December.
+
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to compare ways of building an application and justify building, running, and committing one feature at a time, in terms of how quickly each way finds a bug and recovers from one.
+
+**Question**
+
+Zoe and Kwame each build the Shopping List app. Zoe writes all four features (add, remove, view, and total) in one evening and runs the program for the first time at the end. Choosing View crashes with `KeyError: 'qty'`. Kwame builds Add Item first, runs it with good and bad input, and commits it, then does the same for View, then Remove, then Total. Suppose Kwame made the same mistake while writing View. Which of the two would find the cause of the `KeyError` faster, and why? What can Kwame do if adding Total later breaks something that used to work?
+
+**Level 2 Example**
+
+Kwame would find it faster, because Kwame had only written one new feature since the program last worked. If Total breaks something, Kwame can go back to the last commit.
+
+**Level 3 Example**
+
+Kwame would find the cause faster. `KeyError: 'qty'` means some line reads the key `"qty"` from an item dictionary that does not have that key, probably because a different line stored the quantity under `"quantity"`. Kwame ran the program right after writing View, and Add Item had already been run and committed, so the mistake has to be in the few lines of View, or in how View reads the dictionaries that Add Item builds. Zoe ran the program for the first time after writing every feature, so the wrong key could be in any line of any feature that builds or reads an item, and Zoe has to search all of them. If Total breaks something that used to work, Kwame can compare the code with the last commit, or go back to it, because each of Kwame's commits records a version of the program that was known to work. Zoe has never had a version that was known to work, so Zoe has no such version to go back to.
