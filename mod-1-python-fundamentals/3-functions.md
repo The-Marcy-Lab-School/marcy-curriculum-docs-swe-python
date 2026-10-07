@@ -57,6 +57,8 @@ print(boiling_point_F) # Output: 212.0
 
 Suppose we wanted to also convert 0°C and 20°C to Fahrenheit in the same program. We could just copy and paste the code and swap out the numbers like this:
 
+{% code title="01_conversion.py" overflow="wrap" lineNumbers="true" %}
+
 ```python
 boiling_point_C = 100
 boiling_point_F = boiling_point_C * 9/5 + 32
@@ -70,6 +72,8 @@ best_temperature_C = 20
 best_temperature_F = best_temperature_C * 9/5 + 32
 print(best_temperature_F) # Output: 68.0
 ```
+
+{% endcode %}
 
 But this approach doesn't scale well.
 
@@ -118,18 +122,23 @@ convert_C_to_F(20)  # 68.0
 💡 A function can also carry a short description of what it does, written as a string on the first line of its body. It is called a **docstring**, and VS Code and the built-in `help()` function show it to whoever is about to call the function:
 
 ```python
-def print_sum_and_average(a, b, c, d):
-    """Print the sum and average of four numbers."""
-    sum = a + b + c + d
-    average = sum / 4
-    print(f"The sum of {a} + {b} + {c} + {d} is {sum} and the average is {average}")
+def convert_C_to_F(celsius):
+    """convert the given celsius temperature to fahrenheit"""
+    fahrenheit = celsius * 9/5 + 32
+    print(fahrenheit)
 ```
 
 You will see docstrings in nearly every library and every piece of generated code you read. Write one whenever a function's name alone does not say what it does.
 
 {% endhint %}
 
-**Challenge**: Refactor this highly repetitive code for printing a star rating for a book. First, what does each `print()` statement output? What should the function be called? What are the inputs that make each instance of code different (and what should those parameters be called)?
+**Challenge**: Open `02_book_rating.py`, which contains this highly repetitive code for printing a star rating for a book. Then, refactor it. Here are some questions to consider:
+
+- What does each `print()` statement output?
+- What should the function be called?
+- What are the inputs that make each instance of code different (and what should those parameters be called)?
+
+{% code title="02_book_rating.py" overflow="wrap" lineNumbers="true" %}
 
 ```py
 title1 = "The Great Gatsby"
@@ -147,6 +156,8 @@ score3 = 5
 stars3 = "*" * score3
 print(title3 + ": " + stars3)
 ```
+
+{% endcode %}
 
 **<details><summary>Answer</summary>**
 
@@ -202,6 +213,8 @@ Note that the order in which statements are executed in our code is not always t
 
 ### Parameters and Arguments
 
+{% code title="04_parameters_arguments.py" overflow="wrap" %}
+
 ```py
 def say_hello():
     print("hello")
@@ -210,11 +223,13 @@ say_hello() # hello
 say_hello() # hello
 say_hello() # hello
 ```
+{% endcode %}
 
 The function `say_hello` does the same thing. Every. Single. Time. It always prints `"hello"`. This function has no parameters.
 
 **Parameters** give functions more flexibility to change their behavior based on provided input values, called **arguments**.
 
+{% code title="04_parameters_arguments.py" overflow="wrap" lineNumbers="true" %}
 ```python
 # print_sum can add and print any two given values
 # x and y are parameters that reference the values provided when the function is called.
@@ -227,6 +242,7 @@ print_sum(5, 3)
 # This time, 10 and 2 are the arguments. 12 is printed
 print_sum(10, 2)
 ```
+{% endcode %}
 
 Some things to remember:
 
@@ -263,13 +279,11 @@ The second call never gets inside the function at all. Python checks that the _n
 
 {% endhint %}
 
-**Challenge:** Refactor this function so that it can print any name and hobby.
+**Challenge:** Refactor the `say_hello` function so that it can print any name and hobby in a message.
 
 ```python
-def say_hello():
-    print("Hi, my name is Ben. I like to code!")
-
-say_hello()
+say_hello('Ben', 'code')
+# Output: Hi, my name is Ben. I like to code!
 ```
 
 Test your code by invoking the function with various inputs. What happens when no input is provided?
@@ -305,11 +319,11 @@ A `return` statement does two things:
 def add(x, y):
     return x + y
 
-# The value of 5 + 3 is returned, resolving to `sum = 8`
-sum = add(5, 3)
+# The value of 5 + 3 is returned, resolving to `result = 8`
+result = add(5, 3)
 
 # We can now use the computed value outside of the function
-print(sum)
+print(result)
 ```
 
 **Predict, then run.** What does it print?
@@ -320,7 +334,7 @@ print(add(12, add(5, 3)))
 
 **<details><summary>Answer</summary>**
 
-The output is `20`. The function calls are evaluated (a.ka.a "resolve") in this order:
+The output is `20`. The function calls are evaluated (a.k.a "resolve") in this order:
 
 - `add(5, 3)` resolves to `8`
 - `add(12, 8)` resolves to `20`
@@ -379,7 +393,7 @@ say_hello(hobby="play the bass", name="Gonzalo")
 
 You may recall seeing keyword arguments in chapter 1.1. `print("a", "b", sep="-")` passes `"a"` and `"b"` by position and `sep` (separator) by keyword. `sep` has a default value of a single space, which is why you never had to write it before.
 
-**Challenge:** Which of these calls work, and what do they print? Which one crashes, and why?
+**Predict:** Which of these calls work, and what do they print? Which one crashes, and why?
 
 ```python
 def make_greeting(name, punctuation="!"):
@@ -435,6 +449,8 @@ This is how `print()` accepts any number of values. Run `help(print)` and, just 
 
 For example, a variable assigned in the **scope** of a function can only be referenced within that function. It is not reachable outside of the function.
 
+{% code title="07_scope.py" overflow="wrap" lineNumbers="true" %}
+
 ```python
 def print_x():
     # x is reachable anywhere in this function
@@ -446,6 +462,8 @@ print_x()
 
 print(x)  # NameError: name 'x' is not defined
 ```
+
+{% endcode %}
 
 Variables can be assigned at the following levels of scope, listed from the least reachability to the most reachability:
 
@@ -459,11 +477,11 @@ Scopes can contain other scopes. For example, a file can contain a function and 
 # my_name is global. Reachable anywhere in this file.
 my_name = 'Jayson'
 
-def say_hi():
+def greet():
     # `my_name` is reachable anywhere within this file, even in lower scopes like in this function
     print(f"Hi, my name is {my_name}")
 
-say_hi() # prints "Hi, my name is Jayson"
+greet() # prints "Hi, my name is Jayson"
 
 def greet_friend(friend):
     # Parameters like `friend` are local. Reachable anywhere in this function.
@@ -486,7 +504,7 @@ greet_friend('Jane')
 ```
 
 {% hint style="warning" %}
-**Predict, then run.** Add this line to the very bottom of the file above. What happens?
+**Predict, then run.** What happens if we add this line to the very bottom of the code above?
 
 ```python
 print(message, my_name)
