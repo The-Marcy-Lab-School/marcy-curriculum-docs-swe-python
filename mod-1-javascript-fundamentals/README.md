@@ -1,1 +1,0 @@
-# Mod 1 - JavaScript Fundamentals
