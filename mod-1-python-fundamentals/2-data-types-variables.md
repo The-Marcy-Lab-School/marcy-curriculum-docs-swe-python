@@ -5,23 +5,29 @@
 - [Key Terms](#key-terms)
 - [Computation is All About Data](#computation-is-all-about-data)
 - [Data Types](#data-types)
-- [Operators](#operators)
-  - [Resolution Order of Operations](#resolution-order-of-operations)
-- [Variables](#variables)
+- [Variables Store Data](#variables-store-data)
   - [Using Variables: Assign, Reassign, Reference](#using-variables-assign-reassign-reference)
+  - [Reassign Using the Current Value](#reassign-using-the-current-value)
   - [Naming Conventions](#naming-conventions)
-- [Operators in Depth](#operators-in-depth)
-  - [Arithmetic Operators](#arithmetic-operators)
-  - [Comparison (Relational) Operators](#comparison-relational-operators)
-  - [Logical Operators](#logical-operators)
-  - [Membership and Identity Operators](#membership-and-identity-operators)
-  - [Assignment Operators](#assignment-operators)
-  - [The Conditional Expression](#the-conditional-expression)
+- [Operators](#operators)
+  - [Know Your Operators](#know-your-operators)
+  - [Operator Type Errors](#operator-type-errors)
+  - [Resolution Order of Operations](#resolution-order-of-operations)
+  - [Operators in Depth](#operators-in-depth)
+    - [Arithmetic Operators](#arithmetic-operators)
+    - [Comparison (Relational) Operators](#comparison-relational-operators)
+    - [Logical Operators](#logical-operators)
+    - [Membership and Identity Operators](#membership-and-identity-operators)
+    - [Assignment Operators](#assignment-operators)
+    - [The Conditional Expression](#the-conditional-expression)
 
 ## Key Terms
 
 - **State** refers to the data stored by a program at a point in time.
-- **Data types** are categories of values in Python. There are 5 basic types (`str`, `int`, `float`, `bool`, `None`) and 3 types that hold other data or code (`list`, `dict`, and functions). Knowing the type of a value helps determines how you can use that value. Choosing the right type to represent your data is essential.
+- **Data types** are categories of values in Python. There are 5 basic types (`str`, `int`, `float`, `bool`, `None`) and 3 types that hold other data or code (`list`, `dict`, and functions). Knowing the type of a value helps determine how you can use that value. Choosing the right type to represent your data is essential.
+- **Variables** are named containers for data. You can **assign**, **reference** and **reassign** variables to store and update information in your program.
+  - A variable is created the first time it is **assigned**. Names in `ALL_CAPS` are a signal to readers that a value is a constant and should not be reassigned.
+- **`snake_case`** is the Python convention for naming variables and functions: lowercase words joined by underscores, like `days_in_each_month`.
 - **Operators** are symbols (e.g. `+`, `>=`, `and`) that generate new data from existing values.
   - **Arithmetic operators** (`+`, `-`, `*`, `/`, `//`, `%`, `**`) calculate a new value from numbers.
   - **Comparison operators** (`==`, `!=`, `<`, `>`, `<=`, `>=`) compare two values and produce a boolean.
@@ -30,9 +36,6 @@
   - **Identity operators** (`is`, `is not`) check whether two names refer to the very same object.
   - **Assignment operators** (`=`, `+=`, `-=`, and the rest) store a value in a variable.
 - **Operator precedence** is the order in which Python evaluates the operators in an expression, such as multiplication before addition. Parentheses change that order: whatever is inside them is evaluated first.
-- **Variables** are named containers for data. You can reference and reassign variables to store and update information in your program.
-  - A variable is created the first time it is assigned. Names in `ALL_CAPS` are a signal to readers that a value is a constant and should not be reassigned.
-- **`snake_case`** is the Python convention for naming variables and functions: lowercase words joined by underscores, like `days_in_each_month`.
 
 ## Computation is All About Data
 
@@ -106,34 +109,328 @@ Here are some examples of each of the other three:
 
 </details>
 
-## Operators
+## Variables Store Data
 
-Each data types is a different option that a programmer has to represent information. For example, you could choose to represent the state of a light switch with the strings `"on"` and `"off"` or you could use booleans `True` and `False`.
+Practically every piece of data in a program is going to be "stored" in one way or another. Variables are the first way that we learn how to "store" values in a program.
 
-How you make that decision almost entirely depends on the kinds of **operators** that you can use with each data type. Operators are used to create expressions that generate new data. However, you must learn how each data type interacts with each operator to avoid `TypeError`s
+A **Variable** is a named container for data, kind of like storing something in a locker with your name on it. Storing data in a named variable lets you retrieve and use that data anywhere later in the program as long as the program is running.
+
+Consider the two approaches below to produce the same result. The first does not use variables while the second does. What are the tradeoffs of each approach?
+
+**Approach 1: No Variables**
 
 ```python
-5 + 2               # the value 7 is created
-"hello" + " world"  # the value "hello world" is created
-
-5 * 2               # the value 10 is created
-"hello" * "world"   # TypeError: can't multiply sequence by non-int of type 'str'
+print("Story time!")
+print("This is a story about Ralph.")
+print("Ralph is a 22-year-old student at Marcy Lab School.")
+print("Every day, Ralph takes the D train from The Bronx to Marcy Lab School.")
+print("Ralph spends his day coding.")
+print("At the end of the day, Ralph heads home on the D train back to The Bronx")
+print("At home, Ralph practices coding some more before bed.")
+print("The end")
 ```
 
-In most cases, Python uses operators in ways that are predictable. Sometimes however, Python will do something unexpected. For now, you don't need to memorize all of these rules but be aware that there is a concrete and reproduce-able explanation for every unexpected behavior.
+**Approach 2: Variables**
 
-**Challenge:** Can you predict what each expression will produce? Some of these get a bit weird.
+```python
+name = "Ralph"
+age = 22
+school = "Marcy Lab School"
+train = "D"
+pronoun = "his"
+subject = "coding"
+borough = "The Bronx"
+
+print("Story time!")
+print(f"This is a story about {name}.")
+print(f"{name} is a {age}-year-old student at {school}.")
+print(f"Every day, {name} takes the {train} train from {borough} to {school}.")
+print(f"{name} spends {pronoun} day {subject}.")
+print(f"At the end of the day, {name} heads home on the {train} train back to {borough}")
+print(f"At home, {name} practices {subject} some more before bed.")
+print("The end")
+```
+
+**<details><summary>Which approach is easier to read?</summary>**
+
+The first approach can be read directly from the print statements and requires fewer lines of code.
+
+The second one requires you to first remember what each variable stores and then look back at the values of each variable as you read. Well-chosen variable names can help with this.
+
+</details>
+
+**<details><summary>Which approach is easier to maintain as a programmer if we were to change the protagonist from `"Ralph"` to `"Maya"`?</summary>**
+
+We would need to change it in 6 places in the first program but only 1 in the second program.
+
+Variables make it simpler to maintain our code by avoiding having to repeat the same value over and over again. Instead, we store the value once and use it as many times as we like.
+
+</details>
+
+### Using Variables: Assign, Reassign, Reference
+
+There are three things we can do with variables, each with "technical" language that we use to talk about them:
+
+1. **Assign** a variable by giving it a value with the `=` operator. The first time you do this creates the variable in memory.
+
+   ```python
+   name = "Ralph"
+   age = 22
+   school = "Marcy Lab School"
+   train = "D"
+   pronoun = "his"
+   subject = "coding"
+   borough = "The Bronx"
+   ```
+
+   _Note: Variables can be assigned any kind of data!_
+
+2. **Reference** the value held by the variable by writing the variable's name. Variable references are expressions.
+
+   ```python
+   print("Story time!")
+   print(f"This is a story about {name}.")
+   print(f"{name} is a {age}-year-old student at {school}.")
+   print(f"Every day, {name} takes the {train} train from {borough} to {school}.")
+   print(f"{name} spends {pronoun} day {subject}.")
+   print(f"At the end of the day, {name} heads home on the {train} train back to {borough}")
+   print(f"At home, {name} practices {subject} some more before bed.")
+   print("The end")
+   ```
+
+3. **Reassign** a new value to a variable by using the `=` operator again. Reassigning a variable changes the value on all _future_ references; it doesn't change any references to that variable before the change.
+
+   ```python
+   print("Story time!")
+   print(f"This is a story about {name}.")
+   print(f"{name} is a {age}-year-old student at {school}.")
+   print(f"Every day, {name} takes the {train} train from {borough} to {school}.")
+   print(f"{name} spends {pronoun} day {subject}.")
+
+   # reassigning train changes its value on all future references
+   train = "2"
+   print(f"At the end of the day, {name} heads home on the {train} train back to {borough}")
+   # output: At the end of the day, Ralph heads home on the 2 train back to The Bronx
+
+   print(f"At home, {name} practices {subject} some more before bed.")
+   print("The end")
+   ```
+
+### Reassign Using the Current Value
+
+When using the **assignment operator** `=`, whatever is on the right side of the operator resolves first and then is assigned to the variable. We can even reference the _current_ value of a variable to _reassign_ it a new value.
+
+**Predict, then Run**: What is the output of the code below?
+
+```py
+count = 1
+print(f"count is now {count}")
+count = count * 3
+print(f"count is now {count}")
+```
+
+**<details><summary>Answer</summary>**
+
+```
+count is now 1
+count is now 3
+```
+
+The right side, `count * 3`, uses the current value of `count`, which is `1`, so it evaluates to `3`. The statement then becomes `count = 3`.
+
+</details>
+
+The same result can be achieved using the **augmented assignment** operators `+=`, `-=`, `/=` and `*=` (there are a few more as well but these are the common ones).
+
+The operator `var *= val` is the same as `var = var * val`:
+
+```py
+count = 1
+print(f"count is now {count}")
+count *= 3
+print(f"count is now {count}")
+```
+
+**Predict, then Run**: What is the output of the code below?
+
+```py
+count = 1
+count += 5
+count *= 2
+count /= 3
+print(count)
+```
+
+**<details><summary>Answer</summary>**
+
+`((1 + 5) * 2) / 3` gives us `4.0`
+
+</details>
+
+### Naming Conventions
+
+Variables should be named using `snake_case`, lowercase words joined by underscores, and describe the data they hold for the best readability.
+
+```py
+# Bad: Unclear what the data is
+numbers = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+# Good: easy to understand the data in the variable
+days_in_each_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+# Bad: descriptive but difficult to read
+daysineachmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+# Not Pythonic: readable but not conventional in Python
+daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+```
+
+A variable whose value should never change is called a **constant**, and its name is written in `ALL_CAPS`. Every Python programmer reads that as "do not reassign me". But `ALL_CAPS` is only a convention. Python itself doesn't enforce it, so reassigning a constant raises no error, and nothing warns you if you do it by accident.
+
+```python
+# Good: a constant. The name tells the reader it will never change.
+MAX_GUESSES = 5
+
+# This is still possible though so always be careful!
+MAX_GUESSES = 10
+```
+
+## Operators
+
+Suppose we had a variable to store the state of a light switch called `is_on`. What data type would you use?
+
+```py
+# Strings?
+is_on = "Yes"
+is_on = "No"
+# Booleans?
+is_on = True
+is_on = False
+```
+
+What about storing a `phone_number` value?
+
+```py
+# Number?
+phone_number = 7185551234
+# String?
+phone_number = "718-555-1234"
+```
+
+**<details><summary>Answer</summary>**
+
+`is_on` should be a boolean because it represents something with only two possible states. Strings also make typos hard to catch. If you write `"yes"` when you meant `"Yes"`, a check like `is_on == "Yes"` is quietly `False`, and the program carries on with the wrong answer. A typo in a boolean, such as `true` instead of `True`, stops the program with a `NameError`, so you find the mistake right away.
+
+`phone_number` should be a string because it is used more like a unique identifier (like an email) than it is as a number that you would do math with.
+
+</details>
+
+How you make that decision depends mostly on what kinds of **operators** you intend to use with the value. Operators are symbols or keywords (e.g. `+`, `>`, `and`, `not`) that produce a value. They are used in a variety of expressions.
+
+- We use numbers when we want to use **arithmetic operators** (`+`, `-`, `*`, `/`, etc...)
+  ```py
+  celsius = 100.0
+  fahrenheit = celsius * 9/5 + 32
+  print(f"{celsius}°C is {fahrenheit}°F")
+  # Output: 100.0°C is 212.0°F
+  ```
+- We use booleans when we want to use **logical operators** (`and`, `or`, `not`):
+  ```py
+  is_on = True
+  has_power = False
+  generator_is_running = True
+
+  there_is_light = is_on and (has_power or generator_is_running)
+  # True and (False or True) -> True and True -> True
+
+  print(f"The lights are on: {there_is_light}")
+  # Output: The lights are on: True
+  ```
+- We use strings when we want to do things like use the **membership operator**:
+  ```py
+  email = "ben@marcylabschool.org"
+  print(f"{email} is a Marcy email: {"@marcylabschool.org" in email}")
+  ```
+
+At the bottom of this chapter you can take a deep dive into all of the different kinds of operators. They are:
+
+- **Assignment operators** (`=`, `+=`, `-=`, and the rest) store a value in a variable.
+- **Arithmetic operators** (`+`, `-`, `*`, `/`, `//`, `%`, `**`) calculate a new value from numbers.
+- **Comparison operators** (`==`, `!=`, `<`, `>`, `<=`, `>=`) compare two values and produce a boolean.
+- **Logical operators** (`and`, `or`, `not`) combine or reverse booleans.
+- **Membership operators** (`in`, `not in`) check whether a value is inside a string, list, or dictionary.
+- **Identity operators** (`is`, `is not`) check whether two names refer to the very same object.
+
+### Know Your Operators
+
+In most cases, Python uses operators in ways that are predictable. Sometimes however, Python will do something unexpected.
+
+For example, if we decided to use strings for `is_on`, `has_power`, and `generator_is_running`, what would this program produce as output? And is it "right"?
+
+```py
+is_on = "Yes"
+has_power = "No"
+generator_is_running = "Yes"
+
+there_is_light = is_on and (has_power or generator_is_running)
+# "Yes" and ("No" or "Yes") -> "Yes" and "No" -> "No"
+
+print(f"The lights are on: {there_is_light}")
+# Output: The lights are on: No
+```
+
+The output is `"No"`, and this is NOT correct! The generator is running, so the lights should be on. The reason why isn't exactly obvious. Let's see:
+
+- Resolving the variables first gives us the expression `"Yes" and ("No" or "Yes")`. With booleans, this gave us `True`. With strings, the same rules hand back one of the strings themselves.
+- `or` checks its left side first. If the left side counts as `True`, `or` hands back the left side exactly as it is and never looks at the right side. Otherwise, `or` hands back the right side. Surprisingly, `bool("No")` is `True`, so `"No" or "Yes"` hands back `"No"`.
+
+  ```py
+  # Python3 REPL
+  >>> bool("No")
+  True
+  >>> "No" or "Yes"
+  'No'
+  ```
+
+  Python doesn't recognize `"No"` as a negative value. It just sees a string of text, and any string other than the empty string `""` counts as `True`.
+
+- `and` also checks its left side first. However, if the left side counts as `False`, `and` hands it back; otherwise `and` hands back the right side. `bool("Yes")` is `True`, so `"Yes" and "No"` hands back `"No"`.
+
+  ```py
+  # Python3 REPL
+  >>> bool("Yes")
+  True
+  >>> "Yes" and "No"
+  'No'
+  ```
+
+If you were confused by this example, that is okay. The point of this example is simply to show you that
+
+1. Booleans are the right data type for this problem. With booleans, the logical operators `and` and `or` always produce `True` or `False`, so the result is a correct yes-or-no answer.
+2. **There is a concrete and reproduce-able explanation for every unexpected behavior** and it is your job to be aware of that and know how to break down an expression into its parts so you can figure out these rules for yourself. The `python3` REPL program is an excellent way to do that!
+
+**Challenge:** Can you predict what each expression will produce? Some of these get a bit weird. Use the `python3` REPL to test out these expressions once you've made a prediction and check out the **Answers** dropdown below if you are confused.
 
 ```python
 # What you would expect to happen usually happens
 10 + 5 * 2
-"B" > "A"
-2 > 1 and "B" > "A"
+False and True
+not False
+not not False
+not False and True
+not (False and True)
+"ana" in "banana"
+None is None
 
 # Slightly unexpected results
+"10" > "2"
+"a" > "B"
 8 / 2
 "3" * 5
 "5" + 5
+not 0
+not 1
+not 2
 True + True + False
 [1, 2] * 2
 
@@ -157,13 +454,41 @@ The fastest way to check a prediction like these is the **Python REPL**. Run `py
 # Result: 20
 # Why: Multiplication comes first, then addition -> 10 + (5 * 2)
 
-"B" > "A"
-# Result: True
-# Why: Strings are compared character by character, using each character's position in Python's character table. "B" comes after "A" in that table. Every uppercase letter comes before every lowercase letter, so "apple" > "Banana" is True too.
+False and True
+# Result: False
+# Why: `and` produces True only when both sides are True. The left side is already False, so the result is False.
 
-2 > 1 and "B" > "A"
+not False
 # Result: True
-# Why: Both expressions `2 > 1` and `"B" > "A"` are True
+# Why: `not` flips False to True and True to False.
+
+not not False
+# Result: False
+# Why: Python works from the inside out. The inner `not False` produces True, and the outer `not` flips that True back to False.
+
+not False and True
+# Result: True
+# Why: `not` is evaluated before `and`, so this is (not False) and True, which becomes True and True.
+
+not (False and True)
+# Result: True
+# Why: Parentheses go first. False and True produces False, and then `not` flips it to True. The result matches the line above only by coincidence: not True and False is False, but not (True and False) is True.
+
+"ana" in "banana"
+# Result: True
+# Why: For strings, `in` checks whether the left string appears anywhere inside the right string as a run of characters in a row: b-ana-na. "nab" in "banana" is False, because those letters never appear in that order.
+
+None is None
+# Result: True
+# Why: A Python program has only one None, so both sides are the very same object. That is why `x is None` is the standard way to check whether a variable holds None.
+
+"10" > "2"
+# Result: False
+# Why: Strings are compared character by character, using each character's position in Python's character table, even when the characters are digits. Python compares the first characters, "1" and "2", and "1" comes before "2" in that table. That decides the result, so Python never looks at the "0". To compare the numbers, compare 10 > 2 without the quotes.
+
+"a" > "B"
+# Result: True
+# Why: The same character-by-character rule applies. Every uppercase letter comes before every lowercase letter in Python's character table, so "a" comes after "B", even though a comes before b in the alphabet.
 
 8 / 2
 # Result: 4.0 (not 4)
@@ -177,6 +502,18 @@ The fastest way to check a prediction like these is the **Python REPL**. Run `py
 # Result: TypeError
 # Why: + adds two numbers (even different kinds, like 5 + 2.5) or joins two strings, but it has no meaning for a string and a number. Python won't guess whether you meant "55" or 10, so it stops with a TypeError.
 
+not 0
+# Result: True
+# Why: `not` first decides whether its value counts as True or False. The number 0 counts as False, so `not` flips it to True. Chapter 1.4 explains which values count as false.
+
+not 1
+# Result: False
+# Why: Every number other than 0 counts as True, so `not` flips 1 to False.
+
+not 2
+# Result: False
+# Why: 2 counts as True, just like 1 does. `not` never does arithmetic. It always produces True or False.
+
 True + True + False
 # Result: 2
 # Why: In Python, True evaluates to 1 and False evaluates to 0 in arithmetic contexts
@@ -187,7 +524,7 @@ True + True + False
 
 0 or "Python"
 # Result: "Python"
-# Why: `or` treats 0 as False and hands back the other value. Chapter 1.4 explains which values count as false.
+# Why: `or` hands back the left side if it counts as true, and otherwise hands back the right side. 0 counts as false, so you get "Python". Chapter 1.4 explains which values count as false.
 
 0.1 + 0.2 == 0.3
 # Result: False
@@ -199,10 +536,22 @@ True + True + False
 
 [1, 2] is [1, 2]
 # Result: False
-# Why: `is` checks for identity equality, not value equality. While they both contain the same values, Python creates two distinct list objects in memory.
+# Why: Each [1, 2] you type creates a brand-new list, so this line makes two separate lists that happen to hold the same values. `==` asks "are these equal?", which is why the line above is True. `is` asks "are these the very same list?", and two separate lists are not.
 ```
 
 </details>
+
+### Operator Type Errors
+
+Each type works with some operators and not others. If you use an operator on a type that doesn't support it, the program stops with a `TypeError`:
+
+```python
+5 + 2               # the value 7 is created
+"hello" + " world"  # the value "hello world" is created
+
+5 * 2               # the value 10 is created
+"hello" * "world"   # TypeError: can't multiply sequence by non-int of type 'str'
+```
 
 ### Resolution Order of Operations
 
@@ -247,7 +596,7 @@ With parentheses:
 3. `900 / 9` resolves to `100.0`.
 4. `celsius = 100.0` assigns the result.
 
-They differ right at step 1. Everything after that is downstream of which operator got to go first.
+They differ right at step 1. Without parentheses, Python multiplies first. With parentheses, Python subtracts first. Every later step works on the number that step 1 produced, so a different first step gives a different final answer.
 
 </details>
 
@@ -265,186 +614,13 @@ report = "hot" if temperature - 10 > 70 else "mild"
 3. `"hot" if True else "mild"` resolves to `"hot"`.
 4. `report = "hot"` assigns the result.
 
-If arithmetic did _not_ come before comparison, Python would have read it as `temperature - (10 > 70)`, which is `85 - False`, which is `85`, and then `"hot" if 85 else "mild"`. That gives the same answer here by luck, and a different one for other temperatures. Knowing the order is what lets you predict the result instead of hoping.
+If arithmetic did _not_ come before comparison, Python would have read the expression as `temperature - (10 > 70)`. That is `85 - False`, which is `85`. The conditional expression would then be checking `85` instead of `True` or `False`. Chapter 1.4 explains that any number other than 0 counts as true, so the result would still be `"hot"`, but only by luck. Try `temperature = 60`. The real order gives `50 > 70`, which is `False`, so the result is `"mild"`. The wrong order gives `60`, which counts as true, so the result is `"hot"`. Knowing the order is what lets you predict the result instead of hoping.
 
 </details>
 
-**Challenge**: what values are produced by the code snippet below?
+### Operators in Depth
 
-```python
-# Arithmetic
-print(5 + 2 * 3)
-print((5 + 2) * 3)
-print(2 ** 3 * 2)
-print(10 - 2 - 3)
-
-# Comparison
-print(5 + 2 > 6)
-print(5 + (2 > 6))
-
-# Logical
-print(True or False and False)
-print((True or False) and False)
-
-# Combined
-print(5 > 3 and 2 + 2 == 4)
-print((5 > 3 and 2 + 2) == 4)
-print("even" if 7 % 2 == 0 else "odd")
-```
-
-**<details><summary>Answers</summary>**
-
-```python
-# Arithmetic
-print(5 + 2 * 3)       # 11 -> Multiplication before addition
-print((5 + 2) * 3)     # 21 -> Parentheses override precedence
-print(2 ** 3 * 2)      # 16 -> Exponentiation before multiplication: (2 ** 3) * 2
-print(10 - 2 - 3)      # 5 -> Same level, left to right: (10 - 2) - 3
-
-# Comparison
-print(5 + 2 > 6)       # True -> Addition happens before comparison
-print(5 + (2 > 6))     # 5 -> Comparison happens first due to parentheses. False counts as 0 in arithmetic.
-
-# Logical
-print(True or False and False)     # True -> and has higher precedence than or
-print((True or False) and False)   # False -> Parentheses change the evaluation order
-
-# Combined
-print(5 > 3 and 2 + 2 == 4)        # True -> Arithmetic and comparison combined with logical
-print((5 > 3 and 2 + 2) == 4)      # True -> `True and 4` produces 4, and 4 == 4
-print("even" if 7 % 2 == 0 else "odd")  # odd -> % first, then ==, then the conditional expression chooses
-```
-
-</details>
-
-## Variables
-
-A **Variable** is a named container for data. By labeling our data, variables enable us to perform a series of computations in a program and "save" our progress along the way. Descriptive variable names dramatically improve the readability of our code.
-
-Consider the two approaches below to produce the same result. The first does not use variables while the second does. What are the tradeoffs of each approach?
-
-**Approach 1: No Variables**
-
-```python
-print(f"The sum of 4 + 3 + 2 + 1 is {4 + 3 + 2 + 1} and the average is {(4 + 3 + 2 + 1) / 4}")
-# Output: The sum of 4 + 3 + 2 + 1 is 10 and the average is 2.5
-```
-
-**Approach 2: Variables**
-
-```python
-sum = 4 + 3 + 2 + 1
-average = sum / 4
-message = f"The sum of 4 + 3 + 2 + 1 is {sum} and the average is {average}"
-print(message)
-# Output: The sum of 4 + 3 + 2 + 1 is 10 and the average is 2.5
-```
-
-**<details><summary>Tradeoffs of each approach</summary>**
-
-The first approach can be written in one line, however, it is very long. This makes it more difficult to read and predict the output. Additionally the `4 + 3 + 2 + 1` expression must be calculated twice since that calculation is not saved anywhere.
-
-With variables, each expression is nicely labeled for readability and comprehension. Additionally, the calculation for the sum is stored in the `sum` variable allowing us to use it to calculate the `average` and to help construct the `message`. However, more lines of code are used.
-
-In most cases, the benefits of readability, comprehension, and minimizing repetition outweigh the extra space taken up in a file.
-
-</details>
-
-### Using Variables: Assign, Reassign, Reference
-
-There are three things we can do with variables, each with "technical" language that we use to talk about them:
-
-1. Create a new variable by giving it a value ("**assign** the variable a value").
-2. Give the variable a new value to hold ("**reassign** the variable")
-3. Use the value held by the variable ("**reference** the variable")
-
-```python
-# Create the variable count and assign it the value 0
-count = 0
-
-# Reference the count variable to access its current value, 0
-print(f"count starts at {count}")
-
-# Reassign the variable to hold a new value: 1
-count = 1
-
-# Reference the count variable again to access its current value, 1
-print(f"count is now {count}")
-```
-
-We can even reference the _current_ value of a variable to _reassign_ it a new value:
-
-```python
-# The right side (count + 1) resolves before the assignment. count becomes 2
-count = count + 1
-
-# += is an "augmented assignment" operator. It is the same as `count = count + 1`. count becomes 3
-count += 1
-
-# It works with any amount. count becomes 6
-count += 3
-
-# You can use every other arithmetic operator with =. count becomes 12
-count *= 2
-
-print(f"count is now {count}")  # Output: count is now 12
-```
-
-**Predict, then Run**: What is the output of the code below?
-
-```py
-msg = 'hello'
-msg += 'world' + '!' * 3
-print(msg)
-```
-
-**<details><summary>Answer</summary>**
-
-```
-helloworld!!!
-```
-
-Be careful about adding strings together. If you don't put a space in between the words, then the words will be combined directly!
-
-The entire statement gets evaluated in this order:
-
-1. `'!' * 3` evaluates to `'!!!'`
-2. `'world' + '!!!'` evaluates to `'world!!!'`
-3. `msg += 'world!!!'` reassigns `msg` to `'helloworld!!!'`
-
-</details>
-
-### Naming Conventions
-
-Variables should be named using `snake_case`, lowercase words joined by underscores, and describe the data they hold for the best readability
-
-```py
-# Bad: Unclear what the data is
-numbers = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-# Good: easy to understand the data in the variable
-days_in_each_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-# Bad: descriptive but difficult to read
-daysineachmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-# Not Pythonic: readable but not conventional in Python
-daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-```
-
-A global variable whose value should never change is written in `ALL_CAPS`, and every Python programmer reads that as "do not reassign me". It is just a convention, so it is still possible to reassign them.
-
-```python
-# Good: a constant. The name tells the reader it will never change.
-MAX_GUESSES = 5
-
-# This is still possible though so always be careful!
-MAX_GUESSES = 10
-```
-
-## Operators in Depth
-
-### Arithmetic Operators
+#### Arithmetic Operators
 
 **Arithmetic Operators**: Perform standard mathematical calculations (such as addition, subtraction, division, and exponentiation) or sequence manipulation like string concatenation and list repetition.
 
@@ -476,7 +652,7 @@ MAX_GUESSES = 10
 
 ---
 
-### Comparison (Relational) Operators
+#### Comparison (Relational) Operators
 
 **Comparison (Relational) Operators**: Compare two values—checking for equality, inequality, or relative order—and return a Boolean value (`True` or `False`).
 
@@ -505,15 +681,15 @@ _Note: Comparing incompatible types (e.g., `5 < "hello"`) raises a `TypeError` i
 
 ---
 
-### Logical Operators
+#### Logical Operators
 
-**Logical Operators**: Combine boolean values (`and`, `or`, `not`) into a single `True` or `False`.
+**Logical Operators**: Combine or reverse conditions (`and`, `or`, `not`). With booleans, the result is always a single `True` or `False`.
 
-| Operator | Description | Compatible Data Types | Behavior & Return Value                        |
-| -------- | ----------- | --------------------- | ---------------------------------------------- |
-| `and`    | Logical AND | `bool`                | `True` only if both sides are `True`.          |
-| `or`     | Logical OR  | `bool`                | `True` if either side is `True`.               |
-| `not`    | Logical NOT | `bool`                | Flips `True` to `False` and `False` to `True`. |
+| Operator | Description | Compatible Data Types           | Behavior & Return Value                                                                                                                 |
+| -------- | ----------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `and`    | Logical AND | All data types (usually `bool`) | Hands back the left side if it counts as `False`, otherwise the right side.<br><br>With booleans: `True` only if both sides are `True`. |
+| `or`     | Logical OR  | All data types (usually `bool`) | Hands back the left side if it counts as `True`, otherwise the right side.<br><br>With booleans: `True` if either side is `True`.       |
+| `not`    | Logical NOT | All data types (usually `bool`) | Always produces a boolean: `True` if the value counts as `False`, and `False` if it counts as `True`.                                   |
 
 **Examples**:
 
@@ -524,11 +700,11 @@ not True            # False
 5 > 3 and 2 > 1     # True
 ```
 
-In chapter 1.4 you will learn that `and` and `or` also accept values that are not booleans, using a rule called truthiness. That is what the `0 or "Python"` line in the challenge above was doing.
+Whether a value that is not a boolean counts as `True` or `False` is decided by a rule called truthiness, which chapter 1.4 covers in full. The lights example and the `0 or "Python"` line in the challenge above both depend on that rule.
 
 ---
 
-### Membership and Identity Operators
+#### Membership and Identity Operators
 
 **Membership and Identity Operators**: Membership operators (`in`, `not in`) test whether a value exists inside a sequence or container; identity operators (`is`, `is not`) test whether two names refer to the very same object.
 
@@ -551,7 +727,7 @@ a is not b        # True
 
 ---
 
-### Assignment Operators
+#### Assignment Operators
 
 **Assignment Operators**: Assign values to variables (`=`) or update a variable's existing value by combining an operation with assignment (such as `+=` or `-=`).
 
@@ -567,7 +743,7 @@ x = 10                      # Simple assignment
 x += 5                      # Augmented assignment (add 5 to x and re-bind)
 ```
 
-### The Conditional Expression
+#### The Conditional Expression
 
 The **conditional expression** is best seen and then explained:
 

@@ -67,7 +67,7 @@ A program is a text file with instructions that a computer executes to accomplis
 💡 You can quickly turn any line into a comment by highlighting the line (or any range of lines) and pressing <kbd>Command+/</kbd> (Mac) or <kbd>Control+/</kbd>
 {% endhint %}
 
-**Expressions** are any piece of code that evaluates to a single value. the results of evaluating an operation (e.g. `5 + 5`) or a function call (e.g. `len("hi")`). A standalone values (e.g. the string literal `"hello world"`) is also considered an expression because it evaluates to itself.
+**Expressions** are any piece of code that evaluates to a single value, such as an operation (`5 + 5`) or a function call (`len("hi")`). A value on its own, such as the string `"hello world"`, is also an expression, because a value evaluates to itself.
 
 ```python
 5 + 5       # Evaluates to 10
@@ -76,7 +76,7 @@ len("hi")   # Evaluates to 2
 5           # Evaluates to 5
 ```
 
-Expressions on their own do nothing. Expressions become useful when used within statements.
+Python evaluates an expression on a line by itself, like `5 + 5`, and then throws the value away, so the program is no different afterward. To keep a value or act on it, you use the expression inside a statement, for example by storing the value in a variable.
 
 **Statements** are instructions that perform an action. They change the program in some way, often using expressions. For example, variable assignments alter the program's **state** (the data stored by a program at a point in time) and `if`/`else` statements change the control flow of the program:
 
@@ -88,10 +88,10 @@ instructor = "ben"
 mood = None
 
 # if statements change the control flow of a program (which line of code is executed next)
-if instructor != "ben":
-    mood = "sad"
-else:
+if instructor == "ben":
     mood = "happy"
+else:
+    mood = "sad"
 
 print(mood)
 ```
@@ -100,7 +100,10 @@ print(mood)
 
 **<details><summary>Q: In the statements above, what expressions can you see?</summary>**
 
-The `instructor` and `"ben"` expressions are combined using the `!=` operator to create an expression that returns the value `False`
+- Every value is an expression: `"ben"` and `None` on lines 2 and 3, and `"happy"` and `"sad"` inside the `if`/`else`.
+- Every variable name that the program reads is an expression too, like `mood` in `print(mood)`.
+- The biggest expression is the condition `instructor == "ben"`, which combines the `instructor` and `"ben"` expressions with the `==` operator.
+- `instructor` holds `"ben"`, so asking whether the two values are equal evaluates to `True`.
 
 </details>
 
@@ -117,7 +120,13 @@ The interpreter is installed on your computers and can be activated in the Termi
 python3 main.py
 ```
 
-**Question:** Why are we not seeing anything when we run this file?
+**Question:** Run `python3 main.py`. Only one word, `happy`, appears in the Terminal, even though the file contains several statements. Why?
+
+**<details><summary>Answer</summary>**
+
+Only the `print()` function sends anything to the Terminal. The other statements still ran, but they changed the program's state: they stored values in `instructor` and `mood`, and the `if`/`else` chose which of the two assignments to run. The state of a program stays hidden unless you print it.
+
+</details>
 
 ## Printing to the Terminal with `print()`
 
@@ -138,11 +147,32 @@ With `print(celsius)` we can verify whether or not we performed the calculation 
 
 **<details><summary>Q: So, does it work?</summary>**
 
-No. `print(celsius)` shows `194.22222222222223`, not `100.0`. Multiplication and division happen before subtraction, so Python computed `32 * 5 / 9` first and subtracted that from 212. The fix is parentheses: `(fahrenheit - 32) * 5 / 9`.
+No. The formula says to subtract 32 first and then multiply by 5/9, but Python does multiplication and division before subtraction. So Python computed `32 * 5 / 9` first and subtracted that result from 212, and `print(celsius)` shows `194.22222222222223` instead of `100.0`.
 
-Without the `print()`, this bug would have gone unnoticed, and that is exactly what `print()` is for.
+Parentheses are always evaluated first, so `(fahrenheit - 32) * 5 / 9` makes the subtraction happen first.
+
+Notice that Python never complained. A wrong formula is still valid code, so the program runs happily and stores the wrong number. The only way you'd find out is by looking at the value, and that is exactly what `print()` is for.
 
 </details>
+
+`print()` can also take several values at once, separated by commas. By default, `print()` puts a space between the values and starts a new line after the last one. Writing `sep=` inside the parentheses changes what goes between the values, and writing `end=` changes what goes after the last value:
+
+```python
+x = 10
+
+print("start")
+print("the value of x is", x)
+print("a", "b", "c", sep="-")
+print("no new line after this one", end="")
+print(" <- see?")
+```
+
+```
+start
+the value of x is 10
+a-b-c
+no new line after this one <- see?
+```
 
 ### Printing Values Inside Text with f-strings
 
@@ -166,7 +196,7 @@ Myth: "If our program doesn't print anything to the screen, then it isn't workin
 
 It is common to think that without `print()`, the program isn't doing anything. This is not the case!
 
-This program below runs a loop one hundred million times! Even if you don't see any output, notice that it takes a moment for it to finish running:
+This program below runs a loop one hundred million times! Run it and watch the Terminal:
 
 ```python
 x = 0
@@ -176,7 +206,7 @@ for i in range(100_000_000):
     x += 1
 ```
 
-Your computer IS executing the instructions you give it, but you just can't see the results because there is no `print()` statement. You can prove it by asking the Terminal to time the program for you:
+You won't see any output, but the prompt takes a few seconds to come back. A program that did nothing would finish instantly, so those seconds are your computer adding 1 to `x`, one hundred million times. Your computer IS executing the instructions you give it, but you just can't see the results because there is no `print()` statement. You can prove it by asking the Terminal to time the program for you:
 
 ```sh
 time python3 main.py
@@ -186,19 +216,7 @@ time python3 main.py
 python3 main.py  3.82s user 0.02s system 99% cpu 3.840 total
 ```
 
-Nothing was printed by the program, but the Terminal reports that it spent almost four seconds running it. (Your numbers will differ.)
-
-`print()` itself also has more to it than a single message. It can take several values at once, and you can control what goes between them and what comes after them:
-
-```python
-x = 10
-
-print("start")
-print("the value of x is", x)
-print("a", "b", "c", sep="-")
-print("no new line after this one", end="")
-print(" <- see?")
-```
+Nothing was printed, but the Terminal reports that the program ran for almost four seconds, and every one of those seconds went to the loop. (Your numbers will differ.)
 
 ## Control Flow
 
@@ -212,17 +230,19 @@ print("2")
 print("3")
 ```
 
-There exist tools in most programming languages like `if` statements, functions, and loops that let the programmer alter the program's control flow. For example, `if` statements can cause certain statements to be skipped.
+Most programming languages have tools like `if` statements, functions, and loops that let the programmer alter the program's control flow. For example, `if` statements can cause certain statements to be skipped.
+
+Below, `instructor` holds `"ben"`, so `instructor == "ben"` is `True`. The interpreter runs the indented line under `if` and skips the line under `else`.
 
 ```python
 instructor = "ben"
 mood = None
 
 # if statements change the "control flow" of a program (which line of code comes next)
-if instructor != "ben":
-    mood = "sad"  # this is skipped
-else:
+if instructor == "ben":
     mood = "happy"  # this line of code is executed next
+else:
+    mood = "sad"  # this is skipped
 ```
 
 A `for` loop can cause a statement (or multiple) to be executed more than once
@@ -243,7 +263,7 @@ We'll dive deeper into `if` statements and `for` loops later on but for now, the
 
 **Readability** is how easy it is for another engineer to read and understand your code (including future you).
 
-Indentation shows the scope of each line of code, and it is how the interpreter knows which lines belong to which block. Whenever a line ends with a colon `:`, the lines that belong to it must be indented underneath it. The convention, written down in PEP 8, is four spaces per level.
+Indentation is how the interpreter knows which lines belong to which block. A block is the group of lines that sit under a line ending in a colon `:`, like the body of a function or of an `if` statement. Whenever a line ends with a colon `:`, the lines that belong to it must be indented underneath it. The convention, written down in PEP 8, is four spaces per level.
 
 ```python
 def can_vote(age):
@@ -271,7 +291,11 @@ if age >= 18:
 IndentationError: expected an indented block after function definition on line 1
 ```
 
-Nothing runs. The interpreter cannot tell what belongs to `can_vote`, so it refuses the whole file before executing a single line. Indentation is not a style choice you make for your readers. It is part of the language, and getting it wrong is a syntax error.
+- Line 1 ends with a colon, so the interpreter expects the next line to be indented as the body of `can_vote`.
+- Line 2 isn't indented, so `can_vote` has no body at all.
+- Before running anything, the interpreter reads the whole file to check that its structure makes sense. Because the structure is broken, the interpreter stops right there and runs nothing, not even the lines above the mistake. (Put `print("start")` at the top of the file and run it again: `start` never appears, and the error message now names line 3, because every line moved down by one.)
+
+So indentation is part of the language itself, and getting it wrong is a syntax error.
 
 </details>
 {% endhint %}
@@ -307,6 +331,6 @@ def say_the_time(time):
 say_the_time(5)
 ```
 
-Four spaces per level, all the way down. Spaces around `<=`. No spaces inside the parentheses. No extra blank lines. And the function is renamed from `saythetime` to `say_the_time`, because that is how Python names things.
+The original indents each block by a different amount (1, 12, 2 and 4 spaces). Python accepts that, but a reader can't tell at a glance which `print` belongs to which branch. So use four spaces per level, all the way down. Add spaces around `<=` so the comparison stands out from the names on either side. Remove the spaces inside the parentheses and the stray blank line. Rename `saythetime` to `say_the_time`, because Python names use `snake_case` and the underscores let a reader see the three words.
 
 </details>

@@ -83,7 +83,10 @@ Maya is wrong. When Maya runs `python3 main.py`, the Python interpreter executes
 **Key terms**
 
 - **State** refers to the data stored by a program at a point in time.
-- **Data types** are categories of values in Python. There are 5 basic types (`str`, `int`, `float`, `bool`, `None`) and 3 types that hold other data or code (`list`, `dict`, and functions). Knowing the type of a value helps determines how you can use that value. Choosing the right type to represent your data is essential.
+- **Data types** are categories of values in Python. There are 5 basic types (`str`, `int`, `float`, `bool`, `None`) and 3 types that hold other data or code (`list`, `dict`, and functions). Knowing the type of a value helps determine how you can use that value. Choosing the right type to represent your data is essential.
+- **Variables** are named containers for data. You can **assign**, **reference** and **reassign** variables to store and update information in your program.
+  - A variable is created the first time it is **assigned**. Names in `ALL_CAPS` are a signal to readers that a value is a constant and should not be reassigned.
+- **`snake_case`** is the Python convention for naming variables and functions: lowercase words joined by underscores, like `days_in_each_month`.
 - **Operators** are symbols (e.g. `+`, `>=`, `and`) that generate new data from existing values.
   - **Arithmetic operators** (`+`, `-`, `*`, `/`, `//`, `%`, `**`) calculate a new value from numbers.
   - **Comparison operators** (`==`, `!=`, `<`, `>`, `<=`, `>=`) compare two values and produce a boolean.
@@ -92,9 +95,6 @@ Maya is wrong. When Maya runs `python3 main.py`, the Python interpreter executes
   - **Identity operators** (`is`, `is not`) check whether two names refer to the very same object.
   - **Assignment operators** (`=`, `+=`, `-=`, and the rest) store a value in a variable.
 - **Operator precedence** is the order in which Python evaluates the operators in an expression, such as multiplication before addition. Parentheses change that order: whatever is inside them is evaluated first.
-- **Variables** are named containers for data. You can reference and reassign variables to store and update information in your program.
-  - A variable is created the first time it is assigned. Names in `ALL_CAPS` are a signal to readers that a value is a constant and should not be reassigned.
-- **`snake_case`** is the Python convention for naming variables and functions: lowercase words joined by underscores, like `days_in_each_month`.
 
 **You will be able to…**
 

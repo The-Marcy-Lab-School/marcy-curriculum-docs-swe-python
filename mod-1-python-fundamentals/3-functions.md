@@ -41,7 +41,7 @@ print("Hello world")
 
 But what exactly is `print`?
 
-`print` is a **function**—a custom-made statement that is designed to do a particular task many times within a program. Since viewing a value within a program is such a common task, the creators of most programming languages provide a **"built-in" function** for printing so that you don't have to make one yourself.
+`print` is a **function**: a named block of code that does one particular task, which you can run as many times as you like. Since viewing a value within a program is such a common task, the creators of most programming languages provide a **"built-in" function** for printing so that you don't have to make one yourself.
 
 Let's look at how you can build functions ourselves.
 
@@ -79,12 +79,9 @@ But this approach doesn't scale well.
 
 **<details><summary>Q: What isn't great about this code?</summary>**
 
-It breaks the fundamental software engineering principle "DRY" which stands for "Don't Repeat Yourself". Repetition is a problem for two primary reasons:
+The formula `* 9/5 + 32` is written out three times. Suppose the formula has a bug, or you want to change how the result prints. You'd have to make the same change in three places, and if you miss one, two conversions are right and one is quietly wrong. Add a fourth temperature and you have a fourth copy to keep in sync.
 
-- If we need to change the format of our print statements, we need to change the format in 3 places.
-- If we need to fix a bug in the code, we need to fix it in 3 places.
-
-The solution is to create a function!
+Avoiding this kind of repetition is a principle of software engineering called **"DRY": Don't Repeat Yourself**. A function fixes the problem by holding the formula in one place, so a fix made there reaches every conversion.
 
 </details>
 
@@ -182,7 +179,7 @@ print_rating("1984", 5)
 
 Recall that the Python interpreter will execute code from the top of the file to the bottom.
 
-However, code within a function only runs when it is invoked (in other words, when the function is "called"). When that happens, the interpreter jumps up into the function and executes the first line.
+However, code within a function only runs when it is invoked (in other words, when the function is "called"). When that happens, the interpreter jumps up into the function and runs its lines from top to bottom. After the last line, the interpreter jumps back to where the call was and carries on from there.
 
 Look at the code below and **predict what will happen**:
 
@@ -207,7 +204,12 @@ B
 B
 ```
 
-Note that the order in which statements are executed in our code is not always top to bottom. Defining the function doesn't cause the code inside to run. We only execute the code inside of `print_B` when it is invoked a few lines later.
+- `A` prints first. Then the interpreter reaches the `def`.
+- A `def` statement stores the function under the name `print_B` but does not run the code inside it, so `B` is not printed yet.
+- `C` prints next.
+- Then each `print_B()` call jumps into the function, prints `B`, and comes back. There are two calls, so you get two `B`s.
+
+The order the statements run in is not always the order they are written.
 
 </details>
 
@@ -267,7 +269,10 @@ Both crash, with different messages.
 TypeError: can only concatenate str (not "int") to str
 ```
 
-The first call gets as far as `x + y` and then refuses: Python will not add a string and a number. Python checks types at the moment an operation runs, not at the moment the function is called.
+- The first call starts fine: `x` becomes `'hello'` and `y` becomes `5`.
+- Then the body runs `x + y`, which is now `'hello' + 5`. As you saw in chapter 1.2, `+` can't join a string and a number, so Python stops with a `TypeError`.
+
+Python checks types at the moment an operation runs, which is why the call itself got through.
 
 ```
 TypeError: print_sum() missing 2 required positional arguments: 'x' and 'y'
@@ -308,7 +313,7 @@ say_hello()
 
 ### Return Statements
 
-The functions above use `print` to print out a result to the console, but that result can't be used later in the program. If we want a function to produce a value that we can be used outside of the function, we add a `return` statement.
+The functions above use `print` to show a result in the Terminal. `print` puts the value on the screen for you to read, but the program keeps no copy of it, so the rest of the program can't use it. If we want a function to produce a value that the rest of the program can use, we add a `return` statement.
 
 A `return` statement does two things:
 
@@ -334,7 +339,7 @@ print(add(12, add(5, 3)))
 
 **<details><summary>Answer</summary>**
 
-The output is `20`. The function calls are evaluated (a.k.a "resolve") in this order:
+The output is `20`. Python has to know the value of every argument before it can call a function, so it works from the inside out. The function calls resolve in this order:
 
 - `add(5, 3)` resolves to `8`
 - `add(12, 8)` resolves to `20`
@@ -518,7 +523,7 @@ NameError: name 'message' is not defined
 
 Both greetings print first, because the program runs top to bottom and the error is on the last line. Then the interpreter looks for `message` in the global scope and cannot find it. `message` was local to `greet_friend`, and it stopped existing the moment `greet_friend` returned.
 
-Notice what did _not_ cause an error: `print(message)` inside `greet_friend`, after the `if`/`else`. The `if` block did not hide `message` from the rest of the function.
+Notice that `print(message)` inside `greet_friend`, after the `if`/`else`, worked fine. A variable assigned inside an `if` or `else` block belongs to the whole function, so the variable is still there after the block ends.
 
 </details>
 {% endhint %}
@@ -526,9 +531,9 @@ Notice what did _not_ cause an error: `print(message)` inside `greet_friend`, af
 When a variable that is out of scope is referenced, a `NameError` is raised.
 
 {% hint style="info" %}
-As a best practice, aim to declare variables in the lowest possible scope where the variable is needed (local rather than global).
+Any function in the file can read a global variable, so when a global holds the wrong value, you have to search the whole file for the cause. A local variable can only be touched by its own function, so there's only one place to look. For that reason, the best practice is to make each variable local to the one function that needs it, and to make it global only when several functions need it.
 
-For example, in the code snippet above, we must declare the `my_name` variable in the global scope since it is referenced in both the `say_hi` function and `greet_friend` function.
+For example, in the code snippet above, we must declare the `my_name` variable in the global scope since it is referenced in both the `greet` function and `greet_friend` function.
 
 `message`, on the other hand, is only needed inside `greet_friend`, so it lives there. Assigning it once in each branch of the `if`/`else` and printing it once afterward is the natural shape for this kind of function in Python, and it avoids repeating the `print` call.
 {% endhint %}
@@ -623,9 +628,18 @@ print(count)
 UnboundLocalError: cannot access local variable 'count' where it is not associated with a value
 ```
 
-The moment Python sees `count = ...` inside `increment`, it decides that `count` is a _local_ variable of `increment`. Then it tries to evaluate `count + 1` using that local variable, which has not been given a value yet. It never even looks at the global `count`.
+The rule: if a function assigns to a name anywhere inside it, that name is local to the whole function. `increment` assigns `count = ...`, so `count` is local to `increment`, even on the right side of that same line. Python evaluates the right side first, `count + 1`, and the local `count` has no value yet. So Python never reaches the global `count`, and it raises an `UnboundLocalError`, a close cousin of `NameError` for exactly this situation.
 
-You can force Python to use the global one by adding `global count` as the first line of the function. **Do not.** A function that reaches out and changes variables that live outside of it is a function whose behavior you cannot predict by reading it. Pass the value in as a parameter and `return` the new value instead. We'll see exactly why in the chapter on lists, where these functions get a name: impure.
+You can force Python to use the global one by adding `global count` as the first line of the function. **Do not.** If `increment` changes `count` directly, you can no longer tell what `count` holds by reading the lines around it. Any function anywhere in the file might have changed it, so tracking down a wrong value means reading every function. Pass the value in as a parameter and `return` the new value instead:
+
+```python
+def increment(count):
+    return count + 1
+
+count = increment(count)
+```
+
+Now the only line that changes `count` is the one you can see. We'll see exactly why this matters in the chapter on lists, where functions that change variables outside of themselves get a name: impure.
 
 </details>
 {% endhint %}

@@ -34,7 +34,9 @@ The first variable is the `weather` and then, depending on the weather, the vari
 
 ### `if/elif/else` statements
 
-To define the possible decisions that our program can make, we use `if`, `elif`, and `else` statements:
+To define the possible decisions that our program can make, we use `if`, `elif`, and `else` statements.
+
+For example, this function uses these statements to print a message
 
 ```python
 def is_it_hot(temp):
@@ -60,13 +62,14 @@ is_it_hot(60)
 # Output: Nah
 ```
 
-- `if` and `elif` statements require a boolean condition to evaluate to `True` in order to run. `elif` is short for "else if".
+- The condition after `if` or `elif` is usually a comparison like `temp > 100`. The code block under it runs only when the condition is `True`.
+- `elif` is short for "else if" and only runs if the previous conditions were `False` _and_ its own condition is `True`
 - There can be many `elif` statements, or none at all.
 - `else` statements do not require a condition and will run only when none of the other options do.
 
 ### Order Matters
 
-Only the first condition that is `True` will be executed. This means we have to be careful with the order in which we write our conditional statements.
+Python checks the conditions from top to bottom and runs the code block under the first condition that is `True`. As soon as one block runs, Python skips every remaining `elif` and `else` without checking them. So if a broad condition like `temp > 75` comes first, it catches 95 and 105 too, and the narrower conditions below it never get a turn.
 
 **Q: What happens if we rearrange the conditional statements like so?**
 
@@ -115,9 +118,9 @@ is_it_hot(105)
 
 ### Guard Clauses
 
-When working with a function that changes the value returned based on a condition, we can avoid using conditional chains and only use `if` statements called "guard clauses".
+When a function returns a different value depending on a condition, you can replace the `elif`/`else` chain with plain `if` statements. This works because a `return` statement ends the function the moment it runs. Once one `if` returns, none of the lines below it get a chance to run. An `if` statement used this way is called a **guard clause**.
 
-A **guard clause** is an `if` statement that returns before subsequent return statements have a chance to be executed. As a result, `elif` statements aren't necessary.
+Return the statements to the original order and replace each `print()` call with a `return` statement:
 
 ```python
 def is_it_hot(temp):
@@ -135,20 +138,20 @@ print(is_it_hot(105))
 
 **<details><summary>Answer</summary>**
 
-It prints `So Hot!`. A `return` statement ends the function the moment it runs, so once one guard clause returns, none of the lines below it get a chance to run. `105 > 100` is `True`, so the first guard clause returns `"So Hot!"` before `temp > 90` and `temp > 75` are ever checked.
+It prints `So Hot!`. `105 > 100` is `True`, so the first guard clause returns `"So Hot!"` before `temp > 90` and `temp > 75` are ever checked.
 
 Order matters for guard clauses just as it does for an `elif` chain. Start with the narrowest condition first, then move on to less restrictive conditions.
 </details>
 
 **<details><summary>Q: Why doesn't the last return statement need an `if` statement?</summary>**
 
-If the program makes it to the last `return "Nah"` statement, we can assume that the temperature is less than or equal to 75 because none of the other conditions were `True`.
+A `return` statement ends the function the moment it runs, so the program only reaches the last line when every `if` above it was `False`. If `temp > 75` was `False`, the temperature must be 75 or less. An `if temp <= 75:` on that line would check a condition that can only ever be `True`, so you can leave it off and just `return "Nah"`.
 
 </details>
 
 ### Truthy and Falsy Values
 
-Python has a function called `bool()` that converts any value to `True` or `False`, and it is the one conditions use without being asked. Values that are "non-values" or "empty values" are considered **falsy**. All other values are **truthy**:
+Python has a function called `bool()` that converts any value to `True` or `False`. An `if` statement calls `bool()` on its condition for you whenever the condition is not already a boolean. Values that are "non-values" or "empty values" are considered **falsy**. All other values are **truthy**:
 
 ```python
 print(bool(0))         # -> False
@@ -159,7 +162,7 @@ print(bool(100))       # -> True
 print(bool("hello"))   # -> True
 ```
 
-When an `if` is given something that is not already a boolean, it calls `bool()` on it for you. That makes a guard clause against empty input very short:
+Because an `if` calls `bool()` for you, `if not friend:` does the same job as `if friend == "":`, in fewer characters:
 
 ```python
 def greet_friend(friend):
@@ -171,9 +174,9 @@ print(greet_friend(""))      # Output: I can't say hi if I don't know your name!
 print(greet_friend("Jane"))  # Output: Hi, Jane! Nice to meet you.
 ```
 
-`not friend` is `True` when `friend` is the empty string, because `""` is falsy. You will see this shape, `if not something:`, in nearly every program that takes input.
+When `friend` is the empty string, `bool("")` is `False`, and `not` flips `False` to `True`. So `not friend` is `True`, and the guard clause returns the message. You will see this pattern, `if not my_variable:`, in nearly every program that takes input.
 
-One caution. `if not value:` cannot tell `None` apart from `0` or `""`, because all three are falsy. When the question you are asking is specifically "is this `None`?", write `if value is None:`. That is what the `is` operator from chapter 1.2 is for.
+One caution. `if not value:` cannot tell `None` apart from `0` or `""`, because all three are falsy. Suppose `score` is `None` until a player finishes a game. A player who finishes with a score of `0` also makes `not score` evaluate to `True`, and your program would treat that player as if they had never played. When the question you are asking is specifically "is this `None`?", write `if score is None:`. That is what the `is` operator from chapter 1.2 is for.
 
 {% hint style="warning" %}
 **Predict, then run.**
@@ -189,10 +192,31 @@ else:
 
 It prints `printed`.
 
-`"False"` is a string with five characters in it, and a non-empty string is truthy. What the characters spell has nothing to do with it. Only the boolean `False`, the number `0`, `None`, and empty things like `""` are falsy. If you ever compare user input to a boolean, remember that the user typed a string.
+`"False"` is a string with five characters in it, and a non-empty string is truthy. What the characters spell has nothing to do with it. Only the boolean `False`, the number `0`, `None`, and empty things like `""` are falsy.
+
+{% endhint %}
+
+This mistake often occurs when using user input (e.g. from the `input()` function) in a condition. You must remember that the user typed a string. A user who types `no` or `False` still gives you a non-empty string, so `if answer:` runs the `True` branch for them.
+
+```py
+answer = input("Yes or No?")
+if answer:
+    print("they said yes!")
+else:
+    print(":(")
+```
+
+Compare the string itself instead: `if answer == "yes":`.
+
+```py
+answer = input("Yes or No?")
+if answer == "Yes":
+    print("they said yes!")
+else:
+    print(":(")
+```
 
 </details>
-{% endhint %}
 
 ### Use Conditional Expressions To Simplify Conditionals
 
@@ -213,3 +237,5 @@ def is_this_even(num):
     message = "it is even!" if num % 2 == 0 else "it is odd!"
     print(message)
 ```
+
+Both versions print the same message. The conditional expression is easier to read because `message` is assigned on one line, with both possible values side by side. A reader does not have to scan two branches to find out what `message` can hold.
