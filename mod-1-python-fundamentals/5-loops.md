@@ -10,8 +10,9 @@
 - [Intro to Iteration](#intro-to-iteration)
 - [The `for` loop](#the-for-loop)
   - [For Loop Challenge:](#for-loop-challenge)
-- [While Loops and Infinite Loops](#while-loops-and-infinite-loops)
+- [While Loops](#while-loops)
   - [While Loop Challenge](#while-loop-challenge)
+  - [Break and Continue](#break-and-continue)
 - [Nested Loops](#nested-loops)
 
 ## Key Terms
@@ -202,16 +203,91 @@ Run it a few times. With 10 flips, the percentage jumps around a lot from run to
 
 </details>
 
-## While Loops and Infinite Loops
+## While Loops
 
-An **infinite loop** is one in which the condition is ALWAYS `True`. This will cause a program to run forever, either depleting resources or just causing the computer to stall while it waits for the program to end.
+A `for` loop runs a specified number of times. You provide it a range and it runs until that range runs out.
 
-Infinite loops are most often created using `while` loops which are best used to repeat a process an _unknown_ number of times.
+A `while` loop repeats its code block for as long as its condition is `True`. Think of it like an `if` statement that repeats itself. One of the most common use-cases for `while` loops is to create an infinitely prompting REPL program that takes in user input until they type a message like `"Exit"`:
 
-To ensure that a loop does not go on infinitely, we use these two statements:
+```py
+user_input = None # user hasn't typed in anything yet
+while (user_input != "Exit"):
+    user_input = input("type something and hit enter: ")
+    print(f"you typed: {user_input}")
 
-- `break` prematurely breaks out of a loop
-- `continue` prematurely goes to the next iteration of the loop
+print("Good bye!")
+```
+
+Before each pass, Python checks the condition (`user_input != "Exit"`). If the condition is `True`, the block runs again. If the condition is `False`, the loop ends and the program continues with the code after it. That makes `while` loops the right tool for repeating a process an _unknown_ number of times, like rolling a die _until_ you get a 6.
+
+```py
+import random
+
+roll = None
+roll_count = 0
+while (roll != 6):
+    roll = random.randint(1, 6)
+    roll_count += 1
+
+print(f"It took {roll_count} rolls to get a 6!")
+```
+
+### While Loop Challenge
+
+Write a number guessing game program in which the computer:
+
+1. Generates a random number from 1-10. This is the secret number.
+2. The user guesses a random number from 1-10 using the `input()` function
+3. If the guess is correct, print a winning message and end the program.
+4. If it is incorrect, guess again.
+5. If the user ever types `"Exit"`, end the program.
+
+**Bonus Features**
+
+1. Keep track of the guesses, and when the guess is correct, print how many guesses it took.
+2. Limit the computer to 5 guesses. If it guesses 5 times incorrectly, it loses! (you'll need to use `break` which is explained in the next section)
+
+**<details><summary>Check out the solution!</summary>**
+
+```python
+import random
+
+random_num = random.randint(1, 10)
+print("I'm thinking of a random number. Guess what it is!")
+
+# The while condition below checks guess before the first guess is made, so guess has to exist already.
+# Without this line, Python stops with NameError: name 'guess' is not defined.
+guess = None
+guesses = 0
+
+# As long as the guess doesn't match the random number above or "Exit"
+while guess != "Exit":
+    # Bonus feature 2: break will exit the loop early (see below for how break works)
+    if guesses == 5:
+        print("Out of guesses :(")
+        break
+
+    guess = input("What is your guess? ")
+    guesses += 1
+    if (guess == random_num):
+        print(f"{guess}! Got it!! And it only took you {guesses}!!!")
+    else:
+        print(f"That isn't it! Try again!")
+
+
+print("Thanks for playing!")
+```
+
+</details>
+
+### Break and Continue
+
+Two statements let you control a loop from inside its code block:
+
+- `break` ends the loop immediately, and the program continues with the first line after the loop. `break` is how you get out of a loop whose condition is always `True`.
+- `continue` skips the rest of the current pass and jumps back to the top of the loop for the next one. `continue` keeps the loop going, so it cannot get you out of an infinite loop.
+
+Here is another way to write the program that rolls until a 6 is rolled. For fun, it also prints a disappointed message `"Ehh"` if you roll a 1:
 
 ```python
 import random
@@ -221,8 +297,8 @@ while True:
     if roll == 6:
         print("A 6! Bye!")
         break  # <--- how is this different from return??
-    if roll % 2 == 1:
-        print(f"{roll} is odd. Skipping it.")
+    if roll == 1:
+        print("A 1?? Ehh.")
         continue
     print(f"{roll}? That's a great number!")
 
@@ -232,65 +308,14 @@ print("See you next time!")
 `random.randint(1, 6)` rolls a six-sided die. Nobody knows in advance how many rolls it will take to get a 6, which is exactly the job a `while` loop is for. `while True` is always true, so the only way out of this loop is the `break`.
 
 {% hint style="info" %}
-**Q: How is `break` different from `return`?** A `break` statement will exit the current loop and continue executing code that follows the loop. A `return` statement inside of a loop will exit the current loop AND the current function being executed.
+**Q: How is `break` different from `return`?** `break` ends the loop, and the program carries on with the first line after the loop. `return` ends the whole function the loop is inside, so any lines after the loop in that function never run. If the dice code above, including the last `print`, were the body of a function and used `return` instead of `break`, `See you next time!` would never print.
 {% endhint %}
 
 {% hint style="info" %}
-If you do end up in an infinite loop, `Control+C` in the Terminal stops the program. You will see a `KeyboardInterrupt` message. That is Python telling you that you interrupted it, not that anything is wrong with your computer.
+If the condition never becomes `False`, the loop never ends. This is called an **infinite loop**, and the program runs forever.
+
+If you do end up in an infinite loop, `Control+C` in the Terminal stops the program. You will see a `KeyboardInterrupt` message. `KeyboardInterrupt` is Python reporting that you stopped the program from the keyboard. Nothing is wrong with your computer.
 {% endhint %}
-
-### While Loop Challenge
-
-Write a program in which the computer plays a guessing game against itself:
-
-1. Generates a random number from 1-10. This is the secret number.
-2. Guesses a random number from 1-10 and prints the guess.
-3. If the guess is correct, print a message and end the program.
-4. If it is incorrect, guess again.
-
-**Bonus Features**
-
-1. Keep track of the guesses, and when the guess is correct, print how many guesses it took.
-2. Limit the computer to 5 guesses. If it guesses 5 times incorrectly, it loses!
-
-**<details><summary>Check out the solution!</summary>**
-
-```python
-import random
-
-random_num = random.randint(1, 10)
-print("I'm thinking of a random number. Let me guess what it is!")
-
-# We're going to pull out this `guess` value so we can check it on every loop
-guess = None
-
-# We're also going to keep track of remaining guesses
-guesses_remaining = 5
-
-# As long as the guess doesn't match the random number above
-while guess != random_num:
-    guess = random.randint(1, 10)
-    guesses_remaining -= 1
-
-    # If the guess matches, celebrate and exit the loop
-    if guess == random_num:
-        print(f"{guess}! Got it!! And with {guesses_remaining} guesses to spare!!!")
-        break
-
-    # Assuming we didn't exit the loop, break the bad news
-    print(f"{guess}? That's a great number! But not mine!")
-
-    # And do a final check to see if the game keeps going!
-    if guesses_remaining == 0:
-        print("Out of guesses :(")
-        break
-
-print("Thanks for playing!")
-```
-
-In chapter 1.6 you will learn to read what the user types, and you can come back and let a person make the guesses.
-
-</details>
 
 ## Nested Loops
 
