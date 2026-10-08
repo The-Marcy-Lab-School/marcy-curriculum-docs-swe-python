@@ -22,6 +22,10 @@ Specifically, three things carry over and must be actively protected rather than
 
 **The concept coverage.** Every idea taught in the original is taught in the conversion, unless a decision was made to drop it. A dropped idea is always a stated decision, never an omission.
 
+## Hidden answers
+
+When a hidden answer traces execution or reasoning through three or more steps, write one step per bullet. Each bullet keeps its own "so" or "because". Put the general lesson in a separate paragraph after the list.
+
 ## The review contract
 
 Ben reviews every converted document. His time is the constraint, so the goal is that he can scan a document, approve it or ask for changes, and move on. **After drafting or converting any document, produce a conversion report before saying the work is done.** Never skip this and never ask whether it is wanted.
