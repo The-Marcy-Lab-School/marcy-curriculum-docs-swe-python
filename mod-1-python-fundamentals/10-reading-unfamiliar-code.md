@@ -1,5 +1,9 @@
 # 1.10 Reading Unfamiliar Code
 
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/10-reading-unfamiliar-code/)
+{% endhint %}
+
 Every chapter so far has asked you to write code. This one asks you to read it. Specifically, to read code that somebody else wrote, that you have never seen before, and to come away knowing what it does and how it does it.
 
 This is not a break from learning to program. It is the single most common thing a working engineer does all day. Starting in Q2, the code you spend most of your time with will have been written by a teammate, by the author of a library you installed, or by an AI model, and your job will be to understand it well enough to change it, fix it, or reject it. This chapter gives you a method for that, and you will practice it on a program that uses only what you have learned so far, plus a couple of things you have not.

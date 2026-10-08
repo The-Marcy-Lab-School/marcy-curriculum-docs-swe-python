@@ -1,5 +1,9 @@
 # 1.6 Inputs and Outputs
 
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/06-inputs-and-outputs/)
+{% endhint %}
+
 A program takes data in, does something with it, and puts data out. In this lesson we'll learn the tools a command-line program uses for both ends of that: strings, which are what the user types and what the program prints; `print()` and f-strings, which put data out; and `input()` and type conversion, which bring data in.
 
 **Table of Contents:**

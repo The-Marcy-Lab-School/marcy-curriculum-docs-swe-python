@@ -1,5 +1,9 @@
 # 1.7 Lists
 
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/07-lists/)
+{% endhint %}
+
 **Table of Contents**
 
 - [Key Terms](#key-terms)

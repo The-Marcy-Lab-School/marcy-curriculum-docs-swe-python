@@ -1,5 +1,9 @@
 # 1.1 Intro to Programming
 
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/01-intro-to-programming/)
+{% endhint %}
+
 There are so many terms and concepts to learn about programming. In this lesson, we will learn the fundamental vocabulary and concepts that are shared by practically every programming language. You may see code with syntax that you don't understand and that is fine, you will dig deeper into that code's syntax in later lessons. For now, just focus on learning the vocabulary in the **Key Terms** section.
 
 **Table of Contents**

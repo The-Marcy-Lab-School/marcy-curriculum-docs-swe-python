@@ -1,5 +1,9 @@
 # 1.5 Loops
 
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/05-loops/)
+{% endhint %}
+
 **Table of Contents**:
 
 - [Key Terms](#key-terms)
@@ -24,33 +28,41 @@
 
 **Iteration** is the repetition of a process, getting closer to some result each time.
 
-You are assigned the task of flipping a coin 100 times and documenting the result of each. To do this you will:
+Picture this: you are assigned the task of rolling a 6-sided die 100 times and documenting the result of each.
 
-1. Gather your materials (pen, paper, a coin)
-2. Until you've flipped 100 times you will:
-   1. flip a coin
-   2. record the result by writing: `"flip number [flip number] was [heads|tails]"`
-3. Make sure to increase the `flip number` after each flip.
+```
+1. a 4 was rolled
+2. a 2 was rolled
+3. a 6 was rolled
+4. a 6 was rolled
+5. a 1 was rolled
+...
+```
+
+To do this you will:
+
+1. Gather your materials (pen, paper, a die)
+2. Until you've rolled 100 times you will:
+   1. roll the die
+   2. record the result by writing: `"[roll number]. a [roll result] was rolled"`
+3. Make sure to increase the `roll number` after each roll.
 
 Doing this by hand certainly would take a while. We can write code to likely do it faster:
 
 ```python
 import random
 
-def flip_coin():
-    return random.choice(["heads", "tails"])
-
-print(f"Flip number 1 was {flip_coin()}")
-print(f"Flip number 2 was {flip_coin()}")
-print(f"Flip number 3 was {flip_coin()}")
-print(f"Flip number 4 was {flip_coin()}")
-print(f"Flip number 5 was {flip_coin()}")
+print(f"1. a {random.randint(1, 6)} was rolled")
+print(f"2. a {random.randint(1, 6)} was rolled")
+print(f"3. a {random.randint(1, 6)} was rolled")
+print(f"4. a {random.randint(1, 6)} was rolled")
+print(f"5. a {random.randint(1, 6)} was rolled")
 # and so on until you reach 100! 🫠
 ```
 
-The first line, `import random`, loads a tool that comes with Python, and `random.choice(["heads", "tails"])` picks one of the two words at random. Chapter 1.9 explains how importing works. For now, it is a coin.
+The first line, `import random`, loads a tool that comes with Python, and `random.randint(0,6) returns a random integer between 1 and 6 (including 1 and 6). Chapter 1.9 explains how importing works but for now, just focus on what `random.randint(1, 6)` does.
 
-But even so, we have to manually update each number. What a pain! If only there was some way to do this more efficiently.
+The computer rolls faster than you do, but the program still needs one line per roll, with each roll number typed by hand. The program for 100 roll would be 100 nearly identical lines, and 1,000 rolls would mean 900 more. What a pain! If only there was some way to do this more efficiently.
 
 ## The `for` loop
 
@@ -65,33 +77,45 @@ Armed with this syntax, we can easily loop 100 times!
 
 ```python
 for i in range(100):
-    result = flip_coin()
-    print(f"Flip number {i} was {result}")
+    print(f"{i}. a {random.randint(1, 6)} was rolled")
 ```
 
-`range(100)` produces the numbers `0`, `1`, `2`, ... up to `99`, and `i` takes each one in turn. Each time through the loop, Python does these steps in order:
+`range(100)` produces the numbers `0`, `1`, `2`, ... up to `99`, and `i` is assigned each number one at a time, one number per loop: 100 numbers, 100 values of `i`, 100 loops.
+
+Each time through the loop, Python does these steps in order:
 
 1. Take the next number from the range and assign it to `i`
 2. Execute the code block
-3. **Go to 1**, until the range runs out
-
-{% hint style="info" %}
-Even in the most basic programming languages, the concept of the **GOTO** statement has existed. Programmers used to have to label a specific line with a name like `"StartLoop"` and then write a statement to `Go To StartLoop` if they wanted to repeat a portion of code. In high-level programming languages like Python, that is abstracted away for us by the `for` loop.
-{% endhint %}
+3. If the range has more numbers, go to step 1
+4. Otherwise, the loop ends and the program continues with the first line after the loop.
 
 {% hint style="warning" %}
 **Predict, then run.** How many lines does this print, and what is the first number and the last number?
 
 ```python
+print("Start")
 for i in range(5):
     print(i)
+print("End")
 ```
 
 <details><summary>What actually happens</summary>
 
-Five lines: `0`, `1`, `2`, `3`, `4`.
+Seven lines:
 
-`range(5)` means "five numbers, starting at zero," so the last one is `4`, not `5`. Counting from zero is the convention everywhere in Python, and it means the flip counter above printed "Flip number 0" for the first flip. If you want it to say 1, either print `i + 1` or give `range` a starting point.
+```
+Start
+0
+1
+2
+3
+4
+End
+```
+
+`range(5)` means "five numbers, starting at zero," so the last one is `4`, not `5`.
+
+Counting from zero is the convention in Python and in many other languages, and it means the flip counter above printed "Flip number 0" for the first flip. If you want it to say 1, either print `i + 1` or give `range` a starting point.
 
 </details>
 {% endhint %}
@@ -100,7 +124,7 @@ Five lines: `0`, `1`, `2`, `3`, `4`.
 
 ```python
 for i in range(1, 101):      # 1, 2, 3, ... 100
-    print(f"Flip number {i} was {flip_coin()}")
+    print(f"{i}. a {random.randint(1, 6)} was rolled")
 
 for i in range(0, 20, 5):    # 0, 5, 10, 15
     print(i)
@@ -142,7 +166,8 @@ Here is some starter code:
 import random
 
 def flip_coin():
-    return random.choice(["heads", "tails"])
+    flip_result = random.randInt(0, 1)
+    return "heads" if flip_result == 1 else "tails"
 
 def count_heads(flips):
     # add your code here
@@ -157,22 +182,23 @@ count_heads(100)
 import random
 
 def flip_coin():
-    return random.choice(["heads", "tails"])
+    flip_result = random.randInt(0, 1)
+    return "heads" if flip_result == 1 else "tails"
 
 def count_heads(flips):
-    # Create heads before the loop. If heads = 0 were inside the loop, it would reset to 0 on every flip.
+    # Create heads before the loop. If heads = 0 were inside the loop, it would reset to 0 on every flip, and the count could never get past 1.
     heads = 0
     for i in range(flips):
         result = flip_coin()
         heads += 1 if result == 'heads' else 0
 
-    print(f"You flipped {heads} heads out of {flips}. Thats {heads / flips * 100}%!")
+    print(f"You flipped {heads} heads out of {flips} flips! That is {heads / flips * 100}%!")
 
 count_heads(10)
 count_heads(100)
 ```
 
-Run it a few times. The more flips you ask for, the closer the percentage gets to 50.
+Run it a few times. With 10 flips, the percentage jumps around a lot from run to run. With 100 flips, the percentage usually lands closer to 50.
 
 </details>
 

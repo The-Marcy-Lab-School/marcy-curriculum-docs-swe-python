@@ -1,5 +1,9 @@
 # 1.11 Errors and Tracebacks
 
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/11-errors-and-tracebacks/)
+{% endhint %}
+
 Writing code with errors is a natural part of programming. But rather than avoiding them at all costs, we should learn to understand them! Errors provide us valuable information about how we can improve our programs.
 
 **Table of Contents:**
