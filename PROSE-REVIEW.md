@@ -4,58 +4,9 @@ This review checks the explanatory prose of every published lesson in Mod 0 and 
 
 Seven reviewers each read a group of chapters and reported at most twelve findings per file, ranked by how much each passage would cost a fellow. Each finding gives the location, the passage, the rules it breaks, what a fellow would get wrong, and a proposed rewrite. The reviewers report that they ran every behavior claim in their rewrites with Python 3.12.4, pytest, zsh, or Git before writing it down. I have not re-run those checks myself, so each rewrite should be checked again when it is applied. No lesson file has been changed.
 
-**Status:** every item under "Factual errors to fix first" was fixed and checked by running the code on 2026-10-01, along with `git config --global pull.rebase false` in `environment-setup/github-setup.md`. The clarity findings in the full reports have not been applied.
+**Status:** the factual errors the reviewers found were fixed and checked by running the code on 2026-10-01. The clarity findings for Mod 1 chapters 1.1 to 1.9 were applied on 2026-10-07. The log at the end of this document records how Ben edited each batch of applied rewrites before committing them.
 
-The full reports follow the summary below. The summary has three parts: the factual errors, which a fellow will run into by running the code; the patterns that recur across chapters; and the decisions that only you can make.
-
-## Factual errors to fix first
-
-These are not clarity problems. Each one is a statement that a fellow can disprove by running the code or the command, and the lessons ask fellows to predict and then run, so each error teaches them to distrust the lesson. Fixing these is mechanical and needs no decision about voice.
-
-**Mod 0**
-
-- `1-clis.md:334` — `Control+C` does not leave the Python REPL. It prints `KeyboardInterrupt` and returns a new `>>>` prompt. The sentence came over from the Node original, where a double `Control+C` does exit.
-- `1-clis.md:268` — `cd` on its own goes to the home directory (`/Users/<name>`), not to the root of the file system.
-- `1-clis.md:72` — the command table labels `cp` as "Move a file".
-- `3-git-pulling-merging.md:121` — on a fresh Git install, `git pull` stops with `fatal: Need to specify how to reconcile divergent branches.` and never reaches the merge conflict the lesson is building towards. Your own machine sets `pull.rebase=false` globally, so you will not see this when you test the lesson. The cleanest fix is a `git config --global pull.rebase false` line in `environment-setup/github-setup.md`, next to the `user.name` and `user.email` lines.
-- `4-git-branching.md:96` and `:107` — on a fresh Git install, the first `git push` of a new branch fails with `fatal: The current branch ... has no upstream branch.` Your machine sets `push.autoSetupRemote=true`, which hides this failure too. The upstream step appears only as a code comment.
-- `4-git-branching.md:107` — the text says the new commit appears on `main` after pushing a feature branch. It appears only on the feature branch, and that is the point of branching.
-- `4-git-branching.md:163` — the step says to `git pull` after merging a pull request, but leaves out `git checkout main` first, so a fellow still on the feature branch updates the wrong branch.
-- `4-git-branching.md:44` — the command list gives `git checkout -B`, while the hint at line 100 teaches `-b`. The capital `-B` silently resets a branch that already exists.
-
-**Mod 1**
-
-- `2-data-types-variables.md:178` — "you can't add different types" is false: `5 + 2.5` and `True + 1` both work.
-- `2-data-types-variables.md:162` — strings are compared by character code, not alphabetically, so `"apple" > "Banana"` is `True`.
-- `2-data-types-variables.md:527` — refers to `[] or "Python"`, but the challenge contains `0 or "Python"`.
-- `3-functions.md:98` — the first line of the body of `convert_C_to_F` is `celsius = 20`, which overwrites the parameter, so every call prints `68.0`. The output comments throughout that section also say `212`, `32`, and `68` where Python prints `212.0`, `32.0`, and `68.0`.
-- `3-functions.md:200` — the hidden answer names `say_hello`, but the example's function is `print_B`.
-- `3-functions.md:255` — says "the next chapter says more" about the `TypeError`, but chapter 2 is the one that covers it.
-- `4-conditional-statements.md:118` — the first guard-clause example returns `"Eh"` for `105` because its conditions are in the wrong order, and nothing on the page says so. The `???` questions at lines 71, 97, and 122 have no hidden answers.
-- `5-loops.md:163` — the code comment says `heads = 0` sits outside the loop so that it can be used after the loop. In Python a variable created inside a loop is still available afterwards; the real reason is that `heads = 0` inside the loop would reset the count on every flip. This reasoning came over from the JavaScript original.
-- `6-inputs-outputs.md:224` — "every one of these methods returns a string" includes `split` and `isdigit`, which return a list and a boolean.
-- `6-inputs-outputs.md:443` — `5 / 2` is given as an example of conversion between kinds of numbers, but both operands are integers; `/` always produces a float.
-- `7-lists.md:175` — the chapter describes the JavaScript memory model, in which numbers are stored as they are and lists by reference. That contradicts line 251 of the same chapter, and `id()` and `is`, which work on integers too.
-- `8-dictionaries.md:199` — `dict()`, `.copy()`, and `{**d}` copy only the outer dictionary, and the chapter does not say so. A fellow who copies `user` and appends to `clone['friends']` also changes the original and will believe the function is pure.
-- `9-modules-environments-pytest.md:491` and `:540` — `.venv` is described as containing "a copy of Python" and as "often hundreds of megabytes". On macOS, `.venv/bin/python3` is a link to the computer's own Python, and a `.venv` with only pytest installed measured 30 MB.
-- `9-modules-environments-pytest.md:243` — names `circle_helpers.cpython-314.pyc`, but the pytest output later in the chapter reports Python 3.12, which writes `cpython-312.pyc`. Line 235 says `import circle_helpers` is on line 1 of `main.py`; the listing shows line 2.
-- `10-reading-unfamiliar-code.md:238` — without the `.get()` default, `stock.get(name) + 12` raises `TypeError`, not `KeyError`. Only bracket notation raises `KeyError`.
-- `10-reading-unfamiliar-code.md:197` — `sell("apples", 1)` returns `True` both times, so the example does not show the impurity it claims. The summary of that hidden question says "Chapter 2 told you to avoid that"; the warning is in chapter 3.
-- `10-reading-unfamiliar-code.md:370` — `int(answer)` is on line 14 of the Bill Splitter, not line 13.
-- `10-reading-unfamiliar-code.md:73` — "the same thing you did with the debugger in chapter 3" refers to a lesson that does not exist.
-- `11-errors-tracebacks.md:412` — the instruction to "delete the `raise` line" leaves an `if` statement with no body, so pytest reports an `IndentationError` instead of the `DID NOT RAISE` failure the answer describes.
-- `11-errors-tracebacks.md:372` — says `.isdigit()` rejects `5`; `"5".isdigit()` is `True`. The intended example was probably `" 5"` with a leading space.
-- `11-errors-tracebacks.md:205` — says fellows will learn pytest "at the end of this module"; chapter 9 already taught it.
-- `11-errors-tracebacks.md:286` — says the most recent call is on top of the stack, two paragraphs after saying it is at the bottom of the traceback, with nothing to reconcile the two.
-- `12-first-class-functions-hof.md:343` — "only one of them runs at the end" is false; the last step runs both `wrapper` and `greet`. Line 379 counts "three announcements" where two lines are announcements and one comes from `greet`. The code comment at line 62 says "copying the function"; nothing is copied.
-- `13-comprehensions-builtin-iteration.md:286` — says every method that mutates a list returns `None`; `.pop()` returns the element it removed.
-- `13-comprehensions-builtin-iteration.md:419` — the dictionary comprehension hint shows `{1: 'ben', 2: 'maya'}`, which matches none of the chapter's `users` lists. The most recently defined `users` has no `'id'` key, so running the hint raises `KeyError`.
-- `13-comprehensions-builtin-iteration.md:307` — "sort by age, and then by username" reads as one sort with a tie-breaker, and the data even contains a tie, but the solution gives two separate sorts. Line 584 says "the same three steps" after line 525 lists four.
-- `case-study.md:136` — the hidden answer quotes the last line of the error as `NameError: name 'tasks' is not defined`. On Python 3.12 the line ends `Did you mean: 'task'?`, and the question asks for that exact line. I wrote this answer.
-- `14-project-week.md:141` — the rubric says both `main.py` and `menu.py` display the menu. The Phase 1 code prints "Goodbye!" twice, once in each file.
-- `regex.md:212` — says every `re` function takes the pattern first and the string second; `re.sub` takes the replacement second and the string third.
-- `regex.md:73` — the raw-string example uses `\w`, which reaches the `re` module unchanged even without the `r`, so a fellow who tests it concludes the `r` does nothing. `\b` is the example that shows the harm.
-- `regex.md` syntax table — the `[3-30]` row says "any number in range", but the class matches only the characters `3` and `0`. The `[E-Q]` row says "any uppercase letter", but the class covers only E through Q.
+The full reports follow the summary below. The summary has two parts: the patterns that recur across chapters, and the decisions that only you can make.
 
 ## Patterns that recur across chapters
 
@@ -67,7 +18,7 @@ These are not clarity problems. Each one is a statement that a fellow can dispro
 
 **Rules stated wrongly and then contradicted.** Several chapters state a rule early that a later section of the same chapter contradicts: "you can only interact with one directory at a time", "`cd` requires an argument", "`if` requires a boolean condition", "methods manipulate the value they are attached to", "`continue` prevents infinite loops", and "you can only push if your history is exactly the same as the remote's".
 
-**Wrong cross-references.** Chapter numbers, line numbers, function names, and code fragments in the prose often point at the wrong place. These are listed with the factual errors above.
+**Wrong cross-references.** Chapter numbers, line numbers, function names, and code fragments in the prose often point at the wrong place.
 
 **JavaScript reasoning carried into Python.** Four passages explain Python with reasoning that is true only of JavaScript or Node: the REPL exit in chapter 0.1, the block-scope comment in chapter 5, the memory model in chapter 7, and the "first match only" sentence in the regex reading.
 
@@ -83,9 +34,7 @@ These are not clarity problems. Each one is a statement that a fellow can dispro
 
 ## Suggested order of work
 
-1. Fix the factual errors above, starting with the ones that stop a lesson activity from working: the `convert_C_to_F` bug, the chapter 11 `IndentationError`, the two Git settings, and the REPL exit.
-2. Add the `pull.rebase` setting to `environment-setup/github-setup.md`, and decide whether to add `push.autoSetupRemote` there as well or to teach `--set-upstream` in chapter 0.4.
-3. Work through the clarity rewrites one chapter at a time, starting with the hidden answers, since those are where the missing rules cluster.
+Work through the clarity rewrites one batch of chapters at a time, starting with the hidden answers in each chapter, since those are where the missing rules cluster. Before applying a batch, read the log at the end of this document. After Ben commits a batch, compare the committed text with the applied rewrites and add what he changed to the log.
 
 ## Full findings: Mod 0: Command Line Interfaces, Git, and GitHub (chapters 0.1 to 0.4)
 
@@ -2257,3 +2206,19 @@ Then, after the code block, add:
 ### Recurring pattern
 
 The most common fault across all three files is that a sentence states a verdict or a label without the consequence that would justify it: "have to agree", "doing the work", "mangled", "pays off", "exact match", and "separation of concerns" each tell the fellow that something matters without saying what goes wrong for a user or a programmer. The second most common fault is a missing link between two correct sentences: why typing `0` becomes `-1`, why the function compares with `None`, why the flag must be passed by keyword, and why a deleted variable produces `UnboundLocalError` rather than `NameError`. In the project document, the same gap shows up as requirements given by example only, with the rule left out. The fellow has to infer the denominator of the win rate, that `answer_index` counts from 0, and whether the list shows the price or the line cost. Two fellows will infer these differently.
+
+## Log of Ben's edits to applied rewrites
+
+Each entry records how Ben changed a batch of applied rewrites before committing it, found by comparing the commit with the text Claude generated. An observation describes one situation and applies only to situations like it. An observation becomes a candidate rule for the project `CLAUDE.md` only after it appears in at least two batches, and Ben approves each rule before it is added.
+
+### Batch 1: chapters 1.1 to 1.4 (commits `6c181f1` and `1775d48`)
+
+Most rewrites were committed word for word, including every rewrite that states a rule and its consequence. Informal phrases such as "runs happily" and "quietly wrong" were kept.
+
+- **Promoted to `CLAUDE.md`:** hidden answers that trace three or more steps were rewritten as one step per bullet, with the general lesson moved to its own paragraph after the list (1.1 expressions answer, 1.1 indentation answer, 1.3 `print_B` trace, 1.3 `TypeError` trace). Seen four times in this batch, so Ben promoted it immediately.
+- **Fix sentence separated from the diagnosis.** In the 1.1 Celsius answer, the sentence giving the fix ("Parentheses are always evaluated first…") became its own paragraph. Seen once.
+- **A described mistake became code.** The 1.4 caution about using user input as a condition was expanded into a sentence naming where the mistake happens (`input()`), a code block with the wrong version, and a code block with the fix. Seen once.
+- **A sentence introducing code.** Ben added sentences saying what a code block is before it appears ("For example, this function uses these statements to print a message"). Seen twice, both in 1.4, both in passages the review did not touch.
+- **Naming the syntax fully.** "A `def`" became "A `def` statement", and "so no `B` yet" became "so `B` is not printed yet". Seen once each.
+- **A keyword's rule stated where the keyword appears.** Ben added the rule for `elif` (it runs only if the earlier conditions were `False` and its own is `True`). Seen once.
+- **Not rejections:** four first-round rewrites in 1.2 are absent because Ben deleted or replaced the examples they belonged to (the sum and average example, the `msg +=` question, the precedence "Combined" challenge, and the `is_on = not is_on` sentence).
