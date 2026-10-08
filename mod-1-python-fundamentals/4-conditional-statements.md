@@ -194,6 +194,8 @@ It prints `printed`.
 
 `"False"` is a string with five characters in it, and a non-empty string is truthy. What the characters spell has nothing to do with it. Only the boolean `False`, the number `0`, `None`, and empty things like `""` are falsy.
 
+</details>
+
 {% endhint %}
 
 This mistake often occurs when using user input (e.g. from the `input()` function) in a condition. You must remember that the user typed a string. A user who types `no` or `False` still gives you a non-empty string, so `if answer:` runs the `True` branch for them.
@@ -206,7 +208,7 @@ else:
     print(":(")
 ```
 
-Compare the string itself instead: `if answer == "yes":`.
+Compare the string itself instead: `if answer == "Yes":`.
 
 ```py
 answer = input("Yes or No?")
@@ -215,8 +217,6 @@ if answer == "Yes":
 else:
     print(":(")
 ```
-
-</details>
 
 ### Use Conditional Expressions To Simplify Conditionals
 

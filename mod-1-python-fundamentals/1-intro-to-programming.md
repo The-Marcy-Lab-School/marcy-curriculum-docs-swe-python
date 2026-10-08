@@ -16,10 +16,14 @@ There are so many terms and concepts to learn about programming. In this lesson,
 
 ## Setup
 
-- In your `mod-1` folder, create a new folder called `1-intro-to-programming`
-- `cd 1-intro-to-programming`
-- `touch main.py`
-- Open the `main.py` file
+- If you haven't already, clone the lecture code repository into your `development` folder:
+
+  ```sh
+  git clone git@github.com:The-Marcy-Lab-School/F26_SWE_PYTHON_LECTURE_CODE.git
+  ```
+
+- `cd F26_SWE_PYTHON_LECTURE_CODE/mod-1/1-1-intro-to-programming`
+- Open the `01_statements.py` file
 
 ## Key Terms
 
@@ -80,7 +84,7 @@ Python evaluates an expression on a line by itself, like `5 + 5`, and then throw
 
 **Statements** are instructions that perform an action. They change the program in some way, often using expressions. For example, variable assignments alter the program's **state** (the data stored by a program at a point in time) and `if`/`else` statements change the control flow of the program:
 
-{% code title="main.py" lineNumbers="true" %}
+{% code title="01_statements.py" lineNumbers="true" %}
 
 ```python
 # assigning a variable stores a value in the program's memory to be used later
@@ -116,11 +120,11 @@ When we want to run the code in a file, we use a piece of software called the **
 The interpreter is installed on your computers and can be activated in the Terminal using the `python3 [filename]` command:
 
 ```sh
-# main.py is the name of the file we want to run
-python3 main.py
+# 01_statements.py is the name of the file we want to run
+python3 01_statements.py
 ```
 
-**Question:** Run `python3 main.py`. Only one word, `happy`, appears in the Terminal, even though the file contains several statements. Why?
+**Question:** Run `python3 01_statements.py`. Only one word, `happy`, appears in the Terminal, even though the file contains several statements. Why?
 
 **<details><summary>Answer</summary>**
 
@@ -209,11 +213,11 @@ for i in range(100_000_000):
 You won't see any output, but the prompt takes a few seconds to come back. A program that did nothing would finish instantly, so those seconds are your computer adding 1 to `x`, one hundred million times. Your computer IS executing the instructions you give it, but you just can't see the results because there is no `print()` statement. You can prove it by asking the Terminal to time the program for you:
 
 ```sh
-time python3 main.py
+time python3 05_no_output.py
 ```
 
 ```
-python3 main.py  3.82s user 0.02s system 99% cpu 3.840 total
+python3 05_no_output.py  3.82s user 0.02s system 99% cpu 3.840 total
 ```
 
 Nothing was printed, but the Terminal reports that the program ran for almost four seconds, and every one of those seconds went to the loop. (Your numbers will differ.)
@@ -274,18 +278,20 @@ def can_vote(age):
 ```
 
 {% hint style="warning" %}
-**Predict, then run.** Delete the indentation from the second line so the file looks like this, then predict what `python3 main.py` does.
+**Predict, then run.** Open `06_indentation.py` and delete the indentation from the second line so the file looks like this, then predict what `python3 06_indentation.py` does.
 
 ```python
 def can_vote(age):
 if age >= 18:
-    return True
+        return True
+    else:
+        return False
 ```
 
 <details><summary>What actually happens</summary>
 
 ```
-  File "main.py", line 2
+  File "06_indentation.py", line 2
     if age >= 18:
     ^
 IndentationError: expected an indented block after function definition on line 1
