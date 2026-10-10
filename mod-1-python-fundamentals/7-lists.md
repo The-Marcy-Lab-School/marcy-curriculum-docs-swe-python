@@ -31,8 +31,8 @@
 
 ## List Basics
 
-- Lists are lists of data (order matters). Values in a list are called **elements of the list**.
-- Lists use square brackets `[]` to encapsulate the data
+- A list is a single value that holds several values in a particular order. The values in a list are called the **elements of the list**, and each element stays in its position until the list is changed.
+- Lists use square brackets `[]` around their elements, separated by commas.
 - Like strings lists also...
   - have indexes starting at `0`
   - use bracket notation to access individual elements: `my_list[index]`
@@ -89,20 +89,20 @@ def has_value(items, value):
         if item == value:  # Check whether the current element matches the value
             return True  # If it does, we can immediately return True
         # if it doesn't, keep going!
-    return False  # If we make it to the end of the loop, we must not have found it. Return False.
+    return False  # The return True above would have ended the function on a match, so reaching this line means no element matched. Return False.
 
 letters = ['a', 'b', 'c', 'd']
 print(has_value(letters, 'c'))  # Prints True
 print(has_value(letters, 'e'))  # Prints False
 ```
 
-Python has this built in, of course: `value in items` does exactly what `has_value` does. But being able to write it yourself is the point.
+Python has this built in, of course: `value in items` does exactly what `has_value` does. Writing it yourself still matters, because the same loop, check, and return shape answers questions `in` cannot, like "does this list contain any word longer than five letters?"
 
 </details>
 
 ### Lists Are Mutable
 
-Strings have read-only methods like `upper()` and slicing that make a copy of the string but don't change the original string. Trying to change a string in place is an error.
+Strings have methods like `upper()`, and they support slicing, but both return a new string and leave the original alone. If you do not store the new string in a variable, the new string is gone: after `my_name.upper()` runs on its own line, `my_name` is still `'ben'`. Trying to change a string in place with bracket notation is an error.
 
 ```python
 my_name = 'ben'
@@ -127,9 +127,9 @@ print(end_letters)  # []
 
 **<details><summary>Q: We changed the list without ever writing `end_letters = ...`. Strings would not allow that. Why do lists?</summary>**
 
-Strings are **immutable**: once created, the characters in a string cannot change, so the only way to get a different string is to make a new one and assign it somewhere. Lists are **mutable**: the list object itself can be changed while the variable keeps referencing it. Notice that we never reassign `end_letters`! The variable still references the same list, we're just changing the contents of the list.
+Strings are **immutable**: once a string is created, its characters cannot change, so the only way to get a different string is to make a new one and assign it to a variable. Lists are **mutable**: Python lets you change the elements inside an existing list, with bracket notation or with methods like `clear()`. Notice that we never reassign `end_letters`! The variable still points at the same list, and only the contents of that list changed.
 
-Which values are mutable and which are not is one of the most important things to know about any type in Python. Strings, numbers, booleans, and `None` are immutable. Lists and dictionaries are mutable.
+Whether a type is mutable decides whether a change made through one variable can show up through another variable, which is what the next section is about. Strings, numbers, booleans, and `None` are immutable. Lists and dictionaries are mutable.
 
 </details>
 
@@ -250,7 +250,7 @@ print(x)  # 10
 print(y)  # 11
 ```
 
-In this example, even though it _looks_ like we're mutating the value `y`, we are NOT. We're reassigning `y` to reference a completely different value (`11`). `x` never notices.
+`y += 1` looks like it changes the value in `y`, but the number `10` cannot change. Python computes the new value `11` and reassigns `y` to reference it. `x` still references `10`.
 
 ```python
 str = 'hello'
@@ -262,7 +262,7 @@ In this example, when we try to reassign the first character in `str`, a `TypeEr
 
 ### Impure and Pure Functions
 
-Functions are considered **impure functions** if they:
+Functions are considered **impure functions** if they do either of these:
 
 1. Produce different outputs when given the same inputs
 2. Produce side effects (like mutating incoming values)
@@ -291,6 +291,8 @@ print(letters)  # Prints []
 ```
 
 ### Making Copies of Lists to Make Pure Functions
+
+Why care? Whoever calls `empty_the_list(letters)` may only have wanted to use the list, and afterwards their `letters` is empty. The line that emptied `letters` is inside the function, so when the empty list causes a problem later, the line where the problem shows up is nowhere near the line that caused it. A pure function cannot surprise its caller this way, because it leaves its inputs alone and communicates only through what it returns.
 
 Functions that accept lists and modify them are impure. To make a function that modifies a list pure, we need to make a copy of it first. There are three common ways to copy a list, and they all do the same thing:
 
@@ -333,7 +335,7 @@ def shorten(items):
     return new_items
 ```
 
-Or, with a slice that leaves off the last element in the first place:
+Or, with a slice that leaves off the last element in the first place. `items[:-1]` runs from the start of the list up to, but not including, index `-1`, which is the last element. A slice always builds a new list, so `items` is untouched:
 
 ```python
 def shorten(items):
@@ -371,7 +373,7 @@ print(len(coordinates))     # 5, the number of rows
 print(len(coordinates[0]))  # 2, the number of columns in the first row
 ```
 
-When accessing a 2D list, the first index references the "row" and the second index references the "column"
+When accessing a 2D list, the first index picks the "row" and the second index picks the "column". Python reads `coordinates[0][1]` in two steps: `coordinates[0]` produces the row `[30, 90]`, and `[1]` then picks index 1 of that row, which is `90`.
 
 ### Tuples: Lists That Cannot Change
 
@@ -411,7 +413,7 @@ print(new_york_lat)   # 40
 print(new_york_long)  # 74
 ```
 
-The number of variables has to match the number of elements, unless one of the variables has a `*` in front. That variable collects "the rest" as a list:
+The number of variables has to match the number of elements. If the numbers do not match, Python stops with a `ValueError`: `too many values to unpack` when the list has more elements than variables, and `not enough values to unpack` when it has fewer. The exception is a variable with a `*` in front. That variable collects "the rest" as a list:
 
 ```python
 # Unpack the first three rows into their own variables and collect the rest

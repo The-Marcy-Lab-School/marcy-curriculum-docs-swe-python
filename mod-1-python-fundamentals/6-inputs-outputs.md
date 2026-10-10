@@ -121,7 +121,7 @@ print(message)
 TypeError: 'str' object does not support item assignment
 ```
 
-Python refuses. A string, once created, cannot be changed. If you want a different string, you make a new one, which is exactly what the string methods below do.
+Python refuses. In the error, `'str' object` means the value is a string, and `item assignment` is the name for putting a value at an index with `message[0] = ...`. A string, once created, cannot be changed. If you want a different string, you make a new one and assign it to a variable, as in `message = message.replace("H", "J")`. Every string method below works this way: each one returns a new string and leaves the original alone.
 
 </details>
 {% endhint %}
@@ -142,7 +142,7 @@ print(message[len(message) - 1])
 
 ### String Methods
 
-A **method** is a function that is attached to a value. Often, methods are used to manipulate the value they are attached to.
+A **method** is a function that is attached to a value, and a method usually does something with that value. Strings are immutable, so a string method never changes the string it is called on. Methods like `upper()` and `replace()` return a new string instead.
 
 - Methods are invoked using **dot notation**: `value.method()`
 
@@ -164,7 +164,7 @@ print(fruits.endswith('s'))
 # Output: True
 ```
 
-The methods `find` and `rfind` return a number representing the index of a particular character we're looking for. `rfind` searches from the right:
+The methods `find` and `rfind` return the index of a character, or a longer piece of text, that you are looking for. `find` returns the index of the first match, and `rfind` returns the index of the last match. Both methods count the index from the left, the normal way. When there is no match, both methods return `-1`:
 
 ```python
 fruits = 'apples, bananas, cherries'
@@ -178,6 +178,8 @@ print(fruits.rfind('p'))
 print(fruits.find('z'))
 # Output: -1 (not found)
 ```
+
+Be careful with that `-1`. `-1` is also a valid index, so `fruits[fruits.find('z')]` quietly gives you the last character, `'s'`, instead of an error.
 
 The following return a copy of a string modified in some way. **Slicing** with `[start:end]` takes a piece of the string, from `start` up to but not including `end`. The `upper`, `lower`, and `replace` methods and the `*` operator do what their names suggest:
 
@@ -300,7 +302,7 @@ print(f"Hello, {name.upper()}! Your name has {len(name)} letters.")
 # Output: Hello, ADA! Your name has 3 letters.
 ```
 
-Like `print()` with commas, an f-string turns each value into text for you. That is why f-strings are the way most Python programmers build a message: the words and the values sit in the order they will be printed, and you never have to convert anything yourself.
+Like `print()` with commas, an f-string turns each value into text for you. Building the same message with `+` would need `"Your name has " + str(len(name)) + " letters."`, and forgetting the `str()` crashes the program (you will see that crash in Type Conversion below). Because of this conversion, f-strings are the way most Python programmers build a message: the words and the values sit in the order they will be printed, and you never have to convert anything yourself.
 
 ### Formatting Numbers
 
@@ -336,7 +338,7 @@ That is 58.333333333333336%!
 That is 58.3%!
 ```
 
-`.1f` keeps one digit after the decimal point. The same calculation, displayed for a human instead of for the computer.
+`.1f` rounds the number to one digit after the decimal point. Both lines print the same calculation. The second line shows only as many digits as a person reading a percentage needs.
 
 </details>
 {% endhint %}
@@ -358,7 +360,7 @@ print(f"hi {name}. My name is HAL")
 
 The space at the end of the prompt is there so that what the user types does not run into the question.
 
-Users type messily. They add spaces, they use capitals when you expected lowercase. The string methods from earlier in this chapter clean that up, and method chaining lets you do it on the same line as the `input()`:
+Users type messily. They add spaces, and they use capitals when you expected lowercase. Python compares strings character by character, so `"YES" == "yes"` is `False`. Without any cleanup, a check like `answer == "yes"` would tell a user who typed `YES` "Okay, see you later." The string methods from earlier in this chapter clean that up, and method chaining lets you do it on the same line as the `input()`:
 
 ```python
 answer = input("Do you want to continue? (yes/no) ").strip().lower()
@@ -396,7 +398,7 @@ Every time you take input from a user and want a number, the conversion is your 
 
 ## Type Conversion
 
-Arithmetic and comparisons only make sense between values of the right type. Every value that comes out of `input()` is a string, even when the user typed a number, so before you can write `age + 1` or `if age >= 18:` you will need to convert.
+Every value that comes out of `input()` is a string, even when the user typed a number. If `age` holds the string `"20"`, both `age + 1` and `age >= 18` crash with a `TypeError`, because Python will not do arithmetic or a `>=` comparison between a string and a number. Before you can write either one, you need to convert `age` to a number.
 
 We can convert a value of one data type into another data type using the type conversion functions `str()`, `int()`, and `float()`:
 
@@ -412,7 +414,7 @@ print(float("0.50"))   # -> 0.5
 print(int("hello"))    # -> crashes with ValueError: invalid literal for int() with base 10: 'hello'
 ```
 
-That last line is why the `.isdigit()` method from earlier in this chapter exists: check the string before you convert it, and you can give the user a message instead of a crash.
+That last line is the crash that `.isdigit()` lets you avoid: check the string before you convert it, and you can give the user a message instead of a crash. `.isdigit()` is strict, though. It returns `False` for `" 20"` with a space in it, for `"-5"`, and for `"4.2"`. Strip the input first, and expect negative numbers and decimals to be rejected.
 
 ```python
 age = input("How old are you? ")
@@ -449,13 +451,13 @@ Between kinds of numbers, conversion happens on its own: `5 + 2.5` turns the int
 </details>
 {% endhint %}
 
-The fourth conversion function, `bool()`, is the one you met with truthy and falsy values in chapter 1.4. It is the one conditions use without being asked.
+The fourth conversion function, `bool()`, is the one you met with truthy and falsy values in chapter 1.4. An `if` statement calls `bool()` on its condition for you whenever the condition is not already a boolean.
 
 ## Madlib Challenge
 
 A program is considered **hard-coded** if the program code must be modified in order to produce a new result.
 
-The `input()` function is really useful for creating programs that will produce new results depending on the user's input.
+In the program below, the only way to get a different story is to open `main.py` and edit the variables, which a friend playing your madlib cannot do. The `input()` function fixes that problem: the person running the program supplies the words, and every run can tell a new story.
 
 In a new `madlib-challenge` folder, create a `main.py` file with the following hard-coded program:
 
@@ -491,7 +493,7 @@ main()
 Your goal is to do the following in the `madlib-challenge` folder:
 
 1. Replace the hard-coded variables defined in the `main` function with values retrieved from the user via the `input()` function.
-2. `is_happy` has to be a boolean, but the user can only type a string. Ask them to type `Y` or `N`, and turn their answer into `True` or `False`. `y`, `Y`, and `Y` should all count as yes.
+2. `is_happy` has to be a boolean. The user can only type a string, and every non-empty string is truthy (chapter 1.4). If you passed their answer straight to `madlib`, typing `N` would still give the story a happy ending. Ask them to type `Y` or `N`, and turn their answer into `True` or `False`. `y`, `Y`, and ` Y ` (with spaces around it) should all count as yes.
 
 If you get stuck, you can view the solution below:
 

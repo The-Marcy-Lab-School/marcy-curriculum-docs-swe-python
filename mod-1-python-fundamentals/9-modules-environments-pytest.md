@@ -97,7 +97,7 @@ main()
 
 {% endcode %}
 
-As a project grows in scale and complexity, **separation of concerns** becomes increasingly important.
+This file is short enough to read in one go. Now imagine it with fifty circle functions, a dozen display helpers, and the code that ties them together. To fix a wrong area, you would scroll past all of the display code to find `get_area`. Two teammates fixing different things would be editing the same file at the same time. As a project grows, **separation of concerns** is what keeps it manageable.
 
 {% hint style="info" %}
 Separation of Concerns is a fundamental principle of software engineering. It emphasizes the importance of organizing our code into distinct functions and modules that each serve a singular and specific purpose. However, when put together, those individual pieces work in harmony.
@@ -109,7 +109,7 @@ A **module** is a file containing code, which can then be **imported** and utili
 
 ### Every Top-Level Name Can Be Imported
 
-Every name assigned at the top level of a file, meaning every function and every variable that is not indented inside something else, can be imported by another file.
+Every name assigned at the top level of a file, meaning every function and every variable that is not indented inside something else, can be imported by another file. That means a function can leave `main.py` and `main.py` can still call it, by importing it back.
 
 So we can move the `display` function into its own file:
 
@@ -145,7 +145,7 @@ That is the whole file. `LAZY_PI`, `get_area`, `get_diameter`, and `get_circumfe
 
 ### Importing with `import` and `from ... import`
 
-To use a module's names, use the `import` statement. A module's name is its filename without the `.py`.
+To use a module's names, use the `import` statement. A module's name is its filename without the `.py`. When you run `python3 main.py`, Python looks for `circle_helpers.py` and `display.py` in the same folder as `main.py`, so keep the three files side by side. Move `display.py` into a different folder and `from display import display` stops with `ModuleNotFoundError: No module named 'display'`.
 
 {% code title="main.py" overflow="wrap" lineNumbers="true" %}
 
@@ -216,7 +216,7 @@ Second, safety. `import *` brings in _every_ top-level name in the module, inclu
 
 ## What Happens When You Import a File?
 
-Here is something that surprises almost everyone. Importing a file **runs it**, top to bottom, exactly as if you had typed `python3 circle_helpers.py`.
+Here is something that surprises almost everyone. Importing a file **runs it**, top to bottom, the first time it is imported, almost exactly as if you had typed `python3 circle_helpers.py`. The one difference is a variable called `__name__`, which is coming up shortly.
 
 {% hint style="warning" %}
 **Predict, then run.** Add one line to the very bottom of `circle_helpers.py`:
@@ -247,7 +247,7 @@ The message from `circle_helpers.py` prints _first_, before anything from `main.
 **What is that `__pycache__` folder?** The first time you import a module, a folder called `__pycache__` appears next to it, holding a file like `circle_helpers.cpython-312.pyc`. That is a pre-processed copy of the module that Python saves so the next import is faster. It is rebuilt automatically whenever the module changes, you never edit it, and it never belongs in Git. The `.gitignore` section later in this lesson shows how to keep it out.
 {% endhint %}
 
-This is usually fine, because most of what is in a module is `def` statements and defining a function is harmless. But it raises a question: what if a file is _both_ a program you sometimes run directly _and_ a module other files import? `main()` gets called at the bottom of `main.py`. If another file ever imported `main.py`, `main()` would run during the import, which is almost never what anyone wants.
+Running a file when it is imported is usually fine, because most of what is in a module is `def` statements, and a `def` statement only creates a function without running the code inside it. But what if a file is _both_ a program you sometimes run directly _and_ a module other files import? `main.py` ends with a call to `main()`. If another file imported `main.py` to reuse one function, `main()` would run during the import. The circle results would print in the middle of the other program's output. Worse, if that file were the madlib `main.py`, the person using the other program would suddenly be asked to `Choose a name:`.
 
 ### `__name__`
 
@@ -383,7 +383,7 @@ with open("tasks.json") as file:
 print(saved_tasks)  # [{'description': 'walk the dog', 'is_complete': False}]
 ```
 
-`open()` is a built-in that opens a file, and the `with` statement closes it again when the indented block ends. This is how the task manager case study can be extended to remember its tasks between runs.
+`open()` is a built-in function that opens a file. The `"w"` means "open it for writing": it creates `tasks.json` if the file does not exist and replaces whatever was in it if it does. The second `open()` has no `"w"`, so it opens the file for reading, which is what `open()` does by default. The `with` statement closes the file again when the indented block ends. This is how the task manager case study can be extended to remember its tasks between runs.
 
 Nobody memorizes the standard library. The habit to build is to ask "does Python already have this?" before writing it yourself, and to check the [standard library documentation](https://docs.python.org/3/library/index.html) when you suspect it does.
 
@@ -419,12 +419,14 @@ Then turn it on. This is called **activating** the environment:
 source .venv/bin/activate
 ```
 
-Your Terminal prompt changes to show `(.venv)` at the front. That is how you know it is on. If you ever get a `ModuleNotFoundError` for a package you are sure you installed, look at the prompt before you do anything else. Nine times out of ten, `(.venv)` is missing. From now on, in this Terminal window, `python3` and `pip` refer to the ones inside `.venv`:
+Your Terminal prompt changes to show `(.venv)` at the front. That is how you know it is on. From now on, in this Terminal window, `python3` and `pip` refer to the ones inside `.venv`:
 
 ```sh
 which python3
 # /Users/you/mod-1/9-testing/.venv/bin/python3
 ```
+
+Because of that, a package you install with the environment on lives only inside `.venv`. If you ever get a `ModuleNotFoundError` for a package you are sure you installed, look at the prompt before you do anything else. Nine times out of ten, `(.venv)` is missing, which means `python3` is your computer's own Python, and that Python has never had the package installed.
 
 To turn it off, type `deactivate`. You will need to activate it again in every new Terminal window you open for this project.
 
@@ -553,7 +555,7 @@ Some packages are used by the developer(s) who are building a project but aren't
 
 **<details><summary>Q: Why is `pytest` a developer dependency and not a required dependency of the project?</summary>**
 
-`pytest` makes it easier to check that your code works, but the functionality of the program is not changed by it. Someone who just wants to _run_ your program never needs it. It is a convenience for developers.
+Only the files in `tests/` import `pytest`. The files in `src/` that make up the program never do, so someone who just wants to _run_ your program can do it without `pytest` installed. `pytest` serves the people building the program.
 
 </details>
 
@@ -565,7 +567,7 @@ Up to now, you have checked your functions by calling them and reading what `pri
 
 > "Now that we've tested the application, what should we do with the tests? Do we delete them? Do we comment them out? If we keep them, where can they live?"
 
-With manual testing, you're always left with this question. You've spent time and effort to create the tests so deleting them is wasteful, but we can't just leave them in our code because they add clutter.
+With manual testing, your tests are the `print()` calls you added to check each function, and you're always left with this question. You've spent time and effort writing them, so deleting them is wasteful. But if you leave them in, they run every time the program runs, and, as you saw earlier in this lesson, every time another file imports that file. Whoever runs the program sees your check results mixed in with its real output and has no idea what they mean.
 
 Rather than testing functions directly in the files where they live, it is better to create separate **test files** that import functions and test them against sample inputs. Test files provide a number of benefits:
 
@@ -617,6 +619,8 @@ def test_add():
     assert add(10, 5) == 15
 ```
 
+The first line imports `add` from `src/calc.py`. When a module sits inside a folder, you write the folder name, a dot, and then the module name, so `src.calc` means "the `calc` module inside the `src` folder". Python starts looking from the folder you run the tests in, which is why the hint below says to run them from the project's root folder.
+
 Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 1.3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
 
 - `assert expression` checks that the `expression` is truthy. If it is, nothing happens and the test continues.
@@ -647,7 +651,7 @@ tests/test_calc.py .                                                     [100%]
 Each dot after a filename is one passing test. We see a passing test because every `assert` expression was `True`.
 
 {% hint style="info" %}
-**Why `python3 -m pytest` and not just `pytest`?** Installing pytest gives you a `pytest` command as well, and you will see it in other people's instructions. But `pytest` on its own does not put your project folder on the list of places Python looks for modules, so `from src.calc import add` fails with `ModuleNotFoundError: No module named 'src'`. Running it through `python3 -m` adds the current folder to that list, and the import works. Use `python3 -m pytest`, from the project's root folder, every time.
+**Why `python3 -m pytest` and not just `pytest`?** Installing pytest gives you a `pytest` command as well, and you will see it in other people's instructions. But `pytest` on its own does not put your project folder on the list of places Python looks for modules, so `from src.calc import add` fails with `ModuleNotFoundError: No module named 'src'`. Running it through `python3 -m` adds the folder you are in to that list. The project's root folder, `9-testing/`, contains `src/`, so from there `from src.calc import add` works. If you `cd tests` first, Python adds `tests/` instead, finds no `src` there, and you are back to `ModuleNotFoundError`. So run `python3 -m pytest` from the project's root folder every time.
 {% endhint %}
 
 {% hint style="warning" %}
@@ -749,7 +753,7 @@ E       assert 1 is True
 E        +  where 1 = is_even(2)
 ```
 
-`1` is truthy, but it is not the boolean `True`. A function named `is_even` promises a boolean, and `is True` is the assertion that holds it to that promise.
+`1` is truthy, but it is not the boolean `True`. That difference shows up as soon as someone uses the function: `print(f"Is 4 even? {is_even(4)}")` prints `Is 4 even? 1`, and whoever reads that has to guess what `1` means. A function named `is_even` promises a boolean. The `==` version lets the broken function pass, and the `is True` version catches it.
 
 </details>
 

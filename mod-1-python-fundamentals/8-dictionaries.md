@@ -65,7 +65,7 @@ user = {
 }
 ```
 
-- Keys are usually strings, and the quotes around them are required. Keys can also be numbers, which will come in handy when you want to count things.
+- Keys are usually strings, and the quotes around them are required. Without quotes, Python reads `name` as a variable, and if no variable called `name` exists you get `NameError: name 'name' is not defined`. Keys can also be numbers, which comes in handy when you want to look something up by number, like a Roman numeral:
 
 ```python
 roman_numerals = {
@@ -75,7 +75,7 @@ roman_numerals = {
 }
 ```
 
-A key can be any value that cannot change: a string, a number, or a tuple. A list cannot be a key.
+A key has to be a value that cannot change: a string, a number, or a tuple. A dictionary finds a value by looking up its key, and a key that changed after it went in could no longer be found. A list can change, so a list cannot be a key. If you try, Python stops with `TypeError: unhashable type: 'list'`, and "unhashable" is Python's word for "not allowed as a key".
 
 ### Accessing Values with Bracket Notation and `.get()`
 
@@ -121,7 +121,7 @@ print(user.get("age", 0))       # 0
 print(user.get("username"))     # c0d3rkid
 ```
 
-You can also ask first. The `in` operator on a dictionary checks the _keys_:
+You can also ask first. The `in` operator on a dictionary checks the _keys_ only, so `"username" in user` is `True` but `"c0d3rkid" in user` is `False`, even though `"c0d3rkid"` is one of the values:
 
 ```python
 if "age" in user:
@@ -133,12 +133,14 @@ if "age" in user:
 
 ### Dynamic Keys Challenge
 
-Because the key goes inside the brackets as an expression, it does not have to be typed out as a literal string. It can be a variable:
+The brackets can hold any expression, and Python works out its value before using it as the key. So the key can be a variable, and Python uses whatever value the variable holds:
 
 ```python
 key = 'some key'
 my_dict[key] = 'new value'  # adds the key 'some key'
 ```
+
+Watch the quotes. `my_dict[key]` uses the value of the variable `key`, which is `'some key'`. `my_dict['key']` uses the three-letter string `'key'` itself.
 
 Complete the program below so that it lets users add words to the dictionary!
 
@@ -173,7 +175,7 @@ We've already learned that lists are mutable and that a variable holds a referen
 
 So, when we assign a dictionary to a variable, we are storing a reference to the dictionary's location in memory, not the values themselves.
 
-And when we assign a variable holding a dictionary to another variable, each variable holds a reference to the same dictionary
+And when we assign a variable holding a dictionary to another variable, both variables hold a reference to the same dictionary. No copy is made, so a change made through either variable shows up when you look through the other one:
 
 ```python
 sheep = {'name': 'benny', 'noise': 'baaaa'}
@@ -185,7 +187,7 @@ print(clone)  # {'name': 'benny', 'noise': 'BAAAAA'}
 print(sheep is clone)   # True
 ```
 
-We can use the `dict()` function to copy the key-value pairs of one dictionary into a new dictionary. This is particularly useful when creating pure functions:
+The same thing happens when you pass a dictionary to a function. The parameter holds a reference to the caller's dictionary, so if the function changes the parameter, it changes the caller's dictionary too, and the function is impure. To keep the function pure, have it copy the dictionary first. The `dict()` function copies the key-value pairs of one dictionary into a new dictionary, and the function can then change the copy as much as it likes:
 
 ```python
 sheep = {'name': 'benny', 'noise': 'baaaa'}
@@ -280,7 +282,11 @@ dict_keys(['hello', 'rainbow', 'cat'])
 hello
 ```
 
-`.keys()` does not return a list. It returns a `dict_keys` object, which you can loop over and check membership in, but cannot index with `[0]`. If you need a real list, wrap it in `list()`, which is what the third line does. `len()` on the dictionary itself counts the key-value pairs.
+- `.keys()` hands you a `dict_keys` object rather than a list, even though the printout looks like one. You can loop over a `dict_keys` object and use `in` with it. But if you try `dictionary.keys()[0]`, Python stops with `TypeError: 'dict_keys' object is not subscriptable`, which is Python's way of saying "you can't use square brackets on this".
+- `len()` on the dictionary itself counts the key-value pairs: three pairs, so `3`.
+- Wrapping `.keys()` in `list()` builds a real list, so `[0]` works. That list starts with `'hello'` because a dictionary remembers the order its keys were added in, and `"hello"` went in first.
+
+When you need to use an index with a dictionary's keys, turn them into a list first.
 
 </details>
 {% endhint %}
@@ -307,13 +313,15 @@ print(users[1]["name"])   # Maya
 users.append({"name": "Gonzalo", "age": 30, "is_admin": False})
 ```
 
+Giving every dictionary the same keys is what makes the loop work. `user['name']` runs once for every dictionary in the list, so a single dictionary without a `"name"` key would stop the loop with a `KeyError`.
+
 The task manager case study stores its tasks this way, and every project option in this module does too.
 
 ## Dictionaries and Functions
 
 ### Building a Dictionary from Parameters
 
-Functions often build a dictionary from their parameters, together with some default values. This one makes a user with the provided properties, `is_admin` set to `False`, and an empty `friends` list:
+Functions often build a dictionary from their parameters, together with some default values. The `make_user` function below builds a user dictionary that stores the `name` and `age` it is given, sets `is_admin` to `False`, and starts with an empty `friends` list:
 
 ```python
 def make_user(name, age):
@@ -347,4 +355,4 @@ def introduce_self(user):
 introduce_self(user_ben)
 ```
 
-`introduce_self` never looks at `is_admin`, and it doesn't need to. A function that takes a dictionary only has to know about the keys it uses.
+`introduce_self` never looks at `is_admin`, and it doesn't need to. So `introduce_self` works on any dictionary that has a `"name"` and an `"age"`. You could pass it a user with twenty other keys, or add an `"email"` key to every user next week, and `introduce_self` would not need to change. What it does need is those two keys: pass it a dictionary without `"age"` and it stops with `KeyError: 'age'`.
