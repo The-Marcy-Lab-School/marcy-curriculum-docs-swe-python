@@ -15,7 +15,18 @@ Clone it then follow the **Setup** steps listed in the README.
   - [Orient Yourself First](#orient-yourself-first)
 - [Investigation Questions](#investigation-questions)
   - [User Interface Design](#user-interface-design)
-  - [More Questions To Come...](#more-questions-to-come)
+  - [Data Types](#data-types)
+  - [Variables and Scope](#variables-and-scope)
+  - [Functions](#functions)
+  - [Conditional Logic](#conditional-logic)
+  - [Looping and Iteration](#looping-and-iteration)
+  - [Lists and Dictionaries](#lists-and-dictionaries)
+  - [Modules and Testing](#modules-and-testing)
+  - [Reading Unfamiliar Code](#reading-unfamiliar-code)
+  - [Error Handling and Debugging](#error-handling-and-debugging)
+  - [Higher-Order Functions](#higher-order-functions)
+  - [Comprehensions and Built-in Iteration](#comprehensions-and-built-in-iteration)
+  - [Code Style](#code-style)
 - [Extension Opportunities](#extension-opportunities)
   - [Tips](#tips)
 
@@ -87,9 +98,6 @@ _Tip: Remove the code and re-run the program to see how it changes._
 
 **Question 4** When a user completes a task, the program shows a message like `Task "walk the dog" marked as completed!`. Why is it important that the user sees these messages? How would the user experience change without these messages?
 
-### More Questions To Come...
-
-<!--
 ### Data Types
 
 Whether you are designing a new application or learning about an existing one, we always start by asking: _how is the data represented_? Once we know how to represent the data, we are better able to design how the application uses and manipulates it.
@@ -389,7 +397,7 @@ How are imports, functions and code blocks organized? Is there a logical and con
 
 **Question 4**
 
-What do you think the reason is that some files are in the `src` sub-folder while other files are in the root of the project. What is the purpose or benefit of this separation? -->
+What do you think the reason is that some files are in the `src` sub-folder while other files are in the root of the project. What is the purpose or benefit of this separation?
 
 ## Extension Opportunities
 
