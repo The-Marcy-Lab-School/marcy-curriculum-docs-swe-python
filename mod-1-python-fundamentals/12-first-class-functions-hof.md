@@ -97,7 +97,7 @@ print(actions["even"](4))    # True
 This pattern has a name, a **dispatch table**, and it is how a menu program can replace a long chain of `if choice == "1": ... elif choice == "2": ...` with a single dictionary lookup. Keep it in mind for your project.
 
 {% hint style="info" %}
-When a function is attached to a value, we call it a **method**. You have been using methods since chapter 1.6: `upper` is a function stored inside every string, and `"abc".upper()` looks it up and calls it, the same way `actions["hi"]()` does. In Mod 2 you will learn how to attach functions to values of your own.
+When a function is attached to a value, we call it a **method**. You have been using methods since chapter 1.5: `upper` is a function stored inside every string, and `"abc".upper()` looks it up and calls it, the same way `actions["hi"]()` does. In Mod 2 you will learn how to attach functions to values of your own.
 {% endhint %}
 
 ### Functions Passed into Other Functions Are "Callbacks". The Function That Receives the Callback is a "Higher Order Function".

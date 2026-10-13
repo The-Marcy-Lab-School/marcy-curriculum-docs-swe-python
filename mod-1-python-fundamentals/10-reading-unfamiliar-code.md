@@ -302,7 +302,7 @@ It prints `invalid`. It prints `invalid` no matter what you type.
 
 `input()` returns a string, so `choice` is `"2"`, and `"2" == 2` is `False`. Every branch fails and the `else` runs. The function is perfectly readable, perfectly plausible, and useless. Either the comparisons need to be against `"1"`, `"2"`, `"3"`, or `choice` needs `int()` first (and then a guard for non-numbers).
 
-You knew this. You have known it since chapter 1.6. The point is that knowing it did not stop the model, and it will not stop the model next time, so the check has to be yours.
+You knew this. You have known it since chapter 1.5. The point is that knowing it did not stop the model, and it will not stop the model next time, so the check has to be yours.
 
 </details>
 {% endhint %}

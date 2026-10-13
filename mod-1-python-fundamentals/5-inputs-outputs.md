@@ -1,4 +1,4 @@
-# 1.6 Inputs and Outputs
+# 1.5 Strings, Inputs and Outputs
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/06-inputs-and-outputs/)
@@ -136,10 +136,10 @@ answer = '  YES '
 answer.strip()
 answer.lower()
 print(answer)
-# Output: '  YES '
+# Output:   YES   (the spaces and the capitals are still there)
 ```
 
-As a result, we need to store the new string in a variable. However, to avoid storing each method result in a new variable and work through them one at a time, we can use **method chaining** to combine multiple method calls into one line:
+As a result, we need to store the new string in a variable. However, to avoid storing each method result in a new variable and working through them one at a time, we can use **method chaining** to combine multiple method calls into one line:
 
 ```py
 answer = '  YES '
@@ -432,7 +432,7 @@ print(message[len(message) - 1])
 **Question: What would you return to complete this `starts_and_ends_with_a` function below?**
 
 ```py
-def starts_and_ends_with_a(str):
+def starts_and_ends_with_a(text):
     return ???
 
 print(starts_and_ends_with_a('apple'))          # False
@@ -443,8 +443,8 @@ print(starts_and_ends_with_a('abracadabra'))    # True
 **<details><summary>Answer</summary>**
 
 ```py
-def starts_and_ends_with_a(str):
-    return str[0] == 'a' and str[-1] == 'a'
+def starts_and_ends_with_a(text):
+    return text[0] == 'a' and text[-1] == 'a'
 ```
 
 </details>
@@ -486,7 +486,7 @@ else:
 **Question: How would you use `len()` to complete this `is_valid_index` function below?**
 
 ```py
-def is_valid_index(str, index):
+def is_valid_index(text, index):
     return ???
 
 print(is_valid_index('a', 0))      # True
@@ -499,8 +499,8 @@ print(is_valid_index('a', -2))     # False
 **<details><summary>Answer</summary>**
 
 ```py
-def is_valid_index(str, index):
-    return -len(str) <= index < len(str)
+def is_valid_index(text, index):
+    return -len(text) <= index < len(text)
 ```
 
 </details>
@@ -583,7 +583,7 @@ else:
 
 `email.find("@")` returns the index of the `@`, and a slice stops just before its `end`, so `email[:email.find("@")]` is every character before the `@`. If the user types `Reuben@MarcyLabSchool.org`, `lower()` turns it into `reuben@marcylabschool.org`, `find("@")` returns `6`, and `username` holds `"reuben"`. The `is_marcy_email` function from [Validating Input](#validating-input) could check the same `email` to decide whether the user belongs to Marcy.
 
-When the input holds several pieces separated by the same characters, the `split` method breaks it into a list of pieces. Lists are the subject of the next chapter.
+When the input holds several pieces separated by the same characters, the `split` method breaks it into a list of pieces. Lists are the subject of chapter 1.7.
 
 ```python
 print('apples, bananas, cherries'.split(', '))
@@ -742,7 +742,7 @@ print(f"{total:.2f}")
 That `31.400000000000002` is the kind of number you get from arithmetic with decimals, because computers store decimal numbers in a way that is very slightly inexact. The format specifier changes only how the number is _displayed_. The value in `total` is untouched. If you want to change the number itself, `round(total, 2)` returns `31.4`.
 
 {% hint style="warning" %}
-**Predict, then run.** The coin-flip challenge in chapter 1.5 printed a percentage. Suppose 7 of 12 flips came up heads.
+**Predict, then run.** Suppose you flip a coin 12 times and 7 of the flips come up heads.
 
 ```python
 heads = 7
@@ -866,5 +866,3 @@ Notice that `quantity` is left as a string. It is printed and compared with `"1"
 This solution assumes that the user types at least one character for every answer. A user who presses Enter without typing a name still crashes `name[0]` with the `IndexError` from [Parsing Input](#parsing-input). Adding a `len()` check for that case is a good next step.
 
 </details>
-
-**Bonus:** Go back to the While Loop Challenge in chapter 1.5. In that version, the computer guesses its own number. Change it so that the user types each guess instead, and check each guess with `.isdigit()` before you cast it.

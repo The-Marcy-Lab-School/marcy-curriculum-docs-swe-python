@@ -327,7 +327,7 @@ How does the application handle edge cases like trying to complete a task that d
 
 **Question 4**
 
-In chapter 1.6, you checked a string with `isdigit()` before converting it with `int()`. This application uses `try`/`except` instead. Predict what each approach does with the input `-1`. Then type `-1` at the Complete Task prompt. Which part of the program refuses it?
+In chapter 1.5, you checked a string with `isdigit()` before converting it with `int()`. This application uses `try`/`except` instead. Predict what each approach does with the input `-1`. Then type `-1` at the Complete Task prompt. Which part of the program refuses it?
 
 **Question 5**
 

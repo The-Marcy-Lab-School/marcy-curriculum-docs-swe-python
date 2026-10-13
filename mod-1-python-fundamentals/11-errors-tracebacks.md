@@ -371,7 +371,7 @@ people = ask_for_number("How many people? ")
 
 The `return` inside the `try` ends the loop and the function the moment the conversion succeeds. If it fails, the `except` prints a message and the `while True` asks again. This function will appear, in some form, in your project.
 
-**<details><summary>Q: Chapter 1.6 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
+**<details><summary>Q: Chapter 1.5 checked input with `.isdigit()` instead. Why might `try`/`except` be the better tool here?</summary>**
 
 `.isdigit()` only accepts strings made entirely of digits, so it rejects `-5` and `" 5"` (a 5 with a space in front) even though `int()` would happily convert both. The `try`/`except` version lets `int()` be the judge of what it can convert, which is exactly the right judge. Use `.isdigit()` when you specifically want strings made only of digits, with no minus sign or spaces; use `try`/`except` when you want "whatever `int()` accepts."
 

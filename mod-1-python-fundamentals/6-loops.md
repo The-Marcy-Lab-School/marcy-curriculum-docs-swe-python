@@ -1,4 +1,4 @@
-# 1.5 Loops
+# 1.6 Loops
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/05-loops/)
@@ -167,7 +167,7 @@ Here is some starter code:
 import random
 
 def flip_coin():
-    flip_result = random.randInt(0, 1)
+    flip_result = random.randint(0, 1)
     return "heads" if flip_result == 1 else "tails"
 
 def count_heads(flips):
@@ -183,7 +183,7 @@ count_heads(100)
 import random
 
 def flip_coin():
-    flip_result = random.randInt(0, 1)
+    flip_result = random.randint(0, 1)
     return "heads" if flip_result == 1 else "tails"
 
 def count_heads(flips):
@@ -267,10 +267,13 @@ while guess != "Exit":
         print("Out of guesses :(")
         break
 
-    guess = input("What is your guess? ")
+    guess = input("What is your guess? ").strip()
     guesses += 1
-    if (guess == random_num):
+    # input() returns a string, so validate the guess with isdigit() and cast it with int() before comparing it to random_num.
+    # Without the cast, "7" == 7 is False, and no guess could ever win.
+    if guess.isdigit() and int(guess) == random_num:
         print(f"{guess}! Got it!! And it only took you {guesses}!!!")
+        break
     else:
         print(f"That isn't it! Try again!")
 

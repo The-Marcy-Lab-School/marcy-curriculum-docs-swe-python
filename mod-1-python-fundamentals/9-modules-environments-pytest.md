@@ -238,7 +238,7 @@ the circumference of a circle with radius 5 is 31.400000000000002
 
 The message from `circle_helpers.py` prints _first_, before anything from `main.py`. When the interpreter reaches `import circle_helpers` on line 2 of `main.py`, it goes and runs all of `circle_helpers.py`. The `def` statements create the functions, and the `print` at the bottom prints. Only then does it return to `main.py` and continue.
 
-(That `31.400000000000002` is the slightly inexact decimal arithmetic from chapter 1.6, and `{circumference:.2f}` in the f-string would display it as `31.40`.)
+(That `31.400000000000002` is the slightly inexact decimal arithmetic from chapter 1.5, and `{circumference:.2f}` in the f-string would display it as `31.40`.)
 
 </details>
 {% endhint %}
@@ -291,7 +291,7 @@ You will see this guard at the bottom of nearly every Python program you read, a
 
 ### Madlib Challenge, Part 2
 
-Open the `madlib-challenge` folder from chapter 1.6. Right now, the `madlib` function and the `main` function that asks the user for input share one file.
+Open the `madlib-challenge` folder from chapter 1.5. Right now, the `madlib` function and the `main` function that asks the user for input share one file.
 
 1. Re-organize the code such that the `madlib` function is in its own file called `madlib.py`, and `main.py` imports it.
 2. Replace the `main()` call at the bottom of `main.py` with the `if __name__ == "__main__":` guard.

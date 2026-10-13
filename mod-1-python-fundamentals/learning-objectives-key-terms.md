@@ -259,69 +259,9 @@ The program prints `C` because `score >= 70` is checked first. Jordan should put
 
 The program prints `C`. Each `if` is a guard clause, and a `return` statement ends the function the moment it runs. So the first condition that is `True` decides the answer, and the conditions below it are never checked. `95 >= 70` is `True`, so the function returns `"C"` before it ever checks `score >= 80` or `score >= 90`. Jordan should put the narrowest condition first: `score >= 90`, then `score >= 80`, then `score >= 70`. Then a score of 95 meets `score >= 90` first and gets `"A"`, while a score of 75 fails the first two checks and still gets `"C"`. The last line needs no condition because the function only reaches it when every guard clause above it was `False`, which means the score must be below 70.
 
-## 1.5 Loops
+## 1.5 Strings, Inputs and Outputs
 
-<!-- key-terms-from: 5-loops.md -->
-
-**Key terms**
-
-- **Loops** allow you to repeat code multiple times, making it easy to automate repetitive tasks and process collections of data.
-- The **`for` loop** with **`range()`** is best for repeating a process a known number of times, such as counting.
-- An **iterable** is any value a `for` loop can walk through one element at a time. A `range()` and a string are both iterables.
-- The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
-- **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
-- **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
-- Loop challenges help you practice using loops to solve real problems, such as counting results or repeating until something happens.
-
-**You will be able to…**
-
-_In the session:_
-
-- Rewrite repeated statements as a `for` loop over `range()`, and predict the first and last values `range()` produces.
-- Choose between a `for` loop and a `while` loop from whether the number of repetitions is known in advance.
-- Write a `while True` loop that repeats until a random event happens, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
-- Keep a running count across iterations of a loop and report it afterward.
-
-_By the end of the module:_
-
-- Loop over the characters of a string.
-- Predict the output and the number of iterations of a nested loop.
-- Stop an infinite loop from the Terminal.
-
-### Exit Ticket
-
-**Learning Objective**: Fellows will be able to predict the result a loop produces, explain how placing a variable inside or outside the loop determines that result, and justify the choice between a `for` loop and a `while` loop.
-
-**Question**
-
-Kiara writes a function that rolls a die many times and counts the sixes:
-
-```python
-import random
-
-def count_sixes(rolls):
-    for i in range(rolls):
-        sixes = 0
-        if random.randint(1, 6) == 6:
-            sixes += 1
-    print(f"{sixes} sixes in {rolls} rolls")
-
-count_sixes(100)
-```
-
-Kiara runs the program several times. The message always reports either 0 or 1 sixes, never anything close to the 16 or 17 sixes that 100 rolls usually produce. Why? How should Kiara fix the function? Next, Kiara wants a program that rolls until the first 6 and then reports how many rolls it took. Should Kiara use a `for` loop or a `while` loop, and why?
-
-**Level 2 Example**
-
-The count is reset to 0 every time the loop runs. Kiara should move `sixes = 0` above the `for` line. For rolling until a 6, Kiara should use a `while` loop.
-
-**Level 3 Example**
-
-A `for` loop runs its whole body once for every number in `range(100)`. `sixes = 0` is inside the body, so it runs at the start of every roll and throws away the count from all the rolls before. By the time the loop ends, `sixes` holds only the result of the last roll: `1` if the last roll was a 6 and `0` if it was not. Kiara should move `sixes = 0` above the `for` line. Then `sixes = 0` runs once, and `sixes += 1` adds to a running count that lasts across all 100 iterations. For rolling until the first 6, Kiara should use a `while` loop, because nobody knows in advance how many rolls it will take, and a `for` loop with `range()` needs the number of repetitions before the loop starts. Kiara could set a `rolls` counter to `0` before a `while True:` loop, add 1 to it on every roll, `break` when the roll is a 6, and print `rolls` after the loop.
-
-## 1.6 Inputs and Outputs
-
-<!-- key-terms-from: 6-inputs-outputs.md -->
+<!-- key-terms-from: 5-inputs-outputs.md -->
 
 **Key terms**
 
@@ -378,6 +318,66 @@ The program crashes with a `TypeError` because `age` is a string. Luis needs to 
 **Level 3 Example**
 
 The program crashes with `TypeError: '>=' not supported between instances of 'str' and 'int'`. `input()` always returns a string, so even though Luis typed `21`, `age` holds `"21"`. Python will not compare a string with a number, because it does not know whether Luis meant the text or the number. To fix the program, Luis has to cast `age` with `int()` before the comparison. But `int("twenty")` raises a `ValueError`, so Luis should validate the string before casting it. I would write `age = input("How old are you? ").strip()` to remove stray spaces, then `if not age.isdigit():` print a message like `twenty is not a number`, and otherwise run `age = int(age)` before the `>= 18` comparison. Then `21` passes `isdigit()`, becomes the integer `21`, and prints `You can vote!`, while `twenty` fails `isdigit()` and gets a message instead of a crash.
+
+## 1.6 Loops
+
+<!-- key-terms-from: 6-loops.md -->
+
+**Key terms**
+
+- **Loops** allow you to repeat code multiple times, making it easy to automate repetitive tasks and process collections of data.
+- The **`for` loop** with **`range()`** is best for repeating a process a known number of times, such as counting.
+- An **iterable** is any value a `for` loop can walk through one element at a time. A `range()` and a string are both iterables.
+- The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
+- **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
+- **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
+- Loop challenges help you practice using loops to solve real problems, such as counting results or repeating until something happens.
+
+**You will be able to…**
+
+_In the session:_
+
+- Rewrite repeated statements as a `for` loop over `range()`, and predict the first and last values `range()` produces.
+- Choose between a `for` loop and a `while` loop from whether the number of repetitions is known in advance.
+- Write a `while True` loop that repeats until a random event happens, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
+- Keep a running count across iterations of a loop and report it afterward.
+
+_By the end of the module:_
+
+- Loop over the characters of a string.
+- Predict the output and the number of iterations of a nested loop.
+- Stop an infinite loop from the Terminal.
+
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to predict the result a loop produces, explain how placing a variable inside or outside the loop determines that result, and justify the choice between a `for` loop and a `while` loop.
+
+**Question**
+
+Kiara writes a function that rolls a die many times and counts the sixes:
+
+```python
+import random
+
+def count_sixes(rolls):
+    for i in range(rolls):
+        sixes = 0
+        if random.randint(1, 6) == 6:
+            sixes += 1
+    print(f"{sixes} sixes in {rolls} rolls")
+
+count_sixes(100)
+```
+
+Kiara runs the program several times. The message always reports either 0 or 1 sixes, never anything close to the 16 or 17 sixes that 100 rolls usually produce. Why? How should Kiara fix the function? Next, Kiara wants a program that rolls until the first 6 and then reports how many rolls it took. Should Kiara use a `for` loop or a `while` loop, and why?
+
+**Level 2 Example**
+
+The count is reset to 0 every time the loop runs. Kiara should move `sixes = 0` above the `for` line. For rolling until a 6, Kiara should use a `while` loop.
+
+**Level 3 Example**
+
+A `for` loop runs its whole body once for every number in `range(100)`. `sixes = 0` is inside the body, so it runs at the start of every roll and throws away the count from all the rolls before. By the time the loop ends, `sixes` holds only the result of the last roll: `1` if the last roll was a 6 and `0` if it was not. Kiara should move `sixes = 0` above the `for` line. Then `sixes = 0` runs once, and `sixes += 1` adds to a running count that lasts across all 100 iterations. For rolling until the first 6, Kiara should use a `while` loop, because nobody knows in advance how many rolls it will take, and a `for` loop with `range()` needs the number of repetitions before the loop starts. Kiara could set a `rolls` counter to `0` before a `while True:` loop, add 1 to it on every roll, `break` when the roll is a 6, and print `rolls` after the loop.
 
 ## 1.7 Lists
 
