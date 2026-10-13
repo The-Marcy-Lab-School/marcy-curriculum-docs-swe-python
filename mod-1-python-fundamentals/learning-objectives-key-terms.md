@@ -326,26 +326,24 @@ The program crashes with `TypeError: '>=' not supported between instances of 'st
 **Key terms**
 
 - **Loops** allow you to repeat code multiple times, making it easy to automate repetitive tasks and process collections of data.
-- The **`for` loop** with **`range()`** is best for repeating a process a known number of times, such as counting.
+- The **`for` loop** runs its code block once for each element of an iterable. Paired with **`range()`**, it repeats a process a known number of times.
 - An **iterable** is any value a `for` loop can walk through one element at a time. A `range()` and a string are both iterables.
+- **Iterating** over an iterable means going through its elements one at a time, running the loop's code block once for each element.
 - The **`while` loop** is useful for repeating a process an unknown number of times, continuing until a condition is no longer true.
 - **Infinite loops** occur when the loop's condition never becomes false; use `break` to exit early and `continue` to skip to the next iteration.
-- **Nested loops** let you loop inside another loop, useful for working with multi-dimensional data or complex processes.
-- Loop challenges help you practice using loops to solve real problems, such as counting results or repeating until something happens.
 
 **You will be able to…**
 
 _In the session:_
 
-- Rewrite repeated statements as a `for` loop over `range()`, and predict the first and last values `range()` produces.
+- Identify the loop variable and the iterable in any `for` statement, explain that the loop variable's name is the programmer's choice, and rewrite repeated statements as a `for` loop over a string or over `range()`, predicting the first and last values `range()` produces.
 - Choose between a `for` loop and a `while` loop from whether the number of repetitions is known in advance.
-- Write a `while True` loop that repeats until a random event happens, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
+- Write a `while` loop that repeats until the user types valid input or a random event happens, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
 - Keep a running count across iterations of a loop and report it afterward.
 
 _By the end of the module:_
 
-- Loop over the characters of a string.
-- Predict the output and the number of iterations of a nested loop.
+- Write a `for` loop that iterates over the characters of a string, and choose between iterating over the string and over `range(len(...))` by whether the loop needs each character's index.
 - Stop an infinite loop from the Terminal.
 
 ### Exit Ticket

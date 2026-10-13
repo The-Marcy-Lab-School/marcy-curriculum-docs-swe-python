@@ -282,7 +282,24 @@ message = 'even' if num % 2 == 0 else 'odd'
 
 ## Loops
 
-**For Loop with `range()`** — use when you know how many iterations:
+**For Loop** — runs its code block once for each element of an iterable. You choose the variable's name:
+
+```python
+for variable_name in iterable:
+    # code block
+```
+
+**For Loop over a string:**
+
+```python
+for letter in "hello":       # letter holds "h", then "e", ... then "o"
+    print(letter)
+
+for i in range(len(word)):   # use the indexes only when you need each position
+    print(i, word[i])
+```
+
+**For Loop with `range()`** — use when you know how many iterations. The stop value is never included:
 
 ```python
 for i in range(10):          # 0 through 9
@@ -317,15 +334,6 @@ while True:
 **`break` vs `return`:**
 - `break` — exits the current loop, continues after the loop
 - `return` — exits the loop AND the current function
-
-**Nested Loops:**
-
-```python
-for i in range(3):
-    for j in range(5):
-        print(f"{i} - {j}")
-# Outer runs 3 times × inner runs 5 times = 15 total iterations
-```
 
 ## Modules and the Ecosystem
 
