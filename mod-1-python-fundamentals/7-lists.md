@@ -24,14 +24,21 @@
 ## Key Terms
 
 - **Lists** are ordered collections of values. Like strings, they have indexes starting at `0`, support bracket notation and slicing, and work with `len()` and the `in` operator.
-- Unlike strings, lists are **mutable**. Methods like `append`, `insert`, `pop`, and `remove` change a list in place.
-- A variable does not hold a list. It holds a **reference** to the list. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
+- Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
+- A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
 - A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
 - Lists can contain other lists (**2D lists**), and a list can be **unpacked** into several variables at once. A **tuple** is a list that cannot change, written with parentheses.
 
 ## List Basics
 
-- A list is a single value that holds several values in a particular order. The values in a list are called the **elements of the list**, and each element stays in its position until the list is changed.
+A list is a single value that holds several values in a particular order.
+
+```py
+friends = ['bert', 'ernie', 'big bird', 'kermit', 'miss piggy', 'elmo']
+```
+
+The values in a list are called the **elements of the list**, and each element stays in its position until the list is changed.
+
 - Lists use square brackets `[]` around their elements, separated by commas.
 - Like strings lists also...
   - have indexes starting at `0`

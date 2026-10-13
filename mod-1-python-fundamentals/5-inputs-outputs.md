@@ -1,0 +1,841 @@
+# 1.6 Inputs and Outputs
+
+{% hint style="info" %}
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/06-inputs-and-outputs/)
+{% endhint %}
+
+A program takes data in, does something with it, and puts data out. In a command-line program, both ends of that are strings: everything the user types arrives in the program as a string, and everything the program prints is turned into a string before it appears. Once the user supplies the data, you no longer know what it holds, so your program has to work on each string it receives: clean it, which includes casting it to the type the program needs, validate it, and parse out the parts it needs. On the way out, the program reshapes its results into text a person can read. This lesson follows a value through each of those steps, and teaches each string tool at the step that needs it.
+
+**Table of Contents:**
+
+- [Key Terms](#key-terms)
+- [Strings](#strings)
+- [Input](#input)
+  - [Getting Input with `input()`](#getting-input-with-input)
+  - [Cleaning Input](#cleaning-input)
+    - [Type Casting](#type-casting)
+  - [Validating Input](#validating-input)
+  - [Parsing Input](#parsing-input)
+- [Output](#output)
+  - [Printing Several Values](#printing-several-values)
+  - [String Interpolation with f-strings](#string-interpolation-with-f-strings)
+  - [Formatting Numbers](#formatting-numbers)
+- [Madlib Challenge](#madlib-challenge)
+
+![A string of characters is like a bracelet with beads on it](../.gitbook/assets/image.png)
+
+## Key Terms
+
+- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning all operations are "read-only".
+- The **`in` operator** checks whether one string contains another.
+- **Bracket notation** returns individual characters within a string: `str[index]`
+- The built-in **`len()`** function returns the number of characters in a string (and you can use this method on lists and dictionaries too!).
+- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
+- **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
+- **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.
+- **f-strings** interpolate the value of any expression written inside `{}` into a string. A **format specifier** after a colon, like `{price:.2f}`, controls how the value is displayed.
+- The **`input()`** function gets input from the user. It always returns a string, so casting it to another type is your job.
+- **Type casting** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
+- A program is **hard-coded** if the program code must be modified in order to produce a new result.
+
+## Strings
+
+A string is a sequence of characters between single or double quotations.
+
+```python
+print("This is a string!")
+print('1234556')     # <-- also a string
+print('True')        # <-- also a string
+print('!@#$%^&*()')  # <-- also a string
+```
+
+{% hint style="info" %}
+**Escaping characters.** If you want a quotation mark inside your string, put a `\` in front of it:
+
+```py
+print("The robot said, \"beep boop bop\"")
+```
+
+The same backslash makes special characters: `\t` is a tab and `\n` is a new line:
+
+```py
+print("First line\nSecond line") # prints two lines
+```
+{% endhint %}
+
+## Input
+
+A program is considered **hard-coded** if the program code must be modified in order to produce a new result. The built-in `input()` function lets the person running the program provide the data instead, through the Terminal.
+
+Handing that job to the user means giving up some control. When you wrote the data yourself, you knew exactly what each value held. A user can type anything: extra spaces, unexpected capitals, nothing at all, or an email address with no `@` in it.
+
+A program that uses those values exactly as they arrive will print strange output or crash. What you still control is what the program does with each value next. A program typically does a few things with user input:
+
+1. cleaning
+2. validating
+3. parsing
+
+Whatever the user types arrives as a string, so the more you know about strings, the more kinds of input your program can handle. The rest of this section teaches the string tools for each job.
+
+### Getting Input with `input()`
+
+`input(prompt)` prints the `prompt`, waits for the user to type a line and press Enter, and returns what they typed:
+
+{% code title="main.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+name = input("Hello there! What's your name? ")
+print(f"hi {name}. My name is HAL")
+```
+
+{% endcode %}
+
+The space at the end of the prompt is there so that what the user types does not run into the question.
+
+### Cleaning Input
+
+**Cleaning** input means putting what the user typed into the form, and the data type, that the rest of the program expects. Users type messily. They add spaces, and they use capitals when you expected lowercase. Python compares strings character by character, so `"YES" == "yes"` is `False`. Without any cleanup, a check like `answer == "yes"` would tell a user who typed `YES` "Okay, see you later."
+
+Strings come with tools for cleaning up text like this, called methods. A **method** is a special kind of function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`:
+
+```py
+answer = '  YES '
+
+# str.strip() returns `str` without the whitespace at either end
+print(answer.strip())
+# Output: YES
+
+# str.lower() returns `str` with every character in lowercase
+print('YES'.lower())
+# Output: yes
+
+# str.upper() returns `str` with every character capitalized
+print('yes'.upper())
+# Output: YES
+
+# Other data types have methods too, such as float.is_integer()
+print(5.0.is_integer()) # True
+print(5.1.is_integer()) # False
+```
+
+{% hint style="info" %}
+
+🤔 **How does the method access the value?** Because methods are attached to a value, they can access the value without it being passed in as an argument (this is possible with the `class` syntax in Python, covered in the next module).
+
+{% endhint %}
+
+Strings are **immutable** (read-only), so a string method never changes the string it is called on. Methods like `strip()` and `lower()` first copy the string they are operating on and return a new string instead. After `answer.strip()` runs, `answer` still holds `'  YES '`, so to keep the cleaned-up string, store what the method returns, as in `answer = answer.strip()`.
+
+Cleaning `answer` completely takes both `strip()` and `lower()`, and you can call them one after the other:
+
+```python
+answer = '  YES '
+
+print(answer.strip().lower())
+# Output: yes
+```
+
+`answer.strip().lower()` is two method calls in a row. `strip()` returns a new string, and `.lower()` is called on that new string. This is called **method chaining**, and it works because `strip()` returns a string, which has a `.lower()` method.
+
+Method chaining lets you clean input on the same line as the `input()`:
+
+```python
+answer = input("Do you want to continue? (yes/no) ").strip().lower()
+
+if answer == "yes":
+    print("Let's keep going!")
+else:
+    print("Okay, see you later.")
+```
+
+Whether the user types `yes`, `YES`, or ` Yes`, `answer` holds `"yes"`.
+
+Sometimes cleaning means removing characters from the middle of a string, not only from its ends. `replace(old, new)` replaces every appearance of `old` with `new`, so replacing a character with an empty string removes it:
+
+```python
+phone = '555-123-4567'
+
+print(phone.replace('-', ''))
+# Output: 5551234567
+
+print('apples'.replace('p', 'g'))
+# Output: aggles
+
+print('apples'.replace('p', 'g', 1))
+# Output: agples
+```
+
+Notice that `replace` replaces _every_ match unless you tell it how many to replace with a third argument.
+
+#### Type Casting
+
+Cleaning input also means giving it the data type the program needs.
+
+{% hint style="warning" %}
+**Predict, then run.**
+
+```python
+age = input("How old are you? ")
+print(age * 2)
+```
+
+Type `20` when asked. What prints?
+
+<details><summary>What actually happens</summary>
+
+```
+2020
+```
+
+`input()` **always returns a string**, no matter what the user typed. The user typed `20`, but `age` holds `"20"`, and a string multiplied by `2` is repeated, just like `"3" * 5` in chapter 1.2.
+
+Every time you take input from a user and want a number, casting it is your job. Nothing does it for you.
+
+</details>
+{% endhint %}
+
+Every value that comes out of `input()` is a string, even when the user typed a number. If `age` holds the string `"20"`, both `age + 1` and `age >= 18` crash with a `TypeError`, because Python will not do arithmetic or a `>=` comparison between a string and a number. Before you can write either one, you need to cast `age` to a number.
+
+Converting a value from one data type to another is called **type casting**. We can cast a value using the type casting functions `str()`, `int()`, and `float()`:
+
+```python
+# Everything can easily be turned into a string
+print(str(1))          # -> "1"
+print(str(True))       # -> "True"
+
+# Not everything becomes a number in a nice way
+print(int(False))      # -> 0
+print(int("42"))       # -> 42
+print(float("0.50"))   # -> 0.5
+print(int("hello"))    # -> crashes with ValueError: invalid literal for int() with base 10: 'hello'
+```
+
+Casting input works the same way. `strip()` and `int()` can both clean the input on the same line as the `input()`:
+
+```python
+age = int(input("How old are you? ").strip())
+print(f"Next year you will be {age + 1}")
+```
+
+If the user types `twenty` instead of `20`, `int()` crashes with the same `ValueError` as `int("hello")`. A program that casts input without validating it first crashes as soon as a user types something unexpected. Catching that problem before the cast is the job of [Validating Input](#validating-input), which comes next.
+
+{% hint style="warning" %}
+**Predict, then run.** What is the result of the expression below? What data type is produced? Do you think we should even be allowed to do something like this?
+
+```python
+print("1" + 1)
+```
+
+<details><summary>What actually happens</summary>
+
+```
+TypeError: can only concatenate str (not "int") to str
+```
+
+Python will not add a string and a number. It does not know whether you wanted the string `"11"` or the number `2`, and rather than pick one it stops and tells you. The error is your cue to say which cast you meant:
+
+```python
+print("1" + str(1))   # -> "11"
+print(int("1") + 1)   # -> 2
+```
+
+Between kinds of numbers, conversion happens on its own: `5 + 2.5` turns the integer `5` into a float and produces `7.5`, and `5 + True` produces `6` because `True` counts as `1` in arithmetic. Division with `/` is a separate rule: `/` always produces a float, even between two integers, so `4 / 2` produces `2.0`.
+
+</details>
+{% endhint %}
+
+The fourth type casting function, `bool()`, is the one you met with truthy and falsy values in chapter 1.4. An `if` statement calls `bool()` on its condition for you whenever the condition is not already a boolean.
+
+### Validating Input
+
+**Validating** input means checking that it is acceptable before the program uses it. Clean input can still be the wrong input. The user may have pressed Enter without typing anything, or typed an email address with no `@` in it. Each tool in this section answers a question about a string, and the answer is a value that an `if` statement can use to decide what the program does next.
+
+The `len()` function returns the number of characters in a string (including spaces). `len()` is a function rather than a method, so the string goes inside the parentheses: `len(name)`.
+
+```python
+message = 'Hello there!'
+
+print(len(message))
+# Output: 12
+
+print(len(''))
+# Output: 0
+```
+
+A string with no characters at all, `''`, is called an **empty string**, and its length is `0`. Pressing Enter without typing anything makes `input()` return an empty string. Typing only spaces does too, once `strip()` has removed them. Without a check, this program would greet the user with `Hello, !`, and the user could reasonably believe the program is broken. Checking the length first lets the program say what went wrong instead:
+
+```python
+name = input("What's your name? ").strip()
+
+if len(name) == 0:
+    print("You didn't type a name.")
+else:
+    print(f"Hello, {name}!")
+```
+
+The `in` operator checks whether one string is inside another.
+
+```py
+print('ana' in 'banana')
+# Output: True
+
+print('ANA' in 'banana')
+# Output: False
+```
+
+**<details><summary>Q: Is this operation case-sensitive?</summary>**
+
+Yes! In the example above, `'ANA' in 'banana'` resolved to `False`. This is one reason to clean input with `lower()` before validating it.
+
+</details>
+
+**Question: How would you use `in` to complete this `is_marcy_email` function below?**
+
+```py
+def is_marcy_email(email):
+    return ???
+
+print(is_marcy_email('reuben@marcylabschool.org')) # True
+print(is_marcy_email('reuben@marcylabschool.com')) # False
+print(is_marcy_email('reuben@marcy.org'))          # False
+```
+
+**<details><summary>Answer</summary>**
+
+```py
+def is_marcy_email(email):
+    return '@marcylabschool.org' in email
+```
+
+</details>
+
+When it matters _where_ the text appears, the `startswith` and `endswith` methods check only the beginning or only the end of a string:
+
+```python
+website = 'https://marcylabschool.org'
+
+print(website.startswith('https://'))
+# Output: True
+
+print(website.endswith('.com'))
+# Output: False
+```
+
+The `isdigit` method checks whether a string is made entirely of digits. That makes `isdigit()` the check to run before casting a string to a number, because `int("hello")` crashes the program, as you saw in [Type Casting](#type-casting):
+
+```python
+print('42'.isdigit())
+# Output: True
+
+print('4.2'.isdigit())
+# Output: False
+```
+
+Validating the string before you cast it lets you give the user a message instead of a crash. `.isdigit()` is strict, though. It returns `False` for `" 20"` with a space in it, for `"-5"`, and for `"4.2"`. Clean the input with `strip()` first, and expect negative numbers and decimals to be rejected.
+
+```python
+age = input("How old are you? ").strip()
+
+if not age.isdigit():
+    print(f"Sorry, {age} is not a number")
+else:
+    age = int(age)
+    print(f"Next year you will be {age + 1}")
+```
+
+**Question: A sign-up form accepts a phone number when it has exactly 10 digits once the dashes are removed. What would you return to complete this `is_valid_phone` function below?**
+
+```py
+def is_valid_phone(phone):
+    return ???
+
+print(is_valid_phone('555-123-4567'))   # True
+print(is_valid_phone('5551234567'))     # True
+print(is_valid_phone('555-1234'))       # False
+print(is_valid_phone('555-CALL-NOW'))   # False
+```
+
+**<details><summary>Answer</summary>**
+
+```py
+def is_valid_phone(phone):
+    digits = phone.replace('-', '')
+    return digits.isdigit() and len(digits) == 10
+```
+
+`'555-CALL-NOW'` has 10 characters once its dashes are removed, so the length check alone would accept it. `isdigit()` is the check that rejects it.
+
+Notice that `is_valid_phone` never casts the phone number to an `int`. A phone number is made of digits, but nobody adds or multiplies phone numbers, so it stays a string.
+
+</details>
+
+### Parsing Input
+
+**Parsing** input means taking it apart to get the pieces the program needs, such as the first letter of a name or the part of an email address before the `@`. Taking a piece out of a string starts with knowing where each character is.
+
+Each character in a string, including spaces, has an **index** — a numbered position starting at `0`.
+
+We can get a single character from a string using **Bracket Notation** and the index: `string[index]`
+
+```python
+print("abc"[0])    # Output: a
+print("abc"[1])    # Output: b
+print("abc"[2])    # Output: c
+```
+
+It works on variables too!
+
+```python
+message = 'Hello there!'
+
+print(message[0])   # Output: H
+print(message[4])   # Output: o
+print(message[5])   # Output: ???
+print(message[11])  # Output: ???
+```
+
+Python also lets you count backwards from the end of a string with a negative index. `-1` is the last character, `-2` is the one before it, and so on:
+
+```python
+print(message[-1])  # Output: !
+print(message[-2])  # Output: ???
+
+print(message[len(message) - 1])
+# Output: !  (the same character as message[-1])
+```
+
+**Question: What would you return to complete this `starts_and_ends_with_a` function below?**
+
+```py
+def starts_and_ends_with_a(str):
+    return ???
+
+print(starts_and_ends_with_a('apple'))          # False
+print(starts_and_ends_with_a('banana'))         # False
+print(starts_and_ends_with_a('abracadabra'))    # True
+```
+
+**<details><summary>Answer</summary>**
+
+```py
+def starts_and_ends_with_a(str):
+    return str[0] == 'a' and str[-1] == 'a'
+```
+
+</details>
+
+{% hint style="warning" %}
+**Predict, then run.** Run this program and press Enter without typing a name.
+
+```python
+name = input("What's your name? ").strip()
+print(f"Your name starts with {name[0].upper()}")
+```
+
+<details><summary>What actually happens</summary>
+
+```
+IndexError: string index out of range
+```
+
+- Pressing Enter without typing anything makes `input()` return an empty string, `""`.
+- An empty string has no characters, so it has no index `0`.
+- `name[0]` asks for a character that does not exist, so Python stops with an `IndexError`.
+
+The program stops. Later in this module you will learn how to catch errors like this one and decide what to do instead. For now, the lesson is that an index has to be inside the string.
+
+</details>
+{% endhint %}
+
+The `len()` check from [Validating Input](#validating-input) prevents this crash too, because index `0` exists only when the string has at least one character:
+
+```python
+name = input("What's your name? ").strip()
+
+if len(name) == 0:
+    print("You didn't type a name.")
+else:
+    print(f"Your name starts with {name[0].upper()}")
+```
+
+**Question: How would you use `len()` to complete this `is_valid_index` function below?**
+
+```py
+def is_valid_index(str, index):
+    return ???
+
+print(is_valid_index('a', 0))      # True
+print(is_valid_index('a', 2))      # False
+print(is_valid_index('aaa', 2))    # True
+print(is_valid_index('a', -1))     # True
+print(is_valid_index('a', -2))     # False
+```
+
+**<details><summary>Answer</summary>**
+
+```py
+def is_valid_index(str, index):
+    return -len(str) <= index < len(str)
+```
+
+</details>
+
+An index takes out one character. **Slicing** with `[start:end]` takes out a piece of the string, from `start` up to but not including `end`:
+
+```python
+fruits = 'apples, bananas, cherries'
+
+print(fruits[0:6])
+# Output: apples
+```
+
+Either number in a slice can be left out. Leaving out `start` begins the slice at the first character, and leaving out `end` continues the slice to the last character. A negative number counts from the end of the string, just as it does with a single index:
+
+```python
+print(fruits[:6])
+# Output: apples
+
+print(fruits[8:])
+# Output: bananas, cherries
+
+print(fruits[-8:])
+# Output: cherries
+```
+
+A slice needs index numbers, but with input, the user decides where the interesting part of the string is. The methods `find` and `rfind` return the index of a character, or a longer piece of text, that you are looking for.
+
+- `find` returns the index of the first match
+- `rfind` returns the index of the last match.
+- Both methods count the index from the left, the normal way. When there is no match, both methods return `-1`:
+
+**Predict, then run**: What will be the output of each print statement below?
+
+```python
+fruit = 'bananas'
+
+print(fruit.find('a'))
+# Output: ???
+
+print(fruit.rfind('a'))
+# Output: ???
+
+print(fruit.find('z'))
+# Output: ???
+```
+
+**<details><summary>Answer</summary>**
+
+```python
+fruit = 'bananas'
+
+print(fruit.find('a'))
+# Output: 1
+
+print(fruit.rfind('a'))
+# Output: 5
+
+print(fruit.find('z'))
+# Output: -1 (not found)
+```
+
+</details>
+
+Together, `find()` and a slice take out a piece of the input whose position you could not know in advance. This program asks for an email address, validates it with the `in` operator, and takes everything before the `@` as a username:
+
+```python
+email = input("What's your email? ").strip().lower()
+
+if "@" in email:
+    username = email[:email.find("@")]
+    print(f"Welcome, {username}!")
+else:
+    print(f"Sorry, {email} is not an email address.")
+```
+
+`email.find("@")` returns the index of the `@`, and a slice stops just before its `end`, so `email[:email.find("@")]` is every character before the `@`. If the user types `Reuben@MarcyLabSchool.org`, `lower()` turns it into `reuben@marcylabschool.org`, `find("@")` returns `6`, and `username` holds `"reuben"`. The `is_marcy_email` function from [Validating Input](#validating-input) could check the same `email` to decide whether the user belongs to Marcy.
+
+When the input holds several pieces separated by the same characters, the `split` method breaks it into a list of pieces. Lists are the subject of the next chapter.
+
+```python
+print('apples, bananas, cherries'.split(', '))
+# Output: ['apples', 'bananas', 'cherries']
+```
+
+Be careful when chaining after `split()`. Not every method returns a string: `split()` returns a list and `isdigit()` returns a boolean, so something like `'a, b'.split(', ').lower()` crashes with an `AttributeError`.
+
+## Output
+
+Everything a command-line program shows its user comes out of `print()`, and `print()` turns every value into a string before showing it. That makes the output of your program a string that you build. Until this chapter, your programs could print a value only the way it was stored. The string tools you used on input work just as well on output, so a program can reshape a value before printing it: capitalize it, take a piece of it, or measure it. The more you can do with strings, the more control you have over exactly what your user reads.
+
+One more tool is useful mostly for output: the `*` operator, which repeats a string, as you saw with `"3" * 5` in chapter 1.2. For example, this program prints a heading in capitals with a line of `=` beneath it:
+
+```python
+title = "Shopping List"
+
+print(title.upper())
+print("=" * len(title))
+# Output:
+# SHOPPING LIST
+# =============
+```
+
+`title.upper()` returns a capitalized copy of the title, and `"=" * len(title)` repeats `=` once for every character in the title. Because the length of the line comes from `len()` instead of from counting characters by hand, the line stays exactly as long as the heading when `title` changes to `"Groceries"` or to anything else.
+
+You have been calling `print()` since chapter 1.1 with one value at a time. It can do more than that.
+
+### Printing Several Values
+
+Give `print()` several values separated by commas and it prints all of them on one line, with a space between each:
+
+```python
+name = "Ada"
+age = 36
+
+print("name:", name, "age:", age)
+# Output: name: Ada age: 36
+```
+
+Two keyword arguments control the spacing. `sep` (separator) is what goes _between_ the values, and its default is a space. `end` is what goes _after_ the last value, and its default is `"\n"`, the new line character from the escaping hint above. That default is why every `print()` starts on a new line.
+
+```python
+print("a", "b", "c", sep="-")
+# Output: a-b-c
+
+print("loading", end="")
+print("...", end="")
+print("done")
+# Output: loading...done
+```
+
+{% hint style="warning" %}
+**Predict, then run.**
+
+```python
+print("1", "2", "3", sep="")
+print(1, 2, 3, sep=" + ", end=" = 6\n")
+```
+
+<details><summary>What actually happens</summary>
+
+```
+123
+1 + 2 + 3 = 6
+```
+
+The first line has nothing between the values, so they run together. The second line puts `" + "` between the numbers and `" = 6\n"` after them. Notice that `print()` accepted the numbers `1`, `2`, and `3` without complaint. It turns every value into text before printing it.
+
+</details>
+{% endhint %}
+
+### String Interpolation with f-strings
+
+When a string is written with an `f` in front of the opening quote, an expression inside curly braces `{}` is **interpolated** into a string for easy formatting:
+
+```python
+print(f"The sum of 10 and 2 is {10 + 2}")
+# Output: The sum of 10 and 2 is 12
+```
+
+These are called **f-strings**. Without the `f`, the curly braces are just characters:
+
+```python
+print("The sum of 10 and 2 is {10 + 2}")
+# Output: The sum of 10 and 2 is {10 + 2}
+```
+
+Anything that produces a value can go inside the braces: a variable, arithmetic, a function call, a method call, an index, or a slice. This is where the string tools from the Input section pay off a second time, because each one can shape a value right where it appears in the message:
+
+```python
+first = "ada"
+last = "lovelace"
+
+print(f"Welcome, {first[0].upper()}{first[1:]}!")
+# Output: Welcome, Ada!
+
+print(f"Your initials are {first[0].upper()}.{last[0].upper()}.")
+# Output: Your initials are A.L.
+
+print(f"Your last name has {len(last)} letters.")
+# Output: Your last name has 8 letters.
+```
+
+Each pair of braces holds its own expression. In the first message, `first[0].upper()` takes the first character of the name and capitalizes it, and `first[1:]` takes every character after the first, so together they print the name with a capital letter even though `first` is stored in lowercase.
+
+A slice is just as useful for leaving information out. A receipt should show enough of a card number for the customer to recognize their card, and no more:
+
+```python
+card = "4111222233334444"
+
+print(f"Paid with the card ending in {card[-4:]}")
+# Output: Paid with the card ending in 4444
+```
+
+Like `print()` with commas, an f-string turns each value into text for you. Building the same message with `+` would need `"Your last name has " + str(len(last)) + " letters."`, and forgetting the `str()` crashes the program (you saw that crash in [Type Casting](#type-casting)). Because of this conversion, f-strings are the way most Python programmers build a message: the words and the values sit in the order they will be printed, and you never have to cast anything yourself.
+
+{% hint style="warning" %}
+**Predict, then run.** Many receipts hide every digit of the card number except the last four.
+
+```python
+card = "4111222233334444"
+print("*" * (len(card) - 4) + card[-4:])
+```
+
+<details><summary>What actually happens</summary>
+
+```
+************4444
+```
+
+- `len(card)` is `16`, so `len(card) - 4` is `12`.
+- `"*" * 12` repeats the star twelve times.
+- `card[-4:]` takes the last four characters, `"4444"`.
+- `+` joins the two strings. Both sides are already strings, so nothing needs casting.
+
+The number of stars comes from the card number itself, so a 15-digit card gets 11 stars and still shows only its last four digits. The program never needs to know in advance how long the card number is.
+
+</details>
+{% endhint %}
+
+### Formatting Numbers
+
+Put a colon after the expression inside the braces and you can say _how_ the value should be displayed. This is called a **format specifier**. The one you will use most is `.2f`, which means "as a decimal number with exactly two digits after the decimal point":
+
+```python
+price = 5
+print(f"${price:.2f}")
+# Output: $5.00
+
+total = 31.400000000000002
+print(f"{total:.2f}")
+# Output: 31.40
+```
+
+That `31.400000000000002` is the kind of number you get from arithmetic with decimals, because computers store decimal numbers in a way that is very slightly inexact. The format specifier changes only how the number is _displayed_. The value in `total` is untouched. If you want to change the number itself, `round(total, 2)` returns `31.4`.
+
+{% hint style="warning" %}
+**Predict, then run.** The coin-flip challenge in chapter 1.5 printed a percentage. Suppose 7 of 12 flips came up heads.
+
+```python
+heads = 7
+flips = 12
+
+print(f"That is {heads / flips * 100}%!")
+print(f"That is {heads / flips * 100:.1f}%!")
+```
+
+<details><summary>What actually happens</summary>
+
+```
+That is 58.333333333333336%!
+That is 58.3%!
+```
+
+`.1f` rounds the number to one digit after the decimal point. Both lines print the same calculation. The second line shows only as many digits as a person reading a percentage needs.
+
+</details>
+{% endhint %}
+
+## Madlib Challenge
+
+The program below is **hard-coded**: the only way to get a different story is to open `main.py` and edit the variables, which a friend playing your madlib cannot do. The `input()` function fixes that problem: the person running the program supplies the words, and every run can tell a new story.
+
+In a new `madlib-challenge` folder, create a `main.py` file with the following hard-coded program:
+
+{% code title="madlib-challenge/main.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+def madlib(name, verb, quantity, item, new_item, is_happy):
+    print(f"There once was a man named {name}.")
+    print(f"Every day he would {verb} with his {quantity} {item}s")
+
+    if is_happy:
+        print(f"But then, he found a {new_item} and everything changed!")
+    else:
+        print(f"But then, a {new_item} took over his life and he couldn't {verb} again!")
+
+    print("The end.")
+
+def main():
+    name = 'Ben'
+    verb = 'run'
+    quantity = 50
+    item = 'dog'
+    new_item = 'new car'
+    is_happy = False
+
+    madlib(name, verb, quantity, item, new_item, is_happy)
+
+main()
+```
+
+{% endcode %}
+
+Your goal is to do the following in the `madlib-challenge` folder:
+
+1. Replace the hard-coded variables defined in the `main` function with values retrieved from the user via the `input()` function, and remove any spaces the user types around their answers.
+2. `is_happy` has to be a boolean. The user can only type a string, and every non-empty string is truthy (chapter 1.4). If you passed their answer straight to `madlib`, typing `N` would still give the story a happy ending. Ask them to type `Y` or `N`, and turn their answer into `True` or `False`. `y`, `Y`, and `Y` (with spaces around it) should all count as yes.
+
+Now run your program a few times with different words. The hard-coded story read correctly only because its words happened to fit the sentences around them. Once a friend chooses the words, the story starts to break: the name `ben` prints as "a man named ben", the item `apple` prints as "he found a apple", and the quantity `1` prints as "his 1 dogs". The `madlib` function produces the program's output, so fix each of these problems inside `madlib`, using the string tools from this chapter:
+
+3. Print the name with a capital first letter and the rest in lowercase, however the user typed it. `ben`, `BEN`, and `bEN` should all print as `Ben`.
+4. Put "an" before `new_item` when it starts with a vowel, and "a" otherwise: "an apple" but "a new car".
+5. When the quantity is `1`, leave the `s` off the item: "his 1 dog", but "his 50 dogs".
+6. Start the story with a title, such as `The Story of Ben`, and print a line of `=` beneath it that is exactly as long as the title. The user chooses the name, so you cannot count the characters ahead of time.
+
+If you get stuck, you can view the solution below:
+
+**<details><summary>Q: Solution</summary>**
+
+{% code title="main.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+def madlib(name, verb, quantity, item, new_item, is_happy):
+    name = name[0].upper() + name[1:].lower()
+
+    if new_item[0].lower() in "aeiou":
+        article = "an"
+    else:
+        article = "a"
+
+    if quantity == "1":
+        items = item
+    else:
+        items = item + "s"
+
+    title = f"The Story of {name}"
+    print(title)
+    print("=" * len(title))
+
+    print(f"There once was a man named {name}.")
+    print(f"Every day he would {verb} with his {quantity} {items}")
+
+    if is_happy:
+        print(f"But then, he found {article} {new_item} and everything changed!")
+    else:
+        print(f"But then, {article} {new_item} took over his life and he couldn't {verb} again!")
+
+    print("The end.")
+
+def main():
+    name = input('Choose a name: ').strip()
+    verb = input('Choose a verb: ').strip()
+    quantity = input('Choose a quantity: ').strip()
+    item = input('Choose an item: ').strip()
+    new_item = input('Choose a new item: ').strip()
+    is_happy_response = input('Choose whether the story is happy. Y or N: ')
+    is_happy = is_happy_response.strip().upper() == "Y"
+
+    madlib(name, verb, quantity, item, new_item, is_happy)
+
+main()
+```
+
+{% endcode %}
+
+Notice that `quantity` is left as a string. It is printed and compared with `"1"`, and neither of those needs a number, so there is no reason to cast it.
+
+This solution assumes that the user types at least one character for every answer. A user who presses Enter without typing a name still crashes `name[0]` with the `IndexError` from [Parsing Input](#parsing-input). Adding a `len()` check for that case is a good next step.
+
+</details>
+
+**Bonus:** Go back to the While Loop Challenge in chapter 1.5. In that version, the computer guesses its own number. Change it so that the user types each guess instead, and check each guess with `.isdigit()` before you cast it.

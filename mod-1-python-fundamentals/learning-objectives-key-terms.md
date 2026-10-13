@@ -325,16 +325,16 @@ A `for` loop runs its whole body once for every number in `range(100)`. `sixes =
 
 **Key terms**
 
-- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning their characters cannot be changed directly.
-- You can _access_ individual characters of a string with **bracket notation**.
-- You can check the length of a string with **`len(str)`** (and you can use this method on lists and dictionaries too!).
+- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning all operations are "read-only".
+- The **`in` operator** checks whether one string contains another.
+- **Bracket notation** returns individual characters within a string: `str[index]`
+- The built-in **`len()`** function returns the number of characters in a string (and you can use this method on lists and dictionaries too!).
 - A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
 - **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
-- The **`in` operator** checks whether one string contains another.
 - **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.
 - **f-strings** interpolate the value of any expression written inside `{}` into a string. A **format specifier** after a colon, like `{price:.2f}`, controls how the value is displayed.
-- The **`input()`** function gets input from the user. It always returns a string, so converting it to another type is your job.
-- **Type conversion** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
+- The **`input()`** function gets input from the user. It always returns a string, so casting it to another type is your job.
+- **Type casting** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
 - A program is **hard-coded** if the program code must be modified in order to produce a new result.
 
 **You will be able to…**
@@ -343,19 +343,19 @@ _In the session:_
 
 - Access a character of a string by positive or negative index, take a slice, and predict the `IndexError` for a position that does not exist.
 - Print several values in one `print()` call, control what goes between and after them with `sep` and `end`, and build a message with an f-string that formats a decimal with `:.2f`.
-- Read a line of input with `input()`, clean it up with `strip()` and `lower()`, explain why it is always a string, and convert it with `int()` or `float()` after checking it with `isdigit()`.
-- Convert a hard-coded program into one that takes its values from `input()`, turning a `Y`/`N` answer into a boolean.
+- Read a line of input with `input()`, clean it with `strip()` and `lower()`, explain why it is always a string, and cast it with `int()` or `float()` after validating it with `isdigit()`.
+- Refactor a hard-coded program into one that takes its values from `input()`, turning a `Y`/`N` answer into a boolean and using indexes, slices, `in`, and `len()` to adapt its output to whatever words the user types.
 
 _By the end of the module:_
 
 - Explain what it means that strings are immutable and predict the `TypeError` from trying to change one in place.
 - Search and change strings with `in`, `find()`, `startswith()`, `endswith()`, `replace()`, and `split()`, and chain two methods in one expression.
-- Predict the `TypeError` from `"1" + 1` and fix it by converting one side.
+- Predict the `TypeError` from `"1" + 1` and fix it by casting one side.
 - Explain the difference between displaying a number with `:.2f` and changing it with `round()`.
 
 ### Exit Ticket
 
-**Learning Objective**: Fellows will be able to predict how a program handles the value returned by `input()` and explain why that value must be cleaned, checked, and converted before it is used as a number.
+**Learning Objective**: Fellows will be able to predict how a program handles the value returned by `input()` and explain why that value must be cleaned, validated, and cast before it is used as a number.
 
 **Question**
 
@@ -373,11 +373,11 @@ Luis runs the program and types `21`. What happens, and why? How should Luis cha
 
 **Level 2 Example**
 
-The program crashes with a `TypeError` because `age` is a string. Luis needs to convert it with `int()`, and check it with `isdigit()` first so that `twenty` doesn't crash.
+The program crashes with a `TypeError` because `age` is a string. Luis needs to cast it with `int()`, and validate it with `isdigit()` first so that `twenty` doesn't crash.
 
 **Level 3 Example**
 
-The program crashes with `TypeError: '>=' not supported between instances of 'str' and 'int'`. `input()` always returns a string, so even though Luis typed `21`, `age` holds `"21"`. Python will not compare a string with a number, because it does not know whether Luis meant the text or the number. To fix the program, Luis has to convert `age` with `int()` before the comparison. But `int("twenty")` raises a `ValueError`, so Luis should check the string before converting it. I would write `age = input("How old are you? ").strip()` to remove stray spaces, then `if not age.isdigit():` print a message like `twenty is not a number`, and otherwise run `age = int(age)` before the `>= 18` comparison. Then `21` passes `isdigit()`, becomes the integer `21`, and prints `You can vote!`, while `twenty` fails `isdigit()` and gets a message instead of a crash.
+The program crashes with `TypeError: '>=' not supported between instances of 'str' and 'int'`. `input()` always returns a string, so even though Luis typed `21`, `age` holds `"21"`. Python will not compare a string with a number, because it does not know whether Luis meant the text or the number. To fix the program, Luis has to cast `age` with `int()` before the comparison. But `int("twenty")` raises a `ValueError`, so Luis should validate the string before casting it. I would write `age = input("How old are you? ").strip()` to remove stray spaces, then `if not age.isdigit():` print a message like `twenty is not a number`, and otherwise run `age = int(age)` before the `>= 18` comparison. Then `21` passes `isdigit()`, becomes the integer `21`, and prints `You can vote!`, while `twenty` fails `isdigit()` and gets a message instead of a crash.
 
 ## 1.7 Lists
 
@@ -386,8 +386,8 @@ The program crashes with `TypeError: '>=' not supported between instances of 'st
 **Key terms**
 
 - **Lists** are ordered collections of values. Like strings, they have indexes starting at `0`, support bracket notation and slicing, and work with `len()` and the `in` operator.
-- Unlike strings, lists are **mutable**. Methods like `append`, `insert`, `pop`, and `remove` change a list in place.
-- A variable does not hold a list. It holds a **reference** to the list. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
+- Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
+- A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
 - A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
 - Lists can contain other lists (**2D lists**), and a list can be **unpacked** into several variables at once. A **tuple** is a list that cannot change, written with parentheses.
 
