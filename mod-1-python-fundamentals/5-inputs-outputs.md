@@ -4,8 +4,6 @@
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/06-inputs-and-outputs/)
 {% endhint %}
 
-A program takes data in, does something with it, and puts data out. In a command-line program, both ends of that are strings: everything the user types arrives in the program as a string, and everything the program prints is turned into a string before it appears. Once the user supplies the data, you no longer know what it holds, so your program has to work on each string it receives: clean it, which includes casting it to the type the program needs, validate it, and parse out the parts it needs. On the way out, the program reshapes its results into text a person can read. This lesson follows a value through each of those steps, and teaches each string tool at the step that needs it.
-
 **Table of Contents:**
 
 - [Key Terms](#key-terms)
@@ -15,7 +13,14 @@ A program takes data in, does something with it, and puts data out. In a command
   - [Cleaning Input](#cleaning-input)
     - [Type Casting](#type-casting)
   - [Validating Input](#validating-input)
+    - [The `len()` builtin](#the-len-builtin)
+    - [The `in` operator](#the-in-operator)
+    - [`startswith()`](#startswith)
+    - [`isdigit()`](#isdigit)
   - [Parsing Input](#parsing-input)
+    - [Bracket Notation](#bracket-notation)
+    - [Slicing](#slicing)
+    - [Slicing with `find()`](#slicing-with-find)
 - [Output](#output)
   - [Printing Several Values](#printing-several-values)
   - [String Interpolation with f-strings](#string-interpolation-with-f-strings)
@@ -124,18 +129,26 @@ print(5.1.is_integer()) # False
 
 {% endhint %}
 
-Strings are **immutable** (read-only), so a string method never changes the string it is called on. Methods like `strip()` and `lower()` first copy the string they are operating on and return a new string instead. After `answer.strip()` runs, `answer` still holds `'  YES '`, so to keep the cleaned-up string, store what the method returns, as in `answer = answer.strip()`.
-
-Cleaning `answer` completely takes both `strip()` and `lower()`, and you can call them one after the other:
+Strings are **immutable** (read-only), so a string method never changes the string it is called on. Methods like `strip()` and `lower()` first copy the string they are operating on and return a new string instead. So, after `answer.strip()` runs, `answer` still holds `'  YES '`.
 
 ```python
 answer = '  YES '
+answer.strip()
+answer.lower()
+print(answer)
+# Output: '  YES '
+```
 
-print(answer.strip().lower())
+As a result, we need to store the new string in a variable. However, to avoid storing each method result in a new variable and work through them one at a time, we can use **method chaining** to combine multiple method calls into one line:
+
+```py
+answer = '  YES '
+cleaned = answer.strip().lower()
+print(cleaned)
 # Output: yes
 ```
 
-`answer.strip().lower()` is two method calls in a row. `strip()` returns a new string, and `.lower()` is called on that new string. This is called **method chaining**, and it works because `strip()` returns a string, which has a `.lower()` method.
+This works because `strip()` returns a new string, and `.lower()` is called on that new string.
 
 Method chaining lets you clean input on the same line as the `input()`:
 
@@ -250,6 +263,8 @@ The fourth type casting function, `bool()`, is the one you met with truthy and f
 
 **Validating** input means checking that it is acceptable before the program uses it. Clean input can still be the wrong input. The user may have pressed Enter without typing anything, or typed an email address with no `@` in it. Each tool in this section answers a question about a string, and the answer is a value that an `if` statement can use to decide what the program does next.
 
+#### The `len()` builtin
+
 The `len()` function returns the number of characters in a string (including spaces). `len()` is a function rather than a method, so the string goes inside the parentheses: `len(name)`.
 
 ```python
@@ -262,7 +277,9 @@ print(len(''))
 # Output: 0
 ```
 
-A string with no characters at all, `''`, is called an **empty string**, and its length is `0`. Pressing Enter without typing anything makes `input()` return an empty string. Typing only spaces does too, once `strip()` has removed them. Without a check, this program would greet the user with `Hello, !`, and the user could reasonably believe the program is broken. Checking the length first lets the program say what went wrong instead:
+A string with no characters at all, `''`, is called an **empty string**, and its length is `0`. Pressing Enter without typing anything makes `input()` return an empty string. Typing only spaces does too, once `strip()` has removed them.
+
+Without a check, this program would greet the user with `Hello, !`, and the user could reasonably believe the program is broken. Checking the length first lets the program say what went wrong instead:
 
 ```python
 name = input("What's your name? ").strip()
@@ -272,6 +289,8 @@ if len(name) == 0:
 else:
     print(f"Hello, {name}!")
 ```
+
+#### The `in` operator
 
 The `in` operator checks whether one string is inside another.
 
@@ -309,6 +328,8 @@ def is_marcy_email(email):
 
 </details>
 
+#### `startswith()`
+
 When it matters _where_ the text appears, the `startswith` and `endswith` methods check only the beginning or only the end of a string:
 
 ```python
@@ -320,6 +341,8 @@ print(website.startswith('https://'))
 print(website.endswith('.com'))
 # Output: False
 ```
+
+#### `isdigit()`
 
 The `isdigit` method checks whether a string is made entirely of digits. That makes `isdigit()` the check to run before casting a string to a number, because `int("hello")` crashes the program, as you saw in [Type Casting](#type-casting):
 
@@ -372,6 +395,8 @@ Notice that `is_valid_phone` never casts the phone number to an `int`. A phone n
 ### Parsing Input
 
 **Parsing** input means taking it apart to get the pieces the program needs, such as the first letter of a name or the part of an email address before the `@`. Taking a piece out of a string starts with knowing where each character is.
+
+#### Bracket Notation
 
 Each character in a string, including spaces, has an **index** — a numbered position starting at `0`.
 
@@ -480,6 +505,8 @@ def is_valid_index(str, index):
 
 </details>
 
+#### Slicing
+
 An index takes out one character. **Slicing** with `[start:end]` takes out a piece of the string, from `start` up to but not including `end`:
 
 ```python
@@ -501,6 +528,8 @@ print(fruits[8:])
 print(fruits[-8:])
 # Output: cherries
 ```
+
+#### Slicing with `find()`
 
 A slice needs index numbers, but with input, the user decides where the interesting part of the string is. The methods `find` and `rfind` return the index of a character, or a longer piece of text, that you are looking for.
 
