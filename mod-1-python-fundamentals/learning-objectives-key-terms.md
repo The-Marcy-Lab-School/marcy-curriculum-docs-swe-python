@@ -1,6 +1,35 @@
 # Mod 1 Learning Objectives and Key Terms
 
-One entry per lesson. Key terms are copied from each lesson's **Key Terms** section by `scripts/sync-key-terms.py`, so edit them in the lesson and rerun the script rather than editing them here. Learning objectives are written so that each one could be checked with a short task. Each list is split in two. _In the session_ names the three or four objectives the 90-minute lecture is responsible for: introduced, practiced, and checked before it ends. _By the end of the module_ names the rest, which the chapter's reading, the assignment, and the project carry, and which the Mod 1 assessment can draw on.
+- [1.1 Intro to Programming](#11-intro-to-programming)
+  - [Exit Ticket](#exit-ticket)
+- [1.2 Data Types, Variables, and Operators](#12-data-types-variables-and-operators)
+  - [Exit Ticket](#exit-ticket-1)
+- [1.3 Functions](#13-functions)
+  - [Exit Ticket](#exit-ticket-2)
+- [1.4 Conditional Statements](#14-conditional-statements)
+  - [Exit Ticket](#exit-ticket-3)
+- [1.5 Strings, Inputs and Outputs](#15-strings-inputs-and-outputs)
+  - [Exit Ticket](#exit-ticket-4)
+- [1.6 Loops](#16-loops)
+  - [Exit Ticket](#exit-ticket-5)
+- [1.7 Lists](#17-lists)
+  - [Exit Ticket](#exit-ticket-6)
+- [1.8 Dictionaries](#18-dictionaries)
+  - [Exit Ticket](#exit-ticket-7)
+- [1.9 Modules, Virtual Environments, and pytest](#19-modules-virtual-environments-and-pytest)
+  - [Exit Ticket](#exit-ticket-8)
+- [1.10 Reading Unfamiliar Code](#110-reading-unfamiliar-code)
+  - [Exit Ticket](#exit-ticket-9)
+- [1.11 Errors and Tracebacks](#111-errors-and-tracebacks)
+  - [Exit Ticket](#exit-ticket-10)
+- [1.12 First-Class Functions and Higher-Order Functions](#112-first-class-functions-and-higher-order-functions)
+  - [Exit Ticket](#exit-ticket-11)
+- [1.13 Comprehensions and Built-in Iteration](#113-comprehensions-and-built-in-iteration)
+  - [Exit Ticket](#exit-ticket-12)
+- [Case Study: CLI Task Manager](#case-study-cli-task-manager)
+  - [Exit Ticket](#exit-ticket-13)
+- [Project: CLI Application](#project-cli-application)
+  - [Exit Ticket](#exit-ticket-14)
 
 ## 1.1 Intro to Programming
 
