@@ -49,8 +49,9 @@
   - [1.11 Errors and Tracebacks](mod-1-python-fundamentals/11-errors-tracebacks.md)
   - [1.12 First-Class Functions and Higher-Order Functions](mod-1-python-fundamentals/12-first-class-functions-hof.md)
   - [1.13 Comprehensions and Built-in Iteration](mod-1-python-fundamentals/13-comprehensions-builtin-iteration.md)
+  - [1.14 Test-Driven Development](mod-1-python-fundamentals/14-test-driven-development.md)
   - [Case Study: CLI Task Manager](mod-1-python-fundamentals/case-study.md)
-  - [Project: CLI Application](mod-1-python-fundamentals/14-project-week.md)
+  - [Project: CLI Application](mod-1-python-fundamentals/project.md)
   - [Regex (Optional Friday Reading)](mod-1-python-fundamentals/regex.md)
   - [Cheat Sheet](mod-1-python-fundamentals/cheatsheet.md)
 

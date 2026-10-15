@@ -412,18 +412,19 @@ A `for` loop runs its whole body once for every number in `range(100)`. `sixes =
 
 **Key terms**
 
-- **Lists** are ordered collections of values. Like strings, they have indexes starting at `0`, support bracket notation and slicing, and work with `len()` and the `in` operator.
+- **Lists** are ordered collections of values, called **elements**. Like strings, they have indexes starting at `0`, support bracket notation and slicing, and work with `len()` and the `in` operator.
 - Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
 - A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
+- Two variables that reference the same list are **aliases**: a change made through one shows up through the other.
+- A list can be **unpacked** into several variables at once, and `enumerate()` hands a loop each element together with its index.
 - A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
-- Lists can contain other lists (**2D lists**), and a list can be **unpacked** into several variables at once. A **tuple** is a list that cannot change, written with parentheses.
 
 **You will be able to…**
 
 _In the session:_
 
-- Create a list, access elements by index, slice it, test membership with `in`, and loop over it with `for` and `enumerate()`.
-- Add, replace, and remove elements with the list methods and `del`, and predict the list's contents after each operation.
+- Construct a list one element at a time with `append()` inside a loop, access elements by index, slice it, test membership with `in`, and loop over it with `for` and `enumerate()`.
+- Add, replace, and remove elements with the list methods, predict the list's contents after each operation, and predict how two parallel lists fall out of step when only one of them changes.
 - Predict what happens to `nums` after `clone = nums; clone[1] = 20`, and explain it in terms of references.
 - Explain why a function can change a list it was given, and classify a function as pure or impure.
 
@@ -431,8 +432,7 @@ _By the end of the module:_
 
 - Explain why the same bracket assignment that fails on a string works on a list.
 - Make a pure version of an impure list function by copying the list first.
-- Access rows and columns of a 2D list and report its size with `len()`.
-- Explain when to use a tuple instead of a list, and predict the `TypeError` from changing one.
+- Explain why `insert(0, ...)` takes longer as a list grows while `append()` does not, using the model of a list as a row of references.
 - Unpack a list into several variables, including with `*rest`.
 
 ### Exit Ticket
@@ -825,10 +825,6 @@ The first call prints `Go team!` three times. The second call prints it once and
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
 - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.
 - **`enumerate()`**, **`zip()`**, **`any()`**, and **`all()`** cover the other everyday loop shapes without an index in sight.
-- **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
-- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
-- **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
-- **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
 
 **You will be able to…**
 
@@ -845,8 +841,6 @@ _By the end of the module:_
 - Write a function that returns the first element passing a test, and decide what it returns when nothing passes.
 - Build a frequency counter with a dictionary and `.get(key, 0)`.
 - Use `enumerate()`, `zip()`, `any()`, and `all()` in place of index-based loops.
-- Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop to a comprehension while its tests stay green.
-- Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
 
 ### Exit Ticket
 
@@ -877,9 +871,75 @@ The program prints `None` because `.sort()` doesn't return anything. Imani shoul
 
 The program prints `None`. `.sort()` sorts a list in place, which means it changes `discounted` itself and returns nothing, so `ordered` gets `None`. The list in `discounted` is now `[1, 6, 10]`, but Imani never prints it. Imani should write `ordered = sorted(discounted)`, because `sorted()` returns a new sorted list and leaves `discounted` unchanged. Calling `discounted.sort()` on its own line and then printing `discounted` would also work. The loop can become `discounted = [price - 2 for price in prices]`. The loop transforms every value and collects the results in a new list, and that is exactly what a list comprehension does: for each `price` in `prices`, it computes `price - 2` and adds the result to a new list that has as many elements as the source. Combining the two steps, `ordered = sorted([price - 2 for price in prices])` does the whole job in one line.
 
+## 1.14 Test-Driven Development
+
+<!-- key-terms-from: 14-test-driven-development.md -->
+
+**Key terms**
+
+- **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
+- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
+- **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
+- **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
+
+**You will be able to…**
+
+_In the session:_
+
+- Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop to a comprehension while its tests stay green.
+- Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
+- Predict the error a new test raises before the code it checks has been written, and explain what that failure shows about the test.
+
+_By the end of the module:_
+
+- Use `isinstance()` with one type or a tuple of types to decide what a function does with each kind of value.
+- Refactor a function by combining branches that do the same job, and run the tests to confirm that its behavior did not change.
+- Develop the banking assignment's `withdraw` function test-first, including its overdraft rule.
+
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to explain how passing tests show that a refactor did not change what a function does, and justify writing a test that fails before writing the code that makes it pass.
+
+**Question**
+
+Malik has this function and two passing tests:
+
+```python
+def get_passing_scores(scores):
+    passing = []
+    for score in scores:
+        if score >= 65:
+            passing.append(score)
+    return passing
+```
+
+```python
+def test_get_passing_scores():
+    """get_passing_scores - keeps only the scores of 65 or more"""
+    assert get_passing_scores([90, 40, 65]) == [90, 65]
+
+
+def test_get_passing_scores_does_not_mutate():
+    """get_passing_scores - returns a new list and leaves the original alone"""
+    scores = [90, 40, 65]
+    passing = get_passing_scores(scores)
+    assert passing is not scores
+    assert scores == [90, 40, 65]
+```
+
+Malik rewrites the body of the function as `return [score for score in scores if score >= 65]`, runs the tests, and both pass. What do the passing tests tell Malik about the new version, and why? Next, the function has to accept scores stored as strings, like `"72"`. Using TDD, what should Malik do first, what should Malik expect to see the first time it runs, and why is that result useful?
+
+**Level 2 Example**
+
+The tests passing means the comprehension works the same as the loop. With TDD, Malik should write the test for strings first, and it should fail because the function can't handle strings yet.
+
+**Level 3 Example**
+
+The passing tests tell Malik that the comprehension still does what the loop did, so this was a refactor: the code works differently but does the same thing. The first test uses `==` to check the contents, so the new version still keeps `90` and `65` and drops `40`. The second test uses `is not` to check that a new list came back and `==` to check that `scores` was not changed, so the new version is still a pure function. Malik doesn't have to compare outputs by eye, because the tests already describe what the function should do. For the strings, Malik should first write a new test, such as `assert get_passing_scores([90, "72", 40]) == [90, 72]`. Writing it forces Malik to decide what the function should return, for example whether `"72"` comes back as the number `72` or as the string. The first run should fail (red) with a `TypeError`, because `"72" >= 65` compares a string with a number. That failure shows that the test really checks the new requirement. A test that passed before Malik changed any code could not tell working code from broken code. Then Malik writes just enough code to pass (green), such as converting each score with `int()`, and can refactor while all three tests stay green.
+
 ## Case Study: CLI Task Manager
 
-**Key terms:** none new. The case study exercises the terms from lessons 1 to 13.
+**Key terms:** none new. The case study exercises the terms from lessons 1 to 14.
 
 **You will be able to…**
 
@@ -924,7 +984,7 @@ Add Task would still add tasks, because `from tasks import tasks` gives `menu.py
 
 ## Project: CLI Application
 
-**Key terms:** none new. The project applies the terms from lessons 1 to 13.
+**Key terms:** none new. The project applies the terms from lessons 1 to 14.
 
 **You will be able to…**
 
