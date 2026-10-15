@@ -104,7 +104,7 @@ Whether you are designing a new application or learning about an existing one, w
 
 **Question 1**
 
-Go to the `tasks.py` file and look at the `tasks` variable. It is a list of dictionaries. Each dictionary represents a task in the list. Each task has a `description` string and an `is_complete` boolean. For the `is_complete` value, we could also have represented it with the numbers: `"is_complete": 0` (incomplete) and `"is_complete": 1` (complete); or as strings `"is_complete": "complete"` and `"is_complete": "incomplete"`. If it were up to you, which would you choose to represent `is_complete` and why?
+Go to the `tasks.py` file and look at the `tasks` variable. It is a list of dictionaries. Each dictionary represents a task in the list. Each task has a `description` string and an `is_complete` boolean. For the `is_complete` value, we could also have represented it with the numbers: `"is_complete": 0` (incomplete) and `"is_complete": 1` (complete); or as strings `"is_complete": "complete"` and `"is_complete": "incomplete"`. If it were up to you, which would you choose to represent `is_complete` and why? Incorporate how the `is_complete` value is used throughout the program into your answer.
 
 **Question 2**
 
@@ -122,6 +122,8 @@ Understanding where variables are declared (their **scope**) and therefore where
 
 In the `show_menu()` function in `menu.py`, the variable `is_running` is assigned `True` before the loop and reassigned to `False` inside it. The `tasks` list in `tasks.py`, by contrast, is never reassigned, and yet its contents change constantly. What is the difference between these two kinds of change? Why can `clear_tasks()` empty the list with `tasks.clear()`, when writing `tasks = []` inside that function would not empty it?
 
+_Hint: research the difference between mutation of lists and reassignment._
+
 **Question 2**
 
 In the `show_menu()` function in `menu.py`, take a look at the `task_choice` and `task_index` variables. Consider that we could have also written the code without any variables and it would still work properly:
@@ -130,7 +132,7 @@ In the `show_menu()` function in `menu.py`, take a look at the `task_choice` and
 complete_task(int(input('Enter task number to complete: ')) - 1)
 ```
 
-What are the tradeoffs of these approaches?
+What are the tradeoffs of these approaches? What does that tell you more broadly about when, how, and why you use variables?
 
 **Question 3**
 
@@ -138,12 +140,6 @@ Look at the `tasks` list in `tasks.py`. What is the scope of the `tasks` variabl
 
 {% hint style="warning" %}
 **Predict, then run.** In `tasks.py`, delete the whole `tasks = [...]` assignment at the top of the file, and add the line `tasks = []` as the first line of `add_task()`. Run the app. At what moment does it fail, and what is the last line of the error message? Undo the change when you are done.
-
-<details><summary>What actually happens</summary>
-
-It fails before you choose anything, as soon as the menu has printed: `NameError: name 'tasks' is not defined. Did you mean: 'task'?` Python suggests `task` because `view_tasks()` has a loop variable with that similar name. `show_menu()` calls `view_tasks()` every time the menu displays, and `view_tasks()` looks for `tasks` in its own local scope and then in the global scope of `tasks.py`, and finds it in neither. The `tasks` inside `add_task()` is local to `add_task()`, so no other function can reach it. Even `add_task()` could not remember anything with it, because every call would start a brand new empty list.
-
-</details>
 {% endhint %}
 
 ### Functions
@@ -180,12 +176,6 @@ In `menu.py`, the `show_menu()` function uses `if/elif` statements to handle dif
 
 {% hint style="warning" %}
 **Predict, then run.** In `show_menu()`, change each `elif menu_choice` to `if menu_choice`. Run the app, choose `1`, and add a task. What appears after the confirmation message? Undo the change when you are done.
-
-<details><summary>What actually happens</summary>
-
-The task is added, and then `Invalid option. Please choose 1-4.` appears as well. With separate `if` statements, the `else` belongs only to the last one, `if menu_choice == '4':`. A choice of `'1'` runs the first `if`, and then Python goes on to check the other three. It finds that `'1' == '4'` is `False`, so it runs the `else`. In an `if`/`elif` chain, only the first true condition runs, and the `else` runs only when none of them did.
-
-</details>
 {% endhint %}
 
 **Question 2**
@@ -198,12 +188,6 @@ Look at the `view_tasks()` function. It checks `if len(tasks) == 0:` before disp
 
 {% hint style="warning" %}
 **Predict, then run.** Delete the `if len(tasks) == 0:` check and the two lines inside it from `view_tasks()`. Run the app, choose Clear All Tasks, and press Enter. What does the task list show now? Undo the change when you are done.
-
-<details><summary>What actually happens</summary>
-
-The heading `Your Tasks:` appears with nothing beneath it. Nothing crashes, because a `for` loop over an empty list runs zero times. So the check is not there to prevent an error. It is there so that the user reads `No tasks yet. Add one!`, which tells them what to do next, instead of a heading over an empty space.
-
-</details>
 {% endhint %}
 
 ### Looping and Iteration
@@ -214,23 +198,17 @@ Loops take repetitive tasks and boil them down to a process that can be repeated
 
 Look at the `show_menu()` function in `menu.py`. There's a `while is_running:` loop that keeps the menu running until the user chooses to exit. What would happen if we forgot to set `is_running = False` when the user chooses option 4 (Exit)? What would happen if we instead forgot the `is_running = True` line before the loop?
 
-{% hint style="warning" %}
-**Predict, then run.** Delete the line `is_running = True` from `show_menu()` and run the app. How far does the program get, and what type of error appears? Undo the change when you are done.
-
-<details><summary>What actually happens</summary>
-
-`Welcome to the Task Manager!` prints, and then, before the menu appears: `UnboundLocalError: cannot access local variable 'is_running' where it is not associated with a value`. Because `show_menu()` assigns `is_running = False` further down, Python treats `is_running` as a local variable of `show_menu()` for the whole function. When `while is_running:` runs, that local variable has not been given a value yet. This is the same rule as the `count` example in chapter 1.3.
-
-</details>
-{% endhint %}
-
 **Question 2**
 
-Why is a `while` loop the appropriate type of loop to use to display the menu as opposed to a `for` loop?
+The `while` loop in `show_menu()` has a condition `while is_running:`. This means the loop will continue as long as `is_running` is `True`. What would happen if we changed the condition to `while True:` and removed the `is_running` variable entirely? How else could we break out of the loop?
 
 **Question 3**
 
-The `while` loop in `show_menu()` has a condition `while is_running:`. This means the loop will continue as long as `is_running` is `True`. What would happen if we changed the condition to `while True:` and removed the `is_running` variable entirely? How else could we break out of the loop?
+Why is a `while` loop the appropriate type of loop to use to display the menu (see `show_menu` in `menu.py` as opposed to a `for` loop? Conversely, why is a `for` loop the approriate type of loop to use to display the list of tasks (see `view_tasks` in `tasks.py`)?
+
+**Question 4**
+
+Find the `for` loop in the `view_tasks` function in `tasks.py`. Then look up the `enumerate` builtin function. How would you refactor (rewrite) the `for` loop to use `enumerate` instead?
 
 ### Lists and Dictionaries
 
@@ -291,12 +269,6 @@ Compare it line by line with `complete_task()`. Then write a bug report for it: 
 
 {% hint style="warning" %}
 **Predict, then run.** Paste the function at the bottom of `tasks.py`. From the `src` folder, start the REPL with `python3`, then run `from tasks import delete_task` followed by `delete_task(2)`. The list starts with the two sample tasks. What happens? Delete the function from `tasks.py` when you are done, because the AI policy keeps code a model wrote out of your own work.
-
-<details><summary>What actually happens</summary>
-
-`IndexError: pop index out of range`. With two tasks, the valid indexes are `0` and `1`, so `2` should be refused. But the guard checks `task_index > len(tasks)`, which is `2 > 2`, which is `False`, so the guard lets `2` through and `tasks.pop(2)` raises the error. `complete_task()` uses `>=`, and that one character is the whole bug. As a bug report: "`delete_task(2)` with two tasks raises `IndexError: pop index out of range`. Expected `Invalid task number.` The guard uses `>` where it needs `>=`."
-
-</details>
 {% endhint %}
 
 ### Error Handling and Debugging
@@ -317,12 +289,6 @@ How does the application handle edge cases like trying to complete a task that d
 
 {% hint style="warning" %}
 **Predict, then run.** Choose Clear All Tasks, then Complete Task, and enter `1`. What message appears, and which line of `tasks.py` produced it?
-
-<details><summary>What actually happens</summary>
-
-`Invalid task number.` With the list empty, `len(tasks)` is `0`, so `task_index >= len(tasks)` is `0 >= 0`, which is `True`, and the guard on line 45 returns before `tasks[task_index]` can raise an `IndexError`. That is the second of the two conditions Question 3 asks about, and it is the one doing the work here. The first, `task_index < 0`, catches a user who types `0`.
-
-</details>
 {% endhint %}
 
 **Question 4**
@@ -363,12 +329,6 @@ What does the `start=1` argument to `enumerate` do? What would the user see if i
 
 {% hint style="warning" %}
 **Predict, then run.** Remove `start=1` from the `enumerate()` call in `view_tasks()`. Run the app, choose Complete Task, and type the number shown beside "Answer investigation questions". Which task does the confirmation message name? Undo the change when you are done.
-
-<details><summary>What actually happens</summary>
-
-The numbers now start at `0`, so "Answer investigation questions" is shown as `1`. Typing `1` makes `menu.py` subtract 1, which gives index `0`, so the confirmation names "Complete the CLI Task Manager project", the task above the one you meant. The display and the `- 1` in `menu.py` have to agree. `start=1` numbers the tasks from 1 for the user, and the `- 1` turns the user's number back into an index that starts at 0. Change one without the other, and every choice is off by one.
-
-</details>
 {% endhint %}
 
 **Question 4**
