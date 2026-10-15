@@ -26,10 +26,12 @@
   - [Exit Ticket](#exit-ticket-11)
 - [1.13 Comprehensions and Built-in Iteration](#113-comprehensions-and-built-in-iteration)
   - [Exit Ticket](#exit-ticket-12)
-- [Case Study: CLI Task Manager](#case-study-cli-task-manager)
+- [1.14 Test-Driven Development](#114-test-driven-development)
   - [Exit Ticket](#exit-ticket-13)
-- [Project: CLI Application](#project-cli-application)
+- [Case Study: CLI Task Manager](#case-study-cli-task-manager)
   - [Exit Ticket](#exit-ticket-14)
+- [Project: CLI Application](#project-cli-application)
+  - [Exit Ticket](#exit-ticket-15)
 
 ## 1.1 Intro to Programming
 
@@ -416,7 +418,8 @@ A `for` loop runs its whole body once for every number in `range(100)`. `sixes =
 - Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
 - A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
 - Two variables that reference the same list are **aliases**: a change made through one shows up through the other.
-- A list can be **unpacked** into several variables at once, and `enumerate()` hands a loop each element together with its index.
+- **Unpacking** assigns the elements of a list to several variables in one statement: `first_name, last_name = "Ada Lovelace".split(" ")`.
+- The built-in **`enumerate()`** function hands a loop each element of a list together with its index, as a pair that the loop unpacks into two variables: `for index, item in enumerate(items):`.
 - A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
 
 **You will be able to…**
@@ -957,7 +960,7 @@ _By the end of the module:_
 - Explain why the menu uses a `while` loop, what `is_running` does, and how the same loop could be written with `break`.
 - Debug a model-written `delete_task()` and write a bug report that names the input, the actual output, the expected output, and the line at fault.
 - Plan a dispatch table for the menu and explain which option cannot go into it.
-- Write a list comprehension that selects the completed tasks, and use `all()` to check whether every task is complete.
+- Write a list comprehension that selects the completed tasks
 - Extend the application with a new feature that respects the existing separation of concerns.
 
 ### Exit Ticket

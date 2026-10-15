@@ -7,72 +7,137 @@
 **Table of Contents**
 
 - [Key Terms](#key-terms)
+- [Keeping Every Value](#keeping-every-value)
 - [List Basics](#list-basics)
+  - [Unpacking](#unpacking)
+  - [Looping with `enumerate()`](#looping-with-enumerate)
+- [Changing a List](#changing-a-list)
   - [Lists Are Mutable](#lists-are-mutable)
-  - [List Methods for Adding and/or Removing Values](#list-methods-for-adding-andor-removing-values)
-- [Mutable Values and References](#mutable-values-and-references)
-  - [How Lists Are Stored in Memory](#how-lists-are-stored-in-memory)
-  - [Mutability vs. Reassignment](#mutability-vs-reassignment)
-  - [Impure and Pure Functions](#impure-and-pure-functions)
+  - [Adding and Removing Values](#adding-and-removing-values)
+- [References](#references)
+  - [A List Is a Row of References](#a-list-is-a-row-of-references)
+  - [Two Names, One List](#two-names-one-list)
+  - [Adding to the Front vs. the Back](#adding-to-the-front-vs-the-back)
+  - [Passing a List to a Function](#passing-a-list-to-a-function)
+- [Pure and Impure Functions](#pure-and-impure-functions)
   - [Making Copies of Lists to Make Pure Functions](#making-copies-of-lists-to-make-pure-functions)
   - [Copying List Challenge](#copying-list-challenge)
 - [Advanced List Syntax](#advanced-list-syntax)
   - [2D Lists](#2d-lists)
   - [Tuples: Lists That Cannot Change](#tuples-lists-that-cannot-change)
-  - [Unpacking](#unpacking)
+  - [Unpacking](#unpacking-1)
 
 ## Key Terms
 
 - **Lists** are ordered collections of values, called **elements**. Like strings, they have indexes starting at `0`, support bracket notation and slicing, and work with `len()` and the `in` operator.
 - Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
 - A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
+- Two variables that reference the same list are **aliases**: a change made through one shows up through the other.
+- **Unpacking** assigns the elements of a list to several variables in one statement: `first_name, last_name = "Ada Lovelace".split(" ")`.
+- The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
 - A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
-- Lists can contain other lists (**2D lists**), and a list can be **unpacked** into several variables at once. A **tuple** is a list that cannot change, written with parentheses.
+
+## Keeping Every Value
+
+Recall the dollar program in chapter 1.6 which added dollar mounts entered by a user to a `total` and printed it out.
+
+```python
+total = 0
+
+while True:
+    amount = input("Enter an amount in dollars (like 4.50), or done to finish: ").strip()
+
+    # exit on "done"
+    if amount.lower() == "done":
+        break
+
+    # if removing a single `.` from the amount results in anything other than numbers
+    digits = amount.replace(".", "", 1)
+    if not digits.isdigit():
+        print(f"Sorry, {amount} is not a dollar amount")
+        continue
+
+    total += float(amount)
+
+print(f"Your total is ${total:.2f}")
+```
+
+Now, we want a full receipt which lists every item the customer bought and what each one cost. A variable holds one value, so a program would need one variable per item, and it cannot know in advance how many items the customer will buy.
+
+A **list** solves this. A list is a single value that holds any number of values in order, and a program can add to it one value at a time. This program keeps two lists, one for the names of the items and one for their prices, and prints a receipt when the user types `done`:
+
+```python
+items = []
+prices = []
+
+while True:
+    # now we also ask for an item (or done)
+    item = input("Item (or done to finish): ").strip()
+    if item.lower() == "done":
+        break
+
+    # then we ask for the price
+    price = input(f"Price of {item}: ").strip()
+    digits = price.replace(".", "", 1)
+    if not digits.isdigit():
+        print(f"Sorry, {price} is not a price, so {item} was not added.")
+        continue
+
+    # add the item to the items list and price to the prices list
+    items.append(item)
+    prices.append(float(price))
+
+# Once the while loop is done collecting inputs, calculate the total and print out the receipt
+total = 0
+for i in range(len(items)):
+    print(f"{items[i]}: ${prices[i]:.2f}")
+    total += prices[i]
+
+print(f"Total: ${total:.2f}")
+```
+
+The loop that asks for input works the same way as the dollar program, and three new things make the receipt possible:
+
+- `items = []` and `prices = []` create two **empty lists**, lists with nothing in them yet.
+- `items.append(item)` adds `item` to the end of the `items` list, and `prices.append(float(price))` does the same for the price. Each pass through the loop makes both lists one element longer.
+- After the loop, `range(len(items))` produces the index of every item. The item at index `0` and the price at index `0` belong to the same purchase, so `items[i]` and `prices[i]` print side by side.
 
 ## List Basics
 
-A list is a single value that holds several values in a particular order.
+A list is written with square brackets `[]` around its values, separated by commas.
 
 ```py
-friends = ['bert', 'ernie', 'big bird', 'kermit', 'miss piggy', 'elmo']
+items = ['coffee', 'bagel', 'juice', 'muffin']
+prices = [3.50, 2.25, 4.00, 3.00]
 ```
 
 The values in a list are called the **elements of the list**, and each element stays in its position until the list is changed.
 
-- Lists use square brackets `[]` around their elements, separated by commas.
-- Like strings lists also...
-  - have indexes starting at `0`
-  - use bracket notation to access individual elements: `my_list[index]`
-  - work with `len()` to get the number of elements in the list
-  - support slicing with `[start:end]` and the `in` operator
+Like strings lists also...
+
+- have indexes starting at `0`
+- use bracket notation to access individual elements: `my_list[index]`
+- work with `len()` to get the number of elements in the list
+- support slicing with `[start:end]` and the `in` operator
 - Unlike strings, lists are mutable.
 
 ```python
-friends = ['bert', 'ernie', 'big bird', 'kermit', 'miss piggy', 'elmo']
-print(f"type() on a list returns {type(friends)}")
+items = ['coffee', 'bagel', 'juice', 'muffin']
+print(f"type() on a list returns {type(items)}")
 
-print(f"I have {len(friends)} friends")
-print(f"My best friend is {friends[2]}")
-print(f"My newest friend is {friends[-1]}")
-print(f"My first three friends are {friends[0:3]}")
-print(f"Is kermit my friend? {'kermit' in friends}")
-print('But here are all of my friends:')
+print(f"I bought {len(items)} items")
+print(f"My first item was {items[0]}")
+print(f"My last item was {items[-1]}")
+print(f"My first two items were {items[0:2]}")
+print(f"Did I buy a bagel? {'bagel' in items}")
+print('Here is everything I bought:')
 
-for friend in friends:
-    # friend holds the "current" friend that we're looking at in this iteration of the loop
-    print(friend)
+for item in items:
+    # item holds the "current" item that we're looking at in this iteration of the loop
+    print(item)
 ```
 
-That last loop is the most common thing you will ever do with a list. `for friend in friends` visits each element in order and assigns it to `friend`, with no index and no `range()` in sight. When you _do_ need the position of each element as well, `enumerate()` hands you both:
-
-```python
-for index, friend in enumerate(friends):
-    print(f"{index}: {friend}")
-
-# 0: bert
-# 1: ernie
-# ...
-```
+That last loop is the most common thing you will ever do with a list. `for item in items` visits each element in order and assigns it to `item`, with no index and no `range()` in sight. The receipt loop needed `range(len(items))` only because it also had to get the matching price from a second list.
 
 **Challenge: This function can verify whether or not a given list `items` contains a given value `value`. For each numbered comment below, add a comment explaining the logic of the function!**
 
@@ -107,6 +172,50 @@ Python has this built in, of course: `value in items` does exactly what `has_val
 
 </details>
 
+### Unpacking
+
+In chapter 1.5, `split()` broke a string into a list of pieces. Often you want each piece in its own variable. **Unpacking** makes it possible to take the values from a list and assign them to distinct variables in one statement.
+
+The syntax puts several variable names, separated by commas, on the left side of the assignment operator `=` and the list on the right side:
+
+```python
+first_name, last_name = "Ada Lovelace".split(" ")
+
+print(first_name)  # Ada
+print(last_name)   # Lovelace
+```
+
+The number of variables has to match the number of elements. If the numbers do not match, Python stops with a `ValueError`: `too many values to unpack` when the list has more elements than variables, and `not enough values to unpack` when it has fewer. The exception is a variable with a `*` in front. That variable collects "the rest" as a list:
+
+```python
+items = ['coffee', 'bagel', 'juice', 'muffin']
+
+first_item, *other_items = items
+
+print(first_item)   # coffee
+print(other_items)  # ['bagel', 'juice', 'muffin']
+```
+
+### Looping with `enumerate()`
+
+When you need the position of each element as well as the element, `enumerate()` hands you both. On each pass, `enumerate()` produces a pair, an index and an element, and unpacking splits the pair into two variables:
+
+```python
+items = ['coffee', 'bagel', 'juice', 'muffin']
+prices = [3.50, 2.25, 4.00, 3.00]
+
+for index, item in enumerate(items):
+    print(f"{item}: ${prices[index]:.2f}")
+
+# coffee: $3.50
+# bagel: $2.25
+# ...
+```
+
+This is the receipt loop again. `item` holds the name directly, and `index` is still there to find the matching price.
+
+## Changing a List
+
 ### Lists Are Mutable
 
 Strings have methods like `upper()`, and they support slicing, but both return a new string and leave the original alone. If you do not store the new string in a variable, the new string is gone: after `my_name.upper()` runs on its own line, `my_name` is still `'ben'`. Trying to change a string in place with bracket notation is an error.
@@ -117,30 +226,30 @@ my_name.upper()   # doesn't mutate the string, it makes a copy
 my_name[0] = "J"  # TypeError: 'str' object does not support item assignment
 ```
 
-Unlike strings, lists let you **mutate** them directly (change their contents without reassignment).
+Unlike strings, lists let you **mutate** them directly (change their contents without reassignment). If the bagel on the receipt was on sale, the program can fix its price in place:
 
 ```python
-end_letters = ["x", "y", "z"]
-end_letters[1] = "foo"
-print(end_letters)  # ["x", "foo", "z"]
+prices = [3.50, 2.25, 4.00, 3.00]
+prices[1] = 1.75
+print(prices)  # [3.5, 1.75, 4.0, 3.0]
 ```
 
 We can even empty a list in one go:
 
 ```python
-end_letters.clear()  # end_letters now has no values
-print(end_letters)  # []
+prices.clear()  # prices now has no values
+print(prices)  # []
 ```
 
-**<details><summary>Q: We changed the list without ever writing `end_letters = ...`. Strings would not allow that. Why do lists?</summary>**
+**<details><summary>Q: We changed the list without ever writing `prices = ...`. Strings would not allow that. Why do lists?</summary>**
 
-Strings are **immutable**: once a string is created, its characters cannot change, so the only way to get a different string is to make a new one and assign it to a variable. Lists are **mutable**: Python lets you change the elements inside an existing list, with bracket notation or with methods like `clear()`. Notice that we never reassign `end_letters`! The variable still points at the same list, and only the contents of that list changed.
+Strings are **immutable**: once a string is created, its characters cannot change, so the only way to get a different string is to make a new one and assign it to a variable. Lists are **mutable**: Python lets you change the elements inside an existing list, with bracket notation or with methods like `clear()`. Notice that we never reassign `prices`! The variable still points at the same list, and only the contents of that list changed.
 
-Whether a type is mutable decides whether a change made through one variable can show up through another variable, which is what the next section is about. Strings, numbers, booleans, and `None` are immutable. Lists and dictionaries are mutable.
+Whether a type is mutable decides whether a change made through one variable can show up through another variable, which is what the References section is about. Strings, numbers, booleans, and `None` are immutable. Lists and dictionaries are mutable.
 
 </details>
 
-### List Methods for Adding and/or Removing Values
+### Adding and Removing Values
 
 Since lists are mutable, they not only have read-only operations like slicing and `in`, they also have methods for adding to and removing from the list.
 
@@ -154,7 +263,7 @@ These methods let you remove values from a list
 - `my_list.pop()` — removes and returns the last element of a list, reducing the length by 1
 - `my_list.pop(index)` — removes and returns the element at the given index
 - `my_list.remove(value)` — removes the first element equal to the given value
-- `del my_list[index]` — removes the element at the given index (a statement, not a method)
+- `my_list.clear()` — removes every element
 
 ```python
 letters = ['a', 'b', 'c', 'd', 'e']
@@ -177,15 +286,58 @@ letters.remove('Hey ;)')  # Removes the first 'Hey ;)' it finds
 print(letters)  # Prints ['a', 'b', 'c', 'd', 'e']
 ```
 
-## Mutable Values and References
+Each of these methods changes one list. The receipt keeps two lists that have to change together, and nothing in Python keeps them in step.
+
+{% hint style="warning" %}
+**Predict, then run.** The customer changes their mind about the bagel. What does the receipt print?
+
+```python
+items = ['coffee', 'bagel', 'juice', 'muffin']
+prices = [3.50, 2.25, 4.00, 3.00]
+
+items.remove('bagel')
+
+for index, item in enumerate(items):
+    print(f"{item}: ${prices[index]:.2f}")
+```
+
+<details><summary>What actually happens</summary>
+
+```
+coffee: $3.50
+juice: $2.25
+muffin: $4.00
+```
+
+- `items.remove('bagel')` removes the bagel from `items`, so `juice` moves to index `1` and `muffin` moves to index `2`.
+- `prices` was never changed, so index `1` still holds the bagel's price, `2.25`, and index `2` still holds the juice's price, `4.00`.
+- The loop pairs elements by index, so every item after the bagel prints beside the wrong price.
+
+The program does not crash, so nothing tells the store that the receipt is wrong. Removing the element at the same index from both lists, with `items.pop(1)` and `prices.pop(1)`, keeps them in step, but the programmer has to remember to change both lists every time. In chapter 1.8, a list of dictionaries keeps each item's name and price together in one element, so they cannot drift apart.
+
+</details>
+{% endhint %}
+
+## References
 
 Lists and dictionaries are considered **mutable types**, and that changes how variables that hold them behave. Let's see why.
 
-### How Lists Are Stored in Memory
+### A List Is a Row of References
 
-Python stores every value, whether it is a number, a string, or a list, in an area of memory called the **heap**. A variable does not hold the value itself. It holds a **reference to the value's heap address**. Before, we might have thought of a variable like a locker with a value stored inside. In reality, the heap is the locker room and the variable stores which locker the value is stored in, not the locker itself.
+Python stores every value, whether it is a number, a string, or a list, in an area of memory called the **heap**. A variable does not hold the value itself. It holds a **reference to the value's heap address**: a note saying where in memory the value is stored.
 
-You can see the address for yourself. The `id()` function returns a number that identifies where a value lives:
+A list works the same way, one level deeper. The list itself is a row of numbered slots, and each slot holds a reference to one element:
+
+```
+items ──► [ slot 0 | slot 1 | slot 2 ]
+              │        │        │
+              ▼        ▼        ▼
+          'coffee'  'bagel'  'juice'
+```
+
+The variable `items` references the row, and each slot references an element. Bracket notation follows those references: `items[1]` goes to the row that `items` references, then follows slot `1` to `'bagel'`.
+
+You can see a reference for yourself. The `id()` function returns a number that identifies where a value lives:
 
 ```python
 nums = [1, 2, 3]
@@ -196,9 +348,9 @@ print(id(clone))         # the exact same number
 print(nums is clone)     # True: `is` asks whether two variables reference the same object
 ```
 
-Because `nums` and `clone` hold the same reference, they are two names for one list, not two separate lists.
+Because `nums` and `clone` hold the same reference, they are two names for one list, not two separate lists. Two variables that reference the same list are called **aliases**.
 
-### Mutability vs. Reassignment
+### Two Names, One List
 
 {% hint style="warning" %}
 **Predict, then run.** What will the value of `nums` and `clone` be after the program runs?
@@ -228,6 +380,48 @@ If you expected `nums` to still be `[1, 2, 3]`, your mental model was that `clon
 
 </details>
 {% endhint %}
+
+### Adding to the Front vs. the Back
+
+The row of references also explains why some list operations take longer than others. `append()` writes a reference into the empty slot at the end of the row, and nothing else moves. `insert(0, value)` has to make room at the front, so every reference already in the row shifts one slot to the right first.
+
+{% hint style="warning" %}
+**Predict, then run.** This program adds 100000 numbers to the back of one list and to the front of another. `time.perf_counter()` returns the current time in seconds, so subtracting the start time from the end time measures how long each loop took. Which loop is slower, and by roughly how much?
+
+```python
+import time
+
+start = time.perf_counter()
+back = []
+for number in range(100000):
+    back.append(number)
+print(f"append took {time.perf_counter() - start:.3f} seconds")
+
+start = time.perf_counter()
+front = []
+for number in range(100000):
+    front.insert(0, number)
+print(f"insert(0) took {time.perf_counter() - start:.3f} seconds")
+```
+
+<details><summary>What actually happens</summary>
+
+The exact numbers depend on your computer. On one laptop, the program printed:
+
+```
+append took 0.003 seconds
+insert(0) took 1.493 seconds
+```
+
+- Each `append()` writes one reference into the next empty slot, so 100000 appends do 100000 small steps.
+- Each `insert(0, ...)` first shifts every reference already in the list. The 1000th insert shifts 999 references, and the 100000th shifts 99999, so the work adds up much faster than the number of values.
+
+Change both `range(100000)` calls to `range(10000)` and run it again. Both loops finish so quickly that the difference is hard to notice. With 10 times as many values, `append()` takes about 10 times as long, but `insert(0, ...)` takes about 100 times as long. When a program adds to a list in a loop, add to the back.
+
+</details>
+{% endhint %}
+
+### Passing a List to a Function
 
 The same thing happens when we invoke a function and provide a list as an argument:
 
@@ -259,15 +453,7 @@ print(y)  # 11
 
 `y += 1` looks like it changes the value in `y`, but the number `10` cannot change. Python computes the new value `11` and reassigns `y` to reference it. `x` still references `10`.
 
-```python
-str = 'hello'
-str[0] = 'j'
-# TypeError: 'str' object does not support item assignment
-```
-
-In this example, when we try to reassign the first character in `str`, a `TypeError` is raised.
-
-### Impure and Pure Functions
+## Pure and Impure Functions
 
 Functions are considered **impure functions** if they do either of these:
 
@@ -306,10 +492,10 @@ Functions that accept lists and modify them are impure. To make a function that 
 ```python
 copy1 = list(letters)   # the list() function builds a new list from any sequence
 copy2 = letters[:]      # a slice with no start or end is a copy of the whole thing
-copy3 = [*letters]      # the * unpacks the elements into a new list literal
+copy3 = [*letters]      # the * unpacks the elements into a new list
 ```
 
-The third form is the most flexible, because you can add extra elements while you copy:
+The third form uses the same `*` as unpacking, and it is the most flexible, because you can add extra elements while you copy:
 
 ```python
 def extend(items, value):
