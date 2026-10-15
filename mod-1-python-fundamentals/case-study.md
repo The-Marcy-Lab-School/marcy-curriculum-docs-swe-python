@@ -21,11 +21,12 @@ Clone it then follow the **Setup** steps listed in the README.
   - [Conditional Logic](#conditional-logic)
   - [Looping and Iteration](#looping-and-iteration)
   - [Lists and Dictionaries](#lists-and-dictionaries)
-  - [Modules and Testing](#modules-and-testing)
+  - [Modules](#modules)
   - [Reading Unfamiliar Code](#reading-unfamiliar-code)
   - [Error Handling and Debugging](#error-handling-and-debugging)
   - [Higher-Order Functions](#higher-order-functions)
   - [Comprehensions and Built-in Iteration](#comprehensions-and-built-in-iteration)
+  - [Test-Driven Development](#test-driven-development)
   - [Code Style](#code-style)
 - [Extension Opportunities](#extension-opportunities)
   - [Tips](#tips)
@@ -106,13 +107,25 @@ Whether you are designing a new application or learning about an existing one, w
 
 Go to the `tasks.py` file and look at the `tasks` variable. It is a list of dictionaries. Each dictionary represents a task in the list. Each task has a `description` string and an `is_complete` boolean. For the `is_complete` value, we could also have represented it with the numbers: `"is_complete": 0` (incomplete) and `"is_complete": 1` (complete); or as strings `"is_complete": "complete"` and `"is_complete": "incomplete"`. If it were up to you, which would you choose to represent `is_complete` and why? Incorporate how the `is_complete` value is used throughout the program into your answer.
 
+{% hint style="warning" %}
+**Predict, then run.** In `tasks.py`, change the sample tasks' `True` to `"complete"` and their `False` to `"incomplete"`. Run the app. Which checkbox appears beside each task? Find the line in `view_tasks()` that decides, and explain the result. Undo the change when you are done.
+{% endhint %}
+
 **Question 2**
 
-In `tasks.py` in the `add_task` function, there is this conditional statement: `if not description:`. What data type does the expression `not description` evaluate to? and what is the purpose of this conditional statement?
+In `show_menu()`, the user's menu choice is compared with strings, as in `if menu_choice == '1':`, while the task number in Question 3 is converted with `int()` before it is used. What data type does `input()` return? Why does the menu compare `menu_choice` with `'1'` rather than converting it to an integer first?
+
+{% hint style="warning" %}
+**Predict, then run.** In `show_menu()`, change `if menu_choice == '1':` to `if menu_choice == 1:`. Run the app and choose `1`. What appears? Explain why. Undo the change when you are done.
+{% endhint %}
 
 **Question 3**
 
 In `menu.py`, the user's chosen task number `task_choice` is converted to a number using the `int()` conversion function. Why is this code necessary? What happens if this type conversion is removed?
+
+{% hint style="warning" %}
+**Predict, then run.** In `menu.py`, change `int(task_choice) - 1` to `task_choice - 1`. Run the app, choose Complete Task, and enter `2`. What is the last line of the error message? The line you changed is inside a `try`. Explain why the `except` did or did not handle the error. Undo the change when you are done.
+{% endhint %}
 
 ### Variables and Scope
 
@@ -126,13 +139,16 @@ _Hint: research the difference between mutation of lists and reassignment._
 
 **Question 2**
 
-In the `show_menu()` function in `menu.py`, take a look at the `task_choice` and `task_index` variables. Consider that we could have also written the code without any variables and it would still work properly:
+In the `show_menu()` function in `menu.py`, take a look at the `task_choice` and `task_index` variables. Consider that we could have also written the code without any variables, and it would still complete tasks:
 
 ```python
-complete_task(int(input('Enter task number to complete: ')) - 1)
+try:
+    complete_task(int(input('Enter task number to complete: ').strip()) - 1)
+except ValueError:
+    print('That is not a number.')
 ```
 
-What are the tradeoffs of these approaches? What does that tell you more broadly about when, how, and why you use variables?
+This version's `except` prints a different message from the one in `menu.py`. Why couldn't it keep the original message? What are the tradeoffs of these approaches? What does that tell you more broadly about when, how, and why you use variables?
 
 **Question 3**
 
@@ -148,7 +164,7 @@ Functions are the building blocks of reusable code. They allow us to break down 
 
 **Question 1**
 
-In `menu.py`, take a look at how the `input()` function is being invoked. Based on what you're seeing, how many parameters does the function seem to have? If you were the designer of that function what name would you give to its parameter?
+The task list numbers tasks from 1, but `complete_task()` expects an index that starts at 0. The `- 1` that converts one to the other is in `menu.py`. Suppose `complete_task()` took the number the user typed and did the subtraction itself. What would change in `menu.py`, in `tasks.py`, and in `tests/test_tasks.py`? Which version would you choose, and why?
 
 **Question 2**
 
@@ -198,17 +214,29 @@ Loops take repetitive tasks and boil them down to a process that can be repeated
 
 Look at the `show_menu()` function in `menu.py`. There's a `while is_running:` loop that keeps the menu running until the user chooses to exit. What would happen if we forgot to set `is_running = False` when the user chooses option 4 (Exit)? What would happen if we instead forgot the `is_running = True` line before the loop?
 
+{% hint style="warning" %}
+**Predict, then run.** Delete the line `is_running = True` from `show_menu()`. Run the app. What is the last line of the error message? Explain what each part of that message is telling you. Undo the change when you are done.
+{% endhint %}
+
 **Question 2**
 
 The `while` loop in `show_menu()` has a condition `while is_running:`. This means the loop will continue as long as `is_running` is `True`. What would happen if we changed the condition to `while True:` and removed the `is_running` variable entirely? How else could we break out of the loop?
 
 **Question 3**
 
-Why is a `while` loop the appropriate type of loop to use to display the menu (see `show_menu` in `menu.py` as opposed to a `for` loop? Conversely, why is a `for` loop the approriate type of loop to use to display the list of tasks (see `view_tasks` in `tasks.py`)?
+Why is a `while` loop the appropriate type of loop to use to display the menu (see `show_menu` in `menu.py`) as opposed to a `for` loop? Conversely, why is a `for` loop the appropriate type of loop to use to display the list of tasks (see `view_tasks` in `tasks.py`)?
 
 **Question 4**
 
 Find the `for` loop in the `view_tasks` function in `tasks.py`. Then look up the `enumerate` builtin function. How would you refactor (rewrite) the `for` loop to use `enumerate` instead?
+
+**Question 5**
+
+In `view_tasks()`, the number printed beside each task is `i + 1`. Why does it add 1 to `i` rather than print `i` itself?
+
+{% hint style="warning" %}
+**Predict, then run.** In `view_tasks()`, change `{i + 1}` to `{i}`. Run the app, choose Complete Task, and type the number shown beside "Answer investigation questions". Which task does the confirmation message name? Undo the change when you are done.
+{% endhint %}
 
 ### Lists and Dictionaries
 
@@ -220,11 +248,11 @@ The entire collection of `tasks` is represented as a list of task dictionaries. 
 
 **Question 2**
 
-What ideas do you have for differentiating incomplete tasks and complete tasks?
+In `complete_task()`, the function gets a task with `task = tasks[task_index]` and then sets `task["is_complete"] = True`. The function never assigns anything into `tasks`, yet the task list shows the change. How? In your answer, say which of those two lines is an assignment and which is a mutation, and what each one does to the dictionary stored in `tasks`.
 
-### Modules and Testing
+### Modules
 
-A module is a file containing code, which can then be imported and utilized in other parts of a larger program or system. Rather than writing all of our code in one file, this project splits the code into three modules: `main.py`, `menu.py`, and `tasks.py`. As a result, we achieve "separation of concerns". The tests in the `tests/` folder import those same modules, and they tell you when a change in one file affects another.
+A module is a file containing code, which can then be imported and utilized in other parts of a larger program or system. Rather than writing all of our code in one file, this project splits the code into three modules: `main.py`, `menu.py`, and `tasks.py`. As a result, we achieve "separation of concerns".
 
 **Question 1**
 
@@ -241,10 +269,6 @@ If we wanted to add a new feature to the application, giving the user the option
 **Question 4**
 
 `main.py` ends with `if __name__ == "__main__":`. `menu.py` and `tasks.py` do not have this line. Why does only one of the three files need it?
-
-**Question 5**
-
-With your virtual environment activated, run `python3 -m pytest` from the project folder and check that every test passes. Then, in `clear_tasks()`, change the message `'All tasks cleared!'` to `'Tasks cleared!'`. Before you run the tests again, predict which tests will fail. Why does a test in `test_menu.py` fail when you changed only `tasks.py`? Undo the change when you are done.
 
 ### Reading Unfamiliar Code
 
@@ -291,6 +315,10 @@ How does the application handle edge cases like trying to complete a task that d
 **Predict, then run.** Choose Clear All Tasks, then Complete Task, and enter `1`. What message appears, and which line of `tasks.py` produced it?
 {% endhint %}
 
+{% hint style="warning" %}
+**Predict, then run.** In `complete_task()`, delete `task_index < 0 or` from the guard. Run the app, choose Complete Task, and enter `0`. Which task, if any, is marked complete? Undo the change when you are done.
+{% endhint %}
+
 **Question 4**
 
 In chapter 1.5, you checked a string with `isdigit()` before converting it with `int()`. This application uses `try`/`except` instead. Predict what each approach does with the input `-1`. Then type `-1` at the Complete Task prompt. Which part of the program refuses it?
@@ -317,27 +345,67 @@ Comprehensions and Python's built-in iteration tools abstract away the logic for
 
 **Question 1**
 
-In the `view_tasks()` function in `tasks.py`, there's a `for` loop: `for index, task in enumerate(tasks, start=1):`. This is a different kind of loop than the `while` loop. What are the tradeoffs of using `for ... in enumerate(...)` when compared to using a `while` loop with a counter, or `for i in range(len(tasks))`?
+In Looping and Iteration Question 4, you rewrote the `for` loop in `view_tasks()` to use `enumerate`. Put your version beside the original `for i in range(len(tasks)):` loop. Which lines does your version no longer need? Which version leaves more room for an off-by-one mistake, and why?
 
 **Question 2**
 
-Look at the `for` loop in `view_tasks()`. The loop variable is called `task` and it represents each individual task dictionary. What would happen if we changed the variable name from `task` to `item` or `t`? Would the code still work the same way?
+The Mark All as Completed extension needs to set every task's `is_complete` to `True`. A classmate adds this function to `tasks.py`:
+
+```python
+def complete_all_tasks():
+    tasks = [{"description": task["description"], "is_complete": True} for task in tasks]
+    print('All tasks marked as completed!')
+```
+
+{% hint style="warning" %}
+**Predict, then run.** Paste the function at the bottom of `tasks.py`. From the `src` folder, start the REPL with `python3`, then run `from tasks import complete_all_tasks` followed by `complete_all_tasks()`. What happens? Delete the function from `tasks.py` when you are done.
+{% endhint %}
+
+Rewrite `complete_all_tasks()` so that it works. Should your version use a list comprehension or a `for` loop? Explain what a list comprehension produces, and why that does or does not fit a function whose job is to change the tasks that already exist.
 
 **Question 3**
 
-What does the `start=1` argument to `enumerate` do? What would the user see if it were removed?
+Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.13, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
+
+### Test-Driven Development
+
+Tests are code that checks other code. The tests in the `tests/` folder import the same modules as the application, and each time you run them, they check that the application still behaves the way the tests describe. That tells you when a change in one file affects another, before a user finds out. In test-driven development, you write the test for a feature before you write the feature itself.
+
+**Question 1**
+
+With your virtual environment activated, run `python3 -m pytest` from the project folder and check that every test passes. Then, in `clear_tasks()`, change the message `'All tasks cleared!'` to `'Tasks cleared!'`. Before you run the tests again, predict which tests will fail. Why does a test in `test_menu.py` fail when you changed only `tasks.py`? Undo the change when you are done.
+
+The comment above `view_tasks()` also describes output: it shows an example of what the function prints. If a teammate changed the checkbox for a completed task from `[x]` to `[✓]`, which would tell them that something else needs updating, the comment or the tests? What does that suggest about what comments are good for, and what tests are good for?
+
+**Question 2**
+
+Open `tests/test_menu.py` and find `test_adding_a_task`. The test plays the part of the user: `type_answers('1', 'Buy groceries', '', '4', '')` lists everything the user types, in order, and `type_answers` (defined at the top of the file, with comments explaining it) hands those answers to `input()` one at a time. For each of the five answers, name the `input()` call in `show_menu()` that receives it.
 
 {% hint style="warning" %}
-**Predict, then run.** Remove `start=1` from the `enumerate()` call in `view_tasks()`. Run the app, choose Complete Task, and type the number shown beside "Answer investigation questions". Which task does the confirmation message name? Undo the change when you are done.
+**Predict, then run.** In `test_adding_a_task`, delete the last `''`, so that the test gives four answers. Run `python3 -m pytest`. Which test fails, and what does its message say? Undo the change when you are done.
+{% endhint %}
+
+**Question 3**
+
+Open `tests/conftest.py`. The function `reset_tasks()` runs before every test and puts the two sample tasks back into `tasks`. Why do the tests need this? Think about what the list looks like after `test_clearing_all_tasks` has run.
+
+{% hint style="warning" %}
+**Predict, then run.** In `reset_tasks()`, replace the last line with `pass`, a statement that does nothing, so the function still runs before every test but no longer resets the list. Run `python3 -m pytest`. How many tests fail? Then run only `python3 -m pytest tests/test_tasks.py::test_sample_tasks_are_present_at_start`. Does it pass or fail on its own, and why is the result different? Undo the change when you are done.
 {% endhint %}
 
 **Question 4**
 
-The Show Completed Tasks and Show Task Stats extensions both start from the same question: which tasks are complete? Write a function `get_completed_tasks()` that returns a new list of only the completed tasks, using a list comprehension with an `if`. Then write one expression that counts the completed tasks, and use `all()` to decide whether to print `Every task is done!`. Which module should each piece of this code live in?
+Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys` to capture what the function printed, because `view_tasks()` prints its output instead of returning it. In chapter 1.9, you tested functions by comparing their return value with `==`. Suppose `view_tasks()` built the same text as a string and returned it, and `show_menu()` printed it. What would the test look like then? What else would that change make easier?
 
 **Question 5**
 
-Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys` to capture what the function printed, because `view_tasks()` prints its output instead of returning it. In chapter 1.13, you tested functions by comparing their return value with `==`. Suppose `view_tasks()` built the same text as a string and returned it, and `show_menu()` printed it. What would the test look like then? What else would that change make easier?
+Chapter 1.14 described test-driven development: write a test for a feature before the feature exists, watch it fail (red), then write just enough code to make it pass (green). Try it on the [Toggle Complete extension](#extension-opportunities) (see below). In `tests/test_tasks.py`, add `toggle_task` to the import line at the top. Then write a test that calls `toggle_task(1)` twice and checks `tasks[1]["is_complete"]` after each call. What value should it have after the first call, and after the second?
+
+{% hint style="warning" %}
+**Predict, then run.** Before you write `toggle_task()`, run `python3 -m pytest`. What does the error say? What happened to the other tests in `test_tasks.py`, and to the tests in `test_menu.py` and `test_main.py`?
+{% endhint %}
+
+Now write `toggle_task()` in `tasks.py` and run the tests again. Chapter 1.14 says that a failing test proves the test is actually checking something. What could go wrong with a test that you only ever saw pass?
 
 ### Code Style
 
@@ -345,17 +413,13 @@ Code style encompasses the conventions and formatting choices that make code rea
 
 **Question 1**
 
-Look at the indentation in `tasks.py`. Notice how the code inside functions is indented with 4 spaces, and code inside `if` statements is indented even further. How does this indentation impact your ability to understand the code?
+Find the variables, functions, parameters, and dictionary keys in the application (search for `def` and `=`). Do they clearly describe the content they hold / the functionality they perform? What patterns do you see in naming, and how do they compare with the `snake_case` convention from PEP 8? Why is this important?
 
 **Question 2**
 
-Find the variables, functions, parameters, and dictionary keys in the application (search for `def` and `=`). Do they clearly describe the content they hold / the functionality they perform? What patterns do you see in naming? Why is this important?
-
-**Question 3**
-
 How are imports, functions and code blocks organized? Is there a logical and consistent flow that makes the code easy to follow?
 
-**Question 4**
+**Question 3**
 
 What do you think the reason is that some files are in the `src` sub-folder while other files are in the root of the project. What is the purpose or benefit of this separation?
 
@@ -368,7 +432,6 @@ Now that the core Task Manager app is complete, it's time to add new features! P
 - **Show Completed Tasks**: Add a menu option to display only tasks that are completed.
 - **Show Incomplete Tasks**: Add a menu option to display only tasks that are not completed.
 - **Mark All as Completed**: Add a menu option that marks every task as completed.
-- **Show Task Stats**: Add a message to the `view_tasks` function that shows the user how many tasks are complete vs. incomplete.
 - **Data Persistence**: Look into the `json.dump()` and `json.load()` functions from the `json` module, together with the built-in `open()` function, to figure out how to store the tasks in a `.json` file whenever the user exits and then retrieve those tasks when they start up again.
 - **Tests**: The `tests/` folder already tests every function in `tasks.py`. Add tests to `tests/test_tasks.py` for each feature you build, following the pattern of the tests already there, and run them with `python3 -m pytest`.
 
