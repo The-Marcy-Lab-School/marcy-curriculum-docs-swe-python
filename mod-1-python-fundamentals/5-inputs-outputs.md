@@ -1,7 +1,7 @@
 # 1.5 Strings, Inputs and Outputs
 
 {% hint style="info" %}
-💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/06-inputs-and-outputs/)
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/05-strings-inputs-and-outputs/)
 {% endhint %}
 
 **Table of Contents:**

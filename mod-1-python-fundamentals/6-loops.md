@@ -1,7 +1,7 @@
 # 1.6 Loops
 
 {% hint style="info" %}
-💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/05-loops/)
+💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/06-loops/)
 {% endhint %}
 
 **Table of Contents**:
