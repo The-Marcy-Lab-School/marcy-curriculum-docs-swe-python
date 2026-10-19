@@ -418,9 +418,10 @@ A `for` loop runs its whole body once for every number in `range(100)`. `sixes =
 - Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
 - A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
 - Two variables that reference the same list are **aliases**: a change made through one shows up through the other.
+- **Copying** a list with `list(items)` or `items[:]` makes a new list with the same elements. A function that copies a list before changing it leaves the caller's list unchanged.
 - **Unpacking** assigns the elements of a list to several variables in one statement: `first_name, last_name = "Ada Lovelace".split(" ")`.
-- The built-in **`enumerate()`** function hands a loop each element of a list together with its index, as a pair that the loop unpacks into two variables: `for index, item in enumerate(items):`.
-- A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
+- The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
+- Lists can contain other lists (**2D lists**). A **tuple** is a list that cannot change, written with parentheses.
 
 **You will be able to…**
 
@@ -429,18 +430,20 @@ _In the session:_
 - Construct a list one element at a time with `append()` inside a loop, access elements by index, slice it, test membership with `in`, and loop over it with `for` and `enumerate()`.
 - Add, replace, and remove elements with the list methods, predict the list's contents after each operation, and predict how two parallel lists fall out of step when only one of them changes.
 - Predict what happens to `nums` after `clone = nums; clone[1] = 20`, and explain it in terms of references.
-- Explain why a function can change a list it was given, and classify a function as pure or impure.
+- Explain why a function can change a list it was given, and rewrite the function so that it copies the list and leaves the caller's list unchanged.
 
 _By the end of the module:_
 
 - Explain why the same bracket assignment that fails on a string works on a list.
-- Make a pure version of an impure list function by copying the list first.
+- Copy a list with `list()`, a slice, or `[*items]`, and predict whether a change to the copy affects the original.
+- Access rows and columns of a 2D list and report its size with `len()`.
+- Explain when to use a tuple instead of a list, and predict the `TypeError` from changing one.
 - Explain why `insert(0, ...)` takes longer as a list grows while `append()` does not, using the model of a list as a row of references.
 - Unpack a list into several variables, including with `*rest`.
 
 ### Exit Ticket
 
-**Learning Objective**: Fellows will be able to predict how a function that receives a list affects the caller's list, explain the result in terms of references, and classify the function as pure or impure.
+**Learning Objective**: Fellows will be able to predict how a function that receives a list affects the caller's list, explain the result in terms of references, and change the function so that the caller's list is left unchanged.
 
 **Question**
 
@@ -457,15 +460,15 @@ print(original)
 print(with_bonus)
 ```
 
-Amara expected `original` to still be `[70, 85]`. What do the two `print()` lines show, and why? Is `add_bonus` a pure function? How could Amara change `add_bonus` so that `original` stays `[70, 85]`?
+Amara expected `original` to still be `[70, 85]`. What do the two `print()` lines show, and why? How could Amara change `add_bonus` so that `original` stays `[70, 85]`?
 
 **Level 2 Example**
 
-Both lines print `[70, 85, 100]` because the function changed the original list. `add_bonus` is impure. Amara should make a copy of the list before appending.
+Both lines print `[70, 85, 100]` because the function changed the original list. Amara should make a copy of the list before appending.
 
 **Level 3 Example**
 
-Both lines print `[70, 85, 100]`. A variable does not hold a list, it holds a reference to the list. When Amara calls `add_bonus(original)`, the parameter `scores` receives a reference to the same list that `original` references. `scores.append(100)` mutates that one list in place, and `return scores` hands back the same reference, so `original`, `scores`, and `with_bonus` are three names for one list. `add_bonus` is impure because it has a side effect: it mutates the list it was given. To make it pure, Amara should copy the list and add to the copy, for example by writing `return [*scores, 100]`. Then `with_bonus` references a new list, `[70, 85, 100]`, and `original` still references the unchanged `[70, 85]`.
+Both lines print `[70, 85, 100]`. A variable does not hold a list, it holds a reference to the list. When Amara calls `add_bonus(original)`, the parameter `scores` receives a reference to the same list that `original` references. `scores.append(100)` mutates that one list in place, and `return scores` hands back the same reference, so `original`, `scores`, and `with_bonus` are three names for one list. `add_bonus` changes the list it was given, so the caller's list changes too. To leave `original` alone, Amara should copy the list and add to the copy, for example by writing `return [*scores, 100]`. Then `with_bonus` references a new list, `[70, 85, 100]`, and `original` still references the unchanged `[70, 85]`.
 
 ## 1.8 Dictionaries
 
@@ -479,7 +482,7 @@ Both lines print `[70, 85, 100]`. A variable does not hold a list, it holds a re
 - Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead.
 - Dictionaries are **mutable**, meaning you can add, modify, or delete key-value pairs after creation using assignment, `del`, or `.pop()`.
 - Dictionaries can contain **nested data** including lists and other dictionaries, allowing for complex data structures.
-- Like lists, dictionaries are held by **reference**. Copy one with `dict(my_dict)` before changing it inside a pure function.
+- Like lists, dictionaries are held by **reference**. Copy one with `dict(my_dict)` before changing it inside a function, so the caller's dictionary stays the same.
 - **`.keys()`**, **`.values()`**, and **`.items()`** let you loop over a dictionary. `.items()` hands you each key and value together.
 
 **You will be able to…**
@@ -494,7 +497,7 @@ _In the session:_
 _By the end of the module:_
 
 - Explain which values can be keys and why a list cannot.
-- Predict the effect of mutating a dictionary through a second variable, and copy a dictionary before changing it in a pure function.
+- Predict the effect of mutating a dictionary through a second variable, and copy a dictionary before changing it inside a function so the caller's dictionary stays the same.
 - Write a function that takes a dictionary and uses only the keys it needs.
 
 ### Exit Ticket
@@ -840,7 +843,7 @@ _In the session:_
 
 _By the end of the module:_
 
-- Choose the right tool for a loop shape: a `for` loop for side effects, a comprehension to transform, a comprehension with `if` to filter, an early `return` to find the first match, a built-in or accumulator to combine, `sorted()` to order.
+- Choose the right tool for a loop shape: a `for` loop to do something with every value, a comprehension to transform, a comprehension with `if` to filter, an early `return` to find the first match, a built-in or accumulator to combine, `sorted()` to order.
 - Write a function that returns the first element passing a test, and decide what it returns when nothing passes.
 - Build a frequency counter with a dictionary and `.get(key, 0)`.
 - Use `enumerate()`, `zip()`, `any()`, and `all()` in place of index-based loops.
@@ -880,6 +883,7 @@ The program prints `None`. `.sort()` sorts a list in place, which means it chang
 
 **Key terms**
 
+- A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
 - **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
 - To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
 - **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.

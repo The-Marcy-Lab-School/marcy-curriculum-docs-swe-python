@@ -198,7 +198,7 @@ There is exactly one piece of data that lives between actions: `stock`, at the t
 
 **<details><summary>Q: `stock` is a global variable, and `restock` and `sell` change it. Chapter 1.3 told you to avoid that. Is this program wrong?</summary>**
 
-It is a tradeoff the author made, and you can name both sides of it. Keeping `stock` inside `inventory.py` and never importing it into `main.py` means only three functions can ever touch it, which makes it easy to find every place it changes. The cost is that `restock` and `sell` are impure: calling `sell("bread", 2)` twice returns `True` the first time and `False` the second, because the first call used up the bread. The case study in two weeks makes the same choice for the same reason, and you will make it in your project too. Knowing the cost is what matters.
+It is a tradeoff the author made, and you can name both sides of it. Keeping `stock` inside `inventory.py` and never importing it into `main.py` means only three functions can ever touch it, which makes it easy to find every place it changes. The cost is that what `restock` and `sell` return depends on more than their arguments: calling `sell("bread", 2)` twice returns `True` the first time and `False` the second, because the first call used up the bread. The case study in two weeks makes the same choice for the same reason, and you will make it in your project too. Knowing the cost is what matters.
 
 Notice also that nothing here needs the `global` keyword. Mutating a dictionary through a global name is allowed; only _reassigning_ the name would need `global`. That is the distinction between mutability and reassignment from chapter 1.7, showing up in practice.
 
@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
 **What it does:** asks for a bill, a group size, and an optional tip percentage, and prints what each person owes.
 
-**The data:** three numbers, none of them remembered between runs. There is no top-level data at all, which is why this program can be pure where the shop could not: `split_bill(100, 4)` returns `29.5` every single time.
+**The data:** three numbers, none of them remembered between runs. There is no top-level data at all, which is why this program's answers depend only on what you give it, where the shop's did not: `split_bill(100, 4)` returns `29.5` every single time.
 
 **Two crashes:**
 

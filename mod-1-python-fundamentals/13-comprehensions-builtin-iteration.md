@@ -68,7 +68,7 @@ Here are the most common things you want to do with a list, and the Python tool 
 
 | You want to...                                              | Use                                                        | Example                                       |
 | ----------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| Perform a task that produces a side effect for every value  | a `for` loop                                               | Print each value, or mutate each dictionary   |
+| Do something with every value without building a new list  | a `for` loop                                               | Print each value, or mutate each dictionary   |
 | Transform every value and collect the results in a new list | a list comprehension                                       | Double every number in the source list        |
 | Test every value and keep the ones that pass                | a list comprehension with `if`                             | Keep only the even numbers in the source list |
 | Test every value and get the first one that passes          | a `for` loop with `return`/`break`                         | Find the first number greater than 10         |

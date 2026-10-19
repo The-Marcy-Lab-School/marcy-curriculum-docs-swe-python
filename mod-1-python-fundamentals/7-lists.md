@@ -9,9 +9,6 @@
 - [Key Terms](#key-terms)
 - [Keeping Every Value](#keeping-every-value)
 - [List Basics](#list-basics)
-  - [Unpacking](#unpacking)
-  - [Looping with `enumerate()`](#looping-with-enumerate)
-- [Changing a List](#changing-a-list)
   - [Lists Are Mutable](#lists-are-mutable)
   - [Adding and Removing Values](#adding-and-removing-values)
 - [References](#references)
@@ -19,13 +16,14 @@
   - [Two Names, One List](#two-names-one-list)
   - [Adding to the Front vs. the Back](#adding-to-the-front-vs-the-back)
   - [Passing a List to a Function](#passing-a-list-to-a-function)
-- [Pure and Impure Functions](#pure-and-impure-functions)
-  - [Making Copies of Lists to Make Pure Functions](#making-copies-of-lists-to-make-pure-functions)
+- [Copying a List Before Changing It](#copying-a-list-before-changing-it)
   - [Copying List Challenge](#copying-list-challenge)
 - [Advanced List Syntax](#advanced-list-syntax)
+  - [Unpacking](#unpacking)
+  - [Looping with `enumerate()`](#looping-with-enumerate)
   - [2D Lists](#2d-lists)
   - [Tuples: Lists That Cannot Change](#tuples-lists-that-cannot-change)
-  - [Unpacking](#unpacking-1)
+- [Summary](#summary)
 
 ## Key Terms
 
@@ -33,13 +31,18 @@
 - Unlike strings, lists are **mutable** so methods like `append`, `insert`, `pop`, and `remove` change a list in place.
 - A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
 - Two variables that reference the same list are **aliases**: a change made through one shows up through the other.
+- **Copying** a list with `list(items)` or `items[:]` makes a new list with the same elements. A function that copies a list before changing it leaves the caller's list unchanged.
+
+**Advanced Topics:**
+
 - **Unpacking** assigns the elements of a list to several variables in one statement: `first_name, last_name = "Ada Lovelace".split(" ")`.
 - The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
-- A **pure function** returns the same output for the same input and has no side effects. Functions that mutate the list they are given are impure. To keep a function pure, make a copy first with `list(arr)`, `arr[:]`, or `[*arr]`.
+- Lists can contain other lists (**2D lists**).
+- A **tuple** is a list that cannot change, written with parentheses.
 
 ## Keeping Every Value
 
-Recall the dollar program in chapter 1.6 which added dollar mounts entered by a user to a `total` and printed it out.
+Recall the dollar program in chapter 1.6 which added dollar amounts entered by a user to a `total` and printed it out.
 
 ```python
 total = 0
@@ -51,7 +54,7 @@ while True:
     if amount.lower() == "done":
         break
 
-    # if removing a single `.` from the amount results in anything other than numbers
+    # skip the amount if anything other than digits is left after removing a single `.`
     digits = amount.replace(".", "", 1)
     if not digits.isdigit():
         print(f"Sorry, {amount} is not a dollar amount")
@@ -172,53 +175,9 @@ Python has this built in, of course: `value in items` does exactly what `has_val
 
 </details>
 
-### Unpacking
-
-In chapter 1.5, `split()` broke a string into a list of pieces. Often you want each piece in its own variable. **Unpacking** makes it possible to take the values from a list and assign them to distinct variables in one statement.
-
-The syntax puts several variable names, separated by commas, on the left side of the assignment operator `=` and the list on the right side:
-
-```python
-first_name, last_name = "Ada Lovelace".split(" ")
-
-print(first_name)  # Ada
-print(last_name)   # Lovelace
-```
-
-The number of variables has to match the number of elements. If the numbers do not match, Python stops with a `ValueError`: `too many values to unpack` when the list has more elements than variables, and `not enough values to unpack` when it has fewer. The exception is a variable with a `*` in front. That variable collects "the rest" as a list:
-
-```python
-items = ['coffee', 'bagel', 'juice', 'muffin']
-
-first_item, *other_items = items
-
-print(first_item)   # coffee
-print(other_items)  # ['bagel', 'juice', 'muffin']
-```
-
-### Looping with `enumerate()`
-
-When you need the position of each element as well as the element, `enumerate()` hands you both. On each pass, `enumerate()` produces a pair, an index and an element, and unpacking splits the pair into two variables:
-
-```python
-items = ['coffee', 'bagel', 'juice', 'muffin']
-prices = [3.50, 2.25, 4.00, 3.00]
-
-for index, item in enumerate(items):
-    print(f"{item}: ${prices[index]:.2f}")
-
-# coffee: $3.50
-# bagel: $2.25
-# ...
-```
-
-This is the receipt loop again. `item` holds the name directly, and `index` is still there to find the matching price.
-
-## Changing a List
-
 ### Lists Are Mutable
 
-Strings have methods like `upper()`, and they support slicing, but both return a new string and leave the original alone. If you do not store the new string in a variable, the new string is gone: after `my_name.upper()` runs on its own line, `my_name` is still `'ben'`. Trying to change a string in place with bracket notation is an error.
+Strings have methods like `upper()`, and strings support slicing, but both return a new string and leave the original alone. If you do not store the new string in a variable, the new string is gone: after `my_name.upper()` runs on its own line, `my_name` is still `'ben'`. Trying to change a string in place with bracket notation is an error.
 
 ```python
 my_name = 'ben'
@@ -297,8 +256,8 @@ prices = [3.50, 2.25, 4.00, 3.00]
 
 items.remove('bagel')
 
-for index, item in enumerate(items):
-    print(f"{item}: ${prices[index]:.2f}")
+for i in range(len(items)):
+    print(f"{items[i]}: ${prices[i]:.2f}")
 ```
 
 <details><summary>What actually happens</summary>
@@ -453,65 +412,56 @@ print(y)  # 11
 
 `y += 1` looks like it changes the value in `y`, but the number `10` cannot change. Python computes the new value `11` and reassigns `y` to reference it. `x` still references `10`.
 
-## Pure and Impure Functions
+## Copying a List Before Changing It
 
-Functions are considered **impure functions** if they do either of these:
-
-1. Produce different outputs when given the same inputs
-2. Produce side effects (like mutating incoming values)
-
-The functions below are impure functions:
+Suppose the store runs a sale that takes $1 off every item, and the receipt should show each item's regular price next to its sale price. This function calculates the sale prices:
 
 ```python
-import random
+def apply_discount(prices):
+    for i in range(len(prices)):
+        prices[i] = prices[i] - 1
+    return prices
 
-# This function can't return the same output each time it is invoked.
-def roll_die():
-    return random.randint(1, 6)
+prices = [3.50, 2.25, 4.00]
+sale_prices = apply_discount(prices)
 
-print(roll_die())  # ???
-print(roll_die())  # ???
-
-
-# This function mutates the incoming list
-def empty_the_list(items):
-    items.clear()
-
-letters = ['a', 'b', 'c']
-empty_the_list(letters)
-
-print(letters)  # Prints []
+print(prices)       # [2.5, 1.25, 3.0]
+print(sale_prices)  # [2.5, 1.25, 3.0]
 ```
 
-### Making Copies of Lists to Make Pure Functions
+The sale prices are correct, but the regular prices are gone. The parameter `prices` inside the function references the same list as the variable `prices` outside it, so every `prices[i] = ...` overwrote one of the caller's regular prices. Nothing in the line `sale_prices = apply_discount(prices)` suggests that it changes `prices`, so a programmer reading that line has no reason to suspect that the regular prices were lost there.
 
-Why care? Whoever calls `empty_the_list(letters)` may only have wanted to use the list, and afterwards their `letters` is empty. The line that emptied `letters` is inside the function, so when the empty list causes a problem later, the line where the problem shows up is nowhere near the line that caused it. A pure function cannot surprise its caller this way, because it leaves its inputs alone and communicates only through what it returns.
-
-Functions that accept lists and modify them are impure. To make a function that modifies a list pure, we need to make a copy of it first. There are three common ways to copy a list, and they all do the same thing:
+To leave the caller's list alone, the function can copy the list first and change only the copy. There are two common ways to copy a list, and they do the same thing:
 
 ```python
+letters = ['a', 'b', 'c']
+
+# Two ways to copy:
 copy1 = list(letters)   # the list() function builds a new list from any sequence
-copy2 = letters[:]      # a slice with no start or end is a copy of the whole thing
-copy3 = [*letters]      # the * unpacks the elements into a new list
+copy2 = letters[:]      # a slice with no start or end creates a copy of the whole thing
 ```
 
-The third form uses the same `*` as unpacking, and it is the most flexible, because you can add extra elements while you copy:
+With a copy, `apply_discount` changes only its own list and returns it, and the caller keeps the regular prices:
 
 ```python
-def extend(items, value):
-    new_items = [*items, value]
-    return new_items
+def apply_discount(prices):
+    sale_prices = list(prices)
+    for i in range(len(sale_prices)):
+        sale_prices[i] = sale_prices[i] - 1
+    return sale_prices
 
-letters = ['a', 'b', 'c']
-more_letters = extend(letters, 'd')
+prices = [3.50, 2.25, 4.00]
+sale_prices = apply_discount(prices)
 
-print(letters)       # Prints ['a', 'b', 'c']
-print(more_letters)  # Prints ['a', 'b', 'c', 'd']
+print(prices)       # [3.5, 2.25, 4.0]
+print(sale_prices)  # [2.5, 1.25, 3.0]
 ```
+
+A third way, `[*letters]`, uses unpacking, which is covered in Advanced List Syntax below.
 
 ### Copying List Challenge
 
-Make this impure list function pure!
+This function changes the list it is given. Rewrite it so that the caller's list stays the same!
 
 ```python
 def shorten(items):
@@ -538,6 +488,64 @@ def shorten(items):
 </details>
 
 ## Advanced List Syntax
+
+### Unpacking
+
+In chapter 1.5, `split()` broke a string into a list of pieces. Often you want each piece in its own variable. **Unpacking** makes it possible to take the values from a list and assign them to distinct variables in one statement.
+
+The syntax puts several variable names, separated by commas, on the left side of the assignment operator `=` and the list on the right side:
+
+```python
+first_name, last_name = "Ada Lovelace".split(" ")
+
+print(first_name)  # Ada
+print(last_name)   # Lovelace
+```
+
+The number of variables has to match the number of elements. If the numbers do not match, Python stops with a `ValueError`: `too many values to unpack` when the list has more elements than variables, and `not enough values to unpack` when it has fewer. The exception is a variable with a `*` in front. That variable collects "the rest" as a list:
+
+```python
+items = ['coffee', 'bagel', 'juice', 'muffin']
+
+first_item, *other_items = items
+
+print(first_item)   # coffee
+print(other_items)  # ['bagel', 'juice', 'muffin']
+```
+
+The `*` also works inside square brackets. There, it unpacks the elements of one list into a new list, which makes a copy of the list. You can even add extra elements while you copy:
+
+```python
+letters = ['a', 'b', 'c']
+copy = [*letters]
+
+def extend(items, value):
+    new_items = [*items, value]
+    return new_items
+
+more_letters = extend(letters, 'd')
+
+print(letters)       # Prints ['a', 'b', 'c']
+print(more_letters)  # Prints ['a', 'b', 'c', 'd']
+```
+
+### Looping with `enumerate()`
+
+When you need the position of each element as well as the element, `enumerate()` hands you both. On each pass, `enumerate()` produces a pair, an index and an element, and unpacking splits the pair into two variables:
+
+```python
+items = ['coffee', 'bagel', 'juice', 'muffin']
+prices = [3.50, 2.25, 4.00, 3.00]
+
+for index, item in enumerate(items):
+    print(f"{item}: ${prices[index]:.2f}")
+
+# coffee: $3.50
+# bagel: $2.25
+# ...
+```
+
+This is the receipt loop again. `item` holds the name directly, and `index` is still there to find the matching price.
 
 ### 2D Lists
 
@@ -584,36 +592,6 @@ coordinate[0] = 31        # TypeError: 'tuple' object does not support item assi
 
 Use a tuple when the values belong together and should never be added to or removed from, like a latitude and a longitude. Python itself hands you tuples constantly: `enumerate()` produces `(index, value)` pairs, and a dictionary's `.items()` produces `(key, value)` pairs. When you see `choice in ("1", "2")`, that is a tuple being used as a small fixed set of options.
 
-### Unpacking
+## Summary
 
-**Unpacking** makes it possible to take the values from a list and assign them to distinct variables in one statement.
-
-The syntax puts several variable names, separated by commas, on the left side of the assignment operator `=` and the list on the right side (the "source variable"):
-
-```python
-coordinates = [
-    [30, 90],
-    [40, 74],
-    [34, 118],
-    [42, 88],
-    [39, 77],
-]
-
-# Unpack the two values from the second row.
-new_york_lat, new_york_long = coordinates[1]
-
-print(new_york_lat)   # 40
-print(new_york_long)  # 74
-```
-
-The number of variables has to match the number of elements. If the numbers do not match, Python stops with a `ValueError`: `too many values to unpack` when the list has more elements than variables, and `not enough values to unpack` when it has fewer. The exception is a variable with a `*` in front. That variable collects "the rest" as a list:
-
-```python
-# Unpack the first three rows into their own variables and collect the rest
-new_orleans, new_york, los_angeles, *lesser_cities = coordinates
-
-print(los_angeles)    # [34, 118]
-print(lesser_cities)  # [[42, 88], [39, 77]]
-```
-
-You have seen this pattern already, without the name. `for index, friend in enumerate(friends)` unpacks each `(index, friend)` tuple as it comes out of `enumerate`.
+A list stores many values in order under one name, so a program can collect values it doesn't know in advance (every amount the user typed, not only their total) and work with them later, using the same indexing, slicing and loops as with strings. Unlike a string, a list can be changed in place, and a variable holds a reference to a list, not a copy of it. So when two variables, or a function and its caller, share a list, a change made through one name shows up through the other. The programmer therefore has to decide whether code should change the list it was given or build a new one.

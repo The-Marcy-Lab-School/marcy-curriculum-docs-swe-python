@@ -17,6 +17,7 @@
 
 ## Key Terms
 
+- A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
 - **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
 - To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
 - **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
@@ -28,7 +29,12 @@ Every comprehension in chapter 1.13 replaced a loop that already worked. How do 
 
 ### A Pure Function and Its Tests
 
-Consider this pure function that takes in a list of numbers and returns a copy of that list where each value is doubled:
+A test calls a function with an input you chose and checks the result against the answer you expect. That check only means something when two things are true of the function:
+
+1. **It returns the same output every time it gets the same input.** A function like `roll_die()`, which returns `random.randint(1, 6)`, cannot be checked with `==`, because no single expected value is right.
+2. **It has no side effects.** A **side effect** is a change a function makes outside itself, such as changing a list it was given. A test of a function that changes its input has to check the input as well as the output, and the next test that uses the same list starts from different data.
+
+A function that meets both rules is called a **pure function**, and a function that breaks either one is **impure**. Chapter 1.7 showed how to keep a function from changing a list it was given: copy the list first and change only the copy. That is what makes this function pure. It takes in a list of numbers and returns a copy of that list where each value is doubled:
 
 ```python
 def double_all_purely(items):

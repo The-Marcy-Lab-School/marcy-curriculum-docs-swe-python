@@ -446,7 +446,7 @@ describe("Ada", 36, city="Brooklyn", hobby="code")
 # {'city': 'Brooklyn', 'hobby': 'code'}
 ```
 
-The positional arguments arrive together in a tuple, and the keyword arguments arrive in a dictionary. You will meet tuples and dictionaries in chapter 1.8. The stars are the part that matters, and the names `args` and `kwargs` are only a convention.
+The positional arguments arrive together in a tuple, and the keyword arguments arrive in a dictionary. You will meet tuples in chapter 1.7 and dictionaries in chapter 1.8. The stars are the part that matters, and the names `args` and `kwargs` are only a convention.
 
 This is how `print()` accepts any number of values. Run `help(print)` and, just under the heading, the documentation shows `print(*args, sep=' ', end='\n', file=None, flush=False)`. You won't need to write either one in this module, but now you can read them.
 
@@ -643,7 +643,7 @@ def increment(count):
 count = increment(count)
 ```
 
-Now the only line that changes `count` is the one you can see. We'll see exactly why this matters in the chapter on lists, where functions that change variables outside of themselves get a name: impure.
+Now the only line that changes `count` is the one you can see. We'll see exactly why this matters in the chapter on lists, where a function can change a list that its caller is still using.
 
 </details>
 {% endhint %}

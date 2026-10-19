@@ -25,7 +25,7 @@
 - Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead.
 - Dictionaries are **mutable**, meaning you can add, modify, or delete key-value pairs after creation using assignment, `del`, or `.pop()`.
 - Dictionaries can contain **nested data** including lists and other dictionaries, allowing for complex data structures.
-- Like lists, dictionaries are held by **reference**. Copy one with `dict(my_dict)` before changing it inside a pure function.
+- Like lists, dictionaries are held by **reference**. Copy one with `dict(my_dict)` before changing it inside a function, so the caller's dictionary stays the same.
 - **`.keys()`**, **`.values()`**, and **`.items()`** let you loop over a dictionary. `.items()` hands you each key and value together.
 
 ## The basics
@@ -187,7 +187,7 @@ print(clone)  # {'name': 'benny', 'noise': 'BAAAAA'}
 print(sheep is clone)   # True
 ```
 
-The same thing happens when you pass a dictionary to a function. The parameter holds a reference to the caller's dictionary, so if the function changes the parameter, it changes the caller's dictionary too, and the function is impure. To keep the function pure, have it copy the dictionary first. The `dict()` function copies the key-value pairs of one dictionary into a new dictionary, and the function can then change the copy as much as it likes:
+The same thing happens when you pass a dictionary to a function. The parameter holds a reference to the caller's dictionary, so if the function changes the parameter, it changes the caller's dictionary too. To leave the caller's dictionary unchanged, have the function copy the dictionary first. The `dict()` function copies the key-value pairs of one dictionary into a new dictionary, and the function can then change the copy as much as it likes:
 
 ```python
 sheep = {'name': 'benny', 'noise': 'baaaa'}
