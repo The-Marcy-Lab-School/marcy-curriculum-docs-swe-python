@@ -399,18 +399,26 @@ empty_the_list(letters)
 print(letters)  # Prints []
 ```
 
-A function can never change a caller's string, number, or boolean this way. The parameter still receives a reference, but an immutable value has no method or bracket assignment that changes it in place. The only way to "change" one is to reassign a variable, and reassignment changes only the variable on the left of the `=`, not the immutable value on the right.
+Sometimes this is exactly what you want. A function whose _job_ is to change a list can change the caller's list directly. Because the caller and the function share one list, the function does not need to build a new list and return it, and every part of the program that references the list sees the change. But this must be intentional.
+
+{% hint style="info" %}
+💡 A function can never change a caller's string, number, or boolean this way. The parameter still receives a reference, but an immutable value has no method or bracket assignment that changes it in place.
+
+You can still _reassign_ a variable to change what value it stores but you cannot _mutate_ the value itself.
 
 ```python
-x = 10
-y = x
-y += 1  # shorthand for y = y + 1
+def add_one_and_print(x):
+    x += 1 # shorthand for x = x + 1
+    print(x)
 
-print(x)  # 10
-print(y)  # 11
+my_num = 10
+add_one_and_print(x)  # 11
+print(my_num) # 10
 ```
 
-`y += 1` looks like it changes the value in `y`, but the number `10` cannot change. Python computes the new value `11` and reassigns `y` to reference it. `x` still references `10`.
+`x += 1` looks like it changes the value in `x`, but the number `10` cannot change. Python computes the new value `11` and reassigns `x` to reference it. `x` still references `10`.
+
+{% endhint %}
 
 ## Copying a List Before Changing It
 
