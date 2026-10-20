@@ -35,7 +35,7 @@
 
 **Advanced Topics:**
 
-- **Unpacking** assigns the elements of a list to several variables in one statement: `item, price = ["coffee", [3.50]`.
+- **Unpacking** assigns the elements of a list to several variables in one statement: `item, price = ["coffee", 3.50]`.
 - The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
 - Lists can contain other lists (**2D lists**).
 - A **tuple** is a list that cannot change, written with parentheses.
