@@ -419,9 +419,13 @@ A `for` loop runs its whole body once for every number in `range(100)`. `sixes =
 - A variable does not hold a value: it holds a **reference** to the value. Two variables can reference the same list, and a function receiving a list receives a reference to the caller's list.
 - Two variables that reference the same list are **aliases**: a change made through one shows up through the other.
 - **Copying** a list with `list(items)` or `items[:]` makes a new list with the same elements. A function that copies a list before changing it leaves the caller's list unchanged.
-- **Unpacking** assigns the elements of a list to several variables in one statement: `first_name, last_name = "Ada Lovelace".split(" ")`.
+
+**Advanced Topics:**
+
+- **Unpacking** assigns the elements of a list to several variables in one statement: `item, price = ["coffe", 3.50]`.
 - The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
-- Lists can contain other lists (**2D lists**). A **tuple** is a list that cannot change, written with parentheses.
+- Lists can contain other lists (**2D lists**).
+- A **tuple** is a list that cannot change, written with parentheses.
 
 **You will be able to…**
 
