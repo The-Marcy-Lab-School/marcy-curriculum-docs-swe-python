@@ -16,6 +16,7 @@
 - [Dictionaries and Functions](#dictionaries-and-functions)
   - [Building a Dictionary from Parameters](#building-a-dictionary-from-parameters)
   - [Passing a Dictionary to a Function](#passing-a-dictionary-to-a-function)
+- [Summary](#summary)
 
 ## Key Terms
 
@@ -356,3 +357,7 @@ introduce_self(user_ben)
 ```
 
 `introduce_self` never looks at `is_admin`, and it doesn't need to. So `introduce_self` works on any dictionary that has a `"name"` and an `"age"`. You could pass it a user with twenty other keys, or add an `"email"` key to every user next week, and `introduce_self` would not need to change. What it does need is those two keys: pass it a dictionary without `"age"` and it stops with `KeyError: 'age'`.
+
+## Summary
+
+A dictionary stores values under names instead of positions, so a program can look each value up by what it means rather than by where it sits. Dictionaries do two jobs. As a **record**, a dictionary keeps the pieces of information about one thing together, such as one purchase's item and price. As a **lookup table**, a dictionary finds a value from a key, such as the price of any item on a menu. Combined with a list, records give a program its most common shape: a list of dictionaries, one for each thing, all with the same keys, so the pieces of information about one thing cannot drift apart the way two parallel lists can. Dictionaries are mutable and held by reference, exactly like lists, so the same decision applies: change the dictionary you were given, or copy it first.
