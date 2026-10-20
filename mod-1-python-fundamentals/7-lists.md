@@ -35,7 +35,7 @@
 
 **Advanced Topics:**
 
-- **Unpacking** assigns the elements of a list to several variables in one statement: `first_name, last_name = "Ada Lovelace".split(" ")`.
+- **Unpacking** assigns the elements of a list to several variables in one statement: `item, price = ["coffee", [3.50]`.
 - The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
 - Lists can contain other lists (**2D lists**).
 - A **tuple** is a list that cannot change, written with parentheses.
@@ -151,9 +151,9 @@ def has_value(items, value):
             return True  # 3.
     return False  # 4.
 
-letters = ['a', 'b', 'c', 'd']
-print(has_value(letters, 'c'))  # Prints True
-print(has_value(letters, 'e'))  # Prints False
+items = ['coffee', 'bagel', 'juice', 'muffin']
+print(has_value(items, 'bagel'))   # Prints True
+print(has_value(items, 'cookie'))  # Prints False
 ```
 
 **<details><summary>Check out this example</summary>**
@@ -166,9 +166,9 @@ def has_value(items, value):
         # if it doesn't, keep going!
     return False  # The return True above would have ended the function on a match, so reaching this line means no element matched. Return False.
 
-letters = ['a', 'b', 'c', 'd']
-print(has_value(letters, 'c'))  # Prints True
-print(has_value(letters, 'e'))  # Prints False
+items = ['coffee', 'bagel', 'juice', 'muffin']
+print(has_value(items, 'bagel'))   # Prints True
+print(has_value(items, 'cookie'))  # Prints False
 ```
 
 Python has this built in, of course: `value in items` does exactly what `has_value` does. Writing it yourself still matters, because the same loop, check, and return shape answers questions `in` cannot, like "does this list contain any word longer than five letters?"
@@ -177,12 +177,12 @@ Python has this built in, of course: `value in items` does exactly what `has_val
 
 ### Lists Are Mutable
 
-Strings have methods like `upper()`, and strings support slicing, but both return a new string and leave the original alone. If you do not store the new string in a variable, the new string is gone: after `my_name.upper()` runs on its own line, `my_name` is still `'ben'`. Trying to change a string in place with bracket notation is an error.
+Strings have methods like `upper()`, and strings support slicing, but both return a new string and leave the original alone. If you do not store the new string in a variable, the new string is gone: after `item.upper()` runs on its own line, `item` is still `'bagel'`. Trying to change a string in place with bracket notation is an error.
 
 ```python
-my_name = 'ben'
-my_name.upper()   # doesn't mutate the string, it makes a copy
-my_name[0] = "J"  # TypeError: 'str' object does not support item assignment
+item = 'bagel'
+item.upper()   # doesn't mutate the string, it makes a copy
+item[0] = 'B'  # TypeError: 'str' object does not support item assignment
 ```
 
 Unlike strings, lists let you **mutate** them directly (change their contents without reassignment). If the bagel on the receipt was on sale, the program can fix its price in place:
@@ -225,24 +225,24 @@ These methods let you remove values from a list
 - `my_list.clear()` — removes every element
 
 ```python
-letters = ['a', 'b', 'c', 'd', 'e']
+items = ['coffee', 'bagel', 'juice', 'muffin']
 
-letters.append('f')      # adds 'f' to the end of letters
-letters.insert(0, 'z')   # adds 'z' to the beginning of letters
-print(letters)  # Prints ['z', 'a', 'b', 'c', 'd', 'e', 'f']
+items.append('cookie')      # adds 'cookie' to the end
+items.insert(0, 'tea')      # adds 'tea' to the beginning
+print(items)  # Prints ['tea', 'coffee', 'bagel', 'juice', 'muffin', 'cookie']
 
-letters.pop()    # removes the last element ('f')
-letters.pop(0)   # removes the first element ('z')
-print(letters)  # Prints ['a', 'b', 'c', 'd', 'e']
+items.pop()                 # removes the last item ('cookie')
+items.pop(0)                # removes the first item ('tea')
+print(items)  # Prints ['coffee', 'bagel', 'juice', 'muffin']
 
-letters.insert(2, 'Hi!')  # At index 2, inserts 'Hi!'
-print(letters)  # Prints ['a', 'b', 'Hi!', 'c', 'd', 'e']
+items.insert(2, 'scone')    # At index 2, inserts 'scone'
+print(items)  # Prints ['coffee', 'bagel', 'scone', 'juice', 'muffin']
 
-letters[2] = 'Hey ;)'  # At index 2, replaces 1 element with 'Hey ;)'
-print(letters)  # Prints ['a', 'b', 'Hey ;)', 'c', 'd', 'e']
+items[2] = 'croissant'      # At index 2, replaces 'scone' with 'croissant'
+print(items)  # Prints ['coffee', 'bagel', 'croissant', 'juice', 'muffin']
 
-letters.remove('Hey ;)')  # Removes the first 'Hey ;)' it finds
-print(letters)  # Prints ['a', 'b', 'c', 'd', 'e']
+items.remove('croissant')   # Removes the first 'croissant' it finds
+print(items)  # Prints ['coffee', 'bagel', 'juice', 'muffin']
 ```
 
 Each of these methods changes one list. The receipt keeps two lists that have to change together, and nothing in Python keeps them in step.
@@ -299,43 +299,47 @@ The variable `items` references the row, and each slot references an element. Br
 You can see a reference for yourself. The `id()` function returns a number that identifies where a value lives:
 
 ```python
-nums = [1, 2, 3]
-clone = nums
+items = ['coffee', 'bagel', 'juice', 'muffin']
+receipt = items
 
-print(id(nums))          # some large number, like 4395782592
-print(id(clone))         # the exact same number
-print(nums is clone)     # True: `is` asks whether two variables reference the same object
+print(id(items))        # some large number, like 4395782592
+print(id(receipt))      # the exact same number
+print(items is receipt) # True: `is` asks whether two variables reference the same object
 ```
 
-Because `nums` and `clone` hold the same reference, they are two names for one list, not two separate lists. Two variables that reference the same list are called **aliases**.
+Because `items` and `receipt` hold the same reference, they are two names for one list, not two separate lists. Two variables that reference the same list are called **aliases**.
+
+{% hint style="info" %}
+💡 Outside of a programming context, the word "alias" is used as another name that refers to the same person. For example, "Batman" is the alias of "Bruce Wayne".
+{% endhint %}
 
 ### Two Names, One List
 
 {% hint style="warning" %}
-**Predict, then run.** What will the value of `nums` and `clone` be after the program runs?
+**Predict, then run.** What will `items` and `receipt` hold after the program runs?
 
 ```python
-nums = [1, 2, 3]
-clone = nums
-clone[1] = 20
+items = ['coffee', 'bagel', 'juice', 'muffin']
+receipt = items
+receipt[1] = 'scone'
 
-print(nums)
-print(clone)
+print(items)
+print(receipt)
 ```
 
 <details><summary>What actually happens</summary>
 
 ```
-[1, 20, 3]
-[1, 20, 3]
+['coffee', 'scone', 'juice', 'muffin']
+['coffee', 'scone', 'juice', 'muffin']
 ```
 
-Both `nums` and `clone` hold the values `[1, 20, 3]`. Why?
+Both `items` and `receipt` hold `['coffee', 'scone', 'juice', 'muffin']`. Why?
 
-- When we assign `clone = nums`, the "value" of `nums` is the **reference** to the list `[1, 2, 3]`, not the list itself. So, `clone` also holds a reference to the exact same list
-- When we mutate `clone[1]`, we are mutating the list referenced by `clone` which is the same list referenced by `nums`. So, both `nums` and `clone` show the mutated list.
+- When we assign `receipt = items`, the "value" of `items` is the **reference** to the list, not the list itself. So, `receipt` also holds a reference to the exact same list
+- When we mutate `receipt[1]`, we are mutating the list referenced by `receipt` which is the same list referenced by `items`. So, both `items` and `receipt` show the mutated list.
 
-If you expected `nums` to still be `[1, 2, 3]`, your mental model was that `clone = nums` copies the list. It copies the _address_.
+If you expected `items` to still hold `'bagel'`, your mental model was that `receipt = items` copies the list. It copies the _address_.
 
 </details>
 {% endhint %}
@@ -385,18 +389,18 @@ Change both `range(100000)` calls to `range(10000)` and run it again. Both loops
 The same thing happens when we invoke a function and provide a list as an argument:
 
 ```python
-def empty_the_list(items):
+def clear_receipt(receipt_items):
     # 3. Upon receiving the reference, this function modifies the list
-    items.clear()
+    receipt_items.clear()
 
-# 1. The list below is created in the heap and the "reference" to its location is stored in letters
-letters = ['a', 'b', 'c']
+# 1. The list below is created in the heap and the "reference" to its location is stored in items
+items = ['coffee', 'bagel', 'juice', 'muffin']
 
-# 2. When we invoke empty_the_list, we assign the "reference" to the function parameter "items"
-empty_the_list(letters)
+# 2. When we invoke clear_receipt, we assign the "reference" to the function parameter "receipt_items"
+clear_receipt(items)
 
-# 4. The list referenced by letters has been modified by the function!
-print(letters)  # Prints []
+# 4. The list referenced by items has been modified by the function!
+print(items)  # Prints []
 ```
 
 Sometimes this is exactly what you want. A function whose _job_ is to change a list can change the caller's list directly. Because the caller and the function share one list, the function does not need to build a new list and return it, and every part of the program that references the list sees the change. But this must be intentional.
@@ -412,11 +416,11 @@ def add_one_and_print(x):
     print(x)
 
 my_num = 10
-add_one_and_print(x)  # 11
+add_one_and_print(my_num)  # 11
 print(my_num) # 10
 ```
 
-`x += 1` looks like it changes the value in `x`, but the number `10` cannot change. Python computes the new value `11` and reassigns `x` to reference it. `x` still references `10`.
+`x += 1` looks like it changes the value in `x`, but the number `10` cannot change. Python computes the new value `11` and reassigns `x` to reference it. `my_num` still references `10`.
 
 {% endhint %}
 
@@ -430,11 +434,11 @@ def apply_discount(prices):
         prices[i] = prices[i] - 1
     return prices
 
-prices = [3.50, 2.25, 4.00]
+prices = [3.50, 2.25, 4.00, 3.00]
 sale_prices = apply_discount(prices)
 
-print(prices)       # [2.5, 1.25, 3.0]
-print(sale_prices)  # [2.5, 1.25, 3.0]
+print(prices)       # [2.5, 1.25, 3.0, 2.0]
+print(sale_prices)  # [2.5, 1.25, 3.0, 2.0]
 ```
 
 The sale prices are correct, but the regular prices are gone. The parameter `prices` inside the function references the same list as the variable `prices` outside it, so every `prices[i] = ...` overwrote one of the caller's regular prices. Nothing in the line `sale_prices = apply_discount(prices)` suggests that it changes `prices`, so a programmer reading that line has no reason to suspect that the regular prices were lost there.
@@ -442,11 +446,11 @@ The sale prices are correct, but the regular prices are gone. The parameter `pri
 To leave the caller's list alone, the function can copy the list first and change only the copy. There are two common ways to copy a list, and they do the same thing:
 
 ```python
-letters = ['a', 'b', 'c']
+prices = [3.50, 2.25, 4.00, 3.00]
 
 # Two ways to copy:
-copy1 = list(letters)   # the list() function builds a new list from any sequence
-copy2 = letters[:]      # a slice with no start or end creates a copy of the whole thing
+copy1 = list(prices)   # the list() function builds a new list from any sequence
+copy2 = prices[:]      # a slice with no start or end creates a copy of the whole thing
 ```
 
 With a copy, `apply_discount` changes only its own list and returns it, and the caller keeps the regular prices:
@@ -458,14 +462,14 @@ def apply_discount(prices):
         sale_prices[i] = sale_prices[i] - 1
     return sale_prices
 
-prices = [3.50, 2.25, 4.00]
+prices = [3.50, 2.25, 4.00, 3.00]
 sale_prices = apply_discount(prices)
 
-print(prices)       # [3.5, 2.25, 4.0]
-print(sale_prices)  # [2.5, 1.25, 3.0]
+print(prices)       # [3.5, 2.25, 4.0, 3.0]
+print(sale_prices)  # [2.5, 1.25, 3.0, 2.0]
 ```
 
-A third way, `[*letters]`, uses unpacking, which is covered in Advanced List Syntax below.
+A third way, `[*prices]`, uses unpacking, which is covered in Advanced List Syntax below.
 
 ### Copying List Challenge
 
@@ -475,6 +479,12 @@ This function changes the list it is given. Rewrite it so that the caller's list
 def shorten(items):
     items.pop()
     return items
+
+items = ['coffee', 'bagel', 'juice', 'muffin']
+shorter_items = shorten(items)
+
+print(items)          # should print ['coffee', 'bagel', 'juice', 'muffin']
+print(shorter_items)  # should print ['coffee', 'bagel', 'juice']
 ```
 
 **<details><summary>Solution</summary>**
@@ -504,10 +514,11 @@ In chapter 1.5, `split()` broke a string into a list of pieces. Often you want e
 The syntax puts several variable names, separated by commas, on the left side of the assignment operator `=` and the list on the right side:
 
 ```python
-first_name, last_name = "Ada Lovelace".split(" ")
+line = "coffee: 3.50"
+item, price = line.split(": ")
 
-print(first_name)  # Ada
-print(last_name)   # Lovelace
+print(item)   # coffee
+print(price)  # 3.50
 ```
 
 The number of variables has to match the number of elements. If the numbers do not match, Python stops with a `ValueError`: `too many values to unpack` when the list has more elements than variables, and `not enough values to unpack` when it has fewer. The exception is a variable with a `*` in front. That variable collects "the rest" as a list:
@@ -524,17 +535,17 @@ print(other_items)  # ['bagel', 'juice', 'muffin']
 The `*` also works inside square brackets. There, it unpacks the elements of one list into a new list, which makes a copy of the list. You can even add extra elements while you copy:
 
 ```python
-letters = ['a', 'b', 'c']
-copy = [*letters]
+items = ['coffee', 'bagel', 'juice', 'muffin']
+copy = [*items]
 
-def extend(items, value):
-    new_items = [*items, value]
+def add_item(items, item):
+    new_items = [*items, item]
     return new_items
 
-more_letters = extend(letters, 'd')
+more_items = add_item(items, 'cookie')
 
-print(letters)       # Prints ['a', 'b', 'c']
-print(more_letters)  # Prints ['a', 'b', 'c', 'd']
+print(items)       # Prints ['coffee', 'bagel', 'juice', 'muffin']
+print(more_items)  # Prints ['coffee', 'bagel', 'juice', 'muffin', 'cookie']
 ```
 
 ### Looping with `enumerate()`
@@ -559,46 +570,43 @@ This is the receipt loop again. `item` holds the name directly, and `index` is s
 
 A list can contain other lists! When the inner lists contain values, we call this a "2-Dimensional (2D)" list or a **"matrix"**.
 
-The matrix below has 2 columns and 5 rows:
+The receipt can be stored as one 2D list instead of two parallel lists. Each row is a list holding one item and its price, so the matrix below has 4 rows and 2 columns:
 
 ```python
-coordinates = [
-    [30, 90],
-    [40, 74],
-    [34, 118],
-    [42, 88],
-    [39, 77],
+receipt = [
+    ['coffee', 3.50],
+    ['bagel', 2.25],
+    ['juice', 4.00],
+    ['muffin', 3.00],
 ]
 
-new_orleans = coordinates[0]
-new_orleans_lat = coordinates[0][0]
-new_orleans_long = coordinates[0][1]
+print(receipt[1])      # ['bagel', 2.25]
+print(receipt[1][0])   # bagel
+print(receipt[1][1])   # 2.25
 
-print(new_orleans)
-print(new_orleans_lat)
-print(new_orleans_long)
-
-print(len(coordinates))     # 5, the number of rows
-print(len(coordinates[0]))  # 2, the number of columns in the first row
+print(len(receipt))     # 4, the number of rows
+print(len(receipt[0]))  # 2, the number of columns in the first row
 ```
 
-When accessing a 2D list, the first index picks the "row" and the second index picks the "column". Python reads `coordinates[0][1]` in two steps: `coordinates[0]` produces the row `[30, 90]`, and `[1]` then picks index 1 of that row, which is `90`.
+When accessing a 2D list, the first index picks the "row" and the second index picks the "column". Python reads `receipt[1][1]` in two steps: `receipt[1]` produces the row `['bagel', 2.25]`, and `[1]` then picks index 1 of that row, which is `2.25`.
+
+Keeping each item and its price in one row means that removing a row removes both, so they cannot fall out of step. But nothing in `receipt[1][1]` says that index `1` holds the price, so a reader has to remember what each position means. In chapter 1.8, a dictionary stores the price under the name `"price"` instead.
 
 ### Tuples: Lists That Cannot Change
 
 A **tuple** is a list that cannot be changed after it is created. It is written with parentheses instead of square brackets, and everything that reads a list works on it: indexing, slicing, `len()`, `in`, and `for`.
 
 ```python
-coordinate = (30, 90)
+line = ('coffee', 3.50)
 
-print(coordinate[0])      # 30
-print(len(coordinate))    # 2
-print(90 in coordinate)   # True
+print(line[0])          # coffee
+print(len(line))        # 2
+print(3.50 in line)     # True
 
-coordinate[0] = 31        # TypeError: 'tuple' object does not support item assignment
+line[1] = 3.00          # TypeError: 'tuple' object does not support item assignment
 ```
 
-Use a tuple when the values belong together and should never be added to or removed from, like a latitude and a longitude. Python itself hands you tuples constantly: `enumerate()` produces `(index, value)` pairs, and a dictionary's `.items()` produces `(key, value)` pairs. When you see `choice in ("1", "2")`, that is a tuple being used as a small fixed set of options.
+Use a tuple when the values belong together and should never be added to or removed from, like one line of a receipt that has already been printed. Python itself hands you tuples constantly: `enumerate()` produces `(index, value)` pairs, and a dictionary's `.items()` produces `(key, value)` pairs. When you see `choice in ("1", "2")`, that is a tuple being used as a small fixed set of options.
 
 ## Summary
 
