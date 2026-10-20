@@ -54,10 +54,8 @@ while True:
     if amount.lower() == "done":
         break
 
-    # skip the amount if anything other than digits is left after removing a single `.`
-    digits = amount.replace(".", "", 1)
-    if not digits.isdigit():
-        print(f"Sorry, {amount} is not a dollar amount")
+    # skip a blank answer
+    if amount == "":
         continue
 
     total += float(amount)
@@ -79,16 +77,12 @@ while True:
     if item.lower() == "done":
         break
 
-    # then we ask for the price
-    price = input(f"Price of {item}: ").strip()
-    digits = price.replace(".", "", 1)
-    if not digits.isdigit():
-        print(f"Sorry, {price} is not a price, so {item} was not added.")
-        continue
+    # then we ask for the price (for now, assume the user enters a valid number)
+    price = float(input(f"Price of {item}: "))
 
     # add the item to the items list and price to the prices list
     items.append(item)
-    prices.append(float(price))
+    prices.append(price)
 
 # Once the while loop is done collecting inputs, calculate the total and print out the receipt
 total = 0
@@ -102,7 +96,7 @@ print(f"Total: ${total:.2f}")
 The loop that asks for input works the same way as the dollar program, and three new things make the receipt possible:
 
 - `items = []` and `prices = []` create two **empty lists**, lists with nothing in them yet.
-- `items.append(item)` adds `item` to the end of the `items` list, and `prices.append(float(price))` does the same for the price. Each pass through the loop makes both lists one element longer.
+- `items.append(item)` adds `item` to the end of the `items` list, and `prices.append(price)` does the same for the price. Each pass through the loop makes both lists one element longer.
 - After the loop, `range(len(items))` produces the index of every item. The item at index `0` and the price at index `0` belong to the same purchase, so `items[i]` and `prices[i]` print side by side.
 
 ## List Basics

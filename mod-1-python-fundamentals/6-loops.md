@@ -381,7 +381,7 @@ print(f"Next year you will be {age + 1}")
 
 `while True` is always true, so the condition never ends this loop. The only way out is the `break`, which runs only when the user has typed a number.
 
-Here is a program that uses both. It adds up the dollar amounts the user types until they type `done`:
+Here is a program that uses both. It adds up the dollar amounts the user types until they type `done`. For now, the program assumes that every answer is either a number, `done`, or blank:
 
 ```python
 total = 0
@@ -391,9 +391,7 @@ while True:
     if amount == "done":
         break
 
-    digits = amount.replace(".", "", 1)
-    if not digits.isdigit():
-        print(f"Sorry, {amount} is not a dollar amount")
+    if amount == "":
         continue
 
     total += float(amount)
@@ -404,9 +402,7 @@ print(f"Your total is ${total:.2f}")
 Nobody knows in advance how many amounts the user will enter, which is exactly the job a `while` loop is for. `while True` never ends the loop by itself, so the two statements inside it do that work:
 
 - `break` runs when the user types `done`. The loop ends, and the program continues with the `print()` after the loop.
-- `continue` runs when the user types something that is not a dollar amount, such as `ten`. It skips the rest of the pass, so `float(amount)` never receives `ten` and cannot crash with a `ValueError`. The loop goes straight back to asking for the next amount.
-
-`amount.replace(".", "", 1)` uses the third argument of `replace()` from chapter 1.5 to remove at most one decimal point before `isdigit()` checks the rest. `4.50` becomes `450` and passes the check, while `4.5.0` still has a decimal point left after one is removed, so it fails.
+- `continue` runs when the user presses Enter without typing an amount. In that case, `input()` returns an empty string, and `float("")` would crash with a `ValueError`. `continue` skips the rest of the pass, so `float(amount)` never receives the empty string, and the loop goes straight back to asking for the next amount.
 
 {% hint style="info" %}
 **Q: How is `break` different from `return`?** `break` ends the loop, and the program carries on with the first line after the loop. `return` ends the whole function the loop is inside, so any lines after the loop in that function never run. If the dollar program above were the body of a function and used `return` instead of `break`, the function would end as soon as the user typed `done`, and `Your total is ...` would never print.
