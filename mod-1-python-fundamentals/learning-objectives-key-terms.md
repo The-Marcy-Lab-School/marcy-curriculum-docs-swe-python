@@ -422,7 +422,7 @@ A `for` loop runs its whole body once for every number in `range(100)`. `sixes =
 
 **Advanced Topics:**
 
-- **Unpacking** assigns the elements of a list to several variables in one statement: `item, price = ["coffe", 3.50]`.
+- **Unpacking** assigns the elements of a list to several variables in one statement: `item, price = ["coffee", 3.50]`.
 - The built-in **`enumerate()`** function produces `(index, item)` pairs that can be iterated over with a `for` loop. Often, the loop unpacks each pair into two variables: `for index, item in enumerate(items):`.
 - Lists can contain other lists (**2D lists**).
 - A **tuple** is a list that cannot change, written with parentheses.
@@ -480,28 +480,43 @@ Both lines print `[70, 85, 100]`. A variable does not hold a list, it holds a re
 
 **Key terms**
 
-- **Dictionaries** are data structures that store multiple pieces of data as key-value pairs, useful for representing real-world entities like users or products.
+- A **dictionary** is a data structure that stores values under keys instead of positions, so a program looks each value up by name.
   - A **key** is the name a value is stored under and looked up by. Each key appears only once in a dictionary.
   - A **value** is the data stored under a key. It can be any type, including a list or another dictionary.
-- Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead.
+- Dictionaries are often used in two ways:
+  - A **record** is a dictionary that keeps the pieces of information about one thing together, such as `{"item": "coffee", "price": 3.50}`. The programmer decides a record's keys in advance so that every purchase record has the same "shape".
+  - A **lookup table** is a dictionary that finds a value from a key, such as a menu that maps each item to its price. Its keys are part of the data, so the program adds new keys as it runs.
+- A **list of dictionaries** holds many records of the same kind, one dictionary for each thing, all with the same keys.
+- Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead. The `in` operator checks whether a key exists.
 - Dictionaries are **mutable**, meaning you can add, modify, or delete key-value pairs after creation using assignment, `del`, or `.pop()`.
-- Dictionaries can contain **nested data** including lists and other dictionaries, allowing for complex data structures.
+- Dictionaries can contain **nested data**, such as a receipt dictionary whose `"purchases"` key holds a list of records.
+- A dictionary is considered an "iterable", meaning you can loop over its _keys_ with `for key in my_dict`. Dictionaries also have three methods that each return an iterable:
+  - **`.keys()`** — all of the keys
+  - **`.values()`** — all of the values
+  - **`.items()`** — every key and its value as pairs
 - Like lists, dictionaries are held by **reference**. Copy one with `dict(my_dict)` before changing it inside a function, so the caller's dictionary stays the same.
-- **`.keys()`**, **`.values()`**, and **`.items()`** let you loop over a dictionary. `.items()` hands you each key and value together.
+
+**Advanced Topics:**
+
+- `dict()` makes a **shallow copy**: the outer dictionary is new, but any list or dictionary nested inside it is shared with the original.
+- A key must be **hashable**, meaning its value can never change. Strings, numbers, and tuples are hashable. A list is not, so using one as a key raises `TypeError: unhashable type: 'list'`.
 
 **You will be able to…**
 
 _In the session:_
 
 - Create a dictionary, read a value by key, and choose between bracket notation and `.get()` based on whether the key is guaranteed to exist.
-- Add, update, and delete key-value pairs, including with a key held in a variable.
-- Loop over a dictionary's keys, values, and key-value pairs with `.items()` and unpacking, and explain what `.keys()` returns.
+- Classify a dictionary as a record or a lookup table, and explain the classification by saying whether the programmer or the data supplies its keys.
 - Model "many of the same kind of thing" as a list of dictionaries, loop over it, and add to it.
+- Construct a lookup table in a loop, such as a count of how many times each item appears in a list of records, using `.get()` with a default for keys that are not there yet.
+- Add, update, and delete key-value pairs with assignment, `del`, and `.pop()`, including with a key held in a variable.
+- Loop over a dictionary's keys, values, and key-value pairs, using `.items()` and unpacking when the loop needs both the key and the value.
 
 _By the end of the module:_
 
 - Explain which values can be keys and why a list cannot.
 - Predict the effect of mutating a dictionary through a second variable, and copy a dictionary before changing it inside a function so the caller's dictionary stays the same.
+- Predict how changing a nested list through a shallow copy affects the original dictionary, and copy the nested list as well when the original must stay the same.
 - Write a function that takes a dictionary and uses only the keys it needs.
 
 ### Exit Ticket

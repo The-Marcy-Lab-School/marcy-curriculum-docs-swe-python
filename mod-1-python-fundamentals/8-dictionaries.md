@@ -7,166 +7,638 @@
 **Table of Contents**:
 
 - [Key Terms](#key-terms)
-- [The basics](#the-basics)
-  - [Accessing Values with Bracket Notation and `.get()`](#accessing-values-with-bracket-notation-and-get)
-  - [Dynamic Keys Challenge](#dynamic-keys-challenge)
+- [Dictionaries: From Rows to Records](#dictionaries-from-rows-to-records)
+  - [What is a Dictionary?](#what-is-a-dictionary)
+- [Records: One Thing's Information Together](#records-one-things-information-together)
+  - [Reading Values with Bracket Notation and `.get()`](#reading-values-with-bracket-notation-and-get)
+  - [Challenge: Phone Records](#challenge-phone-records)
+  - [Changing a Record](#changing-a-record)
+  - [Lists of Dictionaries](#lists-of-dictionaries)
+  - [A Dictionary with a List](#a-dictionary-with-a-list)
+  - [Challenge: Updating a Receipt](#challenge-updating-a-receipt)
+- [Lookup Tables: Finding a Value from a Key](#lookup-tables-finding-a-value-from-a-key)
+  - [Looking Up a Key Held in a Variable](#looking-up-a-key-held-in-a-variable)
+  - [Challenge: Dynamic Keys](#challenge-dynamic-keys)
+  - [Iterating Over Keys and Values of a Dictionary](#iterating-over-keys-and-values-of-a-dictionary)
+  - [Challenge: Counting Items](#challenge-counting-items)
 - [Dictionaries are Mutable and Held by Reference](#dictionaries-are-mutable-and-held-by-reference)
-- [Iterating Over Keys and Values of a Dictionary](#iterating-over-keys-and-values-of-a-dictionary)
-- [Lists of Dictionaries](#lists-of-dictionaries)
-- [Dictionaries and Functions](#dictionaries-and-functions)
-  - [Building a Dictionary from Parameters](#building-a-dictionary-from-parameters)
-  - [Passing a Dictionary to a Function](#passing-a-dictionary-to-a-function)
+  - [Changing a Dictionary Inside a Function](#changing-a-dictionary-inside-a-function)
+  - [Copying a Dictionary Before Changing It](#copying-a-dictionary-before-changing-it)
+- [Advanced Topics](#advanced-topics)
+  - [Which Values Can Be Keys](#which-values-can-be-keys)
+  - [A Copy Shares Its Nested Values](#a-copy-shares-its-nested-values)
 - [Summary](#summary)
 
 ## Key Terms
 
-- **Dictionaries** are data structures that store multiple pieces of data as key-value pairs, useful for representing real-world entities like users or products.
+- A **dictionary** is a data structure that stores values under keys instead of positions, so a program looks each value up by name.
   - A **key** is the name a value is stored under and looked up by. Each key appears only once in a dictionary.
   - A **value** is the data stored under a key. It can be any type, including a list or another dictionary.
-- Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead.
+- Dictionaries are often used in two ways:
+  - A **record** is a dictionary that keeps the pieces of information about one thing together, such as `{"item": "coffee", "price": 3.50}`. The programmer decides a record's keys in advance so that every purchase record has the same "shape".
+  - A **lookup table** is a dictionary that finds a value from a key, such as a menu that maps each item to its price. Its keys are part of the data, so the program adds new keys as it runs.
+- A **list of dictionaries** holds many records of the same kind, one dictionary for each thing, all with the same keys.
+- Dictionary values are accessed using **bracket notation** (`my_dict["key"]`), which raises a `KeyError` for a missing key, or with the **`.get()`** method, which returns `None` (or a default you choose) instead. The `in` operator checks whether a key exists.
 - Dictionaries are **mutable**, meaning you can add, modify, or delete key-value pairs after creation using assignment, `del`, or `.pop()`.
-- Dictionaries can contain **nested data** including lists and other dictionaries, allowing for complex data structures.
+- Dictionaries can contain **nested data**, such as a receipt dictionary whose `"purchases"` key holds a list of records.
+- A dictionary is considered an "iterable", meaning you can loop over its _keys_ with `for key in my_dict`. Dictionaries also have three methods that each return an iterable:
+  - **`.keys()`** — all of the keys
+  - **`.values()`** — all of the values
+  - **`.items()`** — every key and its value as pairs
 - Like lists, dictionaries are held by **reference**. Copy one with `dict(my_dict)` before changing it inside a function, so the caller's dictionary stays the same.
-- **`.keys()`**, **`.values()`**, and **`.items()`** let you loop over a dictionary. `.items()` hands you each key and value together.
 
-## The basics
+**Advanced Topics:**
 
-- Dictionaries are a data type that can store multiple pieces of data as **key: value** pairs
-- You will also hear dictionaries called **maps** or **hashmaps**:
+- `dict()` makes a **shallow copy**: the outer dictionary is new, but any list or dictionary nested inside it is shared with the original.
+- A key must be **hashable**, meaning its value can never change. Strings, numbers, and tuples are hashable. A list is not, so using one as a key raises `TypeError: unhashable type: 'list'`.
+
+## Dictionaries: From Rows to Records
+
+Chapter 1.7 started by introducing lists as a way to track items and their prices as parallel lists:
 
 ```python
-# Lists store values in an order
-words = [
-    "hello",
-    "rainbow",
-    "cat",
-]
+items = ['coffee', 'bagel', 'juice', 'muffin']
+prices = [3.50, 2.25, 4.00, 3.00]
+print(f"{items[0]} costs {prices[0]}")
+```
 
-# Dictionaries store key: value pairs
-dictionary = {
-    "hello": "a casual greeting",
-    "rainbow": "a colorful arc of light",
-    "cat": "the superior pet",
+But this introduced the possibility of "drift" where you delete a value from one list (e.g. `items.remove('bagel')`) but forget to remove the same value from the other list. As a result, the prices no longer align with the items.
+
+The chapter then ended with a receipt stored as a 2D list, one row for each purchase:
+
+```python
+receipt = [['coffee', 3.50], ['bagel', 2.25], ['juice', 4.00], ['muffin', 3.00]]
+
+print(receipt[1][1])  # 2.25
+```
+
+Keeping each item and its price in one row means they cannot fall out of step. But a programmer who reads `receipt[1][1]` has to remember that for any row, index `0` holds the item and index `1` holds the price.
+
+### What is a Dictionary?
+
+A **dictionary** stores each value under a name, called a **key**, instead of at a position. Here is the first purchase as a dictionary:
+
+```python
+purchase_1 = {"item": "coffee", "price": 3.50}
+
+print(purchase_1["price"])  # 3.5
+
+# Dictionaries can be written in one line or across multiple
+purchase_2 = {
+    "item": "bagel",
+    "price": 2.25
+}
+print(purchase_2["price"])  # 2.25
+```
+
+The code now says which piece of information it wants, so a reader no longer has to remember what each position means. Here's how it works:
+
+- Curly braces `{}` surround the dictionary, and each entry is a **key: value** pair.
+  - `"item"` and `"price"` are the keys, written as strings.
+  - `"coffee"` and `3.50` are their values, which can be of any type.
+- Keys are usually strings, and the quotes around them are required. Without quotes, Python reads `price` as a variable, and if no variable called `price` exists you get `NameError: name 'price' is not defined`.
+- `purchase_1["price"]` reads the value stored under the key `"price"`.
+
+{% hint style="info" %}
+💡 You will also hear dictionaries called **maps** or **hashmaps**.
+{% endhint %}
+
+Dictionaries do two jobs.
+
+1. A dictionary like `purchase_1` is a **record**: it keeps the pieces of information about one thing together.
+2. A dictionary that acts like a menu is a **lookup table**: it finds the price of any item from the item's name. You will use one later in this lesson.
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00
 }
 ```
 
-- Dictionaries are useful for storing collections of data related to a single "thing", like data about a user.
-- Dictionaries can have lists and other dictionaries nested inside.
+## Records: One Thing's Information Together
+
+The programmer decides a record's keys in advance so that every purchase record has the same "shape". For example, every purchase has an `"item"` and a `"price"`.
 
 ```python
-user = {
-    "user_id": 44292,
-    "username": 'c0d3rkid',
-    "password": 'pywiz1234',
-    "friends": ['iLoveSoccer123', 'rubyNinja', 'messiGOAT'],
-    "favorite_meal": {
-        "name": 'PB&J',
-        "ingredients": ['peanut butter', 'jelly', 'bread'],
-    },
-}
+purchase_1 = {"item": "coffee", "price": 3.50}
+purchase_2 = {"item": "bagel", "price": 2.25}
+purchase_3 = {"item": "juice", "price": 4.00}
+purchase_4 = {"item": "muffin", "price": 3.00}
 ```
 
-- Keys are usually strings, and the quotes around them are required. Without quotes, Python reads `name` as a variable, and if no variable called `name` exists you get `NameError: name 'name' is not defined`. Keys can also be numbers, which comes in handy when you want to look something up by number, like a Roman numeral:
+### Reading Values with Bracket Notation and `.get()`
+
+Bracket notation reads a value by its key.
 
 ```python
-roman_numerals = {
-    1: "I",
-    5: "V",
-    10: "X",
-}
-```
+purchase_1 = {"item": "coffee", "price": 3.50}
 
-A key has to be a value that cannot change: a string, a number, or a tuple. A dictionary finds a value by looking up its key, and a key that changed after it went in could no longer be found. A list can change, so a list cannot be a key. If you try, Python stops with `TypeError: unhashable type: 'list'`, and "unhashable" is Python's word for "not allowed as a key".
-
-### Accessing Values with Bracket Notation and `.get()`
-
-- Dictionary values can be accessed and/or mutated using bracket notation with the key inside the brackets
-
-```python
-# Bracket notation requires the key
-print(f"Hi, my name is {user['username']}")
-
-# Bracket notation can be used to modify existing values, or create new ones!
-user["password"] = 'try to break in now!'
-user["is_admin"] = False
-
-print(user)
-
-# If a value is a dictionary or list, we can use bracket notation on that value!
-print(f"My favorite meal is {user['favorite_meal']['name']}")
-print(f"My best friend is {user['friends'][0]}")
-
-# Delete key-value pairs with the `del` keyword followed by bracket notation
-del user["user_id"]
-del user["friends"]
+print(f"One {purchase_1['item']}, please")  # One coffee, please
 ```
 
 {% hint style="warning" %}
-**Predict, then run.** There is no `"age"` in `user`.
+**Predict, then run.** There is no `"discount"` in `purchase_1`.
 
 ```python
-print(user["age"])
+print(purchase_1["discount"])
 ```
 
 <details><summary>What actually happens</summary>
 
 ```
-KeyError: 'age'
+KeyError: 'discount'
 ```
 
-Asking a dictionary for a key it does not have is an error, just like asking a list for an index it does not have. When you are not sure a key exists, use the `.get()` method instead. It returns `None` for a missing key, or a default value of your choosing:
-
-```python
-print(user.get("age"))          # None
-print(user.get("age", 0))       # 0
-print(user.get("username"))     # c0d3rkid
-```
-
-You can also ask first. The `in` operator on a dictionary checks the _keys_ only, so `"username" in user` is `True` but `"c0d3rkid" in user` is `False`, even though `"c0d3rkid"` is one of the values:
-
-```python
-if "age" in user:
-    print(user["age"])
-```
+Asking a dictionary for a key it does not have is an error, just like asking a list for an index it does not have.
 
 </details>
 {% endhint %}
 
-### Dynamic Keys Challenge
-
-The brackets can hold any expression, and Python works out its value before using it as the key. So the key can be a variable, and Python uses whatever value the variable holds:
+When you are not sure a key exists, use the `.get()` method instead. It returns `None` for a missing key, or a default value of your choosing:
 
 ```python
-key = 'some key'
-my_dict[key] = 'new value'  # adds the key 'some key'
+print(purchase_1.get("discount"))     # None
+print(purchase_1.get("discount", 0))  # 0
+print(purchase_1.get("item"))         # coffee
 ```
 
-Watch the quotes. `my_dict[key]` uses the value of the variable `key`, which is `'some key'`. `my_dict['key']` uses the three-letter string `'key'` itself.
+A default of `0` is the right answer here, because a purchase with no discount has a discount of zero.
 
-Complete the program below so that it lets users add words to the dictionary!
+You can also ask first using the `in` operator to avoid the error.
 
 ```python
-dictionary = {
-    "hello": "a casual greeting",
-    "rainbow": "a colorful arc of light",
-    "cat": "the superior pet",
-}
+if "discount" in purchase_1:
+    print(purchase_1["discount"])
+```
+
+{% hint style="warning" %}
+**Predict, then run.** `purchase_1` has a _value_ `"coffee"`. Does the `in` operator tell us if a value is in a dictionary?
+
+```python
+if "coffee" in purchase_1:
+    print(purchase_1["item"])
+```
+
+<details><summary>What actually happens</summary>
+
+The `in` operator on a dictionary checks the _keys_ only, so `"item" in purchase_1` is `True` but `"coffee" in purchase_1` is `False`, even though `"coffee"` is one of the values. So this doesn't print anything!
+
+</details>
+{% endhint %}
+
+### Challenge: Phone Records
+
+Create a dictionary "record" for a phone. It should have at least 3 keys with at least one string, boolean, and numeric value. Then, make a second phone record with the exact same shape but with different values. Store them in separate variables and then use bracket notation or `get` to print out one of their values.
+
+**<details><summary>Solution</summary>**
+
+```python
+phone_1 = {"model": "Pixel 9", "storage_gb": 128, "is_unlocked": True}
+phone_2 = {"model": "iPhone 16", "storage_gb": 256, "is_unlocked": False}
+
+print(phone_1["model"])          # Pixel 9
+print(phone_2["model"])          # iPhone 16
+print(phone_1.get("storage_gb"))  # 128
+print(phone_2.get("storage_gb"))  # 256
+```
+
+- `"model"` holds a string, `"storage_gb"` holds a number, and `"is_unlocked"` holds a boolean.
+- Both records use the same three keys, so they have the same shape. Only the values differ.
+
+Because the shapes match, any line written for one phone works on the other. `phone_1["model"]` and `phone_2["model"]` both find a model. If `phone_2` had named its key `"name"` instead, `phone_2["model"]` would raise a `KeyError`.
+
+</details>
+
+### Changing a Record
+
+Dictionaries are mutable, like lists. This means that we can perform all four CRUD operations (Create, Read, Update, and Delete), the four things a program does with stored data:
+
+- _Create_: `my_dict["key"] = value` (bracket notation)
+- _Read_: `my_dict["key"]` (bracket notation)
+- _Update_: `my_dict["key"] = value` (bracket notation)
+- _Delete_: `del my_dict["key"]` or `my_dict.pop("key")`
+
+Create and Update use the same line. Assigning to a key adds a new key-value pair if the key is not in the dictionary yet, and replaces the old value if it is.
+
+```python
+purchase_1 = {"item": "coffee", "price": 3.50}
+
+# Bracket notation can be used to modify existing values, or create new ones!
+purchase_1["price"] = 3.00
+purchase_1["discount"] = 0.50
+print(purchase_1)  # {'item': 'coffee', 'price': 3.0, 'discount': 0.5}
+
+# Delete key-value pairs with the `del` keyword followed by bracket notation
+del purchase_1["discount"]
+print(purchase_1)  # {'item': 'coffee', 'price': 3.0}
+
+# .pop() removes a key-value pair and returns its value
+price = purchase_1.pop("price")
+print(price)     # 3.0
+print(purchase_1)  # {'item': 'coffee'}
+```
+
+### Lists of Dictionaries
+
+The shape you will use more than any other is a list where every element is a dictionary with the same keys. It is how a program holds "many of the same kind of thing".
+
+For example, a purchase record holds all data about one purchase, and a receipt is a list of many purchase records.
+
+Here is the receipt program from chapter 1.7, rewritten to keep one list of purchase records instead of two parallel lists:
+
+```python
+purchases = []
 
 while True:
-    print("Here are your words: ", dictionary)
-    new_word = input("Add a word to your dictionary, or press q to exit. ")
-
-    if new_word == 'q':  # a guard clause
+    item = input("Item (or done to finish): ").strip()
+    if item.lower() == "done":
         break
 
-    definition = input(f"Okay, what is the definition of {new_word}? ")
+    # for now, assume the user enters a valid number
+    price = float(input(f"Price of {item}: "))
 
-    # add the new word and its definition to the dictionary!
+    # one record holds both pieces of information about the purchase
+    purchases.append({"item": item, "price": price})
+
+total = 0
+for purchase in purchases:
+    print(f"{purchase['item']}: ${purchase['price']:.2f}")
+    total += purchase["price"]
+
+print(f"Total: ${total:.2f}")
+```
+
+Two things changed from chapter 1.7:
+
+- `purchases.append({"item": item, "price": price})` adds one record per purchase.
+  - In chapter 1.7 we had two separate lists. Each pass through the loop had to append to `items` and to `prices` separately.
+- The `for` loop hands you one record at a time. `purchase['item']` and `purchase['price']` come from the same record, so they always belong to the same purchase.
+  - In chapter 1.7 we had to line up the two lists by index when printing so we looped with `for i in range(len(items))`.
+
+Notice that in `{"item": item, "price": price}`, the key `"item"` and the variable `item` are spelled the same but are two different things. The key is a string inside the dictionary. The variable holds the value that gets stored under that key.
+
+The same list, written out by hand:
+
+```python
+purchases = [
+    {"item": "coffee", "price": 3.50},
+    {"item": "bagel", "price": 2.25},
+    {"item": "juice", "price": 4.00},
+    {"item": "muffin", "price": 3.00},
+]
+
+# Reach one by position, then by key
+print(purchases[1]["price"])  # 2.25
+
+# Remove one the same way you remove from any list
+purchases.pop(1)  # the bagel and its price leave together
+print(len(purchases))  # 3
+```
+
+Compare `purchases[1]["price"]` with `receipt[1][1]` from the start of the lesson. Both read the second purchase's price, but only `purchases[1]["price"]` says that it is the price.
+
+Giving every dictionary the same keys is what makes the loop work. `purchase['item']` runs once for every dictionary in the list, so a single dictionary without an `"item"` key would stop the loop with a `KeyError`.
+
+### A Dictionary with a List
+
+A dictionary can hold a list of records too. A receipt that also records who made the purchases "nests" the list inside a dictionary:
+
+```python
+receipt = {
+    "customer": "Ada",
+    "purchases": [
+        {"item": "coffee", "price": 3.50},
+        {"item": "bagel", "price": 2.25},
+    ],
+}
+
+print(receipt["purchases"][0]["item"])  # coffee
+```
+
+Read `receipt["purchases"][0]["item"]` from left to right, one step at a time:
+
+- `receipt["purchases"]` is the list of purchase records.
+- `[0]` takes the first record in that list, `{"item": "coffee", "price": 3.50}`.
+- `["item"]` reads that record's item, `"coffee"`.
+
+The task manager case study stores its tasks as a list of dictionaries, and every project option in this module does too.
+
+{% hint style="warning" %}
+**Predict, then run.** The cashier makes Ada's coffee free by deleting its price. What does the program print?
+
+```python
+receipt = {
+    "customer": "Ada",
+    "purchases": [
+        {"item": "coffee", "price": 3.50},
+        {"item": "bagel", "price": 2.25},
+    ],
+}
+
+del receipt["purchases"][0]["price"]
+
+total = 0
+for purchase in receipt["purchases"]:
+    total += purchase["price"]
+print(total)
+```
+
+<details><summary>What actually happens</summary>
+
+```
+KeyError: 'price'
+```
+
+- `del receipt["purchases"][0]["price"]` removes the `"price"` key from the coffee's record, so the coffee record is now `{'item': 'coffee'}`.
+- The loop's first pass reaches the coffee record, and `purchase["price"]` asks it for a key it no longer has. The loop stops with a `KeyError` before `total` is ever printed.
+
+Deleting a key changes the record's shape, and a loop that expects every record to have that key will crash on the record that lacks it. To make the coffee free while keeping its shape, set its price to `0` with `receipt["purchases"][0]["price"] = 0`.
+
+</details>
+{% endhint %}
+
+### Challenge: Updating a Receipt
+
+Start with Ada's receipt below. Without retyping any existing record, write code that:
+
+1. Adds a muffin that costs `3.00` to Ada's purchases.
+2. Changes the bagel's price to `2.00`, because it is on sale.
+3. Adds a `"paid"` key to the receipt, set to `False`.
+4. Prints each purchase as `item: $price`, followed by the total.
+
+```python
+receipt = {
+    "customer": "Ada",
+    "purchases": [
+        {"item": "coffee", "price": 3.50},
+        {"item": "bagel", "price": 2.25},
+    ],
+}
+```
+
+Your program should print:
+
+```
+coffee: $3.50
+bagel: $2.00
+muffin: $3.00
+Total: $8.50
 ```
 
 **<details><summary>Solution</summary>**
 
-To complete this program, add the line `dictionary[new_word] = definition` to the end of the loop.
+```python
+receipt["purchases"].append({"item": "muffin", "price": 3.00})
+receipt["purchases"][1]["price"] = 2.00
+receipt["paid"] = False
+
+total = 0
+for purchase in receipt["purchases"]:
+    print(f"{purchase['item']}: ${purchase['price']:.2f}")
+    total += purchase["price"]
+
+print(f"Total: ${total:.2f}")
+```
+
+- The muffin is a new record, so it goes into the list with `.append()`, the same way any value is added to a list.
+- The bagel already has a record. `receipt["purchases"][1]` reaches that record, and `["price"] = 2.00` updates one key inside it, leaving its `"item"` alone.
+- `"paid"` describes the whole receipt rather than one purchase, so it goes on `receipt` itself.
+
+</details>
+
+## Lookup Tables: Finding a Value from a Key
+
+A record's keys are chosen by the programmer in advance. A lookup table's keys are part of the data. Here is the café's menu from the start of the lesson, which maps each item to its price:
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+
+print(menu["bagel"])  # 2.25
+```
+
+The keys `"coffee"`, `"bagel"`, `"juice"`, and `"muffin"` are not names the programmer picked to describe a purchase. They are the items the café sells, and when the café adds a new item, the menu gains a new key.
+
+{% hint style="warning" %}
+**Check for understanding: record or lookup table?** For each scenario below, decide whether it is a record or a lookup table:
+
+1. The number of `loyalty_points` each customer has (e.g. Ada has 50 while Zo has 25)
+2. One customer's `account` data such as their name, email, and membership status
+3. The remaining `inventory` for each item on the menu (e.g. 41 bagels left over, 20 muffins, etc...)
+4. The café's `details`, such as its address, its phone number, and whether it has Wi-Fi
+
+<details><summary>Answers</summary>
+
+1. **Lookup table.** `loyalty_points = {"Ada": 50, "Zo": 25}`. Every key is a customer, and every value is the same kind of information about that customer: their points. The program finds any customer's points by looking up their name: `loyalty_points["Zo"]`.
+2. **Record.** This represents information about a single customer: `account = {"name": "Ada", "email": "ada@marcy.org", "is_member": True}`. Each key names a different piece of information about Ada, so the values are different types: two strings and a boolean.
+3. **Lookup table.** `inventory = {"bagel": 41, "muffin": 20}`. Every key is a menu item, and every value is how many of that item are left. The program finds any item's count by looking up its name: `inventory["bagel"]`.
+4. **Record.** `details = {"address": "123 Main St", "phone": "555-0100", "has_wifi": True}`. This represents information about a single café. Each key names a different piece of information about it, just like the keys of `account`.
+
+</details>
+{% endhint %}
+
+### Looking Up a Key Held in a Variable
+
+The brackets can hold any expression, and Python works out its value before using it as the key. So the key can be a variable, and Python uses whatever value the variable holds:
+
+```python
+item = "bagel"
+print(menu[item])  # 2.25, the value stored under the key 'bagel'
+```
+
+Watch the quotes. `menu[item]` uses the value of the variable `item`, which is `"bagel"`. `menu["item"]` uses the four-letter string `"item"` itself, and since nothing on the menu is called `"item"`, it raises `KeyError: 'item'`.
+
+A key held in a variable is what makes a lookup table useful. The program below asks for each item by name and finds its price on the menu, so the user no longer types prices at all:
+
+```python
+purchases = []
+
+while True:
+    item = input("Item (or done to finish): ").strip().lower()
+    if item == "done":
+        break
+
+    # Instead of asking for the price, we first check that the item is on the menu...
+    if item not in menu:
+        # ...print a message if it isn't there...
+        print(f"Sorry, {item} is not on the menu")
+        continue
+
+    # ...and then use the price from the menu
+    purchases.append({"item": item, "price": menu[item]})
+
+total = 0
+for purchase in purchases:
+    print(f"{purchase['item']}: ${purchase['price']:.2f}")
+    total += purchase["price"]
+
+print(f"Total: ${total:.2f}")
+```
+
+The program uses both jobs at once. `menu` is a lookup table that turns an item's name into its price, and each `{"item": item, "price": menu[item]}` is a record of one purchase.
+
+`menu[item]` would raise a `KeyError` for an item the café does not sell, such as `"pizza"`, so the `if item not in menu:` check runs first. The check prints a message that tells the user what went wrong, and `continue` sends the loop back to ask for the next item before `menu[item]` ever runs.
+
+### Challenge: Dynamic Keys
+
+Complete the program below so that it lets the café owner add items to the menu!
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+
+while True:
+    print("Here is your menu: ", menu)
+    new_item = input("Add an item to your menu, or press q to exit. ")
+
+    if new_item == 'q':  # a guard clause
+        break
+
+    # for now, assume the owner enters a valid number
+    price = float(input(f"Okay, what is the price of {new_item}? "))
+
+    # add the new item and its price to the menu!
+```
+
+**<details><summary>Solution</summary>**
+
+To complete this program, add the line `menu[new_item] = price` to the end of the loop.
+
+The menu started with four keys, and the program cannot know which items the owner will add. Each new key comes from what the owner types, which is what makes `menu` a lookup table rather than a record.
+
+</details>
+
+### Iterating Over Keys and Values of a Dictionary
+
+In the previous examples, we iterated over a list of records, accessing each record one at a time.
+
+```python
+for purchase in purchases:
+    print(purchase["item"])  # do something with each purchase record
+```
+
+A dictionary can be iterated over too, which is particularly useful when using a dictionary as a lookup table. A `for` loop over a dictionary visits its **keys**:
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+
+for item in menu:
+    price = menu[item]
+    print(f"{item} costs ${price:.2f}")
+```
+
+Dictionaries also have three methods that give you exactly the part you want to loop over:
+
+- `menu.keys()` — all of the keys
+- `menu.values()` — all of the values
+- `menu.items()` — every key and its value, paired up
+
+For example, `.values()` would help us calculate the total without needing to know the item names:
+
+```python
+total = 0
+for price in menu.values():
+    total += price
+
+print(f"One of everything costs ${total:.2f}")  # One of everything costs $12.75
+```
+
+`.items()` is the one you will reach for most, because it hands you both halves of each pair and you unpack them right in the `for` line:
+
+```python
+for item, price in menu.items():
+    print(f"{item} costs ${price:.2f}")
+```
+
+{% hint style="warning" %}
+**Predict, then run.** The café wants a list of everything on the menu that costs less than $3.50. What does this program print?
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+
+cheap_items = []
+for item, price in menu.items():
+    if price < 3.50:
+        cheap_items.append(item)
+
+print(cheap_items)
+```
+
+<details><summary>What actually happens</summary>
+
+```
+['bagel', 'muffin']
+```
+
+- `.items()` hands the loop one key-value pair at a time, and the `for` line unpacks each pair into `item` and `price`.
+- The `if` statement compares each `price` with `3.50`. Coffee costs exactly `3.50`, and `3.50 < 3.50` is `False`, so coffee is left out. Juice costs `4.00`, so it is left out too.
+- Only the key, `item`, is appended, so `cheap_items` holds item names rather than prices.
+- The names appear in the order they were added to the menu, because a dictionary remembers the order its keys were added in.
+
+Use `.items()` whenever the loop needs both halves of each pair: here the price decides whether an item counts, and the item's name is what gets saved.
+
+</details>
+{% endhint %}
+
+### Challenge: Counting Items
+
+The café wants to know which items sell best. Complete `count_items` so that it returns a lookup table mapping each item to the number of times it appears in `purchases`:
+
+```python
+purchases = [
+    {"item": "coffee", "price": 3.50},
+    {"item": "bagel", "price": 2.25},
+    {"item": "coffee", "price": 3.50},
+    {"item": "juice", "price": 4.00},
+    {"item": "coffee", "price": 3.50},
+]
+
+def count_items(purchases):
+    # return a dictionary that maps each item to how many times it was bought
+    return None
+
+print(count_items(purchases))  # should print {'coffee': 3, 'bagel': 1, 'juice': 1}
+```
+
+Start with an empty dictionary. The first time an item appears it is not a key yet, so think about which way of reading a value can handle a missing key.
+
+**<details><summary>Solution</summary>**
+
+```python
+def count_items(purchases):
+    counts = {}
+    for purchase in purchases:
+        item = purchase["item"]
+        current_count = counts.get(item, 0)
+        counts[item] = current_count + 1
+    return counts
+```
+
+- `counts` starts empty, because the function cannot know in advance which items the purchases contain.
+- The first time `"coffee"` appears, `"coffee"` is not a key in `counts` yet. `counts["coffee"]` would raise a `KeyError`, but `counts.get("coffee", 0)` returns the default `0`, which is the right count for an item that has not been seen.
+- `counts[item] = current_count + 1` either adds the key with a count of `1` or replaces the old count with one more.
+
+Each key in `counts` comes from the data, so `counts` is a lookup table built from a list of records.
 
 </details>
 
@@ -179,184 +651,97 @@ So, when we assign a dictionary to a variable, we are storing a reference to the
 And when we assign a variable holding a dictionary to another variable, both variables hold a reference to the same dictionary. No copy is made, so a change made through either variable shows up when you look through the other one:
 
 ```python
-sheep = {'name': 'benny', 'noise': 'baaaa'}
-clone = sheep           # both variables reference the same dictionary
-clone['noise'] = 'BAAAAA'  # mutating the referenced dictionary
+purchase = {"item": "coffee", "price": 3.50}
+receipt_line = purchase           # both variables reference the same dictionary
+receipt_line["price"] = 3.00      # mutating the referenced dictionary
 
-print(sheep)  # {'name': 'benny', 'noise': 'BAAAAA'}
-print(clone)  # {'name': 'benny', 'noise': 'BAAAAA'}
-print(sheep is clone)   # True
+print(purchase)                   # {'item': 'coffee', 'price': 3.0}
+print(receipt_line)               # {'item': 'coffee', 'price': 3.0}
+print(purchase is receipt_line)   # True
 ```
 
-The same thing happens when you pass a dictionary to a function. The parameter holds a reference to the caller's dictionary, so if the function changes the parameter, it changes the caller's dictionary too. To leave the caller's dictionary unchanged, have the function copy the dictionary first. The `dict()` function copies the key-value pairs of one dictionary into a new dictionary, and the function can then change the copy as much as it likes:
+### Changing a Dictionary Inside a Function
+
+The same thing happens when you pass a dictionary to a function. The parameter holds a reference to the caller's dictionary, so if the function changes the parameter, it changes the caller's dictionary too.
+
+A function whose _job_ is to change a record can rely on this. `apply_discount` lowers the price of the purchase it is given and returns nothing, because the caller's dictionary already holds the new price:
 
 ```python
-sheep = {'name': 'benny', 'noise': 'baaaa'}
+def apply_discount(purchase, amount):
+    purchase["price"] = purchase["price"] - amount
 
-def make_loud_clone(animal):
-    clone = dict(animal)  # copy the key-value pairs of animal into a new dictionary
-    clone['noise'] = clone['noise'].upper()
-    return clone
-
-clone = make_loud_clone(sheep)
-
-print(sheep)  # {'name': 'benny', 'noise': 'baaaa'}
-print(clone)  # {'name': 'benny', 'noise': 'BAAAA'}
-print(sheep is clone)   # False
+coffee = {"item": "coffee", "price": 3.50}
+apply_discount(coffee, 0.50)
+print(coffee)  # {'item': 'coffee', 'price': 3.0}
 ```
 
-`animal.copy()` and `{**animal}` do the same thing as `dict(animal)`. You will see all three.
+But this must be intentional. A caller who expected `coffee` to keep its original price would be charging every later customer the discounted price.
 
-All three copy only the outer dictionary. If a value inside it is a list or another dictionary, the copy and the original share that one inner list or dictionary, so changing it through the copy changes the original too:
+### Copying a Dictionary Before Changing It
+
+To leave the caller's dictionary unchanged, have the function copy the dictionary first. The `dict()` function copies the key-value pairs of one dictionary into a new dictionary, and the function can then change the copy as much as it likes:
 
 ```python
-user = {'username': 'c0d3rkid', 'friends': ['rubyNinja']}
-clone = dict(user)
-clone['friends'].append('messiGOAT')
+def discounted_copy(purchase, amount):
+    new_purchase = dict(purchase)  # copy the key-value pairs of purchase into a new dictionary
+    new_purchase["price"] = new_purchase["price"] - amount
+    return new_purchase
 
-print(user['friends'])  # ['rubyNinja', 'messiGOAT']
-print(user['friends'] is clone['friends'])  # True
+coffee = {"item": "coffee", "price": 3.50}
+sale_coffee = discounted_copy(coffee, 0.50)
+
+print(coffee)                 # {'item': 'coffee', 'price': 3.5}
+print(sale_coffee)            # {'item': 'coffee', 'price': 3.0}
+print(coffee is sale_coffee)  # False
 ```
 
-To change a nested list without touching the original, copy that list as well before you change it: `clone['friends'] = list(user['friends'])`.
+`purchase.copy()` and `{**purchase}` do the same thing as `dict(purchase)`. You will see all three.
 
-## Iterating Over Keys and Values of a Dictionary
+## Advanced Topics
 
-One of the key benefits of a list is that we can easily iterate through its values with a `for` loop.
+### Which Values Can Be Keys
+
+Keys can also be numbers, which comes in handy when you want to look something up by number, like a Roman numeral:
 
 ```python
-friends = ['bert', 'ernie', 'elmo']
-print("here are my friends:")
-
-for friend in friends:
-    print(friend)
+roman_numerals = {
+    1: "I",
+    5: "V",
+    10: "X",
+}
 ```
 
-A `for` loop over a dictionary visits its **keys**:
+A key has to be a value that cannot change: a string, a number, or a tuple. A dictionary finds a value by looking up its key, and a key that changed after it went in could no longer be found. A list can change, so a list cannot be a key. If you try, Python stops with `TypeError: unhashable type: 'list'`, and "unhashable" is Python's word for "not allowed as a key".
+
+A tuple can be a key because a tuple cannot change. A tuple key lets a lookup table use two pieces of information at once, such as an item and its size:
 
 ```python
-dictionary = {
-    "hello": "a casual greeting",
-    "rainbow": "a colorful arc of light",
-    "cat": "the superior pet",
+sized_menu = {
+    ("coffee", "small"): 3.00,
+    ("coffee", "large"): 3.50,
+    ("juice", "small"): 3.25,
+    ("juice", "large"): 4.00,
 }
 
-for word in dictionary:
-    print(f"The definition of {word} is {dictionary[word]}")
+print(sized_menu[("coffee", "large")])  # 3.5
 ```
 
-Dictionaries also have three methods that give you exactly the part you want to loop over:
+### A Copy Shares Its Nested Values
 
-- `dictionary.keys()` — all of the keys
-- `dictionary.values()` — all of the values
-- `dictionary.items()` — every key and its value, paired up
+`dict()`, `.copy()`, and `{**my_dict}` all make a **shallow copy**: they copy only the outer dictionary. If a value inside it is a list or another dictionary, the copy and the original share that one inner list or dictionary, so changing it through the copy changes the original too.
+
+Suppose a customer orders a second coffee like their first one, but with an extra shot. Copying the first coffee and adding to the copy's `add_ons` changes the first coffee as well:
 
 ```python
-definitions = dictionary.values()
+first_coffee = {"item": "coffee", "price": 3.50, "add_ons": ["oat milk"]}
+second_coffee = dict(first_coffee)
+second_coffee["add_ons"].append("extra shot")
 
-print("Can you tell what word each of these definitions are for?")
-for definition in definitions:
-    print(definition)
+print(first_coffee["add_ons"])  # ['oat milk', 'extra shot']
+print(first_coffee["add_ons"] is second_coffee["add_ons"])  # True
 ```
 
-`.items()` is the one you will reach for most, because it hands you both halves of each pair and you unpack them right in the `for` line:
-
-```python
-for word, definition in dictionary.items():
-    print(f"The definition of {word} is {definition}")
-```
-
-{% hint style="warning" %}
-**Predict, then run.**
-
-```python
-print(dictionary.keys())
-print(len(dictionary))
-print(list(dictionary.keys())[0])
-```
-
-<details><summary>What actually happens</summary>
-
-```
-dict_keys(['hello', 'rainbow', 'cat'])
-3
-hello
-```
-
-- `.keys()` hands you a `dict_keys` object rather than a list, even though the printout looks like one. You can loop over a `dict_keys` object and use `in` with it. But if you try `dictionary.keys()[0]`, Python stops with `TypeError: 'dict_keys' object is not subscriptable`, which is Python's way of saying "you can't use square brackets on this".
-- `len()` on the dictionary itself counts the key-value pairs: three pairs, so `3`.
-- Wrapping `.keys()` in `list()` builds a real list, so `[0]` works. That list starts with `'hello'` because a dictionary remembers the order its keys were added in, and `"hello"` went in first.
-
-When you need to use an index with a dictionary's keys, turn them into a list first.
-
-</details>
-{% endhint %}
-
-## Lists of Dictionaries
-
-The shape you will use more than any other is a list where every element is a dictionary with the same keys. It is how a program holds "many of the same kind of thing":
-
-```python
-users = [
-    {"name": "Ben", "age": 28, "is_admin": False},
-    {"name": "Maya", "age": 25, "is_admin": True},
-    {"name": "Reuben", "age": 41, "is_admin": True},
-]
-
-# The loop hands you one dictionary at a time
-for user in users:
-    print(f"{user['name']} is {user['age']}")
-
-# Reach one by position, then by key
-print(users[1]["name"])   # Maya
-
-# Add a new one the same way you add to any list
-users.append({"name": "Gonzalo", "age": 30, "is_admin": False})
-```
-
-Giving every dictionary the same keys is what makes the loop work. `user['name']` runs once for every dictionary in the list, so a single dictionary without a `"name"` key would stop the loop with a `KeyError`.
-
-The task manager case study stores its tasks this way, and every project option in this module does too.
-
-## Dictionaries and Functions
-
-### Building a Dictionary from Parameters
-
-Functions often build a dictionary from their parameters, together with some default values. The `make_user` function below builds a user dictionary that stores the `name` and `age` it is given, sets `is_admin` to `False`, and starts with an empty `friends` list:
-
-```python
-def make_user(name, age):
-    new_user = {
-        "name": name,
-        "age": age,
-        "is_admin": False,
-        "friends": [],
-    }
-    return new_user
-
-user1 = make_user('ben', 30)
-```
-
-Notice that the key `"name"` and the variable `name` are spelled the same but are two different things. The key is a string inside the dictionary. The variable holds the value that gets stored under that key.
-
-### Passing a Dictionary to a Function
-
-When a dictionary is passed to a function, the function reaches into it with bracket notation for only the values it cares about:
-
-```python
-user_ben = {
-    "name": "Ben",
-    "age": 28,
-    "is_admin": False,
-}
-
-def introduce_self(user):
-    print(f"Hello! My name is {user['name']} and I am {user['age']} years old.")
-
-introduce_self(user_ben)
-```
-
-`introduce_self` never looks at `is_admin`, and it doesn't need to. So `introduce_self` works on any dictionary that has a `"name"` and an `"age"`. You could pass it a user with twenty other keys, or add an `"email"` key to every user next week, and `introduce_self` would not need to change. What it does need is those two keys: pass it a dictionary without `"age"` and it stops with `KeyError: 'age'`.
+To change a nested list without touching the original, copy that list as well before you change it: `second_coffee["add_ons"] = list(first_coffee["add_ons"])`.
 
 ## Summary
 
