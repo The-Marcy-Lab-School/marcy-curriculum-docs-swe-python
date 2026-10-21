@@ -11,37 +11,42 @@
 - [Input](#input)
   - [Getting Input with `input()`](#getting-input-with-input)
   - [Cleaning Input](#cleaning-input)
+    - [Challenge: Find the Method](#challenge-find-the-method)
     - [Type Casting](#type-casting)
   - [Validating Input](#validating-input)
     - [The `len()` builtin](#the-len-builtin)
     - [The `in` operator](#the-in-operator)
-    - [`startswith()`](#startswith)
-    - [`isdigit()`](#isdigit)
+    - [Challenge: Find String Methods for Validation](#challenge-find-string-methods-for-validation)
+    - [Validating Numbers with `try` and `except`](#validating-numbers-with-try-and-except)
   - [Parsing Input](#parsing-input)
     - [Bracket Notation](#bracket-notation)
     - [Slicing](#slicing)
     - [Slicing with `find()`](#slicing-with-find)
 - [Output](#output)
-  - [Printing Several Values](#printing-several-values)
-  - [String Interpolation with f-strings](#string-interpolation-with-f-strings)
+  - [Repeating Characters with `*`](#repeating-characters-with-)
+  - [String Tools Inside f-strings](#string-tools-inside-f-strings)
   - [Formatting Numbers](#formatting-numbers)
+  - [Lining Up Columns](#lining-up-columns)
 - [Madlib Challenge](#madlib-challenge)
 
 ![A string of characters is like a bracelet with beads on it](../.gitbook/assets/image.png)
 
 ## Key Terms
 
-- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning all operations are "read-only".
-- The **`in` operator** checks whether one string contains another.
-- **Bracket notation** returns individual characters within a string: `str[index]`
-- The built-in **`len()`** function returns the number of characters in a string (and you can use this method on lists and dictionaries too!).
-- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
-- **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
-- **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.
-- **f-strings** interpolate the value of any expression written inside `{}` into a string. A **format specifier** after a colon, like `{price:.2f}`, controls how the value is displayed.
-- The **`input()`** function gets input from the user. It always returns a string, so casting it to another type is your job.
-- **Type casting** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
 - A program is **hard-coded** if the program code must be modified in order to produce a new result.
+- The **`input()`** function gets input from the user. It always returns a string, so casting it to another type is your job.
+  - **Type casting** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
+- A program that uses user input to influence the program's behavior involves three steps:
+  - **Cleaning** input means putting what the user typed into the format that the rest of the program expects (e.g. removing whitespace or converting a string to lowercase).
+  - **Validating** input means checking that it is acceptable before the program uses it (e.g. checking that a name is not empty or that an email address contains an `@`).
+  - **Parsing** input means taking it apart to get the pieces the program needs (e.g. getting the first letter of a name or the part of an email address before the `@`).
+- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
+- Strings have many tools for cleaning, validating, and parsing input:
+  - **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data. Strings are immutable, meaning all operations are "read-only".
+  - **Bracket notation** returns individual characters within a string: `str[index]`
+  - The built-in **`len()`** function returns the number of characters in a string (and you can use this function on lists and dictionaries too!).
+- A **`try`/`except` statement** runs the code in its `try` block, and if a line there raises the error named after `except`, runs the `except` block instead of crashing. It is how a program validates input that only a cast like `int()` can judge.
+- A **format specifier** after a colon inside an f-string's braces controls how the value is displayed. `{price:.2f}` shows two digits after the decimal point, and `{item:<12}` and `{price:>8}` set a width and line the value up on the left or the right.
 
 ## Strings
 
@@ -99,7 +104,7 @@ The space at the end of the prompt is there so that what the user types does not
 
 ### Cleaning Input
 
-**Cleaning** input means putting what the user typed into the form, and the data type, that the rest of the program expects. Users type messily. They add spaces, and they use capitals when you expected lowercase. Python compares strings character by character, so `"YES" == "yes"` is `False`. Without any cleanup, a check like `answer == "yes"` would tell a user who typed `YES` "Okay, see you later."
+**Cleaning** input means putting what the user typed into the format that the rest of the program expects. Users type messily. They add spaces, and they use capitals when you expected lowercase. Python compares strings character by character, so `"YES" == "yes"` is `False`. Without any cleanup, a check like `answer == "yes"` would tell a user who typed `YES` "Okay, see you later."
 
 Strings come with tools for cleaning up text like this, called methods. A **method** is a special kind of function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`:
 
@@ -163,7 +168,13 @@ else:
 
 Whether the user types `yes`, `YES`, or ` Yes`, `answer` holds `"yes"`.
 
-Sometimes cleaning means removing characters from the middle of a string, not only from its ends. `replace(old, new)` replaces every appearance of `old` with `new`, so replacing a character with an empty string removes it:
+#### Challenge: Find the Method
+
+Sometimes cleaning means removing characters from the middle of a string, not only from its ends. Head over to [w3schools](https://www.w3schools.com/python/python_strings_methods.asp) and **find the method that can be used to convert a phone number like `'555-123-4567'` into `'5551234567'` (remove the `-` between the numbers).**
+
+**<details><summary>Answer</summary>**
+
+`replace(old, new)` replaces every appearance of `old` with `new`, so replacing a character with an empty string removes it:
 
 ```python
 phone = '555-123-4567'
@@ -179,6 +190,8 @@ print('apples'.replace('p', 'g', 1))
 ```
 
 Notice that `replace` replaces _every_ match unless you tell it how many to replace with a third argument.
+
+</details>
 
 #### Type Casting
 
@@ -230,7 +243,7 @@ age = int(input("How old are you? ").strip())
 print(f"Next year you will be {age + 1}")
 ```
 
-If the user types `twenty` instead of `20`, `int()` crashes with the same `ValueError` as `int("hello")`. A program that casts input without validating it first crashes as soon as a user types something unexpected. Catching that problem before the cast is the job of [Validating Input](#validating-input), which comes next.
+If the user types `twenty` instead of `20`, `int()` crashes with the same `ValueError` as `int("hello")`. A program that casts input without validating it crashes as soon as a user types something unexpected. Handling that problem is the job of [Validating Input](#validating-input), which comes next.
 
 {% hint style="warning" %}
 **Predict, then run.** What is the result of the expression below? What data type is produced? Do you think we should even be allowed to do something like this?
@@ -261,7 +274,7 @@ The fourth type casting function, `bool()`, is the one you met with truthy and f
 
 ### Validating Input
 
-**Validating** input means checking that it is acceptable before the program uses it. Clean input can still be the wrong input. The user may have pressed Enter without typing anything, or typed an email address with no `@` in it. Each tool in this section answers a question about a string, and the answer is a value that an `if` statement can use to decide what the program does next.
+**Validating** input means checking that it is acceptable before the program uses it. Clean input can still be the wrong input. The user may have pressed Enter without typing anything, or typed an email address with no `@` in it. Each tool in this section answers a question about a string, and the answer is a value that an `if` statement can use to decide what the program does next. The last tool, `try` and `except`, answers the one question that no string method answers exactly: whether a cast will work.
 
 #### The `len()` builtin
 
@@ -328,69 +341,75 @@ def is_marcy_email(email):
 
 </details>
 
-#### `startswith()`
+#### Challenge: Find String Methods for Validation
 
-When it matters _where_ the text appears, the `startswith` and `endswith` methods check only the beginning or only the end of a string:
+Head over to [w3schools](https://www.w3schools.com/python/python_strings_methods.asp) and look at the string methods. There are a number of useful methods for validating inputs. See if you can find the right method for the following scenarios:
+
+1. The user enters a phone number but it must use the `"718"` area code
+2. The user enters a password but it can only contain alphanumeric characters (letters and numbers, no symbols)
+3. The user enters a username but it must be written in lowercase
+4. The user enters a ZIP code but it must contain only digits
+
+**<details><summary>Answers</summary>**
+
+1. You can use `phone_number.startswith("718")`
+2. You can use `password.isalnum()`
+3. You can use `username.islower()`
+4. You can use `zip_code.isdigit()`
+
+Note that most string methods don't use snake_case and instead use all lowercase letters.
+
+</details>
+
+#### Validating Numbers with `try` and `except`
+
+When a program needs a number, `isdigit()` looks like the check to run before the cast. But `isdigit()` answers "is every character a digit?", and the program needs to know "can `int()` convert this?". For some strings, those two questions have different answers:
 
 ```python
-website = 'https://marcylabschool.org'
+print('-5'.isdigit())
+# Output: False, but int('-5') returns -5
 
-print(website.startswith('https://'))
-# Output: True
-
-print(website.endswith('.com'))
-# Output: False
+print('²'.isdigit())
+# Output: True, but int('²') crashes with a ValueError
 ```
 
-#### `isdigit()`
-
-The `isdigit` method checks whether a string is made entirely of digits. That makes `isdigit()` the check to run before casting a string to a number, because `int("hello")` crashes the program, as you saw in [Type Casting](#type-casting):
-
-```python
-print('42'.isdigit())
-# Output: True
-
-print('4.2'.isdigit())
-# Output: False
-```
-
-Validating the string before you cast it lets you give the user a message instead of a crash. `.isdigit()` is strict, though. It returns `False` for `" 20"` with a space in it, for `"-5"`, and for `"4.2"`. Clean the input with `strip()` first, and expect negative numbers and decimals to be rejected.
+A program that checks `isdigit()` before calling `int()` would tell a user who typed `-5` that it is not a number, and it would still crash for a user who typed `²`. The only reliable judge of what `int()` can convert is `int()` itself. A **`try`/`except` statement** lets the program attempt the cast and decide what to do when it fails:
 
 ```python
 age = input("How old are you? ").strip()
 
-if not age.isdigit():
-    print(f"Sorry, {age} is not a number")
-else:
+try:
     age = int(age)
     print(f"Next year you will be {age + 1}")
+except ValueError:
+    print(f"Sorry, {age} is not a whole number")
 ```
 
-**Question: A sign-up form accepts a phone number when it has exactly 10 digits once the dashes are removed. What would you return to complete this `is_valid_phone` function below?**
+Python runs the lines in the `try` block in order. If one of them raises the error named after `except`, Python stops the `try` block at that line and runs the `except` block instead of crashing. If no line raises that error, Python skips the `except` block. Here is what happens when the user types `twenty`:
 
-```py
-def is_valid_phone(phone):
-    return ???
+- `int("twenty")` raises a `ValueError`.
+- Python stops the `try` block on that line. The assignment never happens, so `age` still holds the string `"twenty"`, and the `print()` beneath it never runs.
+- The error is a `ValueError`, which is the type named after `except`, so Python runs the `except` block, and the user reads `Sorry, twenty is not a whole number` instead of a crash.
 
-print(is_valid_phone('555-123-4567'))   # True
-print(is_valid_phone('5551234567'))     # True
-print(is_valid_phone('555-1234'))       # False
-print(is_valid_phone('555-CALL-NOW'))   # False
+`except ValueError` catches only a `ValueError`. Any other error, such as a `NameError` from a misspelled variable, still crashes the program and shows its message, so a mistake in your own code is not hidden behind the message meant for the user.
+
+{% hint style="warning" %}
+**Predict, then run.** Run the program above three times, typing `-3`, then `4.2`, then `42` with spaces around it. What prints each time?
+
+<details><summary>What actually happens</summary>
+
+```
+Next year you will be -2
+Sorry, 4.2 is not a whole number
+Next year you will be 43
 ```
 
-**<details><summary>Answer</summary>**
-
-```py
-def is_valid_phone(phone):
-    digits = phone.replace('-', '')
-    return digits.isdigit() and len(digits) == 10
-```
-
-`'555-CALL-NOW'` has 10 characters once its dashes are removed, so the length check alone would accept it. `isdigit()` is the check that rejects it.
-
-Notice that `is_valid_phone` never casts the phone number to an `int`. A phone number is made of digits, but nobody adds or multiplies phone numbers, so it stays a string.
+`int()` accepts a minus sign, so `-3` is converted. `int()` rejects a decimal point, so `4.2` reaches the `except` block. If the program should accept decimals, cast with `float()` instead. `strip()` removed the spaces around `42` before `int()` saw it.
 
 </details>
+{% endhint %}
+
+Use an `if` check when a simple check answers the question exactly, such as `len(name) == 0` for an empty answer. Use `try` and `except` when only the operation itself can tell whether it will work, such as casting with `int()` or `float()`.
 
 ### Parsing Input
 
@@ -429,26 +448,6 @@ print(message[len(message) - 1])
 # Output: !  (the same character as message[-1])
 ```
 
-**Question: What would you return to complete this `starts_and_ends_with_a` function below?**
-
-```py
-def starts_and_ends_with_a(text):
-    return ???
-
-print(starts_and_ends_with_a('apple'))          # False
-print(starts_and_ends_with_a('banana'))         # False
-print(starts_and_ends_with_a('abracadabra'))    # True
-```
-
-**<details><summary>Answer</summary>**
-
-```py
-def starts_and_ends_with_a(text):
-    return text[0] == 'a' and text[-1] == 'a'
-```
-
-</details>
-
 {% hint style="warning" %}
 **Predict, then run.** Run this program and press Enter without typing a name.
 
@@ -467,10 +466,7 @@ IndexError: string index out of range
 - An empty string has no characters, so it has no index `0`.
 - `name[0]` asks for a character that does not exist, so Python stops with an `IndexError`.
 
-The program stops. Later in this module you will learn how to catch errors like this one and decide what to do instead. For now, the lesson is that an index has to be inside the string.
-
-</details>
-{% endhint %}
+The program stops, because an index has to be inside the string.
 
 The `len()` check from [Validating Input](#validating-input) prevents this crash too, because index `0` exists only when the string has at least one character:
 
@@ -483,24 +479,25 @@ else:
     print(f"Your name starts with {name[0].upper()}")
 ```
 
-**Question: How would you use `len()` to complete this `is_valid_index` function below?**
+</details>
+{% endhint %}
+
+**Question: What would you return to complete this `starts_and_ends_with_a` function below?**
 
 ```py
-def is_valid_index(text, index):
+def starts_and_ends_with_a(text):
     return ???
 
-print(is_valid_index('a', 0))      # True
-print(is_valid_index('a', 2))      # False
-print(is_valid_index('aaa', 2))    # True
-print(is_valid_index('a', -1))     # True
-print(is_valid_index('a', -2))     # False
+print(starts_and_ends_with_a('apple'))          # False
+print(starts_and_ends_with_a('banana'))         # False
+print(starts_and_ends_with_a('abracadabra'))    # True
 ```
 
 **<details><summary>Answer</summary>**
 
 ```py
-def is_valid_index(text, index):
-    return -len(text) <= index < len(text)
+def starts_and_ends_with_a(text):
+    return text[0] == 'a' and text[-1] == 'a'
 ```
 
 </details>
@@ -594,9 +591,11 @@ Be careful when chaining after `split()`. Not every method returns a string: `sp
 
 ## Output
 
-Everything a command-line program shows its user comes out of `print()`, and `print()` turns every value into a string before showing it. That makes the output of your program a string that you build. Until this chapter, your programs could print a value only the way it was stored. The string tools you used on input work just as well on output, so a program can reshape a value before printing it: capitalize it, take a piece of it, or measure it. The more you can do with strings, the more control you have over exactly what your user reads.
+Everything a command-line program shows its user comes out of `print()`. Chapter 1.1 showed how to print several values at once and how to place values inside text with f-strings. `print()` turns every value into a string before showing it, so the output of your program is a string that you build, and the string tools you used on input work just as well on output. This section adds a few tools for making that output easy to read.
 
-One more tool is useful mostly for output: the `*` operator, which repeats a string, as you saw with `"3" * 5` in chapter 1.2. For example, this program prints a heading in capitals with a line of `=` beneath it:
+### Repeating Characters with `*`
+
+The `*` operator repeats a string, as you saw with `"3" * 5` in chapter 1.2. A repeated character makes a separator line. For example, this program prints a heading in capitals with a line of `=` beneath it:
 
 ```python
 title = "Shopping List"
@@ -609,97 +608,6 @@ print("=" * len(title))
 ```
 
 `title.upper()` returns a capitalized copy of the title, and `"=" * len(title)` repeats `=` once for every character in the title. Because the length of the line comes from `len()` instead of from counting characters by hand, the line stays exactly as long as the heading when `title` changes to `"Groceries"` or to anything else.
-
-You have been calling `print()` since chapter 1.1 with one value at a time. It can do more than that.
-
-### Printing Several Values
-
-Give `print()` several values separated by commas and it prints all of them on one line, with a space between each:
-
-```python
-name = "Ada"
-age = 36
-
-print("name:", name, "age:", age)
-# Output: name: Ada age: 36
-```
-
-Two keyword arguments control the spacing. `sep` (separator) is what goes _between_ the values, and its default is a space. `end` is what goes _after_ the last value, and its default is `"\n"`, the new line character from the escaping hint above. That default is why every `print()` starts on a new line.
-
-```python
-print("a", "b", "c", sep="-")
-# Output: a-b-c
-
-print("loading", end="")
-print("...", end="")
-print("done")
-# Output: loading...done
-```
-
-{% hint style="warning" %}
-**Predict, then run.**
-
-```python
-print("1", "2", "3", sep="")
-print(1, 2, 3, sep=" + ", end=" = 6\n")
-```
-
-<details><summary>What actually happens</summary>
-
-```
-123
-1 + 2 + 3 = 6
-```
-
-The first line has nothing between the values, so they run together. The second line puts `" + "` between the numbers and `" = 6\n"` after them. Notice that `print()` accepted the numbers `1`, `2`, and `3` without complaint. It turns every value into text before printing it.
-
-</details>
-{% endhint %}
-
-### String Interpolation with f-strings
-
-When a string is written with an `f` in front of the opening quote, an expression inside curly braces `{}` is **interpolated** into a string for easy formatting:
-
-```python
-print(f"The sum of 10 and 2 is {10 + 2}")
-# Output: The sum of 10 and 2 is 12
-```
-
-These are called **f-strings**. Without the `f`, the curly braces are just characters:
-
-```python
-print("The sum of 10 and 2 is {10 + 2}")
-# Output: The sum of 10 and 2 is {10 + 2}
-```
-
-Anything that produces a value can go inside the braces: a variable, arithmetic, a function call, a method call, an index, or a slice. This is where the string tools from the Input section pay off a second time, because each one can shape a value right where it appears in the message:
-
-```python
-first = "ada"
-last = "lovelace"
-
-print(f"Welcome, {first[0].upper()}{first[1:]}!")
-# Output: Welcome, Ada!
-
-print(f"Your initials are {first[0].upper()}.{last[0].upper()}.")
-# Output: Your initials are A.L.
-
-print(f"Your last name has {len(last)} letters.")
-# Output: Your last name has 8 letters.
-```
-
-Each pair of braces holds its own expression. In the first message, `first[0].upper()` takes the first character of the name and capitalizes it, and `first[1:]` takes every character after the first, so together they print the name with a capital letter even though `first` is stored in lowercase.
-
-A slice is just as useful for leaving information out. A receipt should show enough of a card number for the customer to recognize their card, and no more:
-
-```python
-card = "4111222233334444"
-
-print(f"Paid with the card ending in {card[-4:]}")
-# Output: Paid with the card ending in 4444
-```
-
-Like `print()` with commas, an f-string turns each value into text for you. Building the same message with `+` would need `"Your last name has " + str(len(last)) + " letters."`, and forgetting the `str()` crashes the program (you saw that crash in [Type Casting](#type-casting)). Because of this conversion, f-strings are the way most Python programmers build a message: the words and the values sit in the order they will be printed, and you never have to cast anything yourself.
 
 {% hint style="warning" %}
 **Predict, then run.** Many receipts hide every digit of the card number except the last four.
@@ -724,6 +632,27 @@ The number of stars comes from the card number itself, so a 15-digit card gets 1
 
 </details>
 {% endhint %}
+
+### String Tools Inside f-strings
+
+Anything that produces a value can go inside an f-string's braces, including a method call, an index, or a slice. Each string tool from the Input section can shape a value right where it appears in the message:
+
+```python
+first = "ada"
+last = "lovelace"
+card = "4111222233334444"
+
+print(f"Welcome, {first[0].upper()}{first[1:]}!")
+# Output: Welcome, Ada!
+
+print(f"Your initials are {first[0].upper()}.{last[0].upper()}.")
+# Output: Your initials are A.L.
+
+print(f"Paid with the card ending in {card[-4:]}")
+# Output: Paid with the card ending in 4444
+```
+
+Each pair of braces holds its own expression. In the first message, `first[0].upper()` takes the first character of the name and capitalizes it, and `first[1:]` takes every character after the first, so together they print the name with a capital letter even though `first` is stored in lowercase.
 
 ### Formatting Numbers
 
@@ -763,6 +692,30 @@ That is 58.3%!
 
 </details>
 {% endhint %}
+
+### Lining Up Columns
+
+A receipt is hard to read when each price starts wherever its item's name happens to end. A number after the colon in a format specifier sets a **width**, the fewest characters the value takes up, and Python fills the rest of that space with spaces. `<` lines the value up on the left of that space and `>` lines it up on the right. Together with `*`, a width prints a table whose columns line up, however long each item's name is:
+
+```python
+print(f"{'Item':<12}{'Price':>8}")
+print("-" * 20)
+print(f"{'Coffee':<12}{3.5:>8.2f}")
+print(f"{'Bagel':<12}{2.25:>8.2f}")
+print("-" * 20)
+print(f"{'Total':<12}{3.5 + 2.25:>8.2f}")
+```
+
+```
+Item           Price
+--------------------
+Coffee          3.50
+Bagel           2.25
+--------------------
+Total           5.75
+```
+
+Every row is 12 characters of name plus 8 characters of price, so the separator line is `"-" * 20`. `>8.2f` combines a width with two digits after the decimal point, and lining the prices up on the right puts every decimal point in the same column. The width is the _fewest_ characters, so a name longer than 12 characters pushes its price out of line. Choose a width wider than the longest value the column will hold.
 
 ## Madlib Challenge
 

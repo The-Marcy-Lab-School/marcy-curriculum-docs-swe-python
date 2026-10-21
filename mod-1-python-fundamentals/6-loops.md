@@ -14,8 +14,8 @@
   - [Changing the Starting Point for `range()`](#changing-the-starting-point-for-range)
   - [For Loop Challenge](#for-loop-challenge)
 - [While Loops](#while-loops)
-  - [Asking Until the Input Is Valid](#asking-until-the-input-is-valid)
-  - [Break and Continue](#break-and-continue)
+  - [Break](#break)
+  - [Continue](#continue)
   - [While Loop Challenge](#while-loop-challenge)
 - [Summary](#summary)
 
@@ -128,7 +128,7 @@ c
 ```
 
 - Both loops run, because Python does not read the meaning of a variable name. `number` and `letter` are labels that the programmer chose.
-- `"abc"` is a string, so on each pass `number` holds the next character: `"a"`, then `"b"`, then `"c"`.
+- `"abc"` is a string, so on each iteration `number` holds the next character: `"a"`, then `"b"`, then `"c"`.
 - `"123"` is also a string, so `letter` holds the strings `"1"`, `"2"`, and `"3"`, not numbers.
 
 Python never checks whether a name makes sense, so the name is there for the people who read the code. Choose a name that describes what the variable will hold, such as `letter` for the characters of a word, so that the next person who reads your code, including you, can tell what it holds.
@@ -250,7 +250,7 @@ for i in range(len(word)):
 ```
 
 - `len(word)` is `4`, so `range(len(word))` produces `0`, `1`, `2`, and `3`, which are exactly the indexes of `word`.
-- On each pass, `i` holds one index, and `word[i]` uses bracket notation to get the character at that index.
+- On each iteration, `i` holds one index, and `word[i]` uses bracket notation to get the character at that index.
 
 Iterating over `range(len(word))` gives you each character's position as well as the character. When you need only the characters, `for letter in word` is shorter and leaves no index for you to get wrong.
 
@@ -326,7 +326,12 @@ while (user_input != "Exit"):
 print("Good bye!")
 ```
 
-Before each pass, Python checks the condition (`user_input != "Exit"`). If the condition is `True`, the block runs again. If the condition is `False`, the loop ends and the program continues with the code after it. That makes `while` loops the right tool for repeating a process an _unknown_ number of times, like rolling a die _until_ you get a 6.
+Before each iteration, Python checks the condition (`user_input != "Exit"`).
+
+- If the condition is `True`, the block runs again.
+- If the condition is `False`, the loop ends and the program continues with the code after it.
+
+That makes `while` loops the right tool for repeating a process an _unknown_ number of times, like rolling a die _until_ you get a 6.
 
 ```py
 import random
@@ -340,46 +345,52 @@ while (roll != 6):
 print(f"It took {roll_count} rolls to get a 6!")
 ```
 
-### Asking Until the Input Is Valid
+### Break
 
-In chapter 1.5, a program that asked for an age could validate the answer with `isdigit()`, but when the answer was not a number, all it could do was print a message and stop. The user had to run the program again to get another try. A `while` loop can ask again instead, as many times as it takes, because the program cannot know in advance how many wrong answers the user will type:
+A `while` loop checks its condition only at the top of each iteration, so a loop that has to stop partway through, as soon as the user types `quit`, needs a way out from inside its code block. Two statements let you control a loop from there: `break` and `continue`. Let's look at `break` first.
+
+`break` ends the loop immediately, and the program continues with the first line after the loop. `break` lets us write a loop whose condition is always true, `while True:`, and still end it from inside the loop:
 
 ```python
-age = input("How old are you? ").strip()
+print('Type "quit" at any point to exit')
 
-while not age.isdigit():
-    print(f"Sorry, {age} is not a number")
-    age = input("How old are you? ").strip()
+while True:
+    name = input("What's your name? ").strip()
+    if name.lower() == "quit":
+        break
+    if len(name) > 0:
+        print(f"Hello, {name}!")
+        break
+    print("You didn't type a name.")
 
-age = int(age)
-print(f"Next year you will be {age + 1}")
+print("Goodbye!")
 ```
 
-The loop runs only while `age` fails validation, so by the time the program reaches `int(age)`, `age` is guaranteed to hold digits, and the cast cannot crash.
+`while True` is always true, so the condition never ends this loop. The only way out is the `break`, which runs only when the user has typed a name or the word `"quit"`.
 
-### Break and Continue
-
-The validation loop above writes the same `input()` line twice: once before the loop, so that `age` holds a value the first time the condition is checked, and once inside the loop, to ask again. If the question ever changes, both lines have to change, and a programmer who updates only one of them gives the user two different questions.
-
-Two statements let you control a loop from inside its code block:
-
-- `break` ends the loop immediately, and the program continues with the first line after the loop. `break` is how you get out of a loop whose condition is always `True`.
-- `continue` skips the rest of the current pass and jumps back to the top of the loop for the next one. `continue` keeps the loop going, so it cannot get you out of an infinite loop.
-
-With `break`, the validation loop asks its question in one place:
+The same shape keeps asking for a number until `int()` succeeds, with the `try` and `except` from chapter 1.5 deciding whether the answer is valid:
 
 ```python
 while True:
-    age = input("How old are you? ").strip()
-    if age.isdigit():
+    answer = input("How old are you? ").strip()
+    try:
+        age = int(answer)
         break
-    print(f"Sorry, {age} is not a number")
+    except ValueError:
+        print(f"Sorry, {answer} is not a whole number")
 
-age = int(age)
 print(f"Next year you will be {age + 1}")
 ```
 
-`while True` is always true, so the condition never ends this loop. The only way out is the `break`, which runs only when the user has typed a number.
+The `break` sits inside the `try` block, on the line after the cast, so it runs only when the cast succeeds:
+
+- When the user types `twenty`, `int(answer)` raises a `ValueError`. Python stops the `try` block on that line, so the `break` never runs.
+- The `except` block prints the message, and the loop goes back to the top to ask again.
+- When the user types `20`, `int(answer)` succeeds, `age` holds `20`, and the `break` ends the loop. By the time the program reaches the last line, `age` is guaranteed to hold a number.
+
+### Continue
+
+`continue` skips the rest of the current iteration and jumps back to the top of the loop for the next one. `continue` keeps the loop going, so it cannot end a loop whose condition is always true.
 
 Here is a program that uses both. It adds up the dollar amounts the user types until they type `done`. For now, the program assumes that every answer is either a number, `done`, or blank:
 
@@ -402,7 +413,7 @@ print(f"Your total is ${total:.2f}")
 Nobody knows in advance how many amounts the user will enter, which is exactly the job a `while` loop is for. `while True` never ends the loop by itself, so the two statements inside it do that work:
 
 - `break` runs when the user types `done`. The loop ends, and the program continues with the `print()` after the loop.
-- `continue` runs when the user presses Enter without typing an amount. In that case, `input()` returns an empty string, and `float("")` would crash with a `ValueError`. `continue` skips the rest of the pass, so `float(amount)` never receives the empty string, and the loop goes straight back to asking for the next amount.
+- `continue` runs when the user presses Enter without typing an amount. In that case, `input()` returns an empty string, and `float("")` would crash with a `ValueError`. `continue` skips the rest of the iteration, so `float(amount)` never receives the empty string, and the loop goes straight back to asking for the next amount.
 
 {% hint style="info" %}
 **Q: How is `break` different from `return`?** `break` ends the loop, and the program carries on with the first line after the loop. `return` ends the whole function the loop is inside, so any lines after the loop in that function never run. If the dollar program above were the body of a function and used `return` instead of `break`, the function would end as soon as the user typed `done`, and `Your total is ...` would never print.
@@ -451,9 +462,15 @@ while guess != "Exit":
 
     guess = input("What is your guess? ").strip()
     guesses += 1
-    # input() returns a string, so validate the guess with isdigit() and cast it with int() before comparing it to random_num.
+    # input() returns a string, so cast it with int() before comparing it to random_num.
     # Without the cast, "7" == 7 is False, and no guess could ever win.
-    if guess.isdigit() and int(guess) == random_num:
+    # A guess like "seven" or "Exit" makes int() raise a ValueError, and a guess that is not a number is never correct.
+    try:
+        is_correct = int(guess) == random_num
+    except ValueError:
+        is_correct = False
+
+    if is_correct:
         print(f"{guess}! Got it!! And it only took you {guesses}!!!")
         break
     else:
@@ -467,4 +484,4 @@ print("Thanks for playing!")
 
 ## Summary
 
-A loop lets a program repeat a block of code without the programmer writing that block out again. Which loop to use depends on what the program knows before it starts. When the number of repetitions is known, such as 100 rolls or every character in a string, a `for` loop walks through an iterable. When the program has to keep going until something happens, such as rolling a 6 or the user typing `Exit`, a `while` loop repeats for as long as its condition is `True`. Either way, the programmer decides what changes from one pass to the next and when the loop stops, and `break` and `continue` let the code inside a loop end the loop early or skip the rest of a pass.
+A loop lets a program repeat a block of code without the programmer writing that block out again. Which loop to use depends on what the program knows before it starts. When the number of repetitions is known, such as 100 rolls or every character in a string, a `for` loop walks through an iterable. When the program has to keep going until something happens, such as rolling a 6 or the user typing `Exit`, a `while` loop repeats for as long as its condition is `True`. Either way, the programmer decides what changes from one iteration to the next and when the loop stops, and `break` and `continue` let the code inside a loop end the loop early or skip the rest of an iteration.
