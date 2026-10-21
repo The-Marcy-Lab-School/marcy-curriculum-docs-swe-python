@@ -3,6 +3,12 @@
 **Table of Contents**
 
 - [Key Terms](#key-terms)
+- [Testing Your Code with pytest](#testing-your-code-with-pytest)
+  - [Project Layout](#project-layout)
+  - [First Test](#first-test)
+  - [Practice: Add A Test](#practice-add-a-test)
+  - [Reading a Failure](#reading-a-failure)
+  - [Checking `True`, `False`, and Decimals](#checking-true-false-and-decimals)
 - [Refactoring with Tests](#refactoring-with-tests)
   - [A Pure Function and Its Tests](#a-pure-function-and-its-tests)
   - [Refactor with Confidence](#refactor-with-confidence)
@@ -12,20 +18,222 @@
   - [Step 3: Implement Just Enough Code to Pass](#step-3-implement-just-enough-code-to-pass)
   - [Step 4: Refactor If Necessary While Keeping the Tests Passing](#step-4-refactor-if-necessary-while-keeping-the-tests-passing)
   - [Reflection](#reflection)
+- [Testing Errors](#testing-errors)
+  - [Raising Your Own Errors](#raising-your-own-errors)
+  - [Testing That a Function Raises](#testing-that-a-function-raises)
+  - [One Failing Test Does Not Stop the Others](#one-failing-test-does-not-stop-the-others)
 - [Banking System Challenge](#banking-system-challenge)
 - [Extension / Practice](#extension--practice)
 
 ## Key Terms
 
+- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
+- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
+- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
+- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
 - A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
 - **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
 - To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
 - **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
 - **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
+- The **`raise`** statement lets a function report a problem itself, such as `raise ValueError("message")`. **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
+- pytest catches an error raised inside a test, reports that test as failed, and keeps running the others. A test file that cannot be imported stops the whole run.
+
+## Testing Your Code with pytest
+
+Up to now, you have checked your functions by calling them and reading what `print()` shows.
+
+> "Now that we've tested the application, what should we do with the tests? Do we delete them? Do we comment them out? If we keep them, where can they live?"
+
+With manual testing, your tests are the `print()` calls you added to check each function, and you're always left with this question. You've spent time and effort writing them, so deleting them is wasteful. But if you leave them in, they run every time the program runs, and, as you saw in the Modules lesson, every time another file imports that file. Whoever runs the program sees your check results mixed in with its real output and has no idea what they mean.
+
+Rather than testing functions directly in the files where they live, it is better to create separate **test files** that import functions and test them against sample inputs. Test files provide a number of benefits:
+
+- **Separation of concerns**: our source code can focus on functionality while test files focus on testing.
+- **Automation**: test files can be executed with a single command or can be configured to run automatically whenever a commit is made, ensuring all new code is functional.
+- **Documentation**: test files serve as living documentation, showing how functions are expected to behave.
+- **Confidence**: having a comprehensive test suite gives developers confidence when making changes.
+
+The assignments in this program come with test files already written. Running them tells you which of your functions work and which do not.
+
+### Project Layout
+
+Create a folder called `testing-practice`. In it, create and activate a virtual environment and install `pytest`, as you did in the Modules lesson. Then organize the project so that source code and tests live in separate folders:
+
+```
+testing-practice/
+├── .venv/
+├── requirements.txt
+├── src/
+│   └── calc.py
+└── tests/
+    └── test_calc.py
+```
+
+`pytest` finds tests by name. It looks for files whose names start with `test_`, and inside them, for functions whose names start with `test_`. There is nothing to configure.
+
+### First Test
+
+In the file called `src/calc.py`, define a simple `add` function.
+
+```python
+# calc.py
+def add(a, b):
+    return a + b
+```
+
+In the `tests` directory, create a file called `test_calc.py` (the test file name should always match the name of the file being tested, with `test_` in front).
+
+Then, add the following code:
+
+```python
+# test_calc.py
+from src.calc import add
+
+
+def test_add():
+    """add - adds two positive numbers"""
+    assert add(1, 2) == 3
+    assert add(10, 5) == 15
+```
+
+The first line imports `add` from `src/calc.py`. When a module sits inside a folder, you write the folder name, a dot, and then the module name, so `src.calc` means "the `calc` module inside the `src` folder". Python starts looking from the folder you run the tests in, which is why the hint below says to run them from the project's root folder.
+
+Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 1.3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
+
+- `assert expression` checks that the `expression` is truthy. If it is, nothing happens and the test continues.
+- If it is falsy, `assert` raises an `AssertionError`, the test stops, and pytest reports it as a failure. Outside of a test, a failing `assert` crashes the program like any other error: `assert 1 == 2, "one is not two"` raises `AssertionError: one is not two`.
+- `add(1, 2) == 3` is an ordinary comparison, the same `==` from chapter 1.2. There is no special testing vocabulary to learn.
+
+A test can hold as many `assert` statements as you like. The test passes only if every one of them passes.
+
+Run the tests with:
+
+```sh
+python3 -m pytest
+```
+
+And you should see something like this (the Python and pytest version numbers will be whatever is on your machine):
+
+```
+============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/ben/mod-1/testing-practice
+collected 1 item
+
+tests/test_calc.py .                                                     [100%]
+
+============================== 1 passed in 0.00s ===============================
+```
+
+Each dot after a filename is one passing test. We see a passing test because every `assert` expression was `True`.
+
+{% hint style="info" %}
+**Why `python3 -m pytest` and not just `pytest`?** Installing pytest gives you a `pytest` command as well, and you will see it in other people's instructions. But `pytest` on its own does not put your project folder on the list of places Python looks for modules, so `from src.calc import add` fails with `ModuleNotFoundError: No module named 'src'`. Running it through `python3 -m` adds the folder you are in to that list. The project's root folder, `testing-practice/`, contains `src/`, so from there `from src.calc import add` works. If you `cd tests` first, Python adds `tests/` instead, finds no `src` there, and you are back to `ModuleNotFoundError`. So run `python3 -m pytest` from the project's root folder every time.
+{% endhint %}
+
+### Practice: Add A Test
+
+In the `tests/test_calc.py` file, add a new test called `test_add_negatives` that confirms that the `add` function will work properly for inputs like `-3` and `-2`.
+
+**<details><summary>Solution</summary>**
+
+```python
+def test_add_negatives():
+    """add - adds two negative numbers"""
+    assert add(-3, -2) == -5
+```
+
+</details>
+
+Run `python3 -m pytest` again and you should now see two dots. To see every test by name, add `-v` (for "verbose"):
+
+```sh
+python3 -m pytest -v
+```
+
+```
+tests/test_calc.py::test_add PASSED                                      [ 50%]
+tests/test_calc.py::test_add_negatives PASSED                            [100%]
+```
+
+### Reading a Failure
+
+Change the expected value in your new test to `-6`, run the tests again, and look at what pytest tells you:
+
+```
+tests/test_calc.py .F                                                    [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_add_negatives ______________________________
+
+    def test_add_negatives():
+        """add - adds two negative numbers"""
+>       assert add(-3, -2) == -6
+E       assert -5 == -6
+E        +  where -5 = add(-3, -2)
+
+tests/test_calc.py:12: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_calc.py::test_add_negatives - assert -5 == -6
+========================= 1 failed, 1 passed in 0.01s ==========================
+```
+
+The test output provides some really useful information.
+
+- We can see which tests failed: the `F` in the dots, and the name under `FAILURES`
+- For each failing test, we can see which `assert` statement failed, marked with `>`
+- We can see what the function actually returned (`-5`) and what we said it should be (`-6`), and pytest even shows you the call that produced the `-5`.
+
+Armed with this information, we can more confidently build our functions knowing that we have a specific set of targets to aim for. Automated tests allow us to repeatedly run our code against the same set of tests until all expectations are met.
+
+Change the `-6` back to `-5` before moving on.
+
+### Checking `True`, `False`, and Decimals
+
+Two more kinds of assertion appear all over the test files in your assignments.
+
+When a function should return `True`, `False`, or `None`, the test uses `is` rather than `==`:
+
+```python
+def test_is_even():
+    """is_even - returns True for even numbers, False for odd"""
+    assert is_even(2) is True
+    assert is_even(3) is False
+```
+
+`is` is the identity operator from chapter 1.2. There is only one `True` and one `False` in a Python program, so `is True` asks "did the function return the boolean `True` itself?"
+
+**<details><summary>Q: Suppose `is_even` were written as `return 1 - num % 2`, which returns `1` for even numbers and `0` for odd ones. Would `assert is_even(2) == True` pass? Would `assert is_even(2) is True`?</summary>**
+
+The `==` version passes, because `True` counts as `1` in arithmetic, so `1 == True` is `True`. The `is` version fails:
+
+```
+E       assert 1 is True
+E        +  where 1 = is_even(2)
+```
+
+`1` is truthy, but it is not the boolean `True`. That difference shows up as soon as someone uses the function: `print(f"Is 4 even? {is_even(4)}")` prints `Is 4 even? 1`, and whoever reads that has to guess what `1` means. A function named `is_even` promises a boolean. The `==` version lets the broken function pass, and the `is True` version catches it.
+
+</details>
+
+When a function returns a decimal number, the test compares with `pytest.approx()`:
+
+```python
+import pytest
+from src.calc import add
+
+
+def test_add_decimals():
+    """add - adds decimal numbers"""
+    assert add(0.1, 0.2) == pytest.approx(0.3)
+```
+
+Remember from chapter 1.2 that `0.1 + 0.2 == 0.3` is `False`, because decimals are stored very slightly inexactly. `pytest.approx(0.3)` means "a number close enough to `0.3` that the difference is only that inexactness." Using it requires `import pytest` at the top of the test file.
 
 ## Refactoring with Tests
 
-Every comprehension in chapter 1.13 replaced a loop that already worked. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the `pytest` tests from chapter 1.9.
+Every comprehension in chapter 1.13 replaced a loop that already worked. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the `pytest` tests from the last section.
 
 ### A Pure Function and Its Tests
 
@@ -66,7 +274,7 @@ print(copy_of_nums)
 
 </details>
 
-In the `9-testing` project from chapter 1.9, put this function in a new file, `src/double_all.py`, and create `tests/test_double_all.py`.
+In your `testing-practice` project, put this function in a new file, `src/double_all.py`, and create `tests/test_double_all.py`.
 
 Since we are now working with a mutable type (a list), we need to test two different things: that the _contents_ are right, and that the function gave us a _new_ list rather than the one we passed in.
 
@@ -202,6 +410,77 @@ Run `python3 -m pytest tests/test_double_all.py`. All three tests still pass, so
 
 - How did writing tests _before_ code clarify what the function should do?
 
+## Testing Errors
+
+### Raising Your Own Errors
+
+Sometimes your code is the one that discovers the problem. A function that is handed a value it cannot work with should say so loudly rather than carry on and produce nonsense:
+
+```python
+def withdraw(balance, amount):
+    if amount > balance:
+        raise ValueError(f"Cannot withdraw {amount} from a balance of {balance}")
+    return balance - amount
+```
+
+The caller can then choose to catch it with `try` and `except`, or let it crash:
+
+```python
+balance = 100
+
+try:
+    balance = withdraw(balance, 500)
+except ValueError:
+    print("You don't have enough money for that withdrawal.")
+```
+
+Either way, the failure happens where the mistake is, with a message that says what went wrong, instead of three functions later with a confusing one. Pick the built-in error type whose meaning is closest: `ValueError` for a bad value, `TypeError` for a bad type.
+
+### Testing That a Function Raises
+
+An error that a function raises on purpose is part of what the function does, so it deserves a test like any other behavior. In your `testing-practice` project, put `withdraw` in `src/bank.py` and write `tests/test_bank.py`:
+
+```python
+import pytest
+from src.bank import withdraw
+
+
+def test_withdraw():
+    """withdraw - subtracts the amount from the balance"""
+    assert withdraw(100, 30) == 70
+
+
+def test_withdraw_overdraft():
+    """withdraw - raises a ValueError when the amount is more than the balance"""
+    with pytest.raises(ValueError):
+        withdraw(100, 500)
+```
+
+`with pytest.raises(ValueError):` means "the indented code below must raise a `ValueError`." If it does, pytest catches the error and the test passes. If it does not, the test fails. The `with` statement starts a block that `pytest.raises` watches: pytest runs the indented code and then checks what happened.
+
+{% hint style="warning" %}
+**Predict, then run.** Delete the whole `if` statement from `withdraw` (both the `if` line and the `raise` line beneath it) so that it quietly allows the overdraft, and run the tests again. What does pytest report?
+
+<details><summary>What actually happens</summary>
+
+```
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+```
+
+pytest reports `test_withdraw_overdraft` as failed. `test_withdraw` still passes, because `withdraw(100, 30)` never reached the `raise` anyway: 30 is not more than 100. `test_withdraw_overdraft` fails, because `withdraw(100, 500)` now returns `-400` instead of raising a `ValueError`. The function no longer does what the test says it should, and pytest tells you exactly which promise it broke. Put the `if` statement back before moving on.
+
+</details>
+{% endhint %}
+
+### One Failing Test Does Not Stop the Others
+
+Every failure so far happened at an `assert`. A test can also fail because the function it calls crashes. Suppose a bug made `withdraw` raise a `TypeError` on every call. pytest would report both `withdraw` tests as failed, show the `TypeError` and its traceback, and still run every other test in the project.
+
+pytest runs each test function the way a `try`/`except` would. When a test raises an error, pytest catches it, records that test as failed, and moves on to the next test. That is why one broken function never hides the results of the rest of your tests. `pytest.raises` is the reverse case: inside a `with pytest.raises(ValueError):` block, the error is the result the test expects, so the test fails when the error does _not_ happen.
+
+The one failure that stops everything is a test file that cannot be imported, for example because it imports a function that does not exist yet. pytest cannot even find the tests in that file, so it stops with `Interrupted: 1 error during collection` and runs none of the tests in the project. Read the `ImportError` it prints and fix the import before anything else.
+
 ## Banking System Challenge
 
 The assignment for this session applies the same cycle to a list of bank account dictionaries: a pure `deposit` function with tests already written, a refactor to a comprehension while the tests stay green, and a `withdraw` function built test-first with an overdraft rule. Those three tasks repeat the three parts of this chapter (testing a pure function, refactoring with tests, and test-driven development), on the data shape your project will use.
@@ -215,4 +494,4 @@ Once the banking assignment is done:
 - Add a `transfer(bank_accounts, transaction)` feature using TDD, where the transaction has `from_owner`, `to_owner`, and `amount` keys.
 - Refactor repetitive lookup logic into a helper function `get_account_by_owner()`.
 - Write new tests to confirm helper behavior.
-- Make `withdraw` raise a `ValueError` on overdraft instead of silently doing nothing, and test it with `pytest.raises` the way chapter 1.11 did.
+- Make `withdraw` raise a `ValueError` on overdraft instead of silently doing nothing, and test it with `pytest.raises` the way [Testing Errors](#testing-errors) did.

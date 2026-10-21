@@ -190,7 +190,7 @@ Reading only the `def` lines:
 - `inventory.py` — has a `stock` variable and three functions: `restock`, `sell`, `report`. It is for keeping and changing the stock.
 - `main.py` — has one function, `main`. It is for talking to the user and calling the inventory functions.
 
-You have seen this split before. It is the same separation of concerns as `circle_helpers.py` and `main.py` in chapter 1.9.
+You have seen this split before. It is the same separation of concerns as `orders.py`, `interface.py`, and `main.py` in chapter 1.9.
 
 ### Step 3: The Data
 

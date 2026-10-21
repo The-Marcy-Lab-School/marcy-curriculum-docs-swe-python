@@ -15,6 +15,7 @@
   - [Parameters and Arguments](#parameters-and-arguments)
   - [Return Statements](#return-statements)
   - [Default Values and Keyword Arguments](#default-values-and-keyword-arguments)
+  - [Reading a Traceback Through Function Calls](#reading-a-traceback-through-function-calls)
 - [Functions Create Local Variable Scope](#functions-create-local-variable-scope)
   - [Order Matters: Assign Before You Use](#order-matters-assign-before-you-use)
   - [The `global` Keyword](#the-global-keyword)
@@ -31,6 +32,7 @@
 - Parameters can have **default values**, and arguments can be passed by **keyword** as well as by position.
 - A **`NameError`** is raised when a line uses a name that does not exist at the moment that line runs: the name is misspelled, it belongs to a different function's scope, or it is assigned (or its function is defined) further down the file than the line that uses it.
 - A **`TypeError`** is raised when a value is the wrong type for what the code asks of it, such as adding a string to a number, or when a function is called with the wrong number of arguments.
+- A **traceback** lists every function call that was running when an error was raised, most recent call last. The bottom entry is the line where the error occurred, and the entries above it, the **call stack**, are the calls that led there.
 - **Scope** determines where variables can be accessed.
   - **Global scope** is the file, outside of any function. A variable assigned there is reachable anywhere in that file.
   - **Local scope** is the inside of a function. A variable or parameter assigned there exists only while that function is running and is reachable only within it.
@@ -450,6 +452,56 @@ The positional arguments arrive together in a tuple, and the keyword arguments a
 
 This is how `print()` accepts any number of values. Run `help(print)` and, just under the heading, the documentation shows `print(*args, sep=' ', end='\n', file=None, flush=False)`. You won't need to write either one in this module, but now you can read them.
 
+{% endhint %}
+
+### Reading a Traceback Through Function Calls
+
+In chapter 1.1, the traceback named a single line. Once a program calls functions, the line that fails is often inside a function, while the value that caused the problem came from the line that called it. A traceback shows both, because it lists every function call that was running when the error was raised.
+
+{% code title="bill.py" lineNumbers="true" %}
+
+```python
+def split_bill(total, people):
+    return total / people
+
+def print_share(total, people):
+    share = split_bill(total, people)
+    print(f"Each person pays ${share:.2f}")
+
+print_share(60, 3)
+print_share(60, 0)
+```
+
+{% endcode %}
+
+Running `python3 bill.py` prints this:
+
+```
+Each person pays $20.00
+Traceback (most recent call last):
+  File "/Users/ben/mod-1/bill.py", line 9, in <module>
+    print_share(60, 0)
+  File "/Users/ben/mod-1/bill.py", line 5, in print_share
+    share = split_bill(total, people)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ben/mod-1/bill.py", line 2, in split_bill
+    return total / people
+           ~~~~~~^~~~~~~~
+ZeroDivisionError: division by zero
+```
+
+The first line says it: `most recent call last`. A traceback is printed in the order the calls happened, so the place where the error actually occurred is at the **bottom**. Read it from the bottom up:
+
+- The **error type** and the **error message** are the last line: `ZeroDivisionError: division by zero`.
+- The **call stack** is everything above it. We see the file names, line numbers, and function names tracing how we got to the error, with the most recently called function at the bottom.
+  - `return total / people` in `split_bill` on line `2` was reached because…
+  - `share = split_bill(total, people)` in `print_share` on line `5` was called, which happened because…
+  - `print_share(60, 0)` on line `9` in `<module>` (the top level of the file, outside any function) was executed by the interpreter.
+
+`Each person pays $20.00` printed first, because the call on line 8 ran and finished before line 9 was reached. The error _occurred_ on line 2, but the `0` that caused it _came from_ the call on line 9. Both lines appear in the traceback. The bottom one is where Python was standing when it gave up, and the entries above it tell you which call sent it there, which is often where the fix goes.
+
+{% hint style="info" %}
+The **call stack** is a data structure that the interpreter uses to keep track of the functions that are called while the program is running. It saves function calls in a last-in-first-out (LIFO) order which means that the most recent function call is always on top, followed by the function that called it, and so on. A traceback is a printout of the call stack at the moment the error was raised, printed with the most recent call last. So the top of the stack, the call that was running when the error happened, appears at the bottom of the traceback.
 {% endhint %}
 
 ## Functions Create Local Variable Scope

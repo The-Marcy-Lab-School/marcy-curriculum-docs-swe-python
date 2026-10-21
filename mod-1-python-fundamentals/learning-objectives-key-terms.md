@@ -68,6 +68,10 @@
 
 - **Control Flow** refers to the order in which lines of code are executed. Control flow runs from the top of a file to the bottom.
 - **Code Style** refers to the formatting of the code in a way that makes it easier to read and understand. Python's style conventions are written down in a document called [PEP 8](https://peps.python.org/pep-0008/).
+- An **error** is **raised** when Python cannot run a line of code, and the program stops.
+  - A **syntax error** means the code is not valid Python. The interpreter checks the whole file first, so nothing in the file runs.
+  - A **runtime error**, which Python calls an **exception**, happens while the program runs, after the lines before it have already run.
+- A **traceback** is the report Python prints when an error is raised. Read it from the bottom up: the last line gives the error type and message, and the lines above it give the line of code, the file, and the line number where the error happened.
 
 **You will be able to…**
 
@@ -82,6 +86,8 @@ _By the end of the module:_
 
 - Tell an expression from a statement, and say what value a simple expression evaluates to.
 - Read an `IndentationError` and explain why the interpreter refused the whole file.
+- Distinguish a syntax error from a runtime error by whether any of the program ran before it appeared.
+- Read a traceback from the bottom up to name the error type, the message, and the line where the error occurred.
 - Rewrite a badly formatted function to follow PEP 8: four-space indentation, spaces around operators, `snake_case` names.
 
 ### Exit Ticket
@@ -185,6 +191,7 @@ If `quiz_2` held the string `"90"`, the program would crash with a `TypeError` o
 - Parameters can have **default values**, and arguments can be passed by **keyword** as well as by position.
 - A **`NameError`** is raised when a line uses a name that does not exist at the moment that line runs: the name is misspelled, it belongs to a different function's scope, or it is assigned (or its function is defined) further down the file than the line that uses it.
 - A **`TypeError`** is raised when a value is the wrong type for what the code asks of it, such as adding a string to a number, or when a function is called with the wrong number of arguments.
+- A **traceback** lists every function call that was running when an error was raised, most recent call last. The bottom entry is the line where the error occurred, and the entries above it, the **call stack**, are the calls that led there.
 - **Scope** determines where variables can be accessed.
   - **Global scope** is the file, outside of any function. A variable assigned there is reachable anywhere in that file.
   - **Local scope** is the inside of a function. A variable or parameter assigned there exists only while that function is running and is reachable only within it.
@@ -205,6 +212,7 @@ _By the end of the module:_
 - Write a function with default parameter values and call it with positional and keyword arguments.
 - Explain why a function must be defined before the line that calls it runs, and why two functions can each have a variable with the same name.
 - Explain why assigning to a global variable inside a function raises `UnboundLocalError`, and say why passing values in and returning them out is preferred to `global`.
+- Read a traceback through several function calls from the bottom up, and point at the line where the error occurred and the call that supplied the value that caused it.
 
 ### Exit Ticket
 
@@ -296,25 +304,28 @@ The program prints `C`. Each `if` is a guard clause, and a `return` statement en
 
 **Key terms**
 
-- **Strings** are sequences of characters enclosed in quotes (single or double). Strings are immutable, meaning all operations are "read-only".
-- The **`in` operator** checks whether one string contains another.
-- **Bracket notation** returns individual characters within a string: `str[index]`
-- The built-in **`len()`** function returns the number of characters in a string (and you can use this method on lists and dictionaries too!).
-- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
-- **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data.
-- **`print()`** takes any number of values. It puts `sep` between them, a space unless you say otherwise, and `end` after them, a new line unless you say otherwise.
-- **f-strings** interpolate the value of any expression written inside `{}` into a string. A **format specifier** after a colon, like `{price:.2f}`, controls how the value is displayed.
-- The **`input()`** function gets input from the user. It always returns a string, so casting it to another type is your job.
-- **Type casting** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
 - A program is **hard-coded** if the program code must be modified in order to produce a new result.
+- The **`input()`** function gets input from the user. It always returns a string, so casting it to another type is your job.
+  - **Type casting** with `str()`, `int()`, `float()`, `bool()` turns a value of one type into another.
+- A program that uses user input to influence the program's behavior involves three steps:
+  - **Cleaning** input means putting what the user typed into the format that the rest of the program expects (e.g. removing whitespace or converting a string to lowercase).
+  - **Validating** input means checking that it is acceptable before the program uses it (e.g. checking that a name is not empty or that an email address contains an `@`).
+  - **Parsing** input means taking it apart to get the pieces the program needs (e.g. getting the first letter of a name or the part of an email address before the `@`).
+- A **method** is a function that is attached to a value. Methods are invoked using **dot notation**: `value.method()`.
+- Strings have many tools for cleaning, validating, and parsing input:
+  - **String methods** like `startswith`, `endswith`, `find`, `upper`, `replace`, `strip`, and `split` allow you to search, analyze, and manipulate string data. Strings are immutable, meaning all operations are "read-only".
+  - **Bracket notation** returns individual characters within a string: `str[index]`
+  - The built-in **`len()`** function returns the number of characters in a string (and you can use this function on lists and dictionaries too!).
+- A **`try`/`except` statement** runs the code in its `try` block, and if a line there raises the error named after `except`, runs the `except` block instead of crashing. It is how a program validates input that only a cast like `int()` can judge.
+- A **format specifier** after a colon inside an f-string's braces controls how the value is displayed. `{price:.2f}` shows two digits after the decimal point, and `{item:<12}` and `{price:>8}` set a width and line the value up on the left or the right.
 
 **You will be able to…**
 
 _In the session:_
 
 - Access a character of a string by positive or negative index, take a slice, and predict the `IndexError` for a position that does not exist.
-- Print several values in one `print()` call, control what goes between and after them with `sep` and `end`, and build a message with an f-string that formats a decimal with `:.2f`.
-- Read a line of input with `input()`, clean it with `strip()` and `lower()`, explain why it is always a string, and cast it with `int()` or `float()` after validating it with `isdigit()`.
+- Format output with f-strings that show a decimal with `:.2f` and line up columns with a width, and draw separator lines with `*`.
+- Read a line of input with `input()`, clean it with `strip()` and `lower()`, explain why it is always a string, and cast it with `int()` or `float()` inside a `try` block whose `except ValueError` prints a message instead of crashing.
 - Refactor a hard-coded program into one that takes its values from `input()`, turning a `Y`/`N` answer into a boolean and using indexes, slices, `in`, and `len()` to adapt its output to whatever words the user types.
 
 _By the end of the module:_
@@ -344,11 +355,11 @@ Luis runs the program and types `21`. What happens, and why? How should Luis cha
 
 **Level 2 Example**
 
-The program crashes with a `TypeError` because `age` is a string. Luis needs to cast it with `int()`, and validate it with `isdigit()` first so that `twenty` doesn't crash.
+The program crashes with a `TypeError` because `age` is a string. Luis needs to cast it with `int()`, and put the cast in a `try` with an `except ValueError` so that `twenty` doesn't crash.
 
 **Level 3 Example**
 
-The program crashes with `TypeError: '>=' not supported between instances of 'str' and 'int'`. `input()` always returns a string, so even though Luis typed `21`, `age` holds `"21"`. Python will not compare a string with a number, because it does not know whether Luis meant the text or the number. To fix the program, Luis has to cast `age` with `int()` before the comparison. But `int("twenty")` raises a `ValueError`, so Luis should validate the string before casting it. I would write `age = input("How old are you? ").strip()` to remove stray spaces, then `if not age.isdigit():` print a message like `twenty is not a number`, and otherwise run `age = int(age)` before the `>= 18` comparison. Then `21` passes `isdigit()`, becomes the integer `21`, and prints `You can vote!`, while `twenty` fails `isdigit()` and gets a message instead of a crash.
+The program crashes with `TypeError: '>=' not supported between instances of 'str' and 'int'`. `input()` always returns a string, so even though Luis typed `21`, `age` holds `"21"`. Python will not compare a string with a number, because it does not know whether Luis meant the text or the number. To fix the program, Luis has to cast `age` with `int()` before the comparison. But `int("twenty")` raises a `ValueError`, so Luis has to handle that error too. I would write `age = input("How old are you? ").strip()` to remove stray spaces, then put `age = int(age)` and the `>= 18` check inside a `try` block, with an `except ValueError:` block that prints a message like `twenty is not a whole number`. Then `21` becomes the integer `21` and prints `You can vote!`. For `twenty`, `int()` raises a `ValueError`, Python skips the rest of the `try` block, and the `except` block prints the message instead of the program crashing.
 
 ## 1.6 Loops
 
@@ -369,7 +380,7 @@ _In the session:_
 
 - Identify the loop variable and the iterable in any `for` statement, explain that the loop variable's name is the programmer's choice, and rewrite repeated statements as a `for` loop over a string or over `range()`, predicting the first and last values `range()` produces.
 - Choose between a `for` loop and a `while` loop from whether the number of repetitions is known in advance.
-- Write a `while` loop that repeats until the user types valid input or a random event happens, using `break` to leave and `continue` to skip, and explain how `break` differs from `return`.
+- Write a `while` loop that repeats until the user types valid input or a random event happens, using `break` to leave and `continue` to skip, including a loop that asks again whenever `int()` raises a `ValueError`, and explain how `break` differs from `return`.
 - Keep a running count across iterations of a loop and report it afterward.
 
 _By the end of the module:_
@@ -558,12 +569,14 @@ The program prints `2` and then crashes with `KeyError: 'Sula'`. Bracket notatio
 
 **Key terms**
 
+- **Modularity** means building a program from small pieces that each do one job, so that each piece can be read, changed, and checked on its own.
+  - A **helper function** does one piece of a bigger job. A **`main()` function** calls the helper functions in a logical order, so reading `main()` tells you what the program does.
 - A **module** is a file containing code, which can then be imported and utilized in other parts of a larger program or system.
   - Every function and variable defined at the top level of a file can be imported by another file.
   - A module is imported with `import module_name`, or specific names are imported with `from module_name import name`.
 - Importing a file **runs** it, top to bottom. The variable `__name__` tells a file whether it is being run directly (`"__main__"`) or imported by another file.
 - The `if __name__ == "__main__":` guard is how a file says "only run this part when I am the program being run".
-- The **standard library** is the collection of modules that come with Python. `random`, `math`, `time`, and `json` are examples. They need `import` but no installation.
+- The **standard library** is the collection of modules that come with Python. `random` and `math` are examples. They need `import` but no installation.
 - A **package** is a folder of modules that someone has published so that other people can install it and import it. `pytest` is a package.
 - A **library** is a collection of code written for other programs to use rather than to be run on its own. The standard library is Python's own library, and many packages, like `pytest`, are libraries too.
 - Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
@@ -572,32 +585,24 @@ The program prints `2` and then crashes with `KeyError: 'Sula'`. Bracket notatio
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
 - A **`.gitignore`** file lists the files and folders in a project that Git should not track. The `.venv/` and `__pycache__/` folders go in it. The `.venv` folder is never committed; it is rebuilt from `requirements.txt` instead.
-- **JSON** is a text format for storing lists and dictionaries in a file. The standard library's `json` module writes them with `json.dump()` and reads them back with `json.load()`.
-- **Developer dependencies** like `pytest` are packages used by the developer(s) of a project but not needed by the people who run it.
-- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
-- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
-- **`pytest`** is the third-party package that finds and runs test files. It is installed into the project's virtual environment and run with `python3 -m pytest`.
-- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
-- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
+- **`pytest`** is the third-party package that runs the tests in your assignments. It finds files whose names start with `test_` and runs them with `python3 -m pytest`. It is a **developer dependency**: a package used by the developers of a project but not needed by the people who run it.
 
 **You will be able to…**
 
 _In the session:_
 
-- Split a single-file program into modules so that each file has one concern, import a whole module or specific names, and explain why `from module import *` is avoided.
+- Refactor a program written as one block into helper functions and a `main()` function, then split those functions into modules by the kind of job they do, import a whole module or specific names, and explain why `from module import *` is avoided.
 - Predict what prints when a module with top-level code is imported, explain what `__name__` holds, and use the `__main__` guard to keep a module's code from running on import.
 - Create and activate a virtual environment, install `pytest` into it with `pip`, and record it in `requirements.txt` with `pip freeze`.
-- Write a test function with `assert` and a docstring, run the tests with `python3 -m pytest`, and read a failure report to find which assertion failed and what the function actually returned.
 
 _By the end of the module:_
 
 - Explain what the `__pycache__` folder is, keep it and `.venv/` out of Git, and explain why the recipe is committed rather than the meal.
 - Distinguish a standard library module from a third-party package and say which needs installing.
-- Save a list or dictionary to a JSON file and read it back with `json.dump()` and `json.load()`.
 - Use `pip list` and `pip show` to see what is installed and what a package requires, and rebuild an environment with `pip install -r requirements.txt`.
 - Explain the `ModuleNotFoundError` that appears when the environment is not activated, and check for that first.
-- Explain why `pytest` is a developer dependency and why the tests are run with `python3 -m pytest` rather than `pytest`.
-- Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
+- Explain what `python3 -m pytest` does when it runs an assignment's tests, and why `pytest` is a developer dependency.
+- Read a traceback that crosses two modules, and say where to look next for the value that caused the error.
 - Split the madlib program into a module for the story and a `main.py` for the input.
 
 ### Exit Ticket
@@ -688,91 +693,6 @@ Malik reads it and decides, "The name and the docstring say it counts vowels, so
 **Level 3 Example**
 
 `count_vowels("Apple")` returns `1`. The loop checks each letter with `letter in "aeiou"`, and that string contains only lowercase vowels, so the capital `A` fails the check and only the `e` gets counted. Malik is wrong. The name and the docstring tell me what the author intended, but only the body tells me what the function actually does, and a model writes a name and a docstring with the same confidence whether the body is right or wrong. The way to check is to predict the output for one specific input and then run the function. My bug report: "`count_vowels("Apple")` returns `1`. Expected `2`. The check on line 5, `if letter in "aeiou"`, skips uppercase vowels." Changing that check to `letter.lower() in "aeiou"` would fix the function.
-
-## 1.11 Errors and Tracebacks
-
-<!-- key-terms-from: 11-errors-tracebacks.md -->
-
-**Key terms**
-
-- **Errors** are code that prevents a program from running successfully and are "raised" when something goes wrong, providing valuable debugging information.
-- **Syntax errors** occur when code is invalid and can't be executed (e.g., missing quotes, wrong indentation), while **runtime errors** occur when code executes but encounters faulty logic or improper data type usage. Python calls runtime errors **exceptions**.
-- Common error types include **`SyntaxError`** (invalid Python), **`NameError`** (undefined variables), **`TypeError`** (wrong data types), **`ValueError`** (right type, wrong value), **`IndexError`** and **`KeyError`** (missing positions and keys), and **`FileNotFoundError`** (operating system constraints).
-- A **traceback** is the report Python prints when an error is raised. Reading it from the bottom up tells you the error type, the message, and the chain of function calls that led there.
-- Errors can be manually raised using the `raise` keyword, and uncaught errors will cause programs to crash. `try` and `except` let a program catch an error and decide what to do instead.
-- **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
-
-**You will be able to…**
-
-_In the session:_
-
-- Distinguish a syntax error from a runtime error by whether any of the program ran before it appeared.
-- Read a traceback from the bottom up: the error type and message, the line where it occurred, and the chain of calls that led there, including across two files.
-- Catch a specific error type with `try`/`except`, use the error object's message, and explain why a bare `except:` is avoided.
-- Write a loop that keeps asking for input until `int()` succeeds, catching `ValueError`.
-
-_By the end of the module:_
-
-- Name the error type that a given mistake produces, and read an error message to say what went wrong.
-- Point at the line where an error occurred and the line where the bad value came from, and say which one the fix belongs on.
-- Raise a `ValueError` or `TypeError` from a function that is handed a value it cannot work with.
-- Test that a function raises an error with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
-
-### Exit Ticket
-
-**Learning Objective**: Fellows will be able to read a traceback from the bottom up and explain which line raised the error, which line supplied the value that caused it, and why output printed before the crash still appeared.
-
-**Question**
-
-Nia's program has two files:
-
-```python
-# stats.py
-def average(scores):
-    return sum(scores) / len(scores)
-```
-
-```python
-# main.py
-from stats import average
-
-def report(name, scores):
-    print(f"{name}: {average(scores)}")
-
-def main():
-    report("Jamal", [90, 80])
-    report("Omar", [])
-
-main()
-```
-
-Running `python3 main.py` prints this:
-
-```
-Jamal: 85.0
-Traceback (most recent call last):
-  File "/Users/nia/mod-1/main.py", line 10, in <module>
-    main()
-  File "/Users/nia/mod-1/main.py", line 8, in main
-    report("Omar", [])
-  File "/Users/nia/mod-1/main.py", line 4, in report
-    print(f"{name}: {average(scores)}")
-                     ^^^^^^^^^^^^^^^
-  File "/Users/nia/mod-1/stats.py", line 2, in average
-    return sum(scores) / len(scores)
-           ~~~~~~~~~~~~^~~~~~~~~~~~~
-ZeroDivisionError: division by zero
-```
-
-Which line raised the error, and which line supplied the value that caused it? Why did `Jamal: 85.0` print even though the program crashed?
-
-**Level 2 Example**
-
-The error is on line 2 of `stats.py`, because `len([])` is `0`. The empty list came from line 8 of `main.py`. `Jamal: 85.0` printed because the first call worked.
-
-**Level 3 Example**
-
-I read the traceback from the bottom up. The last line gives the error type and message, `ZeroDivisionError: division by zero`, and the entry just above it says that the error occurred on line 2 of `stats.py`, inside `average`. `scores` was an empty list, so `len(scores)` was `0`, and dividing by zero raises the error. The entries above that one show how the program got there: `average` was called from `report` on line 4 of `main.py`, and `report` was called on line 8 of `main.py` with `report("Omar", [])`. Line 8 is where the bad value came from, because that call handed an empty list to a function that divides by the list's length. `Jamal: 85.0` printed first because a runtime error happens only when the program reaches the broken line, and the call to `report` on line 7 ran and finished before line 8 was reached.
 
 ## 1.12 First-Class Functions and Higher-Order Functions
 
@@ -902,16 +822,23 @@ The program prints `None`. `.sort()` sorts a list in place, which means it chang
 
 **Key terms**
 
+- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
+- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
+- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
+- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
 - A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
 - **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
 - To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
 - **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
 - **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
+- The **`raise`** statement lets a function report a problem itself, such as `raise ValueError("message")`. **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
+- pytest catches an error raised inside a test, reports that test as failed, and keeps running the others. A test file that cannot be imported stops the whole run.
 
 **You will be able to…**
 
 _In the session:_
 
+- Write a test function with `assert` and a docstring, run the tests with `python3 -m pytest`, and read a failure report to find which assertion failed and what the function actually returned.
 - Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop to a comprehension while its tests stay green.
 - Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
 - Predict the error a new test raises before the code it checks has been written, and explain what that failure shows about the test.
@@ -921,6 +848,10 @@ _By the end of the module:_
 - Use `isinstance()` with one type or a tuple of types to decide what a function does with each kind of value.
 - Refactor a function by combining branches that do the same job, and run the tests to confirm that its behavior did not change.
 - Develop the banking assignment's `withdraw` function test-first, including its overdraft rule.
+- Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
+- Explain why the tests are run with `python3 -m pytest` from the project's root folder rather than with `pytest`.
+- Raise a `ValueError` from a function that is handed a value it cannot work with, test it with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
+- Explain why a test that crashes does not stop the other tests, and why a test file that cannot be imported stops the whole run.
 
 ### Exit Ticket
 

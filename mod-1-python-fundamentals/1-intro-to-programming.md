@@ -17,6 +17,16 @@ There are so many terms and concepts to learn about programming. In this lesson,
   - [Debunking The `print()` Myth](#debunking-the-print-myth)
 - [Control Flow](#control-flow)
 - [Code Style and Readability](#code-style-and-readability)
+- [Errors](#errors)
+  - [Syntax Errors and Runtime Errors](#syntax-errors-and-runtime-errors)
+  - [Logical Errors](#logical-errors)
+  - [Common Errors](#common-errors)
+    - [`SyntaxError`](#syntaxerror)
+    - [`IndentationError`](#indentationerror)
+    - [`NameError`](#nameerror)
+    - [`TypeError`](#typeerror)
+    - [`ZeroDivisionError`](#zerodivisionerror)
+  - [How to Read a Traceback](#how-to-read-a-traceback)
 
 ## Setup
 
@@ -60,6 +70,10 @@ There are so many terms and concepts to learn about programming. In this lesson,
 
 - **Control Flow** refers to the order in which lines of code are executed. Control flow runs from the top of a file to the bottom.
 - **Code Style** refers to the formatting of the code in a way that makes it easier to read and understand. Python's style conventions are written down in a document called [PEP 8](https://peps.python.org/pep-0008/).
+- An **error** is **raised** when Python cannot run a line of code, and the program stops.
+  - A **syntax error** means the code is not valid Python. The interpreter checks the whole file first, so nothing in the file runs.
+  - A **runtime error**, which Python calls an **exception**, happens while the program runs, after the lines before it have already run.
+- A **traceback** is the report Python prints when an error is raised. Read it from the bottom up: the last line gives the error type and message, and the lines above it give the line of code, the file, and the line number where the error happened.
 
 ## What is a program?
 
@@ -194,7 +208,7 @@ print(f"{fahrenheit}°F is {celsius}°C")
 # Output: 212°F is 100.0°C
 ```
 
-This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now. Chapter 1.5 covers strings and f-strings in full.
+This is called an **f-string**. Without the `f`, the braces are just characters and print exactly as written. You will use f-strings in nearly every program from here on, so get used to reading them now.
 
 ### Debunking The `print()` Myth
 
@@ -344,3 +358,131 @@ say_the_time(5)
 The original indents each block by a different amount (1, 12, 2 and 4 spaces). Python accepts that, but a reader can't tell at a glance which `print` belongs to which branch. So use four spaces per level, all the way down. Add spaces around `<=` so the comparison stands out from the names on either side. Remove the spaces inside the parentheses and the stray blank line. Rename `saythetime` to `say_the_time`, because Python names use `snake_case` and the underscores let a reader see the three words.
 
 </details>
+
+## Errors
+
+Writing code with errors is a natural part of programming. But rather than avoiding them at all costs, we should learn to understand them! Errors provide us valuable information about how we can improve our programs.
+
+When Python cannot run a line of code, it stops the program and **raises** an error. You will also hear "thrown", which means the same thing. Raising an error prints a report that says what went wrong and where, and then the program ends.
+
+### Syntax Errors and Runtime Errors
+
+There are many causes of errors but in general there are two categories, and the difference between them is _when_ Python finds the problem:
+
+- **Syntax Errors:** The code you've written is not valid Python and can't be executed, such as a string that is missing its closing `"`. The interpreter checks the structure of the whole file before it runs any of it, so a syntax error stops the program before its first line runs. The `IndentationError` from [Code Style and Readability](#code-style-and-readability) is a syntax error.
+- **Runtime Errors:** The code is valid Python, but a line asks for something Python cannot do while the program is running, such as reading a variable that does not exist. A runtime error happens only when the program reaches the broken line, so every line before it has already run. Python calls runtime errors **exceptions**.
+
+{% hint style="warning" %}
+**Predict, then run.** This file has a syntax error on line 3 and a perfectly good `print` on line 1. What prints?
+
+```python
+print("this line is fine")
+
+print("this one is not)
+```
+
+<details><summary>What actually happens</summary>
+
+```
+  File "syntax.py", line 3
+    print("this one is not)
+          ^
+SyntaxError: unterminated string literal (detected at line 3)
+```
+
+Nothing prints except the error. Not even `this line is fine`.
+
+You saw this in Mod 0 and it is worth seeing again now that you know the name for it. Python reads and checks the _whole file_ before it runs any of it. A syntax error means the file is rejected before line 1 ever executes. A runtime error, by contrast, only happens when the program reaches the broken line, so everything before it runs first. That difference is the fastest way to tell which kind of error you are looking at.
+
+</details>
+{% endhint %}
+
+### Logical Errors
+
+In addition to Syntax and Runtime Errors, we must be aware of **logical errors** which are caused by the programmer writing interpretable code but that produces an unwanted output. For example:
+
+```py
+age = input("What is your age? ")
+if age < 21:
+    print("You can drink!")
+```
+
+Python has no way of knowing that you wrote `age < 21` as the check for the drinking age when you had _meant_ `age > 21`.
+
+### Common Errors
+
+These are the errors you are most likely to meet in your first programs. Later lessons introduce others at the moment you first run into them.
+
+#### `SyntaxError`
+
+_Very common_. Indicates that a program is not valid Python. The interpreter finds these while reading the file, before running anything.
+
+```python
+print("hello)
+# SyntaxError: unterminated string literal (detected at line 1)
+```
+
+#### `IndentationError`
+
+_Very common when you are new._ A kind of `SyntaxError` specific to Python: a line is indented where it should not be, or not indented where it must be. You saw one in [Code Style and Readability](#code-style-and-readability).
+
+#### `NameError`
+
+_Very common_. Indicates that an attempt is being made to access a variable that is not defined. Such errors commonly indicate typos in code, or a variable used before the line that assigns it.
+
+```python
+print(does_not_exist)
+# NameError: name 'does_not_exist' is not defined
+```
+
+#### `TypeError`
+
+_Very common_. Indicates that an operation was given a value of a type it cannot handle, such as adding text to a number. Chapter 1.2 covers data types.
+
+```python
+print("1" + 1)
+# TypeError: can only concatenate str (not "int") to str
+```
+
+#### `ZeroDivisionError`
+
+_Common._ Exactly what it says. It usually means a number somewhere was zero when you assumed it would not be.
+
+```python
+print(10 / 0)
+# ZeroDivisionError: division by zero
+```
+
+### How to Read a Traceback
+
+Python's error report is called a **traceback**. Consider this program, which misspells the name of a variable on its last line:
+
+{% code title="errors.py" lineNumbers="true" %}
+
+```python
+total = 10
+print("start")
+print(totl)
+```
+
+{% endcode %}
+
+Running `python3 errors.py` prints this:
+
+```
+start
+Traceback (most recent call last):
+  File "/Users/ben/mod-1/errors.py", line 3, in <module>
+    print(totl)
+          ^^^^
+NameError: name 'totl' is not defined. Did you mean: 'total'?
+```
+
+The most useful information is at the **bottom**, so read a traceback from the bottom up:
+
+- The **error type** is the start of the last line. In this case, we have a `NameError`.
+- The **error message** describing the problem follows it on the same line: `name 'totl' is not defined`. Python even suggests the name you probably meant.
+- Above that is the line of code that failed, and the `^^^^` carets point at the exact part of the line that caused the error.
+- Above that, `File "/Users/ben/mod-1/errors.py", line 3` names the file and the line number. `<module>` means the top level of the file, outside any function.
+
+`start` appears above the traceback because this is a runtime error: lines 1 and 2 ran before Python reached line 3.

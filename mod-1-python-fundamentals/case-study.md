@@ -395,7 +395,7 @@ Open `tests/conftest.py`. The function `reset_tasks()` runs before every test an
 
 **Question 4**
 
-Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys` to capture what the function printed, because `view_tasks()` prints its output instead of returning it. In chapter 1.9, you tested functions by comparing their return value with `==`. Suppose `view_tasks()` built the same text as a string and returned it, and `show_menu()` printed it. What would the test look like then? What else would that change make easier?
+Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys` to capture what the function printed, because `view_tasks()` prints its output instead of returning it. In chapter 1.14, you tested functions by comparing their return value with `==`. Suppose `view_tasks()` built the same text as a string and returned it, and `show_menu()` printed it. What would the test look like then? What else would that change make easier?
 
 **Question 5**
 

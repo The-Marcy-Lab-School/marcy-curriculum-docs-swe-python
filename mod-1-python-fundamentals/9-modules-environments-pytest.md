@@ -4,18 +4,23 @@
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/09-modules-environments-pytest/)
 {% endhint %}
 
-In this lesson we'll learn how Python programs are split across multiple files and how those files share code with each other. Then we'll learn where Python code comes from when you didn't write it: the standard library that ships with Python, the packages other people publish, and the virtual environments that keep each project's packages separate. The package we will install is `pytest`, and we will finish by using it to test our own code.
+In this lesson we'll learn how a program is split into pieces that each do one job: first into functions, and then into separate files that share code with each other. Then we'll learn where Python code comes from when you didn't write it: the standard library that ships with Python, the packages other people publish, and the virtual environments that keep each project's packages separate. The package we will install is `pytest`, the tool that has been running the tests in your assignments.
 
 **Table of Contents:**
 
 - [Key Terms](#key-terms)
+- [Modularity](#modularity)
+  - [One Long Block of Code](#one-long-block-of-code)
+  - [Helper Functions and a `main()` Function](#helper-functions-and-a-main-function)
 - [Modules](#modules)
+  - [One Kind of Function per Module](#one-kind-of-function-per-module)
   - [Every Top-Level Name Can Be Imported](#every-top-level-name-can-be-imported)
   - [Importing with `import` and `from ... import`](#importing-with-import-and-from--import)
 - [What Happens When You Import a File?](#what-happens-when-you-import-a-file)
   - [`__name__`](#__name__)
   - [The `if __name__ == "__main__":` Guard](#the-if-__name__--__main__-guard)
-  - [Madlib Challenge, Part 2](#madlib-challenge-part-2)
+  - [A Traceback Across Two Files](#a-traceback-across-two-files)
+  - [Challenge: Split the Madlib](#challenge-split-the-madlib)
 - [The Standard Library](#the-standard-library)
 - [Third-Party Packages and PyPI](#third-party-packages-and-pypi)
 - [Virtual Environments with `venv`](#virtual-environments-with-venv)
@@ -23,23 +28,20 @@ In this lesson we'll learn how Python programs are split across multiple files a
 - [Dependencies and Sub-Dependencies](#dependencies-and-sub-dependencies)
 - [`requirements.txt`](#requirementstxt)
   - [Keep `.venv` Out of Git](#keep-venv-out-of-git)
-- [Developer Dependencies](#developer-dependencies)
-- [Testing Your Code with pytest](#testing-your-code-with-pytest)
-  - [Project Layout](#project-layout)
-  - [First Test](#first-test)
-  - [Practice: Add A Test](#practice-add-a-test)
-  - [Reading a Failure](#reading-a-failure)
-  - [Checking `True`, `False`, and Decimals](#checking-true-false-and-decimals)
+- [pytest: A Package You Already Use](#pytest-a-package-you-already-use)
 - [The Commands, All Together](#the-commands-all-together)
+- [Summary](#summary)
 
 ## Key Terms
 
+- **Modularity** means building a program from small pieces that each do one job, so that each piece can be read, changed, and checked on its own.
+  - A **helper function** does one piece of a bigger job. A **`main()` function** calls the helper functions in a logical order, so reading `main()` tells you what the program does.
 - A **module** is a file containing code, which can then be imported and utilized in other parts of a larger program or system.
   - Every function and variable defined at the top level of a file can be imported by another file.
   - A module is imported with `import module_name`, or specific names are imported with `from module_name import name`.
 - Importing a file **runs** it, top to bottom. The variable `__name__` tells a file whether it is being run directly (`"__main__"`) or imported by another file.
 - The `if __name__ == "__main__":` guard is how a file says "only run this part when I am the program being run".
-- The **standard library** is the collection of modules that come with Python. `random`, `math`, `time`, and `json` are examples. They need `import` but no installation.
+- The **standard library** is the collection of modules that come with Python. `random` and `math` are examples. They need `import` but no installation.
 - A **package** is a folder of modules that someone has published so that other people can install it and import it. `pytest` is a package.
 - A **library** is a collection of code written for other programs to use rather than to be run on its own. The standard library is Python's own library, and many packages, like `pytest`, are libraries too.
 - Third-party packages are published on the **Python Package Index (PyPI)** and installed with **`pip`**, Python's package installer.
@@ -48,56 +50,141 @@ In this lesson we'll learn how Python programs are split across multiple files a
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
 - A **`.gitignore`** file lists the files and folders in a project that Git should not track. The `.venv/` and `__pycache__/` folders go in it. The `.venv` folder is never committed; it is rebuilt from `requirements.txt` instead.
-- **JSON** is a text format for storing lists and dictionaries in a file. The standard library's `json` module writes them with `json.dump()` and reads them back with `json.load()`.
-- **Developer dependencies** like `pytest` are packages used by the developer(s) of a project but not needed by the people who run it.
-- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
-- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
-- **`pytest`** is the third-party package that finds and runs test files. It is installed into the project's virtual environment and run with `python3 -m pytest`.
-- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
-- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
+- **`pytest`** is the third-party package that runs the tests in your assignments. It finds files whose names start with `test_` and runs them with `python3 -m pytest`. It is a **developer dependency**: a package used by the developers of a project but not needed by the people who run it.
 
-## Modules
+## Modularity
 
-Consider the simple Python program below. It defines a few functions for calculating data about a circle with a given radius and then prints them out. Notice that the `main` function is where the functions are all being executed in a logical order:
+### One Long Block of Code
 
-{% code title="main.py" overflow="wrap" lineNumbers="true" %}
+Consider the café program below. It is the ordering program from chapter 1.8, with one addition: it asks how many of each item the customer wants.
+
+{% code title="cafe/main.py" overflow="wrap" lineNumbers="true" %}
 
 ```python
-# functions for circle stuff
-LAZY_PI = 3.14
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+purchases = []
 
-def get_area(radius):
-    return LAZY_PI * radius * radius
+while True:
+    item = input("Item (or done to finish): ").strip().lower()
+    if item == "done":
+        break
+    if item not in menu:
+        print(f"Sorry, {item} is not on the menu")
+        continue
 
-def get_diameter(radius):
-    return radius * 2
+    while True:
+        answer = input(f"How many {item}s? ").strip()
+        try:
+            quantity = int(answer)
+            break
+        except ValueError:
+            print(f"Sorry, {answer} is not a whole number")
 
-def get_circumference(radius):
-    return LAZY_PI * radius * 2
+    purchases.append({"item": item, "quantity": quantity, "price": menu[item]})
 
-# Helper function for printing stuff.
-# It is a "wrapper" for the print function
-def display(message):
-    print(message)
+total = 0
+print("Receipt")
+print("-" * 20)
+for purchase in purchases:
+    cost = purchase["quantity"] * purchase["price"]
+    print(f"{purchase['quantity']} {purchase['item']}: ${cost:.2f}")
+    total += cost
+print("-" * 20)
+print(f"Total: ${total:.2f}")
+```
+
+{% endcode %}
+
+The program works, but every job it does is tangled together in one block: asking for an item, checking it against the menu, parsing the quantity, recording the purchase, adding up the total, and printing the receipt.
+
+Suppose the café asks for the total to include sales tax. The line that adds up the total, `total += cost`, sits inside the loop that prints the receipt, so the change has to be made in the middle of the printing code. And the only way to check that the new total is right is to run the whole program and type an order, every time you make a change.
+
+**Modularity** solves this problem by building a program from small pieces that each do one job. The first tool for modularity is one you already have: functions.
+
+### Helper Functions and a `main()` Function
+
+Here is the same program, with each job moved into a function of its own. A function that does one piece of a bigger job is called a **helper function**:
+
+{% code title="cafe/main.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+purchases = []
+
+def add_purchase(item, quantity):
+    purchases.append({"item": item, "quantity": quantity, "price": menu[item]})
+
+def get_total():
+    total = 0
+    for purchase in purchases:
+        total += purchase["quantity"] * purchase["price"]
+    return total
+
+def ask_for_item():
+    while True:
+        item = input("Item (or done to finish): ").strip().lower()
+        if item == "done" or item in menu:
+            return item
+        print(f"Sorry, {item} is not on the menu")
+
+def ask_for_quantity(item):
+    while True:
+        answer = input(f"How many {item}s? ").strip()
+        try:
+            return int(answer)
+        except ValueError:
+            print(f"Sorry, {answer} is not a whole number")
+
+def print_receipt():
+    print("Receipt")
+    print("-" * 20)
+    for purchase in purchases:
+        cost = purchase["quantity"] * purchase["price"]
+        print(f"{purchase['quantity']} {purchase['item']}: ${cost:.2f}")
+    print("-" * 20)
+    print(f"Total: ${get_total():.2f}")
 
 # The main function just runs all of the other functions
 def main():
-    radius = 5
-    area = get_area(radius)
-    display(f"the area of a circle with radius {radius} is {area}")
+    while True:
+        item = ask_for_item()
+        if item == "done":
+            break
+        quantity = ask_for_quantity(item)
+        add_purchase(item, quantity)
 
-    diameter = get_diameter(radius)
-    display(f"the diameter of a circle with radius {radius} is {diameter}")
-
-    circumference = get_circumference(radius)
-    display(f"the circumference of a circle with radius {radius} is {circumference}")
+    print_receipt()
 
 main()
 ```
 
 {% endcode %}
 
-This file is short enough to read in one go. Now imagine it with fifty circle functions, a dozen display helpers, and the code that ties them together. To fix a wrong area, you would scroll past all of the display code to find `get_area`. Two teammates fixing different things would be editing the same file at the same time. As a project grows, **separation of concerns** is what keeps it manageable.
+Each function's name says what its one job is. The `main` function does none of the jobs itself. It calls the other functions in a logical order, so reading `main()` tells you what the program does without the details of how each step is done.
+
+The sales tax change now has one home: `get_total`. The tax can also be checked without typing an order, by calling `add_purchase("coffee", 2)` and then printing `get_total()`.
+
+**<details><summary>Q: Which of these functions talk to the user, and which ones only work with the data?</summary>**
+
+- `ask_for_item`, `ask_for_quantity`, and `print_receipt` talk to the user. They call `input()` or `print()`.
+- `add_purchase` and `get_total` only work with `menu` and `purchases`. Neither one asks the user anything or prints anything.
+- `main` does neither job itself. It combines the other functions and runs them in a logical order.
+
+</details>
+
+## Modules
+
+This file is now organized, but it is still one file. Now imagine it with fifty menu functions, a dozen functions for talking to the user, and the code that ties them together. To fix a wrong total, you would scroll past all of the input code to find `get_total`. Two teammates fixing different things would be editing the same file at the same time. As a project grows, **separation of concerns** is what keeps it manageable.
 
 {% hint style="info" %}
 Separation of Concerns is a fundamental principle of software engineering. It emphasizes the importance of organizing our code into distinct functions and modules that each serve a singular and specific purpose. However, when put together, those individual pieces work in harmony.
@@ -107,65 +194,110 @@ To achieve separation of concerns, Python projects are typically separated into 
 
 A **module** is a file containing code, which can then be **imported** and utilized in other parts of a larger program or system.
 
+### One Kind of Function per Module
+
+The question above sorted the functions into two kinds, plus `main`. Each kind gets its own module:
+
+- **`orders.py`** holds the data, `menu` and `purchases`, and the functions that work with it.
+- **`interface.py`** holds the functions that talk to the user: the ones that clean, validate, and parse what the user types, and the one that prints the receipt.
+- **`main.py`** is the entry point, the file you run. It combines the functions from the other two modules.
+
+You will see the same split in the case study at the end of this module.
+
+{% code title="cafe/orders.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+purchases = []
+
+def is_on_menu(item):
+    return item in menu
+
+def add_purchase(item, quantity):
+    purchases.append({"item": item, "quantity": quantity, "price": menu[item]})
+
+def get_total():
+    total = 0
+    for purchase in purchases:
+        total += purchase["quantity"] * purchase["price"]
+    return total
+```
+
+{% endcode %}
+
+{% code title="cafe/interface.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+from orders import is_on_menu
+
+def ask_for_item():
+    while True:
+        item = input("Item (or done to finish): ").strip().lower()
+        if item == "done" or is_on_menu(item):
+            return item
+        print(f"Sorry, {item} is not on the menu")
+
+def ask_for_quantity(item):
+    while True:
+        answer = input(f"How many {item}s? ").strip()
+        try:
+            return int(answer)
+        except ValueError:
+            print(f"Sorry, {answer} is not a whole number")
+
+def print_receipt(purchases, total):
+    print("Receipt")
+    print("-" * 20)
+    for purchase in purchases:
+        cost = purchase["quantity"] * purchase["price"]
+        print(f"{purchase['quantity']} {purchase['item']}: ${cost:.2f}")
+    print("-" * 20)
+    print(f"Total: ${total:.2f}")
+```
+
+{% endcode %}
+
+Two functions changed on the way into their modules, and both changes keep `interface.py` away from the data:
+
+- `ask_for_item` used to check `item in menu` itself. Now it calls `is_on_menu`, a new function in `orders.py`, so `interface.py` never touches `menu`. If the menu ever changes how it is stored, only `orders.py` has to change.
+- `print_receipt` used to read `purchases` and call `get_total()` itself. Now it receives the purchases and the total as arguments, so it only prints what it is given.
+
 ### Every Top-Level Name Can Be Imported
 
 Every name assigned at the top level of a file, meaning every function and every variable that is not indented inside something else, can be imported by another file. That means a function can leave `main.py` and `main.py` can still call it, by importing it back.
 
-So we can move the `display` function into its own file:
-
-{% code title="display.py" overflow="wrap" lineNumbers="true" %}
-
-```python
-def display(message):
-    print(message)
-```
-
-{% endcode %}
-
-And the circle functions into theirs:
-
-{% code title="circle_helpers.py" overflow="wrap" lineNumbers="true" %}
-
-```python
-LAZY_PI = 3.14
-
-def get_area(radius):
-    return LAZY_PI * radius * radius
-
-def get_diameter(radius):
-    return radius * 2
-
-def get_circumference(radius):
-    return LAZY_PI * radius * 2
-```
-
-{% endcode %}
-
-That is the whole file. `LAZY_PI`, `get_area`, `get_diameter`, and `get_circumference` are all available to any file that imports `circle_helpers`.
+`menu`, `purchases`, `is_on_menu`, `add_purchase`, and `get_total` are all available to any file that imports `orders`. `interface.py` imports one of them, `is_on_menu`, on its first line.
 
 ### Importing with `import` and `from ... import`
 
-To use a module's names, use the `import` statement. A module's name is its filename without the `.py`. When you run `python3 main.py`, Python looks for `circle_helpers.py` and `display.py` in the same folder as `main.py`, so keep the three files side by side. Move `display.py` into a different folder and `from display import display` stops with `ModuleNotFoundError: No module named 'display'`.
+To use a module's names, use the `import` statement. A module's name is its filename without the `.py`. When you run `python3 main.py`, Python looks for `orders.py` and `interface.py` in the same folder as `main.py`, so keep the three files side by side. Move `interface.py` into a different folder and `from interface import ask_for_item, ask_for_quantity, print_receipt` stops with `ModuleNotFoundError: No module named 'interface'`.
 
-{% code title="main.py" overflow="wrap" lineNumbers="true" %}
+{% code title="cafe/main.py" overflow="wrap" lineNumbers="true" %}
 
 ```python
 # Import the whole module. Its names are reached with dot notation.
-import circle_helpers
+import orders
 
-# Import one specific name from a module. It can then be used directly.
-from display import display
+# Import specific names from a module. They can then be used directly.
+from interface import ask_for_item, ask_for_quantity, print_receipt
 
 def main():
-    radius = 5
+    while True:
+        # ask_for_item was imported by name so we can just invoke it.
+        item = ask_for_item()
+        if item == "done":
+            break
+        quantity = ask_for_quantity(item)
 
-    # the get_area function is INSIDE of the circle_helpers module so we use dot notation
-    area = circle_helpers.get_area(radius)
+        # add_purchase is INSIDE of the orders module so we use dot notation
+        orders.add_purchase(item, quantity)
 
-    # display was imported by name so we can just invoke it.
-    display(f"the area of a circle with radius {radius} is {area}")
-
-    # ... the rest of the code ...
+    print_receipt(orders.purchases, orders.get_total())
 
 main()
 ```
@@ -176,82 +308,74 @@ main()
 
 Each file is concerned with only one aspect of the functionality of the entire program.
 
-- `display.py` is concerned with output logic.
-- `circle_helpers.py` is concerned with logic related to circle calculations.
+- `orders.py` is concerned with the café's data: what is on the menu, what the customer bought, and what it all costs.
+- `interface.py` is concerned with talking to the user: asking for an order and printing the receipt.
 - `main.py` is concerned with combining the functions and executing them in a logical manner.
 
 </details>
 
-If you will use several names from a module, you can list them all in one `from` statement, and then none of them need the module name in front:
-
-{% code title="main.py" overflow="wrap" lineNumbers="true" %}
-
-```python
-from circle_helpers import get_area, get_diameter, get_circumference
-```
-
-{% endcode %}
-
 You can also give a module a shorter name as you import it with `as`:
 
 ```python
-import circle_helpers as ch
+import orders as o
 
-area = ch.get_area(5)
+o.add_purchase("coffee", 2)
 ```
 
 You will see this constantly in other people's code, where long library names get two-letter aliases.
 
-There is also `from circle_helpers import *`, which imports every name in the module at once.
+There is also `from orders import *`, which imports every name in the module at once.
 
-**<details><summary>Q: Why write `import circle_helpers` and then `circle_helpers.get_area(...)`, or list the names you want, when `from circle_helpers import *` would let you write `get_area(...)` with less typing?</summary>**
+**<details><summary>Q: Why write `import orders` and then `orders.add_purchase(...)`, or list the names you want, when `from orders import *` would let you write `add_purchase(...)` with less typing?</summary>**
 
 Two reasons, and the second is the important one.
 
-First, readability. When a reader sees `circle_helpers.get_area(radius)` in `main.py`, they know exactly which file to open to find out what `get_area` does. With `import *`, `get_area` appears from nowhere.
+First, readability. When a reader sees `orders.add_purchase(item, quantity)` in `main.py`, they know exactly which file to open to find out what `add_purchase` does. With `import *`, `add_purchase` appears from nowhere.
 
-Second, safety. `import *` brings in _every_ top-level name in the module, including ones you did not know were there. Suppose someone adds a variable called `len` to `circle_helpers.py`. After `from circle_helpers import *`, the built-in `len` function in `main.py` is silently replaced by their variable, and every `len(...)` call in your file breaks. Importing by name means nothing arrives that you did not ask for.
+Second, safety. `import *` brings in _every_ top-level name in the module, including ones you did not know were there. Suppose someone adds a variable called `len` to `orders.py`. After `from orders import *`, the built-in `len` function in `main.py` is silently replaced by their variable, and every `len(...)` call in your file breaks. Importing by name means nothing arrives that you did not ask for.
 
 </details>
 
 ## What Happens When You Import a File?
 
-Here is something that surprises almost everyone. Importing a file **runs it**, top to bottom, the first time it is imported, almost exactly as if you had typed `python3 circle_helpers.py`. The one difference is a variable called `__name__`, which is coming up shortly.
+Here is something that surprises almost everyone. Importing a file **runs it**, top to bottom, the first time it is imported, almost exactly as if you had typed `python3 orders.py`. The one difference is a variable called `__name__`, which is coming up shortly.
 
 {% hint style="warning" %}
-**Predict, then run.** Add one line to the very bottom of `circle_helpers.py`:
+**Predict, then run.** Add one line to the very bottom of `orders.py`:
 
 ```python
-print("circle_helpers was loaded")
+print("orders was loaded")
 ```
 
-Then run `python3 main.py` (not `circle_helpers.py`). Write down everything you expect to see printed, in order.
+Then run `python3 main.py` (not `orders.py`) and type `done` at the first question. Write down everything you expect to see printed, in order.
 
 <details><summary>What actually happens</summary>
 
 ```
-circle_helpers was loaded
-the area of a circle with radius 5 is 78.5
-the diameter of a circle with radius 5 is 10
-the circumference of a circle with radius 5 is 31.400000000000002
+orders was loaded
+Item (or done to finish): done
+Receipt
+--------------------
+--------------------
+Total: $0.00
 ```
 
-The message from `circle_helpers.py` prints _first_, before anything from `main.py`. When the interpreter reaches `import circle_helpers` on line 2 of `main.py`, it goes and runs all of `circle_helpers.py`. The `def` statements create the functions, and the `print` at the bottom prints. Only then does it return to `main.py` and continue.
+The message from `orders.py` prints _first_, before anything from `main.py`. When the interpreter reaches `import orders` on line 2 of `main.py`, it goes and runs all of `orders.py`. The assignments create `menu` and `purchases`, the `def` statements create the functions, and the `print` at the bottom prints. Only then does it return to `main.py` and continue.
 
-(That `31.400000000000002` is the slightly inexact decimal arithmetic from chapter 1.5, and `{circumference:.2f}` in the f-string would display it as `31.40`.)
+`interface.py` imports from `orders` too, on its first line, but the message prints only once. Python runs a module the first time it is imported, and every later import reuses the module it already ran.
 
 </details>
 {% endhint %}
 
 {% hint style="info" %}
-**What is that `__pycache__` folder?** The first time you import a module, a folder called `__pycache__` appears next to it, holding a file like `circle_helpers.cpython-312.pyc`. That is a pre-processed copy of the module that Python saves so the next import is faster. It is rebuilt automatically whenever the module changes, you never edit it, and it never belongs in Git. The `.gitignore` section later in this lesson shows how to keep it out.
+**What is that `__pycache__` folder?** The first time you import a module, a folder called `__pycache__` appears next to it, holding a file like `orders.cpython-312.pyc`. That is a pre-processed copy of the module that Python saves so the next import is faster. It is rebuilt automatically whenever the module changes, you never edit it, and it never belongs in Git. The `.gitignore` section later in this lesson shows how to keep it out.
 {% endhint %}
 
-Running a file when it is imported is usually fine, because most of what is in a module is `def` statements, and a `def` statement only creates a function without running the code inside it. But what if a file is _both_ a program you sometimes run directly _and_ a module other files import? `main.py` ends with a call to `main()`. If another file imported `main.py` to reuse one function, `main()` would run during the import. The circle results would print in the middle of the other program's output. Worse, if that file were the madlib `main.py`, the person using the other program would suddenly be asked to `Choose a name:`.
+Running a file when it is imported is usually fine, because most of what is in a module is `def` statements, and a `def` statement only creates a function without running the code inside it. But what if a file is _both_ a program you sometimes run directly _and_ a module other files import? `main.py` ends with a call to `main()`. If another file imported `main.py` to reuse something from it, `main()` would run during the import, and the person using the other program would suddenly be asked `Item (or done to finish):`.
 
 ### `__name__`
 
-Every module has a variable called `__name__` that Python sets for it automatically. Replace the `print` at the bottom of `circle_helpers.py` with this, and add the same line to the bottom of `main.py`:
+Every module has a variable called `__name__` that Python sets for it automatically. Replace the `print` at the bottom of `orders.py` with this, and add the same line to `main.py`, just below its `import` lines:
 
 ```python
 print(f"my __name__ is {__name__}")
@@ -260,8 +384,9 @@ print(f"my __name__ is {__name__}")
 Now run `python3 main.py`:
 
 ```
-my __name__ is circle_helpers
+my __name__ is orders
 my __name__ is __main__
+Item (or done to finish):
 ```
 
 When a file is imported, its `__name__` is its module name. When a file is the one you ran with `python3`, its `__name__` is the special string `"__main__"`. So a file can tell which situation it is in.
@@ -270,14 +395,21 @@ When a file is imported, its `__name__` is its module name. When a file is the o
 
 That gives us the standard way to finish a Python program:
 
-{% code title="main.py" overflow="wrap" lineNumbers="true" %}
+{% code title="cafe/main.py" overflow="wrap" lineNumbers="true" %}
 
 ```python
-from circle_helpers import get_area, get_diameter, get_circumference
-from display import display
+import orders
+from interface import ask_for_item, ask_for_quantity, print_receipt
 
 def main():
-    # ...
+    while True:
+        item = ask_for_item()
+        if item == "done":
+            break
+        quantity = ask_for_quantity(item)
+        orders.add_purchase(item, quantity)
+
+    print_receipt(orders.purchases, orders.get_total())
 
 if __name__ == "__main__":
     main()
@@ -287,11 +419,79 @@ if __name__ == "__main__":
 
 Read it as: "if this file is the one being run, call `main()`." When `main.py` is run with `python3 main.py`, the condition is true and the program starts. If any other file ever does `import main`, the condition is false and nothing runs except the `def` statements.
 
-You will see this guard at the bottom of nearly every Python program you read, and you should put it at the bottom of every one you write. The two underscores on each side of `name` and `main` are part of the spelling; Python uses that pattern for names it manages itself.
+You will see this guard at the bottom of nearly every Python program you read, and you should put it at the bottom of every one you write. The two underscores on each side of `name` and `main` are part of the spelling; Python uses that pattern for names it manages itself. `orders.py` and `interface.py` do not need the guard, because they are never the file you run.
 
-### Madlib Challenge, Part 2
+### A Traceback Across Two Files
 
-Open the `madlib-challenge` folder from chapter 1.5. Right now, the `madlib` function and the `main` function that asks the user for input share one file.
+Once a program is split into modules, the traceback crosses files, and the `File` line changes as it goes. Suppose a teammate changes the check in `ask_for_item` to `if len(item) > 0:`, so that it accepts any answer that is not empty, and a customer orders a pizza:
+
+```
+Item (or done to finish): pizza
+How many pizzas? 1
+Traceback (most recent call last):
+  File "/Users/ben/cafe/main.py", line 15, in <module>
+    main()
+  File "/Users/ben/cafe/main.py", line 10, in main
+    orders.add_purchase(item, quantity)
+  File "/Users/ben/cafe/orders.py", line 13, in add_purchase
+    purchases.append({"item": item, "quantity": quantity, "price": menu[item]})
+                                                                   ~~~~^^^^^^
+KeyError: 'pizza'
+```
+
+The rule does not change. Read from the bottom: the error is a `KeyError` on line 13 of `orders.py`, because `menu` has no `"pizza"` key. That function was called from line 10 of `main.py`, and that call came from line 15.
+
+The bad value itself came from `ask_for_item` in `interface.py`, which had already returned by the time the error was raised, so `interface.py` does not appear in the traceback at all. The traceback still points the way: line 10 passed `item` to `add_purchase`, and line 6 of `main.py`, `item = ask_for_item()`, is where `item` got its value. That is the next place to look.
+
+### Challenge: Split the Madlib
+
+Here is a solution to the madlib challenge from chapter 1.5. The `madlib` function and the `main` function that asks the user for input share one file.
+
+{% code title="madlib-challenge/main.py" overflow="wrap" lineNumbers="true" %}
+
+```python
+def madlib(name, verb, quantity, item, new_item, is_happy):
+    name = name[0].upper() + name[1:].lower()
+
+    if new_item[0].lower() in "aeiou":
+        article = "an"
+    else:
+        article = "a"
+
+    if quantity == "1":
+        items = item
+    else:
+        items = item + "s"
+
+    title = f"The Story of {name}"
+    print(title)
+    print("=" * len(title))
+
+    print(f"There once was a man named {name}.")
+    print(f"Every day he would {verb} with his {quantity} {items}")
+
+    if is_happy:
+        print(f"But then, he found {article} {new_item} and everything changed!")
+    else:
+        print(f"But then, {article} {new_item} took over his life and he couldn't {verb} again!")
+
+    print("The end.")
+
+def main():
+    name = input('Choose a name: ').strip()
+    verb = input('Choose a verb: ').strip()
+    quantity = input('Choose a quantity: ').strip()
+    item = input('Choose an item: ').strip()
+    new_item = input('Choose a new item: ').strip()
+    is_happy_response = input('Choose whether the story is happy. Y or N: ')
+    is_happy = is_happy_response.strip().upper() == "Y"
+
+    madlib(name, verb, quantity, item, new_item, is_happy)
+
+main()
+```
+
+{% endcode %}
 
 1. Re-organize the code such that the `madlib` function is in its own file called `madlib.py`, and `main.py` imports it.
 2. Replace the `main()` call at the bottom of `main.py` with the `if __name__ == "__main__":` guard.
@@ -304,11 +504,11 @@ Open the `madlib-challenge` folder from chapter 1.5. Right now, the `madlib` fun
 from madlib import madlib
 
 def main():
-    name = input('Choose a name: ')
-    verb = input('Choose a verb: ')
-    quantity = input('Choose a quantity: ')
-    item = input('Choose an item: ')
-    new_item = input('Choose a new item: ')
+    name = input('Choose a name: ').strip()
+    verb = input('Choose a verb: ').strip()
+    quantity = input('Choose a quantity: ').strip()
+    item = input('Choose an item: ').strip()
+    new_item = input('Choose a new item: ').strip()
     is_happy_response = input('Choose whether the story is happy. Y or N: ')
     is_happy = is_happy_response.strip().upper() == "Y"
 
@@ -320,22 +520,7 @@ if __name__ == "__main__":
 
 {% endcode %}
 
-{% code title="madlib.py" overflow="wrap" lineNumbers="true" %}
-
-```python
-def madlib(name, verb, quantity, item, new_item, is_happy):
-    print(f"There once was a man named {name}.")
-    print(f"Every day he would {verb} with his {quantity} {item}s")
-
-    if is_happy:
-        print(f"But then, he found a {new_item} and everything changed!")
-    else:
-        print(f"But then, a {new_item} took over his life and he couldn't {verb} again!")
-
-    print("The end.")
-```
-
-{% endcode %}
+`madlib.py` holds the `madlib` function exactly as it was, with nothing else in the file.
 
 `madlib.py` is concerned with telling the story. `main.py` is concerned with collecting the user's choices. Neither file needs to know how the other does its job.
 
@@ -353,7 +538,7 @@ print(random.randint(1, 10))        # a whole number from 1 to 10, inclusive
 print(random.choice(["heads", "tails"]))  # one item from a list, chosen at random
 ```
 
-These modules are imported exactly the same way as your own `circle_helpers.py`, and the interpreter finds them for you. Here is `math`:
+These modules are imported exactly the same way as your own `orders.py`, and the interpreter finds them for you. Here is `math`:
 
 ```python
 import math
@@ -362,28 +547,6 @@ print(math.pi)         # 3.141592653589793
 print(math.ceil(4.2))  # 5
 print(math.floor(4.8)) # 4
 ```
-
-Remember `LAZY_PI = 3.14` from the start of this lesson? `math.pi` is the version that isn't lazy.
-
-One more you will want soon is `json`, which turns lists and dictionaries into text that can be saved in a file, and back again. That text format is called **JSON**:
-
-```python
-import json
-
-tasks = [{"description": "walk the dog", "is_complete": False}]
-
-# Write the list to a file as JSON text
-with open("tasks.json", "w") as file:
-    json.dump(tasks, file)
-
-# Read it back into a list
-with open("tasks.json") as file:
-    saved_tasks = json.load(file)
-
-print(saved_tasks)  # [{'description': 'walk the dog', 'is_complete': False}]
-```
-
-`open()` is a built-in function that opens a file. The `"w"` means "open it for writing": it creates `tasks.json` if the file does not exist and replaces whatever was in it if it does. The second `open()` has no `"w"`, so it opens the file for reading, which is what `open()` does by default. The `with` statement closes the file again when the indented block ends. This is how the task manager case study can be extended to remember its tasks between runs.
 
 Nobody memorizes the standard library. The habit to build is to ask "does Python already have this?" before writing it yourself, and to check the [standard library documentation](https://docs.python.org/3/library/index.html) when you suspect it does.
 
@@ -423,7 +586,7 @@ Your Terminal prompt changes to show `(.venv)` at the front. That is how you kno
 
 ```sh
 which python3
-# /Users/you/mod-1/9-testing/.venv/bin/python3
+# /Users/you/cafe/.venv/bin/python3
 ```
 
 Because of that, a package you install with the environment on lives only inside `.venv`. If you ever get a `ModuleNotFoundError` for a package you are sure you installed, look at the prompt before you do anything else. Nine times out of ten, `(.venv)` is missing, which means `python3` is your computer's own Python, and that Python has never had the package installed.
@@ -488,7 +651,7 @@ Sub-dependencies can have dependencies of their own, and `pip` follows the whole
 
 **<details><summary>Q: You only asked for `pytest`. What would happen if `pip` installed `pytest` and nothing else?</summary>**
 
-The first time `pytest` tried to `import pluggy`, it would crash with `ModuleNotFoundError: No module named 'pluggy'`. A package is written by importing other packages, exactly the way your `main.py` imports `circle_helpers.py`, so every package it imports has to be installed too.
+The first time `pytest` tried to `import pluggy`, it would crash with `ModuleNotFoundError: No module named 'pluggy'`. A package is written by importing other packages, exactly the way your `main.py` imports `orders.py`, so every package it imports has to be installed too.
 
 </details>
 
@@ -549,113 +712,22 @@ The general rule: commit the recipe, not the meal.
 
 </details>
 
-## Developer Dependencies
+## pytest: A Package You Already Use
 
-Some packages are used by the developer(s) who are building a project but aren't needed by the people who run it. These are called **developer dependencies**. `pytest` is one of them.
+Every assignment in this program comes with a `tests/` folder and a `requirements.txt` that lists `pytest`. `pytest` is the third-party package that has been checking your work.
 
-**<details><summary>Q: Why is `pytest` a developer dependency and not a required dependency of the project?</summary>**
+When you run `python3 -m pytest`, Python runs the `pytest` module from the active virtual environment. `pytest` then:
 
-Only the files in `tests/` import `pytest`. The files in `src/` that make up the program never do, so someone who just wants to _run_ your program can do it without `pytest` installed. `pytest` serves the people building the program.
+- finds every file in the project whose name starts with `test_`, such as `tests/test_debug.py`;
+- runs every function in those files whose name starts with `test_`. Each one imports a function from your code, calls it with an input whose answer is already known, and checks that your function returned that answer;
+- prints a `.` for every test that passed and an `F` for every test that failed, and then explains each failure.
 
-</details>
+`pytest` is a **developer dependency**. Only the files in `tests/` import it, and the files that make up the program never do, so someone who just wants to _run_ your program can do it without `pytest` installed. `pytest` serves the people building the program. Many projects keep a second file, `requirements-dev.txt`, for developer dependencies. For this module, one `requirements.txt` with everything in it is fine.
 
-Many projects keep a second file, `requirements-dev.txt`, for developer dependencies. For this module, one `requirements.txt` with everything in it is fine.
-
-## Testing Your Code with pytest
-
-Up to now, you have checked your functions by calling them and reading what `print()` shows.
-
-> "Now that we've tested the application, what should we do with the tests? Do we delete them? Do we comment them out? If we keep them, where can they live?"
-
-With manual testing, your tests are the `print()` calls you added to check each function, and you're always left with this question. You've spent time and effort writing them, so deleting them is wasteful. But if you leave them in, they run every time the program runs, and, as you saw earlier in this lesson, every time another file imports that file. Whoever runs the program sees your check results mixed in with its real output and has no idea what they mean.
-
-Rather than testing functions directly in the files where they live, it is better to create separate **test files** that import functions and test them against sample inputs. Test files provide a number of benefits:
-
-- **Separation of concerns**: our source code can focus on functionality while test files focus on testing.
-- **Automation**: test files can be executed with a single command or can be configured to run automatically whenever a commit is made, ensuring all new code is functional.
-- **Documentation**: test files serve as living documentation, showing how functions are expected to behave.
-- **Confidence**: having a comprehensive test suite gives developers confidence when making changes.
-
-The assignments in this program come with test files already written. Running them tells you which of your functions work and which do not.
-
-### Project Layout
-
-Organize the project so that source code and tests live in separate folders:
-
-```
-9-testing/
-├── .venv/
-├── requirements.txt
-├── src/
-│   └── calc.py
-└── tests/
-    └── test_calc.py
-```
-
-`pytest` finds tests by name. It looks for files whose names start with `test_`, and inside them, for functions whose names start with `test_`. There is nothing to configure.
-
-### First Test
-
-In the file called `src/calc.py`, define a simple `add` function.
-
-```python
-# calc.py
-def add(a, b):
-    return a + b
-```
-
-In the `tests` directory, create a file called `test_calc.py` (the test file name should always match the name of the file being tested, with `test_` in front).
-
-Then, add the following code:
-
-```python
-# test_calc.py
-from src.calc import add
-
-
-def test_add():
-    """add - adds two positive numbers"""
-    assert add(1, 2) == 3
-    assert add(10, 5) == 15
-```
-
-The first line imports `add` from `src/calc.py`. When a module sits inside a folder, you write the folder name, a dot, and then the module name, so `src.calc` means "the `calc` module inside the `src` folder". Python starts looking from the folder you run the tests in, which is why the hint below says to run them from the project's root folder.
-
-Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 1.3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
-
-- `assert expression` checks that the `expression` is truthy. If it is, nothing happens and the test continues.
-- If it is falsy, `assert` raises an `AssertionError`, the test stops, and pytest reports it as a failure.
-- `add(1, 2) == 3` is an ordinary comparison, the same `==` from chapter 1.2. There is no special testing vocabulary to learn.
-
-A test can hold as many `assert` statements as you like. The test passes only if every one of them passes.
-
-Run the tests with:
-
-```sh
-python3 -m pytest
-```
-
-And you should see something like this (the Python and pytest version numbers will be whatever is on your machine):
-
-```
-============================= test session starts ==============================
-platform darwin -- Python 3.12.4, pytest-9.1.1, pluggy-1.6.0
-rootdir: /Users/ben/mod-1/9-testing
-collected 1 item
-
-tests/test_calc.py .                                                     [100%]
-
-============================== 1 passed in 0.00s ===============================
-```
-
-Each dot after a filename is one passing test. We see a passing test because every `assert` expression was `True`.
-
-{% hint style="info" %}
-**Why `python3 -m pytest` and not just `pytest`?** Installing pytest gives you a `pytest` command as well, and you will see it in other people's instructions. But `pytest` on its own does not put your project folder on the list of places Python looks for modules, so `from src.calc import add` fails with `ModuleNotFoundError: No module named 'src'`. Running it through `python3 -m` adds the folder you are in to that list. The project's root folder, `9-testing/`, contains `src/`, so from there `from src.calc import add` works. If you `cd tests` first, Python adds `tests/` instead, finds no `src` there, and you are back to `ModuleNotFoundError`. So run `python3 -m pytest` from the project's root folder every time.
-{% endhint %}
+The lesson on test-driven development, later in this module, teaches you to write tests of your own.
 
 {% hint style="warning" %}
-**Predict, then run.** Deactivate the environment with `deactivate`, then run `python3 -m pytest` again. What happens?
+**Predict, then run.** In an assignment folder with its environment activated, deactivate the environment with `deactivate`, then run `python3 -m pytest`. What happens?
 
 <details><summary>What actually happens</summary>
 
@@ -671,105 +743,6 @@ Activate the environment again with `source .venv/bin/activate` before moving on
 
 </details>
 {% endhint %}
-
-### Practice: Add A Test
-
-In the `tests/test_calc.py` file, add a new test called `test_add_negatives` that confirms that the `add` function will work properly for inputs like `-3` and `-2`.
-
-**<details><summary>Solution</summary>**
-
-```python
-def test_add_negatives():
-    """add - adds two negative numbers"""
-    assert add(-3, -2) == -5
-```
-
-</details>
-
-Run `python3 -m pytest` again and you should now see two dots. To see every test by name, add `-v` (for "verbose"):
-
-```sh
-python3 -m pytest -v
-```
-
-```
-tests/test_calc.py::test_add PASSED                                      [ 50%]
-tests/test_calc.py::test_add_negatives PASSED                            [100%]
-```
-
-### Reading a Failure
-
-Change the expected value in your new test to `-6`, run the tests again, and look at what pytest tells you:
-
-```
-tests/test_calc.py .F                                                    [100%]
-
-=================================== FAILURES ===================================
-______________________________ test_add_negatives ______________________________
-
-    def test_add_negatives():
-        """add - adds two negative numbers"""
->       assert add(-3, -2) == -6
-E       assert -5 == -6
-E        +  where -5 = add(-3, -2)
-
-tests/test_calc.py:12: AssertionError
-=========================== short test summary info ============================
-FAILED tests/test_calc.py::test_add_negatives - assert -5 == -6
-========================= 1 failed, 1 passed in 0.01s ==========================
-```
-
-The test output provides some really useful information.
-
-- We can see which tests failed: the `F` in the dots, and the name under `FAILURES`
-- For each failing test, we can see which `assert` statement failed, marked with `>`
-- We can see what the function actually returned (`-5`) and what we said it should be (`-6`), and pytest even shows you the call that produced the `-5`.
-
-Armed with this information, we can more confidently build our functions knowing that we have a specific set of targets to aim for. Automated tests allow us to repeatedly run our code against the same set of tests until all expectations are met.
-
-Change the `-6` back to `-5` before moving on.
-
-### Checking `True`, `False`, and Decimals
-
-Two more kinds of assertion appear all over the test files in your assignments.
-
-When a function should return `True`, `False`, or `None`, the test uses `is` rather than `==`:
-
-```python
-def test_is_even():
-    """is_even - returns True for even numbers, False for odd"""
-    assert is_even(2) is True
-    assert is_even(3) is False
-```
-
-`is` is the identity operator from chapter 1.2. There is only one `True` and one `False` in a Python program, so `is True` asks "did the function return the boolean `True` itself?"
-
-**<details><summary>Q: Suppose `is_even` were written as `return 1 - num % 2`, which returns `1` for even numbers and `0` for odd ones. Would `assert is_even(2) == True` pass? Would `assert is_even(2) is True`?</summary>**
-
-The `==` version passes, because `True` counts as `1` in arithmetic, so `1 == True` is `True`. The `is` version fails:
-
-```
-E       assert 1 is True
-E        +  where 1 = is_even(2)
-```
-
-`1` is truthy, but it is not the boolean `True`. That difference shows up as soon as someone uses the function: `print(f"Is 4 even? {is_even(4)}")` prints `Is 4 even? 1`, and whoever reads that has to guess what `1` means. A function named `is_even` promises a boolean. The `==` version lets the broken function pass, and the `is True` version catches it.
-
-</details>
-
-When a function returns a decimal number, the test compares with `pytest.approx()`:
-
-```python
-import pytest
-from src.calc import add
-
-
-def test_add_decimals():
-    """add - adds decimal numbers"""
-    assert add(0.1, 0.2) == pytest.approx(0.3)
-```
-
-Remember from chapter 1.2 that `0.1 + 0.2 == 0.3` is `False`, because decimals are stored very slightly inexactly. `pytest.approx(0.3)` means "a number close enough to `0.3` that the difference is only that inexactness." Using it requires `import pytest` at the top of the test file.
 
 ## The Commands, All Together
 
@@ -801,3 +774,7 @@ pip install -r requirements.txt
 # Run every test in the project
 python3 -m pytest
 ```
+
+## Summary
+
+A program is easier to read, change, and check when it is built from small pieces that each do one job. This idea, **modularity**, starts with helper functions and a `main()` function that calls them in a logical order, and it continues with **modules**: files that each hold one kind of function and share code by importing each other's top-level names. Importing a file runs it, so a file that is also a program puts its startup code under `if __name__ == "__main__":`. Code you didn't write arrives the same way. The **standard library** comes with Python. **Third-party packages**, such as `pytest`, are installed from PyPI with `pip` into a **virtual environment**, which keeps each project's packages separate, and `requirements.txt` records what to install again.
