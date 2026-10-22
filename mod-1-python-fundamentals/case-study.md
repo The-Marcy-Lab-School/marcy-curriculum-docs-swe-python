@@ -22,11 +22,11 @@ Clone it then follow the **Setup** steps listed in the README.
   - [Looping and Iteration](#looping-and-iteration)
   - [Lists and Dictionaries](#lists-and-dictionaries)
   - [Modules](#modules)
-  - [Reading Unfamiliar Code](#reading-unfamiliar-code)
   - [Error Handling and Debugging](#error-handling-and-debugging)
+  - [Test-Driven Development](#test-driven-development)
   - [Higher-Order Functions](#higher-order-functions)
   - [Comprehensions and Built-in Iteration](#comprehensions-and-built-in-iteration)
-  - [Test-Driven Development](#test-driven-development)
+  - [Reading Unfamiliar Code](#reading-unfamiliar-code)
   - [Code Style](#code-style)
 - [Extension Opportunities](#extension-opportunities)
   - [Tips](#tips)
@@ -270,31 +270,6 @@ If we wanted to add a new feature to the application, giving the user the option
 
 `main.py` ends with `if __name__ == "__main__":`. `menu.py` and `tasks.py` do not have this line. Why does only one of the three files need it?
 
-### Reading Unfamiliar Code
-
-You read this whole application with the method from chapter 1.13 before you started these questions. Code that a model wrote deserves the same method with more suspicion, because it looks just as confident when it is wrong as when it is right.
-
-**Question 1**
-
-A model was asked to write a `delete_task()` function for the Delete Task extension, and it produced this:
-
-```python
-def delete_task(task_index):
-    """Remove one task from the list by its index."""
-    if task_index < 0 or task_index > len(tasks):
-        print('Invalid task number.')
-        return
-
-    task = tasks.pop(task_index)
-    print(f'Task "{task["description"]}" deleted!')
-```
-
-Compare it line by line with `complete_task()`. Then write a bug report for it: a concrete input, the actual output, the expected output, and where the problem is.
-
-{% hint style="warning" %}
-**Predict, then run.** Paste the function at the bottom of `tasks.py`. From the `src` folder, start the REPL with `python3`, then run `from tasks import delete_task` followed by `delete_task(2)`. The list starts with the two sample tasks. What happens? Delete the function from `tasks.py` when you are done, because the AI policy keeps code a model wrote out of your own work.
-{% endhint %}
-
 ### Error Handling and Debugging
 
 Real-world applications must handle unexpected situations gracefully. Understanding how to anticipate, catch, and respond to errors is essential for building robust software. Debugging skills help us identify and fix issues when things don't work as expected.
@@ -326,46 +301,6 @@ In chapter 1.5, you checked a string with `isdigit()` before converting it with 
 **Question 5**
 
 What debugging techniques could you use to understand what's happening when the program doesn't work as expected?
-
-### Higher-Order Functions
-
-Functions are values. They can be stored in a dictionary, passed to another function, and called later by whoever holds them. A menu program is one of the places where this pays off most clearly.
-
-**Question 1**
-
-Chapter 1.11 described a **dispatch table**: a dictionary that maps each choice to the function that handles it, so that one dictionary lookup replaces a long `if`/`elif` chain. Plan a version of `show_menu()` that uses one. Which menu options can go straight into the dictionary? Which need a small function of their own written first? Which option cannot go into the dictionary at all, and why not? What takes the place of the `else`?
-
-**Question 2**
-
-From the `src` folder, start the REPL with `python3` and run `from tasks import tasks`. Use `sorted()` with a `key` written as a `lambda` to build a list of the tasks with the incomplete ones first. Before you run it, predict whether `False` or `True` sorts first. After it runs, has the order of `tasks` itself changed?
-
-### Comprehensions and Built-in Iteration
-
-Comprehensions and Python's built-in iteration tools abstract away the logic for looping through a list by index and doing something with its values. While the programmer loses some fine-tuned control over how the loop is executed, the improved readability of the code is often worth the tradeoff.
-
-**Question 1**
-
-In Looping and Iteration Question 4, you rewrote the `for` loop in `view_tasks()` to use `enumerate`. Put your version beside the original `for i in range(len(tasks)):` loop. Which lines does your version no longer need? Which version leaves more room for an off-by-one mistake, and why?
-
-**Question 2**
-
-The Mark All as Completed extension needs to set every task's `is_complete` to `True`. A classmate adds this function to `tasks.py`:
-
-```python
-def complete_all_tasks():
-    tasks = [{"description": task["description"], "is_complete": True} for task in tasks]
-    print('All tasks marked as completed!')
-```
-
-{% hint style="warning" %}
-**Predict, then run.** Paste the function at the bottom of `tasks.py`. From the `src` folder, start the REPL with `python3`, then run `from tasks import complete_all_tasks` followed by `complete_all_tasks()`. What happens? Delete the function from `tasks.py` when you are done.
-{% endhint %}
-
-Rewrite `complete_all_tasks()` so that it works. Should your version use a list comprehension or a `for` loop? Explain what a list comprehension produces, and why that does or does not fit a function whose job is to change the tasks that already exist.
-
-**Question 3**
-
-Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.12, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
 
 ### Test-Driven Development
 
@@ -406,6 +341,106 @@ Chapter 1.10 described test-driven development: write a test for a feature befor
 {% endhint %}
 
 Now write `toggle_task()` in `tasks.py` and run the tests again. Chapter 1.10 says that a failing test proves the test is actually checking something. What could go wrong with a test that you only ever saw pass?
+
+### Higher-Order Functions
+
+Functions are values. They can be stored in a dictionary, passed to another function, and called later by whoever holds them. A menu program is one of the places where this pays off most clearly.
+
+**Question 1**
+
+Chapter 1.11 described a **dispatch table**: a dictionary that maps each choice to the function that handles it, so that one dictionary lookup replaces a long `if`/`elif` chain. Plan a version of `show_menu()` that uses one. Which menu options can go straight into the dictionary? Which need a small function of their own written first? Which option cannot go into the dictionary at all, and why not? What takes the place of the `else`?
+
+**Question 2**
+
+From the `src` folder, start the REPL with `python3` and run `from tasks import tasks`. Use `sorted()` with a `key` written as a `lambda` to build a list of the tasks with the incomplete ones first. Before you run it, predict whether `False` or `True` sorts first. After it runs, has the order of `tasks` itself changed?
+
+### Comprehensions and Built-in Iteration
+
+Comprehensions and Python's built-in iteration tools abstract away the logic for looping through a list by index and doing something with its values. While the programmer loses some fine-tuned control over how the loop is executed, the improved readability of the code is often worth the tradeoff.
+
+**Question 1**
+
+Near the end of `view_tasks()` in `tasks.py`, this line builds the list that the summary line counts:
+
+```python
+completed_tasks = [task for task in tasks if task["is_complete"]]
+```
+
+Read the comprehension aloud, starting from the `for`. With the two sample tasks, which tasks end up in `completed_tasks`, and what does the line after it print? Then rewrite the comprehension as a `for` loop that starts with an empty list and uses `.append()`. Which version is easier to read, and why?
+
+{% hint style="warning" %}
+**Predict, then run.** Replace the comprehension in `view_tasks()` with your loop and run `python3 -m pytest`. Will the tests still pass? Then move your `.append()` line out of the `if` statement, so that it runs for every task, and run the tests again. Which test fails, and what does that tell you about how tests protect a refactor? Put the comprehension back when you are done.
+{% endhint %}
+
+**Question 2**
+
+The Show Incomplete Tasks extension needs the opposite list. Write one line that uses a comprehension to build `incomplete_tasks` from the same `tasks` list. What must be true of `len(completed_tasks) + len(incomplete_tasks)`, and why? How could `view_tasks()` count the incomplete tasks without building a second list at all?
+
+{% hint style="warning" %}
+**Predict, then run.** From the `src` folder, start the REPL with `python3`, then run
+
+```py
+from tasks import tasks
+completed_tasks = [task for task in tasks if task["is_complete"]]
+completed_tasks[0]["is_complete"] = False
+tasks[0]
+```
+
+Does `tasks[0]` show `True` or `False` for `"is_complete"`? Is `completed_tasks[0]` a copy of the first task, or the same dictionary that `tasks[0]` holds? How can you tell?
+{% endhint %}
+
+**Question 3**
+
+A teammate wants the task list to say `Every task is done!` when every task is complete. They add two lines to the top of `view_tasks()`, above the `if len(tasks) == 0:` check:
+
+```python
+def view_tasks():
+    if all([task["is_complete"] for task in tasks]):
+        print('\nEvery task is done!')
+
+    if len(tasks) == 0:
+        print('\nNo tasks yet. Add one!')
+        return
+
+    # ...the rest of view_tasks() is unchanged
+```
+
+With the two sample tasks, what list does the comprehension inside `all()` build, and what does `all()` return?
+
+{% hint style="warning" %}
+**Predict, then run.** Add the two lines, run the app, choose Clear All Tasks, and press Enter. What does the task list show now? Then start the REPL with `python3` and run `all([])`. Use the result to explain what you saw. Undo the change when you are done.
+{% endhint %}
+
+Where in `view_tasks()` should the teammate put the two lines instead, and why does that position fix the problem? Could `len(completed_tasks) == len(tasks)` do the same job as `all()`, and would it need the same care about where it goes?
+
+**Question 4**
+
+Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.12, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
+
+### Reading Unfamiliar Code
+
+You read this whole application with the method from chapter 1.13 before you started these questions. Code that a model wrote deserves the same method with more suspicion, because it looks just as confident when it is wrong as when it is right.
+
+**Question 1**
+
+A model was asked to write a `delete_task()` function for the Delete Task extension, and it produced this:
+
+```python
+def delete_task(task_index):
+    """Remove one task from the list by its index."""
+    if task_index < 0 or task_index > len(tasks):
+        print('Invalid task number.')
+        return
+
+    task = tasks.pop(task_index)
+    print(f'Task "{task["description"]}" deleted!')
+```
+
+Compare it line by line with `complete_task()`. Then write a bug report for it: a concrete input, the actual output, the expected output, and where the problem is.
+
+{% hint style="warning" %}
+**Predict, then run.** Paste the function at the bottom of `tasks.py`. From the `src` folder, start the REPL with `python3`, then run `from tasks import delete_task` followed by `delete_task(2)`. The list starts with the two sample tasks. What happens? Delete the function from `tasks.py` when you are done, because the AI policy keeps code a model wrote out of your own work.
+{% endhint %}
 
 ### Code Style
 

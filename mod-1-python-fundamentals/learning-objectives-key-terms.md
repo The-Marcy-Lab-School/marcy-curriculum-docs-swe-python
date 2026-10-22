@@ -898,7 +898,7 @@ Malik reads it and decides, "The name and the docstring say it counts vowels, so
 
 ## Case Study: CLI Task Manager
 
-**Key terms:** none new. The case study exercises the terms from lessons 1 to 14.
+**Key terms:** none new. The case study exercises the terms from lessons 1 to 13.
 
 **You will be able to…**
 
@@ -916,7 +916,8 @@ _By the end of the module:_
 - Explain why the menu uses a `while` loop, what `is_running` does, and how the same loop could be written with `break`.
 - Debug a model-written `delete_task()` and write a bug report that names the input, the actual output, the expected output, and the line at fault.
 - Plan a dispatch table for the menu and explain which option cannot go into it.
-- Write a list comprehension that selects the completed tasks
+- Explain which tasks the `completed_tasks` comprehension in `view_tasks()` keeps, rewrite it as a `for` loop, and write the comprehension that selects the incomplete tasks.
+- Predict what `all()` returns for an empty list and explain why a check that uses it must come after the empty-list guard.
 - Extend the application with a new feature that respects the existing separation of concerns.
 
 ### Exit Ticket
