@@ -296,7 +296,18 @@ How does the application handle edge cases like trying to complete a task that d
 
 **Question 4**
 
-In chapter 1.5, you checked a string with `isdigit()` before converting it with `int()`. This application uses `try`/`except` instead. Predict what each approach does with the input `-1`. Then type `-1` at the Complete Task prompt. Which part of the program refuses it?
+Another way to validate the task number is to check the string with `isdigit()` before converting it with `int()`. With that approach, the Complete Task branch of `show_menu()` would look like this:
+
+```python
+task_choice = input('Enter task number to complete: ').strip()
+if task_choice.isdigit():
+    task_index = int(task_choice) - 1
+    complete_task(task_index)
+else:
+    print(f'"{task_choice}" is not a number.')
+```
+
+The application uses `try`/`except` instead. Predict what each version does with the input `-1`. Then type `-1` at the Complete Task prompt of the application as written. Which part of the program refuses it?
 
 **Question 5**
 
