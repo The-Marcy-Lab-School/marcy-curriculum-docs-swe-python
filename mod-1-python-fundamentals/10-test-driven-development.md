@@ -1,4 +1,4 @@
-# 1.14 Test-Driven Development
+# 1.10 Test-Driven Development
 
 **Table of Contents**
 
@@ -22,8 +22,7 @@
   - [Raising Your Own Errors](#raising-your-own-errors)
   - [Testing That a Function Raises](#testing-that-a-function-raises)
   - [One Failing Test Does Not Stop the Others](#one-failing-test-does-not-stop-the-others)
-- [Banking System Challenge](#banking-system-challenge)
-- [Extension / Practice](#extension--practice)
+- [Challenge: Bank Accounts](#challenge-bank-accounts)
 
 ## Key Terms
 
@@ -33,7 +32,7 @@
 - The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
 - A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
 - **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
-- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
+- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a loop that changes a copy by index to a loop that appends to a new list.
 - **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
 - **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
 - The **`raise`** statement lets a function report a problem itself, such as `raise ValueError("message")`. **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
@@ -233,7 +232,7 @@ Remember from chapter 1.2 that `0.1 + 0.2 == 0.3` is `False`, because decimals a
 
 ## Refactoring with Tests
 
-Every comprehension in chapter 1.13 replaced a loop that already worked. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the `pytest` tests from the last section.
+Once a function works, you will often want to rewrite it: to make it shorter, to make it clearer, or to make room for a new feature. How do you know the new version does _exactly_ what the old one did? You could run both and compare the output by eye, but you already have a better tool: the `pytest` tests from the last section.
 
 ### A Pure Function and Its Tests
 
@@ -313,11 +312,16 @@ This example demonstrates a few new details about `assert` statements.
 
 Now that we have passing tests, we can change _how_ the code works — as long as it keeps passing the same tests.
 
-**<details><summary>Challenge: Refactor `double_all_purely` to use a list comprehension</summary>**
+`double_all_purely` copies the list and then changes every position of the copy by its index. Chapter 1.7 showed a more direct way to build a new list: start with an empty list and append each new value to it.
+
+**<details><summary>Challenge: Refactor `double_all_purely` to append each doubled value to a new, empty list</summary>**
 
 ```python
 def double_all_purely(items):
-    return [num * 2 for num in items]
+    doubled = []
+    for num in items:
+        doubled.append(num * 2)
+    return doubled
 ```
 
 </details>
@@ -362,7 +366,7 @@ def test_double_all_purely_strings():
     assert double_all_purely([1, 2, 'a', None]) == [2, 4, 'aa', None]
 ```
 
-Run it. It fails with `TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'`. The numbers and the string were never the problem, because `'a' * 2` is already `'aa'`. `None` is: it cannot be multiplied, and the comprehension has no way to know it should be left alone. A failing test is the point of this step: it proves the test is actually checking something.
+Run it. It fails with `TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'`. The numbers and the string were never the problem, because `'a' * 2` is already `'aa'`. `None` is: it cannot be multiplied, and the loop has no way to know it should be left alone. A failing test is the point of this step: it proves the test is actually checking something.
 
 </details>
 
@@ -372,7 +376,10 @@ Run it. It fails with `TypeError: unsupported operand type(s) for *: 'NoneType' 
 
 ```python
 def double_all_purely(items):
-    return [double(value) for value in items]
+    doubled = []
+    for value in items:
+        doubled.append(double(value))
+    return doubled
 
 
 def double(value):
@@ -384,7 +391,7 @@ def double(value):
         return value
 ```
 
-`isinstance(value, some_type)` asks whether `value` is of that type, and it accepts several types at once when you give it a tuple like `(int, float)`. It is the tool for "what kind of thing is this?" checks, and it reads better inside a comprehension when the branching lives in its own small function.
+`isinstance(value, some_type)` asks whether `value` is of that type, and it accepts several types at once when you give it a tuple like `(int, float)`. It is the tool for "what kind of thing is this?" checks, and the loop stays easy to read when the branching lives in its own small function.
 
 </details>
 
@@ -481,17 +488,121 @@ pytest runs each test function the way a `try`/`except` would. When a test raise
 
 The one failure that stops everything is a test file that cannot be imported, for example because it imports a function that does not exist yet. pytest cannot even find the tests in that file, so it stops with `Interrupted: 1 error during collection` and runs none of the tests in the project. Read the `ImportError` it prints and fix the import before anything else.
 
-## Banking System Challenge
+## Challenge: Bank Accounts
 
-The assignment for this session applies the same cycle to a list of bank account dictionaries: a pure `deposit` function with tests already written, a refactor to a comprehension while the tests stay green, and a `withdraw` function built test-first with an overdraft rule. Those three tasks repeat the three parts of this chapter (testing a pure function, refactoring with tests, and test-driven development), on the data shape your project will use.
+Practice the whole cycle on a list of bank account dictionaries, the data shape your project will use. Add the functions below to `src/bank.py`, beside `withdraw`, and test them in a new file, `tests/test_bank_accounts.py`. Build each one test-first: write a test, watch it fail, write just enough code to pass, and then refactor while the tests stay green.
 
-## Extension / Practice
+Start the test file with a function that returns the sample accounts. Each test calls `make_accounts()` to get its own fresh list, so a test that changes the accounts cannot change the data another test starts from:
 
-Once the banking assignment is done:
+```python
+def make_accounts():
+    return [
+        {"owner": "Ada", "balance": 250},
+        {"owner": "Zo", "balance": 0},
+        {"owner": "Maya", "balance": 40},
+    ]
+```
 
-- Add a `get_empty_accounts(bank_accounts)` feature using TDD.
-- Add an `add_100_to_all_accounts(bank_accounts)` feature using TDD.
-- Add a `transfer(bank_accounts, transaction)` feature using TDD, where the transaction has `from_owner`, `to_owner`, and `amount` keys.
-- Refactor repetitive lookup logic into a helper function `get_account_by_owner()`.
-- Write new tests to confirm helper behavior.
-- Make `withdraw` raise a `ValueError` on overdraft instead of silently doing nothing, and test it with `pytest.raises` the way [Testing Errors](#testing-errors) did.
+1. `get_empty_accounts(bank_accounts)` returns a new list of the accounts whose balance is `0`.
+2. `add_100_to_all_accounts(bank_accounts)` returns a new list of new account dictionaries, each with `100` more in its balance. The original accounts must not change, so test it the way you tested `double_all_purely`.
+3. `transfer(bank_accounts, transaction)` moves money from one account to another. The transaction is a dictionary with `from_owner`, `to_owner`, and `amount` keys. Use `withdraw` to take the money out, so that a transfer the sender cannot afford raises a `ValueError`, and test that with `pytest.raises`.
+4. `transfer` has to find two accounts by their owner. Refactor that lookup into a helper function, `get_account_by_owner(bank_accounts, owner)`, that returns the matching account, or `None` when no account matches. Write tests for the helper, and run every test to confirm that the refactor changed nothing.
+
+**<details><summary>Solution</summary>**
+
+{% code title="tests/test_bank_accounts.py" overflow="wrap" %}
+
+```python
+import pytest
+from src.bank import get_empty_accounts, add_100_to_all_accounts, get_account_by_owner, transfer
+
+
+def make_accounts():
+    return [
+        {"owner": "Ada", "balance": 250},
+        {"owner": "Zo", "balance": 0},
+        {"owner": "Maya", "balance": 40},
+    ]
+
+
+def test_get_empty_accounts():
+    """get_empty_accounts - keeps only the accounts with a balance of 0"""
+    assert get_empty_accounts(make_accounts()) == [{"owner": "Zo", "balance": 0}]
+
+
+def test_add_100_to_all_accounts():
+    """add_100_to_all_accounts - returns new accounts with 100 more in each"""
+    accounts = make_accounts()
+    updated = add_100_to_all_accounts(accounts)
+    assert updated == [
+        {"owner": "Ada", "balance": 350},
+        {"owner": "Zo", "balance": 100},
+        {"owner": "Maya", "balance": 140},
+    ]
+    assert updated is not accounts
+    assert accounts == make_accounts()
+
+
+def test_get_account_by_owner():
+    """get_account_by_owner - finds the account, or returns None"""
+    accounts = make_accounts()
+    assert get_account_by_owner(accounts, "Maya") is accounts[2]
+    assert get_account_by_owner(accounts, "Bo") is None
+
+
+def test_transfer():
+    """transfer - moves the amount from one account to another"""
+    accounts = make_accounts()
+    transfer(accounts, {"from_owner": "Ada", "to_owner": "Zo", "amount": 50})
+    assert accounts[0]["balance"] == 200
+    assert accounts[1]["balance"] == 50
+
+
+def test_transfer_overdraft():
+    """transfer - raises a ValueError when the sender does not have enough"""
+    accounts = make_accounts()
+    with pytest.raises(ValueError):
+        transfer(accounts, {"from_owner": "Maya", "to_owner": "Ada", "amount": 100})
+```
+
+{% endcode %}
+
+{% code title="src/bank.py (below withdraw)" overflow="wrap" %}
+
+```python
+def get_empty_accounts(bank_accounts):
+    empty = []
+    for account in bank_accounts:
+        if account["balance"] == 0:
+            empty.append(account)
+    return empty
+
+
+def add_100_to_all_accounts(bank_accounts):
+    updated = []
+    for account in bank_accounts:
+        new_account = dict(account)
+        new_account["balance"] += 100
+        updated.append(new_account)
+    return updated
+
+
+def get_account_by_owner(bank_accounts, owner):
+    for account in bank_accounts:
+        if account["owner"] == owner:
+            return account
+    return None
+
+
+def transfer(bank_accounts, transaction):
+    from_account = get_account_by_owner(bank_accounts, transaction["from_owner"])
+    to_account = get_account_by_owner(bank_accounts, transaction["to_owner"])
+    from_account["balance"] = withdraw(from_account["balance"], transaction["amount"])
+    to_account["balance"] += transaction["amount"]
+```
+
+{% endcode %}
+
+`add_100_to_all_accounts` copies each dictionary with `dict(account)` before changing its balance, as chapter 1.8 showed, so the original accounts keep their balances. `transfer` changes the accounts it was given, so its tests check the accounts afterward instead of a returned value.
+
+</details>

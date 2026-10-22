@@ -1,4 +1,4 @@
-# 1.12 First-Class Functions and Higher-Order Functions
+# 1.11 First-Class Functions and Higher-Order Functions
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/12-first-class-functions-hofs/)

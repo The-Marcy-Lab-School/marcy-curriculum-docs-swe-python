@@ -1,4 +1,4 @@
-# 1.10 Reading Unfamiliar Code
+# 1.13 Reading Unfamiliar Code
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/10-reading-unfamiliar-code/)
@@ -373,7 +373,7 @@ if __name__ == "__main__":
 
 There is a third if you look: `int(answer)` on line 14 crashes on a tip like `15.5`.
 
-You will learn how to catch these in the next chapter. For now, the skill was finding them, and being able to say on which line and why.
+`try` and `except` from chapter 1.5 could catch the `ValueError`s, and a check could prevent the `ZeroDivisionError`. Here, the skill was finding them, and being able to say on which line and why.
 
 **Something to notice:** `tip_percent=18` is a default parameter value from chapter 1.3, and the `if answer == ""` branch exists only to leave it out so the default is used. That is the author telling you what the normal case is.
 

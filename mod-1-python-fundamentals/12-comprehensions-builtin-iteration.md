@@ -1,4 +1,4 @@
-# 1.13 Comprehensions and Built-in Iteration
+# 1.12 Comprehensions and Built-in Iteration
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/13-comprehensions-builtin-iteration/)
@@ -10,6 +10,7 @@
 - [Imperative vs. Declarative Code: Why We Use Built-in Iteration](#imperative-vs-declarative-code-why-we-use-built-in-iteration)
 - [The Toolkit](#the-toolkit)
   - [Transforming with List Comprehensions](#transforming-with-list-comprehensions)
+  - [Challenge: Refactor with Tests](#challenge-refactor-with-tests)
   - [Filtering with an `if`](#filtering-with-an-if)
   - [Finding the First Match](#finding-the-first-match)
   - [Combining Into One Value](#combining-into-one-value)
@@ -26,6 +27,7 @@
 - `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
 - `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
 - A **dictionary comprehension**, `{key: value for item in items}`, builds a new dictionary the same way a list comprehension builds a new list.
+- Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
 - Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
 - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.
@@ -127,6 +129,23 @@ usernames = [??? for user in users]
 ```python
 usernames = [user['username'] for user in users]
 ```
+
+</details>
+
+### Challenge: Refactor with Tests
+
+Every comprehension in this lesson replaces a loop that already works. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the tests you wrote for `double_all_purely` in the Test-Driven Development lesson.
+
+Open your `testing-practice` project and refactor `double_all_purely` in `src/double_all.py` to use a list comprehension. Then run `python3 -m pytest tests/test_double_all.py`. If every test still passes, the comprehension does what the loop did.
+
+**<details><summary>Solution</summary>**
+
+```python
+def double_all_purely(items):
+    return [double(value) for value in items]
+```
+
+The comprehension still calls `double`, the helper function from the Test-Driven Development lesson, so each value is still doubled, repeated, or left alone. Keeping that branching in its own small function is what lets the comprehension stay one readable line. All three tests still pass, so the refactor changed how `double_all_purely` works without changing what it does.
 
 </details>
 

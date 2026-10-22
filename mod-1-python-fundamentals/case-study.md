@@ -272,7 +272,7 @@ If we wanted to add a new feature to the application, giving the user the option
 
 ### Reading Unfamiliar Code
 
-You read this whole application with the method from chapter 1.10 before you started these questions. Code that a model wrote deserves the same method with more suspicion, because it looks just as confident when it is wrong as when it is right.
+You read this whole application with the method from chapter 1.13 before you started these questions. Code that a model wrote deserves the same method with more suspicion, because it looks just as confident when it is wrong as when it is right.
 
 **Question 1**
 
@@ -333,7 +333,7 @@ Functions are values. They can be stored in a dictionary, passed to another func
 
 **Question 1**
 
-Chapter 1.12 described a **dispatch table**: a dictionary that maps each choice to the function that handles it, so that one dictionary lookup replaces a long `if`/`elif` chain. Plan a version of `show_menu()` that uses one. Which menu options can go straight into the dictionary? Which need a small function of their own written first? Which option cannot go into the dictionary at all, and why not? What takes the place of the `else`?
+Chapter 1.11 described a **dispatch table**: a dictionary that maps each choice to the function that handles it, so that one dictionary lookup replaces a long `if`/`elif` chain. Plan a version of `show_menu()` that uses one. Which menu options can go straight into the dictionary? Which need a small function of their own written first? Which option cannot go into the dictionary at all, and why not? What takes the place of the `else`?
 
 **Question 2**
 
@@ -365,7 +365,7 @@ Rewrite `complete_all_tasks()` so that it works. Should your version use a list 
 
 **Question 3**
 
-Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.13, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
+Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.12, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
 
 ### Test-Driven Development
 
@@ -395,17 +395,17 @@ Open `tests/conftest.py`. The function `reset_tasks()` runs before every test an
 
 **Question 4**
 
-Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys` to capture what the function printed, because `view_tasks()` prints its output instead of returning it. In chapter 1.14, you tested functions by comparing their return value with `==`. Suppose `view_tasks()` built the same text as a string and returned it, and `show_menu()` printed it. What would the test look like then? What else would that change make easier?
+Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys` to capture what the function printed, because `view_tasks()` prints its output instead of returning it. In chapter 1.10, you tested functions by comparing their return value with `==`. Suppose `view_tasks()` built the same text as a string and returned it, and `show_menu()` printed it. What would the test look like then? What else would that change make easier?
 
 **Question 5**
 
-Chapter 1.14 described test-driven development: write a test for a feature before the feature exists, watch it fail (red), then write just enough code to make it pass (green). Try it on the [Toggle Complete extension](#extension-opportunities) (see below). In `tests/test_tasks.py`, add `toggle_task` to the import line at the top. Then write a test that calls `toggle_task(1)` twice and checks `tasks[1]["is_complete"]` after each call. What value should it have after the first call, and after the second?
+Chapter 1.10 described test-driven development: write a test for a feature before the feature exists, watch it fail (red), then write just enough code to make it pass (green). Try it on the [Toggle Complete extension](#extension-opportunities) (see below). In `tests/test_tasks.py`, add `toggle_task` to the import line at the top. Then write a test that calls `toggle_task(1)` twice and checks `tasks[1]["is_complete"]` after each call. What value should it have after the first call, and after the second?
 
 {% hint style="warning" %}
 **Predict, then run.** Before you write `toggle_task()`, run `python3 -m pytest`. What does the error say? What happened to the other tests in `test_tasks.py`, and to the tests in `test_menu.py` and `test_main.py`?
 {% endhint %}
 
-Now write `toggle_task()` in `tasks.py` and run the tests again. Chapter 1.14 says that a failing test proves the test is actually checking something. What could go wrong with a test that you only ever saw pass?
+Now write `toggle_task()` in `tasks.py` and run the tests again. Chapter 1.10 says that a failing test proves the test is actually checking something. What could go wrong with a test that you only ever saw pass?
 
 ### Code Style
 

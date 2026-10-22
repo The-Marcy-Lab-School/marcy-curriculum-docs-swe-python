@@ -638,65 +638,87 @@ The program prints `Hello, test!` and then `Hello, Ada!` because importing `gree
 
 The program prints `Hello, test!` and then `Hello, Ada!`. Importing a file runs it from top to bottom, so when the interpreter reaches `from greetings import greet` on the first line of `main.py`, it runs all of `greetings.py`. The `def` creates the `greet` function, and the `print` at the bottom prints `Hello, test!`. Only then does Python return to `main.py` and print `Hello, Ada!`. To fix it, Sofia should move the test line inside `if __name__ == "__main__":`. Python sets `__name__` for every file automatically: when `greetings.py` is imported, its `__name__` is `"greetings"`, and when it is the file run with `python3`, its `__name__` is `"__main__"`. So the condition is `True` only when `greetings.py` is the program being run, and `python3 main.py` prints only `Hello, Ada!`.
 
-## 1.10 Reading Unfamiliar Code
+## 1.10 Test-Driven Development
 
-<!-- key-terms-from: 10-reading-unfamiliar-code.md -->
+<!-- key-terms-from: 10-test-driven-development.md -->
 
 **Key terms**
 
-- Reading code means **building a model of someone else's intent** from the artifacts they left behind: files, names, and behavior. You are not trying to memorize the code. You are trying to be able to predict it.
-- The **orientation questions** give you a place to stand before you dive in: what is this supposed to do, where does the behavior show up, which files matter, what do I know versus what am I guessing.
-- The method has six steps: **run it, find the entry point, find the data, trace one action, predict then run, and write down what you know and what you are guessing**.
-- Names are the author's notes to you. A function's name and its parameters tell you its intent; the body tells you whether it lives up to it.
-- Reading code a model wrote is the same activity with more suspicion. Generated code is confident and plausible, and plausible is not the same as correct.
+- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
+- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
+- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
+- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
+- A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
+- **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
+- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a loop that changes a copy by index to a loop that appends to a new list.
+- **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
+- **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
+- The **`raise`** statement lets a function report a problem itself, such as `raise ValueError("message")`. **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
+- pytest catches an error raised inside a test, reports that test as failed, and keeps running the others. A test file that cannot be imported stops the whole run.
 
 **You will be able to…**
 
 _In the session:_
 
-- Run an unfamiliar program with good and bad input and describe what it does in one sentence, before reading it.
-- Map a multi-file program by its `import` and `def` lines and identify the entry point and the one piece of data everything revolves around.
-- Trace a single user action from input to output through every function it touches.
-- Predict what a function returns for a specific input, check the prediction, and treat a wrong prediction as a finding.
+- Write a test function with `assert` and a docstring, run the tests with `python3 -m pytest`, and read a failure report to find which assertion failed and what the function actually returned.
+- Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop that changes a copy by index to a loop that appends to a new list while its tests stay green.
+- Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
+- Predict the error a new test raises before the code it checks has been written, and explain what that failure shows about the test.
 
 _By the end of the module:_
 
-- Answer the six orientation questions about a program before changing anything in it.
-- Keep separate lists of what is known and what is guessed, and move an item across only after running code.
-- Find a defect in a plausible, model-written function and describe it as a bug report: concrete input, actual output, expected output, and where.
-- Ask a model about code in tutor mode, using the AI policy's standing instruction.
+- Use `isinstance()` with one type or a tuple of types to decide what a function does with each kind of value.
+- Refactor a function by combining branches that do the same job, and run the tests to confirm that its behavior did not change.
+- Develop the bank account functions test-first, including a `transfer` that raises a `ValueError` when the sender cannot afford it.
+- Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
+- Explain why the tests are run with `python3 -m pytest` from the project's root folder rather than with `pytest`.
+- Raise a `ValueError` from a function that is handed a value it cannot work with, test it with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
+- Explain why a test that crashes does not stop the other tests, and why a test file that cannot be imported stops the whole run.
 
 ### Exit Ticket
 
-**Learning Objective**: Fellows will be able to predict what an unfamiliar function returns for a specific input, justify why a function's name and docstring are not evidence that it works, and describe a defect as a bug report that names the input, the actual output, the expected output, and the line at fault.
+**Learning Objective**: Fellows will be able to explain how passing tests show that a refactor did not change what a function does, and justify writing a test that fails before writing the code that makes it pass.
 
 **Question**
 
-Malik asked a model for a function that counts vowels, and the model produced this:
+Malik has this function and two passing tests:
 
 ```python
-def count_vowels(word):
-    """Count the vowels in a word."""
-    count = 0
-    for letter in word:
-        if letter in "aeiou":
-            count += 1
-    return count
+def get_passing_scores(scores):
+    passing = []
+    for i in range(len(scores)):
+        if scores[i] >= 65:
+            passing.append(scores[i])
+    return passing
 ```
 
-Malik reads it and decides, "The name and the docstring say it counts vowels, so it works." Predict what `count_vowels("Apple")` returns. Is Malik right? Explain why or why not, and write a bug report for the function.
+```python
+def test_get_passing_scores():
+    """get_passing_scores - keeps only the scores of 65 or more"""
+    assert get_passing_scores([90, 40, 65]) == [90, 65]
+
+
+def test_get_passing_scores_does_not_mutate():
+    """get_passing_scores - returns a new list and leaves the original alone"""
+    scores = [90, 40, 65]
+    passing = get_passing_scores(scores)
+    assert passing is not scores
+    assert scores == [90, 40, 65]
+```
+
+Malik rewrites the loop as `for score in scores:`, using `score` in place of `scores[i]`, runs the tests, and both pass. What do the passing tests tell Malik about the new version, and why? Next, the function has to accept scores stored as strings, like `"72"`. Using TDD, what should Malik do first, what should Malik expect to see the first time it runs, and why is that result useful?
 
 **Level 2 Example**
 
-`count_vowels("Apple")` returns `1` instead of `2` because it doesn't count the capital `A`, so Malik is wrong. Bug report: `count_vowels("Apple")` returns `1`, expected `2`.
+The tests passing means the new loop works the same as the old one. With TDD, Malik should write the test for strings first, and it should fail because the function can't handle strings yet.
 
 **Level 3 Example**
 
-`count_vowels("Apple")` returns `1`. The loop checks each letter with `letter in "aeiou"`, and that string contains only lowercase vowels, so the capital `A` fails the check and only the `e` gets counted. Malik is wrong. The name and the docstring tell me what the author intended, but only the body tells me what the function actually does, and a model writes a name and a docstring with the same confidence whether the body is right or wrong. The way to check is to predict the output for one specific input and then run the function. My bug report: "`count_vowels("Apple")` returns `1`. Expected `2`. The check on line 5, `if letter in "aeiou"`, skips uppercase vowels." Changing that check to `letter.lower() in "aeiou"` would fix the function.
+The passing tests tell Malik that the new loop still does what the old one did, so this was a refactor: the code works differently but does the same thing. The first test uses `==` to check the contents, so the new version still keeps `90` and `65` and drops `40`. The second test uses `is not` to check that a new list came back and `==` to check that `scores` was not changed, so the new version is still a pure function. Malik doesn't have to compare outputs by eye, because the tests already describe what the function should do. For the strings, Malik should first write a new test, such as `assert get_passing_scores([90, "72", 40]) == [90, 72]`. Writing it forces Malik to decide what the function should return, for example whether `"72"` comes back as the number `72` or as the string. The first run should fail (red) with a `TypeError`, because `"72" >= 65` compares a string with a number. That failure shows that the test really checks the new requirement. A test that passed before Malik changed any code could not tell working code from broken code. Then Malik writes just enough code to pass (green), such as converting each score with `int()`, and can refactor while all three tests stay green.
 
-## 1.12 First-Class Functions and Higher-Order Functions
+## 1.11 First-Class Functions and Higher-Order Functions
 
-<!-- key-terms-from: 12-first-class-functions-hof.md -->
+<!-- key-terms-from: 11-first-class-functions-hof.md -->
 
 **Key terms**
 
@@ -756,9 +778,9 @@ The first call prints `Go team!` three times. The second call prints it once and
 
 `repeat(cheer, 3)` prints `Go team!` three times. Writing `cheer` without parentheses passes the function itself, because a function is a value like any other. Inside `repeat`, the parameter `callback` refers to `cheer`, and `callback()` calls it once on each pass through the loop. `repeat(cheer(), 3)` behaves differently because Python resolves the arguments before it calls `repeat`. `cheer()` runs first and prints `Go team!` once, and since `cheer` has no `return` statement, the call produces `None`. So `repeat` receives `None` as its callback, and the first `callback()` inside the loop tries to call `None`, which raises `TypeError: 'NoneType' object is not callable`. The single `Go team!` shows that the callback ran too early, before `repeat` ever received it. A higher-order function calls its callback itself, so the callback should be passed without parentheses.
 
-## 1.13 Comprehensions and Built-in Iteration
+## 1.12 Comprehensions and Built-in Iteration
 
-<!-- key-terms-from: 13-comprehensions-builtin-iteration.md -->
+<!-- key-terms-from: 12-comprehensions-builtin-iteration.md -->
 
 **Key terms**
 
@@ -766,6 +788,7 @@ The first call prints `Go team!` three times. The second call prints it once and
 - `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
 - `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
 - A **dictionary comprehension**, `{key: value for item in items}`, builds a new dictionary the same way a list comprehension builds a new list.
+- Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
 - Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
 - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.
@@ -786,6 +809,7 @@ _By the end of the module:_
 - Write a function that returns the first element passing a test, and decide what it returns when nothing passes.
 - Build a frequency counter with a dictionary and `.get(key, 0)`.
 - Use `enumerate()`, `zip()`, `any()`, and `all()` in place of index-based loops.
+- Refactor a tested loop into a comprehension, and rerun its tests to confirm that its behavior did not change.
 
 ### Exit Ticket
 
@@ -816,83 +840,61 @@ The program prints `None` because `.sort()` doesn't return anything. Imani shoul
 
 The program prints `None`. `.sort()` sorts a list in place, which means it changes `discounted` itself and returns nothing, so `ordered` gets `None`. The list in `discounted` is now `[1, 6, 10]`, but Imani never prints it. Imani should write `ordered = sorted(discounted)`, because `sorted()` returns a new sorted list and leaves `discounted` unchanged. Calling `discounted.sort()` on its own line and then printing `discounted` would also work. The loop can become `discounted = [price - 2 for price in prices]`. The loop transforms every value and collects the results in a new list, and that is exactly what a list comprehension does: for each `price` in `prices`, it computes `price - 2` and adds the result to a new list that has as many elements as the source. Combining the two steps, `ordered = sorted([price - 2 for price in prices])` does the whole job in one line.
 
-## 1.14 Test-Driven Development
+## 1.13 Reading Unfamiliar Code
 
-<!-- key-terms-from: 14-test-driven-development.md -->
+<!-- key-terms-from: 13-reading-unfamiliar-code.md -->
 
 **Key terms**
 
-- A **unit test** is a small program that calls one function with a known input and checks that the output is what you expected. A collection of them is a **test suite**.
-- A **test file** is a file whose name starts with `test_` that imports functions from your source code and tests them. Keeping tests in their own files, in a `tests/` folder beside `src/`, is separation of concerns applied to testing.
-- A **test function** is any function in a test file whose name starts with `test_`. It is named after the function it tests, and the docstring on its first line describes what the test checks.
-- The **`assert`** statement checks that an expression is truthy. If it is not, it raises an `AssertionError` and `pytest` reports the test as failed. The expression is an ordinary comparison: `==` for most values, `is` for `True`, `False`, and `None`, and `pytest.approx()` for decimal numbers.
-- A **pure function** returns the same output every time it gets the same input, and has no **side effects**: it changes nothing outside itself, such as a list it was given. A function that breaks either rule is **impure**. Pure functions are the easiest functions to test.
-- **`==`** compares the contents of two values. **`is`** and **`is not`** compare identity: whether two names refer to the very same object. A test for a **pure function** uses `==` to check the returned contents and `is not` to check that a new list came back rather than the original.
-- To **refactor** is to change how code works without changing what it does. Passing tests are what let you refactor with confidence, for example from a `for` loop to a list comprehension.
-- **Test-driven development (TDD)** is a workflow that writes the test first, watches it fail (**red**), writes just enough code to pass (**green**), and then refactors while the tests stay green.
-- **`isinstance(value, type)`** asks whether a value is of a given type, and accepts a tuple of types.
-- The **`raise`** statement lets a function report a problem itself, such as `raise ValueError("message")`. **`pytest.raises(ErrorType)`** is how a test checks that a function raises the error it should.
-- pytest catches an error raised inside a test, reports that test as failed, and keeps running the others. A test file that cannot be imported stops the whole run.
+- Reading code means **building a model of someone else's intent** from the artifacts they left behind: files, names, and behavior. You are not trying to memorize the code. You are trying to be able to predict it.
+- The **orientation questions** give you a place to stand before you dive in: what is this supposed to do, where does the behavior show up, which files matter, what do I know versus what am I guessing.
+- The method has six steps: **run it, find the entry point, find the data, trace one action, predict then run, and write down what you know and what you are guessing**.
+- Names are the author's notes to you. A function's name and its parameters tell you its intent; the body tells you whether it lives up to it.
+- Reading code a model wrote is the same activity with more suspicion. Generated code is confident and plausible, and plausible is not the same as correct.
 
 **You will be able to…**
 
 _In the session:_
 
-- Write a test function with `assert` and a docstring, run the tests with `python3 -m pytest`, and read a failure report to find which assertion failed and what the function actually returned.
-- Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop to a comprehension while its tests stay green.
-- Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
-- Predict the error a new test raises before the code it checks has been written, and explain what that failure shows about the test.
+- Run an unfamiliar program with good and bad input and describe what it does in one sentence, before reading it.
+- Map a multi-file program by its `import` and `def` lines and identify the entry point and the one piece of data everything revolves around.
+- Trace a single user action from input to output through every function it touches.
+- Predict what a function returns for a specific input, check the prediction, and treat a wrong prediction as a finding.
 
 _By the end of the module:_
 
-- Use `isinstance()` with one type or a tuple of types to decide what a function does with each kind of value.
-- Refactor a function by combining branches that do the same job, and run the tests to confirm that its behavior did not change.
-- Develop the banking assignment's `withdraw` function test-first, including its overdraft rule.
-- Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
-- Explain why the tests are run with `python3 -m pytest` from the project's root folder rather than with `pytest`.
-- Raise a `ValueError` from a function that is handed a value it cannot work with, test it with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
-- Explain why a test that crashes does not stop the other tests, and why a test file that cannot be imported stops the whole run.
+- Answer the six orientation questions about a program before changing anything in it.
+- Keep separate lists of what is known and what is guessed, and move an item across only after running code.
+- Find a defect in a plausible, model-written function and describe it as a bug report: concrete input, actual output, expected output, and where.
+- Ask a model about code in tutor mode, using the AI policy's standing instruction.
 
 ### Exit Ticket
 
-**Learning Objective**: Fellows will be able to explain how passing tests show that a refactor did not change what a function does, and justify writing a test that fails before writing the code that makes it pass.
+**Learning Objective**: Fellows will be able to predict what an unfamiliar function returns for a specific input, justify why a function's name and docstring are not evidence that it works, and describe a defect as a bug report that names the input, the actual output, the expected output, and the line at fault.
 
 **Question**
 
-Malik has this function and two passing tests:
+Malik asked a model for a function that counts vowels, and the model produced this:
 
 ```python
-def get_passing_scores(scores):
-    passing = []
-    for score in scores:
-        if score >= 65:
-            passing.append(score)
-    return passing
+def count_vowels(word):
+    """Count the vowels in a word."""
+    count = 0
+    for letter in word:
+        if letter in "aeiou":
+            count += 1
+    return count
 ```
 
-```python
-def test_get_passing_scores():
-    """get_passing_scores - keeps only the scores of 65 or more"""
-    assert get_passing_scores([90, 40, 65]) == [90, 65]
-
-
-def test_get_passing_scores_does_not_mutate():
-    """get_passing_scores - returns a new list and leaves the original alone"""
-    scores = [90, 40, 65]
-    passing = get_passing_scores(scores)
-    assert passing is not scores
-    assert scores == [90, 40, 65]
-```
-
-Malik rewrites the body of the function as `return [score for score in scores if score >= 65]`, runs the tests, and both pass. What do the passing tests tell Malik about the new version, and why? Next, the function has to accept scores stored as strings, like `"72"`. Using TDD, what should Malik do first, what should Malik expect to see the first time it runs, and why is that result useful?
+Malik reads it and decides, "The name and the docstring say it counts vowels, so it works." Predict what `count_vowels("Apple")` returns. Is Malik right? Explain why or why not, and write a bug report for the function.
 
 **Level 2 Example**
 
-The tests passing means the comprehension works the same as the loop. With TDD, Malik should write the test for strings first, and it should fail because the function can't handle strings yet.
+`count_vowels("Apple")` returns `1` instead of `2` because it doesn't count the capital `A`, so Malik is wrong. Bug report: `count_vowels("Apple")` returns `1`, expected `2`.
 
 **Level 3 Example**
 
-The passing tests tell Malik that the comprehension still does what the loop did, so this was a refactor: the code works differently but does the same thing. The first test uses `==` to check the contents, so the new version still keeps `90` and `65` and drops `40`. The second test uses `is not` to check that a new list came back and `==` to check that `scores` was not changed, so the new version is still a pure function. Malik doesn't have to compare outputs by eye, because the tests already describe what the function should do. For the strings, Malik should first write a new test, such as `assert get_passing_scores([90, "72", 40]) == [90, 72]`. Writing it forces Malik to decide what the function should return, for example whether `"72"` comes back as the number `72` or as the string. The first run should fail (red) with a `TypeError`, because `"72" >= 65` compares a string with a number. That failure shows that the test really checks the new requirement. A test that passed before Malik changed any code could not tell working code from broken code. Then Malik writes just enough code to pass (green), such as converting each score with `int()`, and can refactor while all three tests stay green.
+`count_vowels("Apple")` returns `1`. The loop checks each letter with `letter in "aeiou"`, and that string contains only lowercase vowels, so the capital `A` fails the check and only the `e` gets counted. Malik is wrong. The name and the docstring tell me what the author intended, but only the body tells me what the function actually does, and a model writes a name and a docstring with the same confidence whether the body is right or wrong. The way to check is to predict the output for one specific input and then run the function. My bug report: "`count_vowels("Apple")` returns `1`. Expected `2`. The check on line 5, `if letter in "aeiou"`, skips uppercase vowels." Changing that check to `letter.lower() in "aeiou"` would fix the function.
 
 ## Case Study: CLI Task Manager
 
