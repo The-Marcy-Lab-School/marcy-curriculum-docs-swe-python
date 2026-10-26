@@ -57,7 +57,16 @@ The assignments in this program come with test files already written. Running th
 
 ### Project Layout
 
-Create a folder called `testing-practice`. In it, create and activate a virtual environment and install `pytest`, as you did in the Modules lesson. Then organize the project so that source code and tests live in separate folders:
+Create a folder called `testing-practice`. In it, create and activate a virtual environment and install `pytest`, as you did in the Modules lesson.
+
+```sh
+cd [repo_name]
+python3 -m venv .venv
+source .venv/bin/activate
+pip install pytest
+```
+
+Then organize the project so that source code and tests live in separate folders:
 
 ```
 testing-practice/
