@@ -64,6 +64,7 @@ cd [repo_name]
 python3 -m venv .venv
 source .venv/bin/activate
 pip install pytest
+pip freeze > requirements.txt
 ```
 
 Then organize the project so that source code and tests live in separate folders:
