@@ -1,4 +1,4 @@
-# 1.11 First-Class Functions and Higher-Order Functions
+# 1.12 First-Class Functions and Higher-Order Functions
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/12-first-class-functions-hofs/)
@@ -281,7 +281,9 @@ print(sorted(animals))            # ['aardvark', 'bear', 'cheetah', 'deer']  alp
 print(sorted(animals, key=len))   # ['bear', 'deer', 'cheetah', 'aardvark']  by length
 ```
 
-`len` is passed with no parentheses, because `sorted` will call it, once per animal. `min()` and `max()` take `key` the same way:
+`len` is passed with no parentheses, because `sorted` will call it, once per animal. The animals are put in order by what `len` returns, but `key` never changes the elements themselves: `sorted(animals, key=len)` still returns the animal names, not their lengths. The list method `.sort()` takes `key` the same way.
+
+`min()` and `max()` take `key` too:
 
 ```python
 users = [
@@ -293,6 +295,35 @@ users = [
 oldest = max(users, key=lambda user: user['age'])
 print(oldest['username'])   # reuben
 ```
+
+**Challenge**
+
+Sort this list of user dictionaries two ways: once by age, youngest first, and once by username, alphabetically.
+
+```python
+users = [
+    {'username': 'ben', 'age': 30},
+    {'username': 'maya', 'age': 25},
+    {'username': 'reuben', 'age': 41},
+    {'username': 'gonzalo', 'age': 25},
+]
+```
+
+**<details><summary>Solution</summary>**
+
+```python
+by_age = sorted(users, key=lambda user: user['age'])
+
+by_name = sorted(users, key=lambda user: user['username'])
+```
+
+The `key` callback receives one dictionary at a time and returns the value to sort by. Dictionaries have no natural order, so `sorted(users)` with no `key` would raise a `TypeError`.
+
+</details>
+
+{% hint style="info" %}
+Python also has built-in functions called `map()` and `filter()` that take a callback and a list. They work, and you will see them, but Python programmers overwhelmingly prefer comprehensions for the same jobs because the expression is right there instead of hidden inside a callback. Recognize `map` and `filter`; write comprehensions.
+{% endhint %}
 
 ## Wrapping a Function
 
@@ -457,5 +488,3 @@ def skip_empty(func):
 The guard clause from chapter 1.4, now protecting a function that `skip_empty` knows nothing about. This is how a real decorator checks whether a user is logged in before letting a page load.
 
 </details>
-
-The next chapter is about the rest of this family: the built-in ways to loop, transform, filter, and combine data, and when to reach for each one.

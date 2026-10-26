@@ -1,4 +1,4 @@
-# 1.13 Reading Unfamiliar Code
+# 1.12 Reading Unfamiliar Code
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/10-reading-unfamiliar-code/)

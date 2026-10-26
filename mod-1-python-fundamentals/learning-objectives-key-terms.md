@@ -716,71 +716,9 @@ The tests passing means the new loop works the same as the old one. With TDD, Ma
 
 The passing tests tell Malik that the new loop still does what the old one did, so this was a refactor: the code works differently but does the same thing. The first test uses `==` to check the contents, so the new version still keeps `90` and `65` and drops `40`. The second test uses `is not` to check that a new list came back and `==` to check that `scores` was not changed, so the new version is still a pure function. Malik doesn't have to compare outputs by eye, because the tests already describe what the function should do. For the strings, Malik should first write a new test, such as `assert get_passing_scores([90, "72", 40]) == [90, 72]`. Writing it forces Malik to decide what the function should return, for example whether `"72"` comes back as the number `72` or as the string. The first run should fail (red) with a `TypeError`, because `"72" >= 65` compares a string with a number. That failure shows that the test really checks the new requirement. A test that passed before Malik changed any code could not tell working code from broken code. Then Malik writes just enough code to pass (green), such as converting each score with `int()`, and can refactor while all three tests stay green.
 
-## 1.11 First-Class Functions and Higher-Order Functions
+## 1.11 Comprehensions and Built-in Iteration
 
-<!-- key-terms-from: 11-first-class-functions-hof.md -->
-
-**Key terms**
-
-- **Functions are "first-class" values** meaning they can be stored in variables and data structures (lists/dictionaries), passed to functions as arguments, and returned from functions.
-- A **method** is a function attached to a value, like `"abc".upper()`. In Mod 2 you will write your own.
-- **Higher-order functions (HOFs)** are functions that accept other functions as input and/or return functions, enabling powerful programming patterns and code reuse.
-- **Callback functions** are functions passed as arguments to higher-order functions, allowing you to customize behavior without modifying the HOF itself.
-- When passing callbacks to HOFs, avoid invoking them (don't use parentheses) - the HOF will handle the invocation with the correct parameters.
-- **`lambda`** creates a small anonymous function in one expression, a concise way to define callbacks when they won't be reused elsewhere.
-- `sorted()`, `min()`, and `max()` are built-in higher-order functions. Their `key` parameter takes a callback that says what to compare.
-- A **wrapper** is a function returned by another function that calls the original and adds behavior around it. Written with an `@` above a definition, it is called a **decorator**.
-
-**You will be able to…**
-
-_In the session:_
-
-- Show that a function is a value: store it in a variable, in a dictionary, and pass it to another function.
-- Write a higher-order function that accepts a callback and calls it, and explain what makes it reusable.
-- Predict the `TypeError` from passing `say_hello()` instead of `say_hello` as a callback, and explain the `None` that causes it.
-- Sort a list of strings by length and find the largest dictionary in a list by one of its values, using `key=`.
-- Write a function that returns a wrapper around another function, and predict when each line of it prints.
-
-_By the end of the module:_
-
-- Replace an `if`/`elif` chain of menu options with a dictionary of functions.
-- Write a short callback as a `lambda` and say when a `def` is the better choice.
-- Explain what `@announce` above a definition does, in terms of `greet = announce(greet)`.
-- Change a wrapper so that it returns the wrapped function's return value, and so that it guards the call with a condition.
-
-### Exit Ticket
-
-**Learning Objective**: Fellows will be able to predict what a higher-order function does with a callback and explain the difference between passing a function and passing the value that a call to the function returns.
-
-**Question**
-
-Dev writes a higher-order function and a callback:
-
-```python
-def repeat(callback, times):
-    for i in range(times):
-        callback()
-
-def cheer():
-    print("Go team!")
-
-repeat(cheer, 3)
-repeat(cheer(), 3)
-```
-
-What does each of the last two lines print, and why? The second call raises an error, but `Go team!` still appears once before the error. Why?
-
-**Level 2 Example**
-
-The first call prints `Go team!` three times. The second call prints it once and then raises `TypeError: 'NoneType' object is not callable`, because you shouldn't put parentheses on a callback.
-
-**Level 3 Example**
-
-`repeat(cheer, 3)` prints `Go team!` three times. Writing `cheer` without parentheses passes the function itself, because a function is a value like any other. Inside `repeat`, the parameter `callback` refers to `cheer`, and `callback()` calls it once on each pass through the loop. `repeat(cheer(), 3)` behaves differently because Python resolves the arguments before it calls `repeat`. `cheer()` runs first and prints `Go team!` once, and since `cheer` has no `return` statement, the call produces `None`. So `repeat` receives `None` as its callback, and the first `callback()` inside the loop tries to call `None`, which raises `TypeError: 'NoneType' object is not callable`. The single `Go team!` shows that the callback ran too early, before `repeat` ever received it. A higher-order function calls its callback itself, so the callback should be passed without parentheses.
-
-## 1.12 Comprehensions and Built-in Iteration
-
-<!-- key-terms-from: 12-comprehensions-builtin-iteration.md -->
+<!-- key-terms-from: 11-comprehensions-builtin-iteration.md -->
 
 **Key terms**
 
@@ -791,7 +729,7 @@ The first call prints `Go team!` three times. The second call prints it once and
 - Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
 - Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
-- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.
+- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take `reverse=True` for descending order.
 - **`enumerate()`**, **`zip()`**, **`any()`**, and **`all()`** cover the other everyday loop shapes without an index in sight.
 
 **You will be able to…**
@@ -801,7 +739,7 @@ _In the session:_
 - Rewrite an imperative loop that builds a new list as a list comprehension, and read a comprehension aloud from the `for` outward.
 - Filter a list of dictionaries by one of their values.
 - Combine a list into one value with `sum()`, `min()`, `max()`, or `len()`, and write the accumulator loop when none of them fits.
-- Explain the difference between `sorted()` and `.sort()`, predict the `None` from `result = nums.sort()`, and sort with `key=` and `reverse=True`.
+- Explain the difference between `sorted()` and `.sort()`, predict the `None` from `result = nums.sort()`, and sort in descending order with `reverse=True`.
 
 _By the end of the module:_
 
@@ -840,9 +778,9 @@ The program prints `None` because `.sort()` doesn't return anything. Imani shoul
 
 The program prints `None`. `.sort()` sorts a list in place, which means it changes `discounted` itself and returns nothing, so `ordered` gets `None`. The list in `discounted` is now `[1, 6, 10]`, but Imani never prints it. Imani should write `ordered = sorted(discounted)`, because `sorted()` returns a new sorted list and leaves `discounted` unchanged. Calling `discounted.sort()` on its own line and then printing `discounted` would also work. The loop can become `discounted = [price - 2 for price in prices]`. The loop transforms every value and collects the results in a new list, and that is exactly what a list comprehension does: for each `price` in `prices`, it computes `price - 2` and adds the result to a new list that has as many elements as the source. Combining the two steps, `ordered = sorted([price - 2 for price in prices])` does the whole job in one line.
 
-## 1.13 Reading Unfamiliar Code
+## 1.12 Reading Unfamiliar Code
 
-<!-- key-terms-from: 13-reading-unfamiliar-code.md -->
+<!-- key-terms-from: 12-reading-unfamiliar-code.md -->
 
 **Key terms**
 
@@ -898,7 +836,7 @@ Malik reads it and decides, "The name and the docstring say it counts vowels, so
 
 ## Case Study: CLI Task Manager
 
-**Key terms:** none new. The case study exercises the terms from lessons 1 to 13.
+**Key terms:** none new. The case study exercises the terms from lessons 1 to 12.
 
 **You will be able to…**
 
@@ -915,7 +853,6 @@ _By the end of the module:_
 - Explain why `tasks` lives in `tasks.py` and is not imported into `menu.py`, and why only `main.py` has the `__main__` guard.
 - Explain why the menu uses a `while` loop, what `is_running` does, and how the same loop could be written with `break`.
 - Debug a model-written `delete_task()` and write a bug report that names the input, the actual output, the expected output, and the line at fault.
-- Plan a dispatch table for the menu and explain which option cannot go into it.
 - Explain which tasks the `completed_tasks` comprehension in `view_tasks()` keeps, rewrite it as a `for` loop, and write the comprehension that selects the incomplete tasks.
 - Predict what `all()` returns for an empty list and explain why a check that uses it must come after the empty-list guard.
 - Extend the application with a new feature that respects the existing separation of concerns.
@@ -944,7 +881,7 @@ Add Task would still add tasks, because `from tasks import tasks` gives `menu.py
 
 ## Project: CLI Application
 
-**Key terms:** none new. The project applies the terms from lessons 1 to 14.
+**Key terms:** none new. The project applies the terms from lessons 1 to 12.
 
 **You will be able to…**
 

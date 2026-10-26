@@ -1,4 +1,4 @@
-# 1.12 Comprehensions and Built-in Iteration
+# 1.11 Comprehensions and Built-in Iteration
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/13-comprehensions-builtin-iteration/)
@@ -30,7 +30,7 @@
 - Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
 - Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
 - **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
-- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take a `key` callback that says what to compare and `reverse=True` for descending order.
+- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take `reverse=True` for descending order.
 - **`enumerate()`**, **`zip()`**, **`any()`**, and **`all()`** cover the other everyday loop shapes without an index in sight.
 
 ## Imperative vs. Declarative Code: Why We Use Built-in Iteration
@@ -299,42 +299,12 @@ It prints `None`.
 </details>
 {% endhint %}
 
-Both take the same two optional keyword arguments. `reverse=True` gives descending order, and `key` takes a callback, as you saw in the last chapter, that says what to compare:
+Both take an optional keyword argument, `reverse=True`, that gives descending order:
 
 ```python
 nums = [4, 2, 3, 5, 1]
 print(sorted(nums, reverse=True))   # [5, 4, 3, 2, 1]
-
-animals = ['aardvark', 'bear', 'cheetah', 'deer']
-print(sorted(animals, key=len))     # ['bear', 'deer', 'cheetah', 'aardvark']
 ```
-
-`key` is called once per element, and the elements are ordered by what it returns. It never changes the elements themselves; `sorted(animals, key=len)` still returns the animal names, not their lengths.
-
-**Challenge**
-
-Sort this list of user dictionaries two ways: once by age, youngest first, and once by username, alphabetically.
-
-```python
-users = [
-    {'username': 'ben', 'age': 30},
-    {'username': 'maya', 'age': 25},
-    {'username': 'reuben', 'age': 41},
-    {'username': 'gonzalo', 'age': 25},
-]
-```
-
-**<details><summary>Solution</summary>**
-
-```python
-by_age = sorted(users, key=lambda user: user['age'])
-
-by_name = sorted(users, key=lambda user: user['username'])
-```
-
-The `key` callback receives one dictionary at a time and returns the value to sort by. Dictionaries have no natural order, so `sorted(users)` with no `key` would raise a `TypeError`.
-
-</details>
 
 ## Tips and Tricks
 
@@ -426,8 +396,4 @@ print(all([score >= 75 for score in scores]))  # False
 
 {% hint style="info" %}
 A comprehension written with curly braces and a `key: value` expression builds a dictionary instead of a list. With the four-user `users` list from the filtering section, `{user['id']: user['username'] for user in users}` produces `{1: 'ben', 2: 'maya', 3: 'reuben', 4: 'gonzalo'}`. You will not need it often in this module, but you will recognize it when you see it.
-{% endhint %}
-
-{% hint style="info" %}
-Python also has built-in functions called `map()` and `filter()` that take a callback and a list, exactly like the higher-order functions in the last chapter. They work, and you will see them, but Python programmers overwhelmingly prefer comprehensions for the same jobs because the expression is right there instead of hidden inside a callback. Recognize `map` and `filter`; write comprehensions.
 {% endhint %}

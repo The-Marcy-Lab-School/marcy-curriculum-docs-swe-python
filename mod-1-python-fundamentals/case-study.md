@@ -24,7 +24,6 @@ Clone it then follow the **Setup** steps listed in the README.
   - [Modules](#modules)
   - [Error Handling and Debugging](#error-handling-and-debugging)
   - [Test-Driven Development](#test-driven-development)
-  - [Higher-Order Functions](#higher-order-functions)
   - [Comprehensions and Built-in Iteration](#comprehensions-and-built-in-iteration)
   - [Reading Unfamiliar Code](#reading-unfamiliar-code)
   - [Code Style](#code-style)
@@ -353,18 +352,6 @@ Chapter 1.10 described test-driven development: write a test for a feature befor
 
 Now write `toggle_task()` in `tasks.py` and run the tests again. Chapter 1.10 says that a failing test proves the test is actually checking something. What could go wrong with a test that you only ever saw pass?
 
-### Higher-Order Functions
-
-Functions are values. They can be stored in a dictionary, passed to another function, and called later by whoever holds them. A menu program is one of the places where this pays off most clearly.
-
-**Question 1**
-
-Chapter 1.11 described a **dispatch table**: a dictionary that maps each choice to the function that handles it, so that one dictionary lookup replaces a long `if`/`elif` chain. Plan a version of `show_menu()` that uses one. Which menu options can go straight into the dictionary? Which need a small function of their own written first? Which option cannot go into the dictionary at all, and why not? What takes the place of the `else`?
-
-**Question 2**
-
-From the `src` folder, start the REPL with `python3` and run `from tasks import tasks`. Use `sorted()` with a `key` written as a `lambda` to build a list of the tasks with the incomplete ones first. Before you run it, predict whether `False` or `True` sorts first. After it runs, has the order of `tasks` itself changed?
-
 ### Comprehensions and Built-in Iteration
 
 Comprehensions and Python's built-in iteration tools abstract away the logic for looping through a list by index and doing something with its values. While the programmer loses some fine-tuned control over how the loop is executed, the improved readability of the code is often worth the tradeoff.
@@ -426,11 +413,11 @@ Where in `view_tasks()` should the teammate put the two lines instead, and why d
 
 **Question 4**
 
-Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.12, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
+Suppose the user could complete a task by typing its description instead of its number. Using the pattern from Finding the First Match in chapter 1.11, write a function `find_task_index(description)` that returns the index of the first task whose description matches. What should it return when no task matches? Pass that value to `complete_task()` and predict what happens, then run it to check. Would the result be different if `find_task_index()` returned `None` when nothing matched?
 
 ### Reading Unfamiliar Code
 
-You read this whole application with the method from chapter 1.13 before you started these questions. Code that a model wrote deserves the same method with more suspicion, because it looks just as confident when it is wrong as when it is right.
+You read this whole application with the method from chapter 1.12 before you started these questions. Code that a model wrote deserves the same method with more suspicion, because it looks just as confident when it is wrong as when it is right.
 
 **Question 1**
 
