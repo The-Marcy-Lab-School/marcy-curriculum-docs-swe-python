@@ -46,7 +46,7 @@
   - [1.8 Dictionaries](mod-1-python-fundamentals/8-dictionaries.md)
   - [1.9 Modules, Virtual Environments, and pytest](mod-1-python-fundamentals/9-modules-environments-pytest.md)
   - [1.10 Test-Driven Development](mod-1-python-fundamentals/10-test-driven-development.md)
-  - [1.11 Comprehensions and Built-in Iteration](mod-1-python-fundamentals/11-comprehensions-builtin-iteration.md)
+  - [1.11 Comprehensions and Common List Operations](mod-1-python-fundamentals/11-comprehensions-builtin-iteration.md)
   - [1.12 Reading Unfamiliar Code](mod-1-python-fundamentals/12-reading-unfamiliar-code.md)
   - [Case Study: CLI Task Manager](mod-1-python-fundamentals/case-study.md)
   - [Project: CLI Application](mod-1-python-fundamentals/project.md)

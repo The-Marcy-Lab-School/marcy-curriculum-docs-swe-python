@@ -16,7 +16,7 @@ By the end of this module, you will be able to write a Python program that takes
 - [8. Dictionaries](8-dictionaries.md)
 - [9. Modules, Virtual Environments, and pytest](9-modules-environments-pytest.md)
 - [10. Test-Driven Development](10-test-driven-development.md)
-- [11. Comprehensions and Built-in Iteration](11-comprehensions-builtin-iteration.md)
+- [11. Comprehensions and Common List Operations](11-comprehensions-builtin-iteration.md)
 - [12. Reading Unfamiliar Code](12-reading-unfamiliar-code.md)
 - [Case Study: CLI Task Manager](case-study.md)
 - [Project: CLI Application](project.md)

@@ -1,4 +1,4 @@
-# 1.11 Comprehensions and Built-in Iteration
+# 1.11 Comprehensions and Common List Operations
 
 {% hint style="info" %}
 💡 Looking for another way to learn? Check out the [interactive reading for this lesson](https://the-marcy-lab-school.github.io/SWE_Interactive_Readings/Mod1/13-comprehensions-builtin-iteration/)
@@ -7,136 +7,235 @@
 **Table of Contents**
 
 - [Key Terms](#key-terms)
-- [Imperative vs. Declarative Code: Why We Use Built-in Iteration](#imperative-vs-declarative-code-why-we-use-built-in-iteration)
-- [The Toolkit](#the-toolkit)
-  - [Transforming with List Comprehensions](#transforming-with-list-comprehensions)
+- [Name the Job, Choose the Tool](#name-the-job-choose-the-tool)
+- [1. Do something with every value without producing a result](#1-do-something-with-every-value-without-producing-a-result)
+  - [Challenge: Café Report, Part 1](#challenge-café-report-part-1)
+- [2. Transforming with List Comprehensions](#2-transforming-with-list-comprehensions)
+  - [Imperative vs. Declarative Code](#imperative-vs-declarative-code)
   - [Challenge: Refactor with Tests](#challenge-refactor-with-tests)
-  - [Filtering with an `if`](#filtering-with-an-if)
-  - [Finding the First Match](#finding-the-first-match)
-  - [Combining Into One Value](#combining-into-one-value)
-  - [Sorting with `sorted()` and `.sort()`](#sorting-with-sorted-and-sort)
-- [Tips and Tricks](#tips-and-tricks)
-  - [Combining Steps](#combining-steps)
+  - [Challenge: Café Report, Part 2](#challenge-café-report-part-2)
+- [3. Filtering with an `if`](#3-filtering-with-an-if)
+  - [Challenge: Café Report, Part 3](#challenge-café-report-part-3)
+- [4. Reduce a List of Values Into One Value](#4-reduce-a-list-of-values-into-one-value)
+  - [`sum()`, `min()`, `max()`, and `len()`](#sum-min-max-and-len)
+  - [The Accumulator Pattern](#the-accumulator-pattern)
   - [Generating a Frequency Counter](#generating-a-frequency-counter)
-  - [Nested Lists](#nested-lists)
-  - [`zip()`, `any()`, and `all()`](#zip-any-and-all)
+  - [Challenge: Café Report, Part 4](#challenge-café-report-part-4)
+- [5. Finding the First Match](#5-finding-the-first-match)
+  - [Challenge: Café Report, Part 5](#challenge-café-report-part-5)
+- [6. Sorting with `sorted()` and `.sort()`](#6-sorting-with-sorted-and-sort)
+  - [Challenge: Café Report, Part 6](#challenge-café-report-part-6)
+- [Combining Steps](#combining-steps)
+  - [Challenge: Coffee Revenue](#challenge-coffee-revenue)
+- [Advanced Topics](#advanced-topics)
+  - [Finding the First Match with `next()`](#finding-the-first-match-with-next)
+  - [A New List Shares Its Dictionaries](#a-new-list-shares-its-dictionaries)
+- [Summary](#summary)
 
 ## Key Terms
 
+- **Imperative vs. Declarative**
+  - **Imperative Code** provides explicit instructions for every step to complete a task. This gives us a lot of control over every step, but it takes more effort.
+  - **Declarative code** describes the desired solution and uses existing tools to handle the steps. We save time and effort by using existing tools but sacrifice the fine-tuned control that we get if we built it ourselves.
 - **List comprehensions** provide declarative ways to build new lists from existing ones, making code more readable and reducing the need for explicit loops.
-- `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
-- `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
-- A **dictionary comprehension**, `{key: value for item in items}`, builds a new dictionary the same way a list comprehension builds a new list.
-- Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
-- Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
-- **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
-- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take `reverse=True` for descending order.
-- **`enumerate()`**, **`zip()`**, **`any()`**, and **`all()`** cover the other everyday loop shapes without an index in sight.
+  - `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
+  - `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
+- Patterns for using lists:
+  - **`sum()`**, **`min()`**, and **`max()`** combine a list of numbers into a single value, and **`len()`** counts the elements in any list.
+    - To use `sum()`, `min()`, or `max()` on a list of records, first build a list of numbers from the records with a comprehension.
+  - The **accumulator pattern** combines a list into one value: create a variable that holds a starting value, update it once per element in a loop, and return it when the loop ends.
+  - A **frequency counter** is an accumulator whose starting value is an empty dictionary. It builds a lookup table that maps each value in a list to the number of times that value appears.
+  - Finding the **first** element that passes a test is a `for` loop with an early `return`.
+  - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list **in place**, which means it changes the list itself and returns `None`. Both take `reverse=True` for descending order.
 
-## Imperative vs. Declarative Code: Why We Use Built-in Iteration
+## Name the Job, Choose the Tool
 
-What is the value of these tools? They allow us to write our code in a more _declarative_ manner rather than in an _imperative_ manner.
-
-**Imperative code** provides explicit instructions for every step to complete a task. This gives us a lot of control over every step, but it takes more effort.
-
-**Declarative code** just describes the desired solution and uses existing tools to handle the steps. While we give up control to the existing tool, we save time and effort.
-
-For example, suppose we want to double every value in a list. We can either write out every single step imperatively, or we can declaratively describe the desired outcome using a list comprehension
+The examples in this lesson use a café's list of purchases. Each purchase is a record with the customer's name, an item, a price, and the way the customer paid:
 
 ```python
-# Imperative: High Control & High Effort:
-nums = [1, 5, 10, 20]
-
-def double_all_nums(items):
-    new_items = []
-    for num in items:
-        result = num * 2
-        new_items.append(result)
-    return new_items
-
-doubled_imperatively = double_all_nums(nums)
-print(doubled_imperatively)
-
-# Declarative: Low Control & Low Effort:
-doubled_declaratively = [num * 2 for num in nums]
-print(doubled_declaratively)
+purchases = [
+    {"customer": "Ada",     "item": "coffee",   "price": 3.50,  "payment": "card"},
+    {"customer": "Zo",      "item": "bagel",    "price": 2.25,  "payment": "cash"},
+    {"customer": "Malik",   "item": "coffee",   "price": 3.50,  "payment": "card"},
+    {"customer": "Priya",   "item": "juice",    "price": 4.00,  "payment": "cash"},
+    {"customer": "Ada",     "item": "muffin",   "price": 3.00,  "payment": "card"},
+]
 ```
 
-Let's look at how we can use Python's built-in iteration tools to write more declarative code.
+When working with lists like this, the possibilities may seem endless with what you can do! And in some ways that is true, but really there are only a few categories of tasks you will do with a list. Below, we've listed 6 and the specific tools that Python provides for each job. Your role as a software engineer is to _identify_ which kind of task you're working on so you can choose the tool that does it.
 
-## The Toolkit
+Here are the most common jobs you will do with a list, and the Python tool for each:
 
-Here are the most common things you want to do with a list, and the Python tool for each:
+| You want to...                                                    | Example                                         | Use                                                                                 |
+| ----------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 1. Do something with every value without producing a result       | Print the details of each purchase              | a `for` loop                                                                        |
+| 2. Transform every value and collect the results in a new list    | Get a list of customers from the purchases      | a list comprehension                                                                |
+| 3. Keep some values, discard the others (filter)                  | Get a list of the cash purchases                | a list comprehension with `if`                                                      |
+| 4. Reduce a list down to one value                                | Calculate the total the price of every purchase | builtin functions `sum()`, `min()`, `max()`, and `len()` or the accumulator pattern |
+| 5. Find the first value that passes a test (find the first match) | Find the first purchase of juice                | a `for` loop with `return`                                                          |
+| 6. Compare values to put them in order                            | Order the prices from most to least expensive   | `sorted()` or `.sort()`                                                             |
 
-| You want to...                                              | Use                                                        | Example                                       |
-| ----------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| Do something with every value without building a new list  | a `for` loop                                               | Print each value, or mutate each dictionary   |
-| Transform every value and collect the results in a new list | a list comprehension                                       | Double every number in the source list        |
-| Test every value and keep the ones that pass                | a list comprehension with `if`                             | Keep only the even numbers in the source list |
-| Test every value and get the first one that passes          | a `for` loop with `return`/`break`                         | Find the first number greater than 10         |
-| Combine every value into one                                | `sum()`, `min()`, `max()`, `len()`, or an accumulator loop | Calculate the sum of all numbers              |
-| Compare values to put them in order                         | `sorted()` or `.sort()`                                    | Sort a list of numbers in descending order    |
+Let's look at these jobs one at a time. The examples use each purchase's item and price. At the end of each section, a café report challenge asks you to write one more piece of the café's end-of-day report, and the challenges use each purchase's payment.
 
-### Transforming with List Comprehensions
+## 1. Do something with every value without producing a result
 
-A list comprehension builds a new list by evaluating an expression once for every element of a source list. The value of the expression is added to the new list.
+This is the simplest case and one that we've been practicing for the last few lessons. Suppose we wanted to print every purchase as a line of a receipt. A `for` loop already handles this task well.
+
+```python
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+
+# For every element in the list, do something
+for purchase in purchases:
+    print(f"{purchase['item']}: ${purchase['price']:.2f}")
+
+# coffee: $3.50
+# bagel: $2.25
+# coffee: $3.50
+# juice: $4.00
+# muffin: $3.00
+```
+
+### Challenge: Café Report, Part 1
+
+Add to the report with one line per purchase that says the customer's name and how the customer paid. Write a loop that prints these lines:
+
+```
+Ada paid by card
+Zo paid by cash
+Malik paid by card
+Priya paid by cash
+Ada paid by card
+```
+
+**<details><summary>Solution</summary>**
+
+```python
+for purchase in purchases:
+    print(f"{purchase['customer']} paid by {purchase['payment']}")
+```
+
+The loop's job is to print a line for each purchase. It doesn't build anything that the program uses later, so a plain `for` loop is the right tool.
+
+</details>
+
+## 2. Transforming with List Comprehensions
+
+Often, we want to build a new list using data from an existing one. For example, we may want a list of the names of the customers from the `purchases` list.
+
+We can start with an empty list and use a `for` loop through the existing `purchases` list, using `.append()` to fill the new list.
+
+```python
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+
+# Transform purchases into a list of customer names
+customer_names = []
+for purchase in purchases:
+    customer_names.append(purchase["customer"])
+
+print(customer_names)  # ['Ada', 'Zo', 'Malik', 'Priya', 'Ada']
+```
+
+This job, transforming every value and collecting the results in a new list, is so common that Python gives it its own syntax called a **List Comprehension**. It looks like this:
+
+```python
+customer_names = [purchase["customer"] for purchase in purchases]
+
+print(customer_names)  # ['Ada', 'Zo', 'Malik', 'Priya', 'Ada']
+```
+
+You can read this syntax like this: "for each `purchase` in `purchases`, compute `purchase["customer"]` and collect it in the new list."
+
+The list comprehension syntax can be generalized like this:
 
 ```python
 [expression for item in source_list]
 ```
 
-Use it when you want a copy of the source list with each value converted to a new value.
+Python reads this and builds a new list by evaluating `expression` once for every element of a source list. The value of the expression is added to the new list. The new list always has exactly as many elements as the source.
 
-**Example:** In this example, we have a list `inches_list` containing values each representing a number of inches. Using a comprehension, we transform each `inches` value into a string in the format `x inches => y feet z inches`. Each of these new strings is added to the list stored in `feet_and_inches`:
-
-{% code title="transform.py" %}
-
-```python
-inches_list = [70, 55, 62, 12, 36]
-
-# This example converts inches to feet and inches strings
-def get_feet_and_inches_str(inches):
-    feet = inches // 12
-    remaining_inches = inches % 12
-    return f"{inches} inches => {feet} feet {remaining_inches} inches"
-
-feet_and_inches = [get_feet_and_inches_str(inches) for inches in inches_list]
-print(feet_and_inches)
-```
-
-{% endcode %}
-
-Read a comprehension from the `for` outward: "for each `inches` in `inches_list`, compute `get_feet_and_inches_str(inches)` and collect it." The new list always has exactly as many elements as the source.
-
-**Challenge:** In this example, we have a `users` list full of user dictionaries. Write a comprehension that extracts all of the usernames into a new list:
+The expression can be any expression, including a call to a function you wrote. In this example, `format_line` turns one purchase into a line of a receipt, and the comprehension calls it once for every purchase:
 
 {% code title="transform.py" %}
 
 ```python
-users = [
-    {'id': 1, 'username': 'ben', 'is_admin': False},
-    {'id': 2, 'username': 'maya', 'is_admin': True},
-    {'id': 3, 'username': 'reuben', 'is_admin': True},
-    {'id': 4, 'username': 'gonzalo', 'is_admin': False},
-]
-usernames = [??? for user in users]
+def format_line(purchase):
+    return f"{purchase['item']}: ${purchase['price']:.2f}"
+
+receipt_lines = [format_line(purchase) for purchase in purchases]
+print(receipt_lines)
+# ['coffee: $3.50', 'bagel: $2.25', 'coffee: $3.50', 'juice: $4.00', 'muffin: $3.00']
 ```
 
 {% endcode %}
 
-**<details><summary>Solution</summary>**
+Keeping the work in a small function is what lets the comprehension stay one readable line.
+
+### Imperative vs. Declarative Code
+
+The loop and the comprehension build the same list, so which should you use? The comprehension is certainly faster to write and read if you know what you're doing, but everything in programming is a tradeoff so there _must_ be a reason to use a loop.
+
+The `for` loop is the **Imperative** way to do this task meaning **you define and control every step of the process**. This means that you can insert additional steps to customize the solution but it does require more effort to both read and write this code:
 
 ```python
-usernames = [user['username'] for user in users]
+# Imperative: High Control & High Effort:
+customer_names = []
+for purchase in purchases:
+    customer_names.append(purchase["customer"])
+    # A custom print statement that is only possible when written imperatively
+    print(f"Added {purchase['customer']}")
+
+# Declarative: Low Control & Low Effort:
+customer_names = [purchase["customer"] for purchase in purchases]
 ```
 
-</details>
+The list comprehension is the **Declarative** approach where we use purpose-built tools that allow us to **describe the outcome we want, not the process**. This means that we lose the ability to adjust the process. However, if adjustments aren't needed, it is easier to both read and write!
+
+Neither approach is strictly "better", they just make different tradeoffs. The declarative approach is typically the right choice until you need to make adjustments to the process and you reach for the imperative tool that gives you more control.
+
+{% hint style="info" %}
+**Making a Peanut Butter and Jelly Sandwich:**
+
+If you were to give someone **imperative** instructions you might need to specify where to find the ingredients, the exact peanut-butter-to-jelly ratio, and how to cut the bread.
+
+A **declarative** approach would be to simply ask for a sandwich and let the person decide how to make it. You don't care as much about the details as long as it gets done.
+{% endhint %}
 
 ### Challenge: Refactor with Tests
 
-Every comprehension in this lesson replaces a loop that already works. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but you already have a better tool: the tests you wrote for `double_all_purely` in the Test-Driven Development lesson.
+Every comprehension in this lesson replaces a loop that already works. How do you know the comprehension does _exactly_ what the loop did? You could run both and compare the output by eye, but tests do this job better: they check the same inputs every time, and they tell you exactly which check failed.
 
-Open your `testing-practice` project and refactor `double_all_purely` in `src/double_all.py` to use a list comprehension. Then run `python3 -m pytest tests/test_double_all.py`. If every test still passes, the comprehension does what the loop did.
+The lecture code for this lesson has a `refactor-with-tests` folder. Its `double_all.py` file holds this function, which returns a new list in which every number is doubled, every string is repeated, and every other value is left alone:
+
+```python
+def double_all_purely(items):
+    doubled = []
+    for value in items:
+        doubled.append(double(value))
+    return doubled
+
+
+def double(value):
+    if isinstance(value, (int, float, str)):
+        return value * 2
+    else:
+        return value
+```
+
+The folder's `test_double_all.py` file has three tests for `double_all_purely`, and all three pass with the loop. Follow the setup steps in the lecture code's README to install pytest, then run `python3 -m pytest` from inside the `refactor-with-tests` folder to see them pass.
+
+Refactor `double_all_purely` to use a list comprehension and run `python3 -m pytest` again. If every test still passes, the comprehension does what the loop did.
 
 **<details><summary>Solution</summary>**
 
@@ -145,146 +244,357 @@ def double_all_purely(items):
     return [double(value) for value in items]
 ```
 
-The comprehension still calls `double`, the helper function from the Test-Driven Development lesson, so each value is still doubled, repeated, or left alone. Keeping that branching in its own small function is what lets the comprehension stay one readable line. All three tests still pass, so the refactor changed how `double_all_purely` works without changing what it does.
+The comprehension still calls the `double` helper function, so each value is still doubled, repeated, or left alone. Keeping that branching in its own small function is what lets the comprehension stay one readable line. All three tests still pass, so the refactor changed how `double_all_purely` works without changing what it does.
 
 </details>
 
-### Filtering with an `if`
+### Challenge: Café Report, Part 2
 
-Adding an `if` to the end of a comprehension keeps only the elements for which the test is `True`.
-
-```python
-[item for item in source_list if test]
-```
-
-Use it when you want a copy of the source list with unwanted values removed.
-
-**Example:** In this example, we want to know how many scores in a list of numbers are greater than or equal to 75. Using a comprehension with an `if`, we can get a copy of the list containing only those passing scores and then read its length.
-
-{% code title="filter.py" %}
+The report needs a list of how each purchase was paid so that we can tell if at least one customer paid in cash. Write a comprehension that builds it:
 
 ```python
-scores = [100, 85, 90, 70, 74]
-
-# This is a copy of scores that has been filtered.
-passing_scores = [score for score in scores if score >= 75]
-
-# Using its length, we can get the number of passing scores
-print(f"There were {len(passing_scores)} passing scores")
-```
-
-{% endcode %}
-
-Notice that the expression before the `for` is just `score`. Filtering keeps values as they are. You can transform _and_ filter in one comprehension by changing that expression, and the result can be shorter than the source.
-
-**Challenge:** In this example, we have a list of user dictionaries. We want to get a copy of the list that only contains admins.
-
-Use a comprehension with an `if` to check each dictionary and keep only those with `'is_admin': True`.
-
-{% code title="filter.py" %}
-
-```python
-users = [
-    {'id': 1, 'username': 'ben', 'is_admin': False},
-    {'id': 2, 'username': 'maya', 'is_admin': True},
-    {'id': 3, 'username': 'reuben', 'is_admin': True},
-    {'id': 4, 'username': 'gonzalo', 'is_admin': False},
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
 ]
 
-admins = [??? for user in users if ???]
+payments = ???
 
-print(admins)
-# [
-#   {'id': 2, 'username': 'maya', 'is_admin': True},
-#   {'id': 3, 'username': 'reuben', 'is_admin': True},
-# ]
+print(payments)
+# Output: ['card', 'cash', 'card', 'cash', 'card']
+
+print("At least one customer paid in cash" if "cash" in payments else "No one paid in cash")
+# Output: At least one customer paid in cash
 ```
-
-{% endcode %}
 
 **<details><summary>Solution</summary>**
 
 ```python
-admins = [user for user in users if user['is_admin']]
+payments = [purchase["payment"] for purchase in purchases]
 ```
 
-`user['is_admin'] == True` works too, but a boolean is already a boolean, so the comparison adds nothing.
+Read from the `for` outward: for each `purchase` in `purchases`, compute `purchase["payment"]` and collect it. The source has five purchases, so the new list has five payments.
 
 </details>
 
-### Finding the First Match
+## 3. Filtering with an `if`
 
-While a filtering comprehension is used to get ALL values that pass a test, sometimes you only want the first one. The plain way is a `for` loop that leaves as soon as it finds it:
+Filtering occurs whenever we want to keep some values in a list and not others. For example, we may want to look at only the purchases made by the customer named `"Ada"`.
 
 ```python
-def find_first_odd(nums):
-    for num in nums:
-        if num % 2 == 1:
-            return num
-    return None  # nothing passed the test
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
 
-def find_first_odd_index(nums):
-    for index, num in enumerate(nums):
-        if num % 2 == 1:
-            return index
-    return -1
+adas_purchases = [purchase for purchase in purchases if purchase["customer"] == "Ada"]
+print(adas_purchases)
+# Output:
+# [
+#   {'customer': 'Ada', 'item': 'coffee', 'price': 3.5, 'payment': 'card'},
+#   {'customer': 'Ada', 'item': 'muffin', 'price': 3.0, 'payment': 'card'}
+# ]
 ```
 
-`return` inside the loop is what makes this "first": the loop stops at the first success and never looks at the rest. The line after the loop handles the case where nothing matched. Decide what that case should return before you write the function, because callers will need to check for it.
+In this example, `[purchase for purchase in purchases]` would return a new list with every purchase in its entirety. Adding the `if` to the end keeps only the purchases for which the expression `test` expression is true. Here is the general shape:
 
-### Combining Into One Value
+```python
+[expression for item in source_list if test]
+```
+
+Use it when you want a copy of the source list with unwanted values removed.
+
+Here is an example where we combine using an `expression` and an `if` to get the names of the items for purchases over $3:
+
+{% code title="filter.py" %}
+
+```python
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+
+big_items = [purchase["item"] for purchase in purchases if purchase["price"] > 3]
+print(big_items)  # ['coffee', 'coffee', 'juice']
+```
+
+{% endcode %}
+
+Read it from the `for` outward: "for each `purchase` in `purchases`, keep it if its price is over 3, and collect its item."
+
+### Challenge: Café Report, Part 3
+
+The café counts its cash drawer at the end of the day, so the report lists the items that customers paid for in cash. Write one comprehension that builds the list:
+
+```python
+cash_items = ???
+
+print(cash_items)  # ['bagel', 'juice']
+```
+
+**<details><summary>Solution</summary>**
+
+```python
+cash_items = [purchase["item"] for purchase in purchases if purchase["payment"] == "cash"]
+```
+
+The `if` keeps only the purchases paid in cash (filtering), and `purchase["item"]` turns each of those purchases into its item (transforming).
+
+</details>
+
+## 4. Reduce a List of Values Into One Value
+
+When we have a list of values, we often want to reduce that list down to a single value. For example, we may want to get largest or smallest value in the list, or calculate the sum of all values. Let's explore the ways we can do this.
+
+### `sum()`, `min()`, `max()`, and `len()`
 
 Python has built-in functions for the most common ways to boil a list down to a single value:
 
 ```python
-lunch_costs = [5, 10, 7, 9, 15, 8, 12]
+prices = [3.50, 2.25, 3.50, 4.00, 3.00]
 
-print(sum(lunch_costs))   # 66
-print(min(lunch_costs))   # 5
-print(max(lunch_costs))   # 15
-print(len(lunch_costs))   # 7
-print(sum(lunch_costs) / len(lunch_costs))  # 9.428571428571429, the average
+print(sum(prices))   # 16.25
+print(min(prices))   # 2.25
+print(max(prices))   # 4.0
+print(len(prices))   # 5
+print(sum(prices) / len(prices))  # 3.25, the average
 ```
 
-When none of them does what you want, the general shape is the **accumulator pattern**: create a variable holding a starting value, update it once per element, and return it when the loop ends.
+These functions have one limitation: `sum()`, `min()`, and `max()` only work on a list of numbers. Try them on the list of purchases:
 
 ```python
-def total(costs):
-    running_total = 0          # the starting value
-    for cost in costs:
-        running_total += cost  # combine the current value into the total so far
-    return running_total       # the final accumulated value
-
-print(total(lunch_costs))  # 66
+print(len(purchases))  # 5
+print(sum(purchases))  # TypeError: unsupported operand type(s) for +: 'int' and 'dict'
 ```
 
-`sum()` is exactly this loop with `0` as the starting value and `+` as the combining step. The pattern matters because the starting value and the combining step can be anything, which is what the frequency counter below does with a dictionary.
+`len()` works because it only counts the elements, and it never needs to look inside them. `sum()` adds the elements together, starting from `0`, and Python has no rule for adding a dictionary to a number, so it raises a `TypeError`. `min()` and `max()` raise a `TypeError` too, because Python has no rule for deciding which of two dictionaries is smaller.
 
-### Sorting with `sorted()` and `.sort()`
+The fix is to transform the purchases into a list of numbers first. A comprehension does that job, and the built-in function then reduces the numbers:
+
+```python
+prices = [purchase["price"] for purchase in purchases]
+print(prices)       # [3.5, 2.25, 3.5, 4.0, 3.0]
+print(sum(prices))  # 16.25
+print(max(prices))  # 4.0
+```
+
+These are the "declarative" approaches. Let's look at the "imperative" approach which is sometimes needed.
+
+### The Accumulator Pattern
+
+The built-in functions cover the most common reductions. When none of them does the job you need, you write the loop yourself imperatively.
+
+```python
+def total(purchases):
+    running_total = 0                       # the starting value
+    for purchase in purchases:
+        running_total += purchase["price"]  # combine the current value into the total so far
+    return running_total                    # the final accumulated value
+
+print(total(purchases))  # 16.25
+```
+
+This pattern is the **accumulator pattern**:
+
+- create a variable holding a starting value
+- update it once per element
+- return it when the loop ends.
+
+A loop that builds a list with `.append()` has this shape too: its starting value is an empty list, and its combining step is `.append()`. We saw this as the imperative approach for transforming a list:
+
+```python
+def get_customer_names(purchases):
+    customer_names = []                             # the starting value
+    for purchase in purchases:
+        customer_names.append(purchase["customer"]) # combine the current value into the list so far
+    return customer_names                           # the final accumulated value
+
+print(get_customer_names(purchases)) # ['Ada', 'Zo', 'Malik', 'Priya', 'Ada']
+```
+
+`sum()` is this same loop, with `0` as the starting value and `+` as the combining step.
+
+Change the starting value or the combining step, and the same shape does a different job.
+
+### Generating a Frequency Counter
+
+We've seen the accumulator pattern for building an _integer_ total and a _list_ of names. Now, Let's look at using the accumulator pattern to build a _dictionary_.
+
+Here we have some code that creates a lookup table dictionary mapping each type of item to the number of purchases of that item (e.g. "coffee" is in 2 purchases, "bagel" is in 1 purchase, etc...). This kind of lookup table is called a **frequency counter**.
+
+```python
+def get_item_counts(purchases):
+    # The starting value here is an empty {}
+    counts = {}
+    for purchase in purchases:
+        item = purchase["item"]
+        # if this is the first time we are looking at an item, .get returns 0 and we store it as 1
+        # if we've already counted the item before, .get returns its count and we store that count + 1
+        counts[item] = counts.get(item, 0) + 1
+    return counts
+
+print(get_item_counts(purchases))
+# {'coffee': 2, 'bagel': 1, 'juice': 1, 'muffin': 1}
+```
+
+The combining step adds one to the count stored under the current item. The first time an item appears it is not a key yet, and `.get(key, 0)` returns `0` for a missing key, so the same line handles both a new item and one that has been seen before.
+
+{% hint style="info" %}
+This is so common that the standard library has it built in: `from collections import Counter` and then `Counter([purchase["item"] for purchase in purchases])` gives you a dictionary-like object with the same counts. Knowing the loop is what lets you recognize what `Counter` is doing.
+{% endhint %}
+
+{% hint style="warning" %}
+**Predict, then run.** What does this program print?
+
+```python
+sizes = ["small", "large", "small", "small"]
+
+counts = {}
+for size in sizes:
+    counts[size] = counts.get(size, 0) + 1
+
+print(counts)
+```
+
+<details><summary>What actually happens</summary>
+
+It prints `{'small': 3, 'large': 1}`.
+
+- The first time `"small"` appears, it is not a key yet, so `counts.get("small", 0)` returns `0` and the count becomes `1`.
+- `"large"` is new too, so its count also starts at `1`.
+- Each later `"small"` is already a key, so `.get()` returns its current count and the loop adds one to it.
+
+</details>
+{% endhint %}
+
+### Challenge: Café Report, Part 4
+
+The report shows how many purchases were paid each way. Build a lookup table named `payment_counts` that maps each payment method to the number of purchases paid that way:
+
+```python
+payment_counts = {}
+# your loop here
+
+print(payment_counts)  # {'card': 3, 'cash': 2}
+```
+
+**<details><summary>Solution</summary>**
+
+```python
+payment_counts = {}
+for purchase in purchases:
+    payment = purchase["payment"]
+    payment_counts[payment] = payment_counts.get(payment, 0) + 1
+```
+
+- The starting value is an empty dictionary.
+- The combining step adds one to the count stored under the current purchase's payment method. `.get(payment, 0)` returns `0` the first time a payment method appears.
+- When the loop ends, `payment_counts` holds one key for every payment method that appears in the purchases.
+
+</details>
+
+## 5. Finding the First Match
+
+While a filtering comprehension is used to get ALL values that pass a test, sometimes you only want the first one. A comprehension cannot stop early: it checks every element and builds a whole list, even when the first element already passed. The plain way is a `for` loop that leaves as soon as it finds it:
+
+```python
+def find_purchase(purchases, item):
+    for purchase in purchases:
+        if purchase["item"] == item:
+            return purchase
+    return None  # nothing passed the test
+
+def find_purchase_index(purchases, item):
+    for index, purchase in enumerate(purchases):
+        if purchase["item"] == item:
+            return index
+    return -1
+
+print(find_purchase(purchases, "juice"))        # {'customer': 'Priya', 'item': 'juice', 'price': 4.0, 'payment': 'cash'}
+print(find_purchase_index(purchases, "juice"))  # 3
+print(find_purchase(purchases, "tea"))          # None
+```
+
+`return` inside the loop is what makes this "first": the loop stops at the first success and never looks at the rest. The line after the loop handles the case where nothing matched. Decide what that case should return before you write the function, because callers will need to check for it.
+
+{% hint style="warning" %}
+**Predict, then run.** `"coffee"` appears in `purchases` twice, at index `0` and at index `2`. What does this print?
+
+```python
+print(find_purchase_index(purchases, "coffee"))
+```
+
+<details><summary>What actually happens</summary>
+
+It prints `0`. The first purchase is a coffee, so the `return` inside the loop runs on the first pass, and the function ends before the loop ever reaches index `2`.
+
+</details>
+{% endhint %}
+
+### Challenge: Café Report, Part 5
+
+The report names the first item paid for with each payment method. Complete `first_item_paid_by` so that it returns the item of the first purchase paid with `payment`, or `None` when no purchase was paid that way:
+
+```python
+def first_item_paid_by(purchases, payment):
+    # return the item of the first purchase paid with payment, or None
+    return None
+
+print(first_item_paid_by(purchases, "cash"))   # should print bagel
+print(first_item_paid_by(purchases, "card"))   # should print coffee
+print(first_item_paid_by(purchases, "check"))  # should print None
+```
+
+**<details><summary>Solution</summary>**
+
+```python
+def first_item_paid_by(purchases, payment):
+    for purchase in purchases:
+        if purchase["payment"] == payment:
+            return purchase["item"]
+    return None
+```
+
+The loop returns `'bagel'` for `"cash"` as soon as it reaches the bagel, so it never checks the juice. No purchase was paid by `"check"`, so the loop finishes without returning and the function reaches `return None`.
+
+</details>
+
+## 6. Sorting with `sorted()` and `.sort()`
 
 Given a list of numbers, `sorted()` returns a new list with them in ascending order, from smallest to largest. The source list is untouched:
 
 ```python
-nums = [4, 2, 3, 5, 1]
-ordered = sorted(nums)
-print(ordered)  # [1, 2, 3, 4, 5]
-print(nums)     # [4, 2, 3, 5, 1]
+prices = [3.50, 2.25, 3.50, 4.00, 3.00]
+ordered = sorted(prices)
+print(ordered)  # [2.25, 3.0, 3.5, 3.5, 4.0]
+print(prices)   # [3.5, 2.25, 3.5, 4.0, 3.0]
 ```
 
 The list method `.sort()` does the same thing **in place** which means that the source list is modified and nothing is returned:
 
 ```python
-nums = [4, 2, 3, 5, 1]
-nums.sort()      # sorts nums "in place"
-print(nums)      # [1, 2, 3, 4, 5]
+prices = [3.50, 2.25, 3.50, 4.00, 3.00]
+prices.sort()   # sorts prices "in place"
+print(prices)   # [2.25, 3.0, 3.5, 3.5, 4.0]
 ```
+
+`.sort()` is the only tool in this lesson that changes the list it is given. Every other tool leaves the source list unchanged: a comprehension produces a new list, the built-in functions and the accumulator produce a single new value, and `sorted()` produces a new sorted list. Choose `sorted()` when other code still needs the list in its original order, and `.sort()` when nothing does.
 
 {% hint style="warning" %}
 **Predict, then run.**
 
 ```python
-nums = [4, 2, 3, 5, 1]
-result = nums.sort()
+prices = [3.50, 2.25, 3.50, 4.00, 3.00]
+result = prices.sort()
 print(result)
 ```
 
@@ -292,7 +602,7 @@ print(result)
 
 It prints `None`.
 
-`.sort()` changes `nums` and returns nothing, so `result` gets `None`. This is one of the most common mistakes in Python: writing `x = my_list.sort()` and then wondering where the list went. If you want the sorted list as a value, use `sorted(nums)`. If you want to reorder `nums` itself, call `nums.sort()` on its own line and don't assign it to anything.
+`.sort()` changes `prices` and returns nothing, so `result` gets `None`. This is one of the most common mistakes in Python: writing `x = my_list.sort()` and then wondering where the list went. If you want the sorted list as a value, use `sorted(prices)`. If you want to reorder `prices` itself, call `prices.sort()` on its own line and don't assign it to anything.
 
 `.append()` and `.reverse()` work the same way: they change the list in place and return `None`. `.pop()` is different: it changes the list and also returns the element it removed.
 
@@ -302,98 +612,122 @@ It prints `None`.
 Both take an optional keyword argument, `reverse=True`, that gives descending order:
 
 ```python
-nums = [4, 2, 3, 5, 1]
-print(sorted(nums, reverse=True))   # [5, 4, 3, 2, 1]
+prices = [3.50, 2.25, 3.50, 4.00, 3.00]
+print(sorted(prices, reverse=True))   # [4.0, 3.5, 3.5, 3.0, 2.25]
 ```
 
-## Tips and Tricks
+### Challenge: Café Report, Part 6
 
-### Combining Steps
-
-Because each of these tools takes a list and gives back a list (or a value), the output of one can feed straight into the next. Name the intermediate steps when it helps the reader:
+The report lists every price paid in cash, from highest to lowest. Build the list without changing `purchases`:
 
 ```python
-my_nums = [1, 2, 3, 4, 5]
+cash_prices = ???
 
-tripled = [num * 3 for num in my_nums]                  # multiply by 3
-big_ones = [num for num in tripled if num > 12]          # keep the numbers bigger than 12
-number_of_values_bigger_than_12_when_tripled = len(big_ones)  # count how many there are
-
-print(number_of_values_bigger_than_12_when_tripled)
-# 1
+print(cash_prices)  # [4.0, 2.25]
 ```
 
-Or fold the transform and the filter into one comprehension, which is fine while it stays readable:
+**<details><summary>Solution</summary>**
 
 ```python
-print(len([num * 3 for num in my_nums if num * 3 > 12]))
-# 1
+cash_prices = sorted([purchase["price"] for purchase in purchases if purchase["payment"] == "cash"], reverse=True)
 ```
 
-### Generating a Frequency Counter
+The comprehension keeps the cash purchases and turns each one into its price, which gives `[2.25, 4.0]`. `sorted()` with `reverse=True` then returns a new list from highest to lowest. `purchases` itself is a list of dictionaries, which `sorted()` cannot compare, so the comprehension has to build the list of numbers first.
 
-Counting how many times each value appears is the accumulator pattern with a dictionary as the accumulator. The `.get(key, 0)` from chapter 1.8 is what makes it short:
+</details>
+
+## Combining Steps
+
+Because each of these tools takes a list and gives back a list (or a value), the output of one can feed straight into the next. Name the intermediate steps when it helps the reader. This example finds the two highest prices:
 
 ```python
-repeaters = [1, 2, 4, 2, 3, 1, 4, 6, 2]
+prices = [purchase["price"] for purchase in purchases]  # transform each purchase into its price
+ordered = sorted(prices, reverse=True)                  # put the prices in order, highest first
+top_two = ordered[:2]                                   # keep the first two
 
-# The starting value here is an empty {}
-frequencies = {}
-for num in repeaters:
-    frequencies[num] = frequencies.get(num, 0) + 1
-
-print('frequencies', frequencies)
-# frequencies {1: 2, 2: 3, 4: 2, 3: 1, 6: 1}
+print(top_two)
+# [4.0, 3.5]
 ```
 
-{% hint style="info" %}
-This is so common that the standard library has it built in: `from collections import Counter` and then `Counter(repeaters)` gives you a dictionary-like object with the same counts. Knowing the loop is what lets you recognize what `Counter` is doing.
-{% endhint %}
-
-### Nested Lists
+Or fold the steps into one line, which is fine while it stays readable:
 
 ```python
-# Nested list
-smiley_face = [
-    ['-', '-', '-', '-', '-', '-', '-'],
-    ['-', '-', '*', '-', '*', '-', '-'],
-    ['-', '-', '-', '*', '-', '-', '-'],
-    ['-', '*', '-', '-', '-', '*', '-'],
-    ['-', '-', '*', '*', '*', '-', '-'],
-    ['-', '-', '-', '-', '-', '-', '-'],
+print(sorted([purchase["price"] for purchase in purchases], reverse=True)[:2])
+# [4.0, 3.5]
+```
+
+### Challenge: Coffee Revenue
+
+Write the code that calculates how much the café made from coffee. Name each job your code does before you write it.
+
+```python
+coffee_total = ???
+
+print(coffee_total)  # should print 7.0
+```
+
+**<details><summary>Solution</summary>**
+
+```python
+coffee_prices = [purchase["price"] for purchase in purchases if purchase["item"] == "coffee"]
+coffee_total = sum(coffee_prices)
+```
+
+The comprehension does two jobs: the `if` keeps only the coffee purchases (filtering), and `purchase["price"]` turns each one into its price (transforming). `sum()` then combines those prices into one value. The same thing fits on one line as `sum([purchase["price"] for purchase in purchases if purchase["item"] == "coffee"])`.
+
+</details>
+
+## Advanced Topics
+
+### Finding the First Match with `next()`
+
+A comprehension cannot stop early, but a **generator expression** can. A generator expression looks like a comprehension written with parentheses instead of square brackets. Instead of building a whole list at once, it produces one value at a time, and only when something asks it for the next value. The built-in function `next()` is what asks.
+
+Together, they find the first match in one line:
+
+```python
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
 ]
 
-# We can nest the loops
-for row_number, row in enumerate(smiley_face):
-    line = f"{row_number}: "
-    for cell in row:
-        line += cell
-    print(line)
+first_juice = next((purchase for purchase in purchases if purchase["item"] == "juice"), None)
+print(first_juice)  # {'customer': 'Priya', 'item': 'juice', 'price': 4.0, 'payment': 'cash'}
 
-# Or join each row's cells into one string
-for row_number, row in enumerate(smiley_face):
-    print(f"{row_number}: {''.join(row)}")
+first_tea = next((purchase for purchase in purchases if purchase["item"] == "tea"), None)
+print(first_tea)  # None
 ```
 
-### `zip()`, `any()`, and `all()`
+The line has three parts:
 
-Three more built-ins that replace common loops:
+- `(purchase for purchase in purchases if purchase["item"] == "juice")` is the generator expression. It describes the purchases that pass the test, but it has not checked any of them yet.
+- `next(...)` asks the generator for its first value. The generator checks the purchases one at a time and stops at the first one that passes, so it never looks at the muffin after the juice.
+- `None` is the value `next()` returns when the generator runs out of purchases without finding one that passes. Without it, `next()` raises a `StopIteration` error when nothing matches.
+
+This one line does the same job as a `for` loop that returns the first matching purchase and returns `None` after the loop ends. It is the declarative version of that loop, and the same tradeoff applies. The one-line version is shorter when the test is simple. The loop gives you control over each step, so it is easier to read when the search needs to do more, such as return the index of the match or print each purchase it checks.
+
+### A New List Shares Its Dictionaries
+
+A comprehension builds a new list, but when the source list holds dictionaries, the new list holds the same dictionaries, not copies of them. Changing a dictionary through the new list changes it in the source list too:
 
 ```python
-names = ['ben', 'maya', 'reuben']
-ages = [30, 25, 41]
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50},
+    {"customer": "Zo", "item": "bagel", "price": 2.25},
+]
 
-# zip walks two lists in step, pairing up elements by position
-for name, age in zip(names, ages):
-    print(f"{name} is {age}")
+big_purchases = [purchase for purchase in purchases if purchase["price"] > 3]
+big_purchases[0]["price"] = 0
 
-scores = [100, 85, 90, 70, 74]
-
-# any: did at least one pass?  all: did every one pass?
-print(any([score >= 90 for score in scores]))  # True
-print(all([score >= 75 for score in scores]))  # False
+print(purchases[0])                      # {'customer': 'Ada', 'item': 'coffee', 'price': 0}
+print(big_purchases[0] is purchases[0])  # True
 ```
 
-{% hint style="info" %}
-A comprehension written with curly braces and a `key: value` expression builds a dictionary instead of a list. With the four-user `users` list from the filtering section, `{user['id']: user['username'] for user in users}` produces `{1: 'ben', 2: 'maya', 3: 'reuben', 4: 'gonzalo'}`. You will not need it often in this module, but you will recognize it when you see it.
-{% endhint %}
+The list itself is new, so adding an element to `big_purchases` or removing one leaves `purchases` alone. Each dictionary inside it is shared, so changing a dictionary's values changes the one dictionary that both lists hold. To change the records without touching the originals, copy each one inside the comprehension: `[dict(purchase) for purchase in purchases if purchase["price"] > 3]`.
+
+## Summary
+
+Most loops over a list do one of six jobs: do something with every value, transform every value, keep the values that pass a test, combine every value into one, find the first value that passes a test, or put the values in order. Once you can name the job, you can choose the tool Python provides for it: a plain `for` loop to do something with every value; a comprehension to transform or filter; `sum()`, `min()`, `max()` and `len()`, or the accumulator pattern, to combine; a loop with an early `return` to find; and `sorted()` or `.sort()` to put values in order. A comprehension also connects the other tools to a list of records, because it builds the list of numbers that `sum()`, `min()`, `max()` and `sorted()` need. The declarative tools describe the result instead of the steps, so a reader can tell what a line produces without tracing it.

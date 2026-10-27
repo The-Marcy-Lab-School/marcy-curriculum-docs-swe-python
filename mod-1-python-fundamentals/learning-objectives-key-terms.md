@@ -716,67 +716,73 @@ The tests passing means the new loop works the same as the old one. With TDD, Ma
 
 The passing tests tell Malik that the new loop still does what the old one did, so this was a refactor: the code works differently but does the same thing. The first test uses `==` to check the contents, so the new version still keeps `90` and `65` and drops `40`. The second test uses `is not` to check that a new list came back and `==` to check that `scores` was not changed, so the new version is still a pure function. Malik doesn't have to compare outputs by eye, because the tests already describe what the function should do. For the strings, Malik should first write a new test, such as `assert get_passing_scores([90, "72", 40]) == [90, 72]`. Writing it forces Malik to decide what the function should return, for example whether `"72"` comes back as the number `72` or as the string. The first run should fail (red) with a `TypeError`, because `"72" >= 65` compares a string with a number. That failure shows that the test really checks the new requirement. A test that passed before Malik changed any code could not tell working code from broken code. Then Malik writes just enough code to pass (green), such as converting each score with `int()`, and can refactor while all three tests stay green.
 
-## 1.11 Comprehensions and Built-in Iteration
+## 1.11 Comprehensions and Common List Operations
 
 <!-- key-terms-from: 11-comprehensions-builtin-iteration.md -->
 
 **Key terms**
 
+- **Imperative vs. Declarative**
+  - **Imperative Code** provides explicit instructions for every step to complete a task. This gives us a lot of control over every step, but it takes more effort.
+  - **Declarative code** describes the desired solution and uses existing tools to handle the steps. We save time and effort by using existing tools but sacrifice the fine-tuned control that we get if we built it ourselves.
 - **List comprehensions** provide declarative ways to build new lists from existing ones, making code more readable and reducing the need for explicit loops.
-- `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
-- `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
-- A **dictionary comprehension**, `{key: value for item in items}`, builds a new dictionary the same way a list comprehension builds a new list.
+  - `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
+  - `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
 - Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
-- Finding the **first** element that passes a test is a `for` loop with an early `return` or `break`.
-- **`sum()`**, **`min()`**, **`max()`**, and **`len()`** combine a whole list into a single value. When none of them fits, the **accumulator pattern** does: start a variable, update it in a loop, return it.
-- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list in place. Both take `reverse=True` for descending order.
-- **`enumerate()`**, **`zip()`**, **`any()`**, and **`all()`** cover the other everyday loop shapes without an index in sight.
+- **`sum()`**, **`min()`**, and **`max()`** combine a list of numbers into a single value, and **`len()`** counts the elements in any list. To use `sum()`, `min()`, or `max()` on a list of records, first build a list of numbers from the records with a comprehension.
+- The **accumulator pattern** combines a list into one value: create a variable that holds a starting value, update it once per element in a loop, and return it when the loop ends.
+- A **frequency counter** is an accumulator whose starting value is an empty dictionary. It builds a lookup table that maps each value in a list to the number of times that value appears.
+- Finding the **first** element that passes a test is a `for` loop with an early `return`.
+- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list **in place**, which means it changes the list itself and returns `None`. Both take `reverse=True` for descending order.
 
 **You will be able to…**
 
 _In the session:_
 
-- Rewrite an imperative loop that builds a new list as a list comprehension, and read a comprehension aloud from the `for` outward.
-- Filter a list of dictionaries by one of their values.
-- Combine a list into one value with `sum()`, `min()`, `max()`, or `len()`, and write the accumulator loop when none of them fits.
-- Explain the difference between `sorted()` and `.sort()`, predict the `None` from `result = nums.sort()`, and sort in descending order with `reverse=True`.
+- Classify the job a loop does as doing something with each value, transforming, filtering, combining, finding, or ordering, and name the tool Python provides for that job.
+- Rewrite a loop that builds a new list as a list comprehension that transforms, filters, or does both, and read a comprehension aloud from the `for` outward.
+- Combine a list of records into one value with `sum()`, `min()`, or `max()` over a comprehension, and write an accumulator loop, including a frequency counter that builds a lookup table with `.get(key, 0)`, when no built-in function does the job.
+- Write a function that returns the first element that passes a test, and decide what it returns when nothing passes.
 
 _By the end of the module:_
 
-- Choose the right tool for a loop shape: a `for` loop to do something with every value, a comprehension to transform, a comprehension with `if` to filter, an early `return` to find the first match, a built-in or accumulator to combine, `sorted()` to order.
-- Write a function that returns the first element passing a test, and decide what it returns when nothing passes.
-- Build a frequency counter with a dictionary and `.get(key, 0)`.
-- Use `enumerate()`, `zip()`, `any()`, and `all()` in place of index-based loops.
+- Explain the difference between `sorted()` and `.sort()`, predict the `None` from `result = prices.sort()`, and sort in descending order with `reverse=True`.
+- Combine several jobs in sequence, such as transforming, sorting, and slicing, and name each intermediate result.
 - Refactor a tested loop into a comprehension, and rerun its tests to confirm that its behavior did not change.
+- Predict that changing a dictionary through a filtered list also changes the source list, and explain why.
 
 ### Exit Ticket
 
-**Learning Objective**: Fellows will be able to predict the results of `.sort()`, `sorted()`, and list comprehensions, explain the difference between a tool that changes a list in place and a tool that returns a new list, and rewrite a loop that builds a list as a comprehension.
+**Learning Objective**: Fellows will be able to identify the job a loop does and justify whether a comprehension, a built-in function, or the loop itself is the right tool for that job.
 
 **Question**
 
-Imani has a list of prices and wants a new list with $2 taken off each price, ordered from cheapest to most expensive:
+Jordan wrote two functions for a bookstore's list of orders:
 
 ```python
-prices = [12, 3, 8]
+def get_titles(orders):
+    titles = []
+    for order in orders:
+        if order["quantity"] > 0:
+            titles.append(order["title"])
+    return titles
 
-discounted = []
-for price in prices:
-    discounted.append(price - 2)
-
-ordered = discounted.sort()
-print(ordered)
+def find_order(orders, title):
+    for order in orders:
+        if order["title"] == title:
+            return order
+    return None
 ```
 
-Imani expected `[1, 6, 10]`. What does the program print, and why? How should Imani fix it? Then rewrite the `for` loop as a list comprehension, and explain why a comprehension can do the loop's job.
+Jordan wants to rewrite both functions as list comprehensions. Name the job each function does. Which function should Jordan rewrite as a comprehension, and what would the comprehension be? Why should the other function stay a loop?
 
 **Level 2 Example**
 
-The program prints `None` because `.sort()` doesn't return anything. Imani should use `sorted(discounted)` instead. The loop can be `discounted = [price - 2 for price in prices]`.
+`get_titles` filters the orders and gets their titles, so it can be `return [order["title"] for order in orders if order["quantity"] > 0]`. `find_order` finds one order, so it should stay a loop.
 
 **Level 3 Example**
 
-The program prints `None`. `.sort()` sorts a list in place, which means it changes `discounted` itself and returns nothing, so `ordered` gets `None`. The list in `discounted` is now `[1, 6, 10]`, but Imani never prints it. Imani should write `ordered = sorted(discounted)`, because `sorted()` returns a new sorted list and leaves `discounted` unchanged. Calling `discounted.sort()` on its own line and then printing `discounted` would also work. The loop can become `discounted = [price - 2 for price in prices]`. The loop transforms every value and collects the results in a new list, and that is exactly what a list comprehension does: for each `price` in `prices`, it computes `price - 2` and adds the result to a new list that has as many elements as the source. Combining the two steps, `ordered = sorted([price - 2 for price in prices])` does the whole job in one line.
+`get_titles` does two jobs in one loop. The `if` keeps only the orders with a quantity above `0`, which is filtering, and `.append(order["title"])` adds each order's title instead of the whole order, which is transforming. The loop starts with an empty list and ends with a new list holding one title for each order that passed, and building a new list is exactly what a comprehension does. So Jordan can write `return [order["title"] for order in orders if order["quantity"] > 0]`, which reads from the `for` outward as "for each order in orders, keep it if its quantity is above 0, and collect its title." `find_order` does a different job: it finds the first order that matches. The `return` inside the loop ends the function as soon as it finds a match, and the `return None` after the loop handles the case where nothing matches. A comprehension cannot stop early. It checks every order and builds a whole list, so Jordan would get a list of every matching order instead of one order, and would still have to handle an empty list when no title matches. That is why `find_order` should stay a loop.
 
 ## 1.12 Reading Unfamiliar Code
 
