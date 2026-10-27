@@ -167,7 +167,7 @@ Python reads this and builds a new list by evaluating `expression` once for ever
 
 The expression can be any expression, including a call to a function you wrote. In this example, `format_line` turns one purchase into a line of a receipt, and the comprehension calls it once for every purchase:
 
-{% code title="transform.py" %}
+{% code title="03_transform.py" %}
 
 ```python
 def format_line(purchase):
@@ -261,22 +261,22 @@ purchases = [
     {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
 ]
 
-payments = ???
+payment_methods = ???
 
-print(payments)
+print(payment_methods)
 # Output: ['card', 'cash', 'card', 'cash', 'card']
 
-print("At least one customer paid in cash" if "cash" in payments else "No one paid in cash")
+print("At least one customer paid in cash" if "cash" in payment_methods else "No one paid in cash")
 # Output: At least one customer paid in cash
 ```
 
 **<details><summary>Solution</summary>**
 
 ```python
-payments = [purchase["payment"] for purchase in purchases]
+payment_methods = [purchase["payment"] for purchase in purchases]
 ```
 
-Read from the `for` outward: for each `purchase` in `purchases`, compute `purchase["payment"]` and collect it. The source has five purchases, so the new list has five payments.
+Read from the `for` outward: for each `purchase` in `purchases`, compute `purchase["payment"]` and collect it. The source has five purchases, so the new list has five payment methods.
 
 </details>
 
@@ -312,7 +312,7 @@ Use it when you want a copy of the source list with unwanted values removed.
 
 Here is an example where we combine using an `expression` and an `if` to get the names of the items for purchases over $3:
 
-{% code title="filter.py" %}
+{% code title="04_filter.py" %}
 
 ```python
 purchases = [
