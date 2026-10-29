@@ -389,6 +389,8 @@ Does `tasks[0]` show `True` or `False` for `"is_complete"`? Is `completed_tasks[
 
 **Question 3**
 
+_If you have not used `all()` before, read the [W3Schools reference for `all()`](https://www.w3schools.com/python/ref_func_all.asp) first._
+
 A teammate wants the task list to say `Every task is done!` when every task is complete. They add two lines to the top of `view_tasks()`, above the `if len(tasks) == 0:` check:
 
 ```python
@@ -405,11 +407,19 @@ def view_tasks():
 
 With the two sample tasks, what list does the comprehension inside `all()` build, and what does `all()` return?
 
-{% hint style="warning" %}
-**Predict, then run.** Add the two lines, run the app, choose Clear All Tasks, and press Enter. What does the task list show now? Then start the REPL with `python3` and run `all([])`. Use the result to explain what you saw. Undo the change when you are done.
-{% endhint %}
-
 Where in `view_tasks()` should the teammate put the two lines instead, and why does that position fix the problem? Could `len(completed_tasks) == len(tasks)` do the same job as `all()`, and would it need the same care about where it goes?
+
+{% hint style="warning" %}
+
+**Predict, then run:** Add each of these print statements to your program. What will they print?
+
+```py
+print([task["is_complete"] for task in tasks])
+print(all([]))
+```
+
+Then add new conditional statement above, run the app, choose Clear All Tasks, and press Enter. What does the task list show now? Why? Undo the change when you are done.
+{% endhint %}
 
 **Question 4**
 
