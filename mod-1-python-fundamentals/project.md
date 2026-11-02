@@ -9,7 +9,7 @@
   - [Setup Instructions](#setup-instructions)
   - [Git Workflow](#git-workflow)
 - [Project Grading](#project-grading)
-  - [Technical Details (15 points)](#technical-details-15-points)
+  - [Technical Details (16 points)](#technical-details-16-points)
   - [Reflection (2 points)](#reflection-2-points)
   - [Professionalism and Craftsmanship (5 points)](#professionalism-and-craftsmanship-5-points)
 - [How to Submit](#how-to-submit)
@@ -18,13 +18,13 @@
   - [Data Structure](#data-structure)
   - [Stretch Features to Consider:](#stretch-features-to-consider)
 - [🛒 Project 2: Shopping List CLI App](#-project-2-shopping-list-cli-app)
-  - [Key Features to Implement:](#key-features-to-implement)
-  - [Data Structure](#data-structure)
-  - [Stretch Features to Consider:](#stretch-features-to-consider)
+  - [Key Features to Implement:](#key-features-to-implement-1)
+  - [Data Structure](#data-structure-1)
+  - [Stretch Features to Consider:](#stretch-features-to-consider-1)
 - [🧠 Project 3: Quiz Game CLI](#-project-3-quiz-game-cli)
-  - [Key Features to Implement:](#key-features-to-implement)
-  - [Data Structure](#data-structure)
-  - [Stretch Features to Consider:](#stretch-features-to-consider)
+  - [Key Features to Implement:](#key-features-to-implement-2)
+  - [Data Structure](#data-structure-2)
+  - [Stretch Features to Consider:](#stretch-features-to-consider-2)
 - [Stuck Getting Started?](#stuck-getting-started)
   - [Phase 1: Get a Menu Working (Start Here!)](#phase-1-get-a-menu-working-start-here)
   - [Phase 2: Create Your Data Structure](#phase-2-create-your-data-structure)
@@ -62,15 +62,15 @@ Once you have chosen your project, read through the sections below and then look
 
 For many of you, this will be the first "real" project that you build. This is an exciting opportunity! However, it can also become a frustrating one if you take the wrong approach. Here are some common mistakes to avoid and what you can do instead.
 
-| Mistake | What to Do Instead |
-|---------|---------------------|
-| Trying to build everything at once | Build ONE feature, test it, commit, then move on |
-| Writing lots of code before testing | Test after every 5-10 lines of code |
-| Trying to write everything from scratch | Use the [Task Manager Case Study](case-study.md) as a guide for building your project! Take what you need, make what you need! |
-| Copying the example without understanding it | Type the code yourself and make changes to match YOUR project |
-| Forgetting to import functions | Check that every function you call is defined in, or imported into, the file where you use it |
-| Forgetting `int()` on user input | `input()` always returns a string. Convert it before you compare it to a number or do math with it |
-| Not committing often enough | Commit every time something works! You can always go back. |
+| Mistake                                      | What to Do Instead                                                                                                             |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Trying to build everything at once           | Build ONE feature, test it, commit, then move on                                                                               |
+| Writing lots of code before testing          | Test after every 5-10 lines of code                                                                                            |
+| Trying to write everything from scratch      | Use the [Task Manager Case Study](case-study.md) as a guide for building your project! Take what you need, make what you need! |
+| Copying the example without understanding it | Type the code yourself and make changes to match YOUR project                                                                  |
+| Forgetting to import functions               | Check that every function you call is defined in, or imported into, the file where you use it                                  |
+| Forgetting `int()` on user input             | `input()` always returns a string. Convert it before you compare it to a number or do math with it                             |
+| Not committing often enough                  | Commit every time something works! You can always go back.                                                                     |
 
 ## Getting Started
 
@@ -78,7 +78,7 @@ For many of you, this will be the first "real" project that you build. This is a
 
 Once you have chosen your project, complete the following steps to get started:
 
-1. Go to the `swe-project-1-cli-app` template repository and click "Use this template" to create a new repository. Set yourself as the owner and give your project a descriptive name!
+1. Go to the [`swe-project-1-cli-app`](https://github.com/The-Marcy-Lab-School/swe-project-1-cli-app) template repository and click "Use this template" to create a new repository. Set yourself as the owner and give your project a descriptive name!
 2. Clone your repo down to your computer.
 3. Create and activate a virtual environment: `python3 -m venv .venv` and then `source .venv/bin/activate`.
 4. Make sure `.venv/` is listed in your `.gitignore` file.
@@ -114,18 +114,20 @@ git checkout development
 We care deeply about the quality of the code that is produced at Marcy. Even if your application works as described, was it created following best practices? Did you effectively use all of the skills from the module? Were you able to learn and grow from this project-building process?
 
 To ensure that your project meets Marcy's standards of excellence, your project will be assessed on the following criteria (22 points total):
-- Technical Details (15 points)
-  - Core Python Concepts (7 points)
+
+- Technical Details (16 points)
+  - Core Python Concepts (8 points)
   - Code Organization (4 points)
   - User Interaction (4 points)
 - Reflection (2 points)
 - Professionalism and Craftsmanship (5 points)
 
-### Technical Details (15 points)
+### Technical Details (16 points)
 
 Technical details are broken up further into three groups:
 
-**Core Python Concepts (7 points)**
+**Core Python Concepts (8 points)**
+
 1. Variables: Uses clear, descriptive `snake_case` names that explain what data they hold
 2. Functions: Breaks code into multiple functions that each handle specific tasks
 3. Conditionals: Includes at least one `if/elif/else` statement that changes behavior based on user input
@@ -133,29 +135,36 @@ Technical details are broken up further into three groups:
 5. String Methods: Uses string methods (like `.lower()`, `.strip()`, etc.) to validate user input
 6. Built-in Iteration: Uses at least one list comprehension or built-in iteration tool (like `sorted()`, `sum()`, `enumerate()`, etc...)
 7. Dictionaries: Uses at least one dictionary to organize related data together
+8. Testing: Your program's _data layer_ has at least 4 testing functions. See [test_tasks.py](https://github.com/The-Marcy-Lab-School/swe-casestudy-1-cli-task-manager/blob/main/tests/test_tasks.py) from the case study for guidance.
 
 **Code Organization (4 points)**
+
 1. Split your code into **at least 3 separate modules** (files)
 2. Use `import` statements to connect your modules, and an `if __name__ == "__main__":` guard in the entry point
 3. Follows a logical file structure:
-  - `main.py` — the entry point of the application, which starts the program and calls the menu.
-  - `menu.py` — displays the menu, reads the user's input, and calls the function that matches each choice.
-  - A data layer (choose a name!) — holds your application's data and the functions that manage it.
+
+- `main.py` — the entry point of the application, which starts the program and calls the menu.
+- `menu.py` — displays the menu, reads the user's input, and calls the function that matches each choice.
+- A data layer (choose a name!) — holds your application's data and the functions that manage it.
+
 4. A `requirements.txt` file exists, and `.venv/` is listed in `.gitignore`
 
 **User Interaction (4 points)**
+
 1. Creates an interactive experience that responds to user choices using the `input()` function
 2. Provides warning messages when invalid input is provided and allows the user to try again. The program never crashes with a traceback on bad input.
 3. Provides confirmation messages when user actions are completed.
 4. All messages printed to the console have consistent spacing and are free of spelling and grammar mistakes.
 
 ### Reflection (2 points)
+
 In `REFLECTIONS.md`, respond to the prompts below. Your responses should each contain about 150-250 words and demonstrate thoughtful reflection.
 
-  1. Which project requirement did you find most challenging and how did you overcome this challenge? Be specific in your response.
-  2. Share one technical concept that you gained a deeper understanding of through building this project. Explain that concept in simple terms and explain how it is used in your project.
+1. Which project requirement did you find most challenging and how did you overcome this challenge? Be specific in your response.
+2. Share one technical concept that you gained a deeper understanding of through building this project. Explain that concept in simple terms and explain how it is used in your project.
 
 ### Professionalism and Craftsmanship (5 points)
+
 1. Code is functional and free of bugs. Does not raise errors when used under expected circumstances.
 2. Code is well-organized, spacing is consistent, variable/function names are descriptive, comments are concise and purposeful, and no unused code remains.
 3. Commits are small, frequent, and have meaningful commit messages.
@@ -172,6 +181,7 @@ When you have finished your application, merge everything into the `main` branch
 Build a simple Rock–Paper–Scissors game where the user plays against the computer. The program should keep score across multiple rounds until the player decides to quit.
 
 <!-- omit in toc -->
+
 ### Key Features to Implement:
 
 - When a user starts the application, they are greeted with a nice message and are presented with a menu of options:
@@ -208,6 +218,7 @@ Build a simple Rock–Paper–Scissors game where the user plays against the com
 - The game continues until the user chooses to quit, then displays final statistics.
 
 <!-- omit in toc -->
+
 ### Data Structure
 
 Use a **dictionary** to store game data. The dictionary should look like this:
@@ -221,6 +232,7 @@ Use a **dictionary** to store game data. The dictionary should look like this:
 ```
 
 <!-- omit in toc -->
+
 ### Stretch Features to Consider:
 
 - Add a "best of X rounds" mode where the game continues until someone wins a certain number of rounds
@@ -234,6 +246,7 @@ Use a **dictionary** to store game data. The dictionary should look like this:
 Create a CLI shopping list manager where users can add, remove, and view items through a menu system.
 
 <!-- omit in toc -->
+
 ### Key Features to Implement:
 
 - When a user starts the application, they are greeted with a nice message and are presented with a menu of options:
@@ -274,6 +287,7 @@ Create a CLI shopping list manager where users can add, remove, and view items t
 - After selecting an action, the menu is shown again to the user and they are prompted to choose their next action.
 
 <!-- omit in toc -->
+
 ### Data Structure
 
 Use a **list of dictionaries** to store shopping items. Each item should be a dictionary with a name, quantity, and price, like this:
@@ -294,6 +308,7 @@ Use a **list of dictionaries** to store shopping items. Each item should be a di
 ```
 
 <!-- omit in toc -->
+
 ### Stretch Features to Consider:
 
 - Add an option to sort. Let the user choose between `price`, `quantity`, and `name`
@@ -309,6 +324,7 @@ Use a **list of dictionaries** to store shopping items. Each item should be a di
 Build a multiple-choice quiz game where users answer questions, get feedback, and see their score at the end.
 
 <!-- omit in toc -->
+
 ### Key Features to Implement:
 
 - When a user starts the application, they are greeted with a nice message and presented with a menu of options:
@@ -323,15 +339,15 @@ Build a multiple-choice quiz game where users answer questions, get feedback, an
 - The user can enter a number, 1 through 3, to select their next action.
 - When starting a quiz, the application presents questions one at a time with multiple choice options. Each question displays the question text and numbered choices for the user to select from. For example:
 
-    ```
-    Question 1: What is 2 + 2?
-    1) 3
-    2) 4
-    3) 5
-    4) 6
+  ```
+  Question 1: What is 2 + 2?
+  1) 3
+  2) 4
+  3) 5
+  4) 6
 
-    Enter your answer (1-4): [user enters their answer here]
-    ```
+  Enter your answer (1-4): [user enters their answer here]
+  ```
 
 - After answering each question, the user receives immediate feedback on whether their answer was correct.
   ```
@@ -345,6 +361,7 @@ Build a multiple-choice quiz game where users answer questions, get feedback, an
   Thanks for playing!
   ```
 - If the user's score is in the top 5, they are prompted again to enter their name to add their score to the high score leaderboard.
+
   ```
   Congratulations! You scored a high score!
   Enter your name: [user enters their name here]
@@ -362,6 +379,7 @@ Build a multiple-choice quiz game where users answer questions, get feedback, an
   ```
 
 <!-- omit in toc -->
+
 ### Data Structure
 
 Use a **list of dictionaries** to store quiz questions. Each question should be a dictionary with a `question` string, a `choices` list, and an `answer_index` indicating the index of the answer in `choices`, like this:
@@ -396,6 +414,7 @@ Today's date as a string like `11/01/26` comes from the standard library: `impor
 {% endhint %}
 
 <!-- omit in toc -->
+
 ### Stretch Features to Consider:
 
 - Add different categories of questions (math, science, history, etc.) and let users choose their preferred category
@@ -412,6 +431,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
 **Goal:** Display a menu and respond to user input. Nothing else.
 
 1. **Create `main.py`** — This is your entry point. For now, it should just call a `show_menu()` function from the `menu` module. You can also print out some welcome/goodbye messages:
+
    ```python
    from menu import show_menu
 
@@ -426,6 +446,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
    ```
 
 2. **Create `menu.py`** — This file handles user interaction. Start with just a menu that prints and exits:
+
    ```python
    def show_menu():
        print("Menu:")
@@ -440,6 +461,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
 3. **Run it!** Type `python3 main.py` in your terminal. Does it print the menu and capture your input? Great! Commit your progress.
 
 4. **Add a loop** — Make the menu repeat until the user chooses "Exit":
+
    ```python
    def show_menu():
        is_running = True
@@ -475,6 +497,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
    - Quiz Game → `quiz_data.py`
 
 2. **Define your starting data** — Look at the "Data Structure" section for your project. Create the initial data at the top level of the file, where other files can import it:
+
    ```python
    # Example for Rock-Paper-Scissors (game_data.py)
    game_stats = {
@@ -504,6 +527,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
    ```
 
 3. **Import your data into `menu.py`** and print it to verify it works:
+
    ```python
    from game_data import game_stats
    print(game_stats)  # Just to test - remove later!
@@ -518,11 +542,13 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
 **Goal:** Build each menu option one at a time. Don't move on until the current feature works!
 
 #### Pick your FIRST feature (the easiest one):
+
 - **Rock-Paper-Scissors:** View Stats (just print the data)
 - **Shopping List:** View List (just print the data)
 - **Quiz Game:** View High Scores (just print the data)
 
 1. **Create a function for this feature** in your data file:
+
    ```python
    # Example: game_data.py (Rock Paper Scissors)
    game_stats = {"wins": 0, "losses": 0, "ties": 0}
@@ -537,6 +563,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
    ```
 
 2. **Call that function from your menu:**
+
    ```python
    from game_data import view_stats
 
@@ -548,6 +575,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
 3. **Run and test it!** Then commit.
 
 #### Now pick your SECOND feature (the main action):
+
 - **Rock-Paper-Scissors:** Play Round
 - **Shopping List:** Add Item
 - **Quiz Game:** Start Quiz
@@ -570,6 +598,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
 **Goal:** Handle edge cases and make the experience smooth.
 
 1. **Add input validation** — What if the user types something unexpected?
+
    ```python
    # Example: validate menu choice by removing excess whitespace
    choice = input("Choose an option: ").strip()
@@ -584,6 +613,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
    - What if they try to remove an item that doesn't exist?
 
 3. **Add helpful error messages:**
+
    ```python
    # Example: a number that must be positive, without crashing on letters
    try:
@@ -607,6 +637,7 @@ If you're feeling stuck and don't know where to start, follow these steps. Each 
 - [ ] All menu options work correctly
 - [ ] Invalid input shows a helpful message (doesn't crash)
 - [ ] My code is split into at least 3 files
+- [ ] I have one test file for the data layer.
 - [ ] `.venv/` is in my `.gitignore` and `requirements.txt` exists
 - [ ] I've committed my work regularly with descriptive messages
 - [ ] My README explains how to run the app
