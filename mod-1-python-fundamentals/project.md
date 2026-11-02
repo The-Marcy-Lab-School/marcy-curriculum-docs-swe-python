@@ -80,9 +80,22 @@ Once you have chosen your project, complete the following steps to get started:
 
 1. Go to the [`swe-project-1-cli-app`](https://github.com/The-Marcy-Lab-School/swe-project-1-cli-app) template repository and click "Use this template" to create a new repository. Set yourself as the owner and give your project a descriptive name!
 2. Clone your repo down to your computer.
-3. Create and activate a virtual environment: `python3 -m venv .venv` and then `source .venv/bin/activate`.
+3. `cd` into the folder and create and activate a virtual environment:
+
+   ```sh
+   cd swe-project-1-cli-app
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
 4. Make sure `.venv/` is listed in your `.gitignore` file.
-5. Create an empty `requirements.txt` with `pip freeze > requirements.txt`. You will add to it if you install anything.
+5. Install `pytest` and create a `requirements.txt`:
+
+   ```sh
+   pip install pytest
+   pip freeze > requirements.txt
+   ```
+
 6. Add, commit, and push all files with the commit message `"initializing project"`
 
 ### Git Workflow
