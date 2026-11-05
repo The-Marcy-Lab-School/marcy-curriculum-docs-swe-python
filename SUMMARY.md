@@ -11,7 +11,9 @@
   <!-- * [Loom Setup](environment-setup/loom.md) -->
   <!-- * [Postgres Setup](environment-setup/postgres-setup.md) -->
 * [Assignment Guides](how-tos/README.md)
-  * [Software Engineering Assignments Guide](how-tos/working-with-assignments.md)
+  * [How to Work on Assignments](how-tos/working-with-assignments.md)
+  * [Coding Assignments Guide](how-tos/coding-assignments.md)
+  * [Short Response Assignments Guide](how-tos/short-response-assignments.md)
   * [Markdown Guide](how-tos/how-to-write-markdown.md)
   * [Debugging & Rubber Ducking Guide](how-tos/how-to-debug.md)
   * [PEDAC Problem Solving Guide](how-tos/how-to-pedac.md)

@@ -1,420 +1,60 @@
-# Software Engineering Assignments Guide
+# How to Work on Assignments
 
 **Table of Contents:**
 
-- [What is a SWE Assignment?](working-with-assignments.md#what-is-a-swe-assignment)
-  - [Tips for Working on SWE Coding Assignments](working-with-assignments.md#tips-for-working-on-swe-coding-assignments)
-  - [Jest and Testing](working-with-assignments.md#jest-and-testing)
-  - [Feedback on Coding Assignments](working-with-assignments.md#feedback-on-coding-assignments)
-- [What is a SWE-SR Assignment?](working-with-assignments.md#what-is-a-swe-sr-assignment)
-  - [Scoring on Short Response Assignments](working-with-assignments.md#scoring-on-short-response-assignments)
-  - [Feedback on Short Response Assignments](working-with-assignments.md#feedback-on-short-response-assignments)
-  - [Examples of Short Responses](working-with-assignments.md#examples-of-short-responses)
-    - [A Response That Could Use Improvement](working-with-assignments.md#a-response-that-could-use-improvement)
-    - [An Exemplar Response](working-with-assignments.md#an-exemplar-response)
-- [Using AI on Assignments](working-with-assignments.md#using-ai-on-assignments)
-- [Submitting On Time](working-with-assignments.md#submitting-on-time)
-- [How to Work On Assignments](working-with-assignments.md#how-to-work-on-assignments)
-  - [Assignment Setup](working-with-assignments.md#assignment-setup)
-  - [Submitting the Assignment](working-with-assignments.md#submitting-the-assignment)
-  - [How to Undo a Commit to Main and Move Commits to Draft](working-with-assignments.md#how-to-undo-a-commit-to-main-and-move-commits-to-draft)
-
-## What is a SWE Assignment?
-
-Software Engineering (SWE) code assignments are opportunities for you to practice the skills learned in your Software Engineering fellowship at The Marcy Lab School. In these assignments, you can expect to:
-
-- Create code from scratch
-- Modify existing code
-- Debug broken code
-
-Code assignments will typically have an `src` directory where you will be writing your code. They will also have a `tests` directory with `.spec.js` test files that will automatically test your code each time you push to your repository.
-
-### Tips for Working on SWE Coding Assignments
-
-As you work on your coding assignment, you may be tempted to jump right in and start coding. However, it is often best to slow down and plan out your approach first. Look at the problem and make sure you understand fully what it is asking you to do. At Marcy, we recommend that you use the PEDAC approach ([read more about PEDAC here](how-to-pedac.md)).
-
-You may get stuck along the way, which can always be frustrating. Debugging is an essential skill but its hard to know where to start sometimes. That's why we love the "rubber duck" approach ([read more about debugging with the rubber duck approach here](how-to-debug.md))
-
-### Jest and Testing
-
-Tests are an essential part of professional software development. Without testing our code, we run the risk of deploying code with unexpected bugs. With testing, we are forced to think critically about how we expect our program to behave and then write our code to satisfy those tests. This process of first writing tests and then writing code to satisfy those tests is called **Test-Driven Development (TDD)**.
-
-At Marcy, we use [Jest](https://jestjs.io/) to write automated tests for coding assignments. Automated tests are JavaScript files that:
-
-1. Import functions from source code
-2. Run those functions with various inputs
-3. Compare the returned values against the expected values.
-
-A Jest test is written in a file ending in `.spec.js` or `.test.js` and looks like this:
-
-{% code title="circle-helpers.spec.js" lineNumbers="true" %}
-
-```javascript
-// Import the functions to be tested
-const { getArea, getDiameter, getCircumference } = require("./circle-helpers");
-
-// Create a "Test Suite" for these functions
-describe("Circle Helper Tests", () => {
-  // Test the getArea function with a series of expectations
-  test("getArea returns the Area of a circle", () => {
-    // Translation: We expect getArea(2) to return Math.PI * 2 * 2
-    expect(getArea(2)).toBe(Math.PI * 2 * 2);
-    expect(getArea(3)).toBe(Math.PI * 3 * 3);
-
-    // It is useful to think about what should be returned for "bad" inputs.
-    expect(getArea()).toBe(NaN);
-    expect(getArea("hello")).toBe(NaN);
-  });
-
-  // Test the getDiameter function with a series of expectations
-  test("getDiameter returns the Diameter of a circle", () => {
-    // ...tests for getDiameter
-  });
-
-  // ...more tests
-});
-```
-
-{% endcode %}
-
-Each assignment will have automated test files in the `tests` directory. They will show you exactly how we expect your functions to behave. **DO NOT MODIFY THE TESTS**.
-
-To run these automated tests, use the command:
-
-```sh
-npm test # run the tests once
-# or
-npm run test:w # run the tests each time the file changes ("watch mode")
-```
-
-After running this command, you will see the following output. Initially, all tests will fail.
-
-![Failing Jest tests](../.gitbook/assets/failing-tests.png)
-
-The test output provides some really useful information.
-
-- We can see which tests failed
-- For each failing test, we can see which `expect()` statement failed
-- We can see what the expected value is (`12.566...`) and what our function actually returned (`undefined`).
-
-Armed with this information, we can more confidently build our functions knowing that we have a specific set of targets to aim for. Automated tests allow us to repeatedly run our code against the same set of tests until all expectations are met.
-
-All assignments will also come with a `src/playground.js` file that you can use to manually test your code as you develop. We recommend the following workflow:
-
-1. Run the automated tests to see what you are aiming for.
-2. Copy the function you are currently working on into the `playground.js` file and use the test cases to manually test your code
-3. Once you are satisfied, copy your function back into the original file and run the automated tests again.
-4. If anything fails, return to the `playground.js` file to make adjustments.
-5. Repeat.
-
-### Feedback on Coding Assignments
-
-In order for a coding assignment to be marked as "Complete", it must pass at least 75% of the automated tests (though you should always strive to pass 100% of the tests!).
-
-For example, an assignment with 10 automated tests requires 8 passing tests to be marked "Complete".
-
-**There is no limit to the number of times you can submit an assignment.** As such, you are encouraged to **always submit your assignments on time to ensure that your instructor can provide you feedback and support** to complete your assignments.
-
-To support you in your growth as a software engineer, your instructor may provide feedback on any of the following areas (expand each category to see more details):
-
-**<details><summary>Code Quality</summary>**
-
-- Adherence to coding standards and conventions (e.g., ESLint rules)
-- Use of proper naming conventions (variables, functions)
-- Avoidance of code duplication
-- Clear and concise comments
-
-</details>
-
-**<details><summary>Functionality</summary>**
-
-- Does the code meet the project requirements?
-- Does it pass all tests, both automated and edge cases?
-- Correctness of input/output handling
-
-</details>
-
-**<details><summary>Modularity and Reusability</summary>**
-
-- Proper use of functions or classes
-- Modular and reusable code (avoiding large, monolithic functions)
-- Clear separation of logic
-
-</details>
-
-**<details><summary>Version Control Practices</summary>**
-
-- Meaningful commit messages
-- Consistent use of branches
-- Proper use of pull requests and code reviews
-
-</details>
-
-**<details><summary>Code Structure and Organization</summary>**
-
-- File structure
-- Separation of concerns
-- Readability and logical flow
-
-</details>
-
-**<details><summary>Error Handling</summary>**
-
-- Proper use of try-catch blocks
-- Graceful handling of unexpected inputs or states
-- Meaningful error messages
-
-</details>
-
-**<details><summary>Efficiency and Performance</summary>**
-
-- Time and space complexity
-- Use of appropriate data structures and algorithms
-- Avoidance of unnecessary computations
-
-</details>
-
-## What is a SWE-SR Assignment?
-
-Software Engineering (SWE) Short Response (SR) assignments are opportunities to develop your technical communication skills.
-
-In these assignments, you may encounter the following types of prompts:
-
-- Research a new topic and share your findings.
-- Analyze a programming best practice and list its advantages and disadvantages.
-- Compare and contrast approaches for solving a problem and provide an argument in support of one.
-- Teach a piece of syntax or a concept with examples and analogies.
-
-Your intended audience should be someone with _some_ experience programming but who is still learning. As such, strive to be as clear and concise as possible. There is a fine balance between too much information and just enough but when in doubt, provide more details. Examples and analogies can often help!
-
-Strive to do more than just answer the prompts. Use the prompts as opportunities to practice your technical communication. While anyone can write functional code, not everyone can communicate clearly so take pride in this work!
-
-Short Response prompts will always be found in the `README.md` file of your assignment. Each prompt will be listed under a `## Prompt X` heading and you should add your responses under the `### Response X` heading using Markdown ([read about Markdown syntax here](./how-to-write-markdown.md)).
-
-For example:
-
-{% code overflow="wrap" %}
-
-```md
-## Prompt 2
-
-Modules let us split up our code into separate files. What are benefits of doing this? Are there any downsides?
-
-### Response 2
-
-Response here...
-```
-
-{% endcode %}
-
-### Scoring on Short Response Assignments
-
-Your short response work is graded in two categories:
-
-- **Technical Score:** Each of your responses is scored out of 3 points for the technical accuracy and precision of its content.
-- **Writing Quality Score:** Your entire submission is scored once, out of 3 points, for whether it was proofread and whether your sentences say what you meant.
-
-For example, an assignment with 4 questions is worth 15 points: 3 technical points for each of the 4 questions, plus 3 writing quality points for the whole submission.
-
-#### Technical Score
-
-Each question asked in a Short Response assignment is given up to 3 points based on the technical accuracy and precision of your writing:
-
-- 0 — Did not attempt to answer the prompt
-- 1 — Did not answer all parts of the prompt AND information and examples provided are inaccurate and non-functional.
-- 2 — Did not answer all parts of the prompt OR information and examples provided are inaccurate and non-functional.
-- 3 — Answered all parts of the prompt AND information and examples provided are accurate and functional.
-
-### Writing Quality Score
-
-Writing Quality does not include correctness, required terminology, or conceptual precision. Those belong to the Technical Score.
-
-Your whole submission is scored once, by checking whether each of these two areas has a problem:
-
-- **Proofreading.** Anything a spell checker or a markdown preview would catch: a misspelled word, a missing or duplicated word, an unclosed backtick, a code fence with the wrong language, or an escaped character that breaks rendering. This area counts against you when these mistakes appear in more than one answer, or more than twice within a single answer.
-- **Clarity.** At least one sentence that contradicts another statement in your submission, or whose meaning is still wrong even after its grammar is corrected.
-
-| Score              | Criteria                                                  |
-| ------------------ | --------------------------------------------------------- |
-| **3 - Exemplary**  | No problems in either area.                               |
-| **2 - Proficient** | Problems in one area (proofreading or clarity, not both). |
-| **1 - Developing** | Problems in both areas.                                   |
-| **0 - Incomplete** | The submission cannot be understood as written.           |
-
-**These are feedback, never deductions:** a run-on sentence, a comma splice, a long-winded explanation, weak organization or flow, and markdown that renders correctly but is not used effectively. Your grader may mention them to help you improve, but they do not change your score. The test is the one above: if a spell checker or a markdown preview would not catch it, and the meaning is not wrong once the grammar is corrected, it is feedback.
-
-{% hint style="info" %}
-In order for a short response assignment to be marked as "Complete", you must score at least a 75% on the assignment.
-
-For example, an assignment with 5 short response prompts has a total possible score of 15. You must score at least a 12 on that assignment.
-
-Assignments below 75% must be revised and resubmitted.
-{% endhint %}
-
-### Feedback on Short Response Assignments
-
-While the score will primarily reflect the accuracy and completion of your responses, to support you in your growth as a technical communicator, your instructor may also provide feedback on the following areas:
-
-**<details><summary>Clarity</summary>**
-
-- Is the main idea or goal of the writing clear?
-- Are technical terms defined or explained for the intended audience?
-- Is the writing free of unnecessary jargon or overly complex language?
-
-</details>
-
-**<details><summary>Structure</summary>**
-
-- Does the content follow a logical flow?
-- Are headings, subheadings, and paragraphs effectively used to guide the reader?
-- Are transitions between paragraphs / sections smooth and easy to follow?
-
-</details>
-
-**<details><summary>Engagement</summary>**
-
-- Is the tone appropriate for the audience (e.g., conversational vs. formal)?
-- Does the writing capture and maintain interest?
-- Are examples, analogies and visuals used effectively to enhance understanding?
-
-</details>
-
-**<details><summary>Audience Fit</summary>**
-
-- Does the writing match the knowledge level of the intended audience?
-- Are key questions or concerns the audience might have addressed?
-
-</details>
-
-**<details><summary>Mechanics</summary>**
-
-- Are there grammar, spelling, or punctuation errors?
-- Is the formatting consistent and professional (e.g., indentation in code snippets, use of backticks and code fences to highlight code, use of bolding and italics to emphasize key words)?
-
-</details>
-
-### Examples of Short Responses
-
-Let's look at an example of two responses that are complete and accurate but in very different ways.
-
-The examples below each respond to the following prompt:
-
-> Explain what `if` and `else` statements are used for. Provide a code example to enhance your response.
-
-#### A Response That Could Use Improvement
-
-First, let's look at an example of a response that is technically accurate and complete but would likely receive feedback for improvements. As you read, what feedback would you provide?
-
-> <img src="../.gitbook/assets/sr-markdown-example-1.png" alt="A response that could use improvement" data-size="original">
-
-**<details><summary>See how this response is rendered in Markdown!</summary>**
-
-They are used if you want to like do one thing or another in your code. Here is an example.
-
-if (true) { console.log('this'); } else { console.log('that'); }
-
-</details>
-
-For this response, the following feedback would be provided:
-
-- **Clarity**: Without the prompt, it would be hard to know that "they" is referring to `if` and `else` statements at the beginning of the sentence. Additionally, no explanation of the example is provided, leaving open the possibility that the reader misunderstands the syntax.
-- **Engagement**: The example demonstrates the syntax but the example is hard to relate to a real-world scenario for programming.
-- **Mechanics**: By adding in markdown formatting, key terms could be highlighted and the provided code block can be placed inside of a code fence (see below for an example of this). Look at the rendered markdown above to see how the structure of the code block is lost without a code fence.
-
-#### An Exemplar Response
-
-Below is a great example of a short response answer. As you read, what do you notice about it?
-
-![An exemplar response](../.gitbook/assets/sr-markdown-example-2.png)
-
-**<details><summary>See how this response is rendered in Markdown!</summary>**
-
-In JavaScript, `if` statements are used by programmers to decide whether or not to perform an action in their program. This decision is based on a **boolean expression** (a bit of code that evaluates to `true` or `false`).
-
-For example, we can simulate flipping a coin using an `if` statement and the `Math.random()` function which generates a number between `0` and `1`. In this example, the program will print `"heads"` only _if_ the boolean expression `random > 0.5` is `true`. Otherwise nothing will happen:
-
-```js
-const random = Math.random();
-
-// Print out "heads" if the random number is between 0.5 and 1, otherwise, do nothing
-if (random > 0.5) {
-  console.log("heads");
-}
-```
-
-When combined with an `else` statement, the programmer can provide an alternative action to perform when the boolean expression is `false`.
-
-```js
-const random = Math.random();
-
-// Print out "heads" if the random number is between 0.5 and 1
-if (random > 0.5) {
-  console.log("heads");
-}
-// Otherwise, print tails
-else {
-  console.log("tails");
-}
-```
-
-With the addition of the `else` statement, the program will print out `"tails"` if `random > 0.5` is `false`.
-
-</details>
-
-Among other things, this response does the following things well:
-
-- It answers all parts of the prompt, the information provided is accurate, and the provided code is functional.
-- The writing is easy to understand and information is presented in a logical order.
-- The provided JavaScript example is engaging as it is highly relatable and demonstrates a practical use case of `if` and `else` statements.
-- The example is explained afterwards.
-- It uses markdown formatting to bold key terms and highlight code with backticks (e.g. `event.target`) and wraps the code blocks in code fences. Look at the rendered markdown above to see how the use of markdown dramatically improves the appearance of the writing.
-
-## Using AI on Assignments
-
-On short response assignments, you may use generative AI tools like ChatGPT to help structure and refine your responses and to check for spelling and grammar mistakes. However, the majority of the writing should be yours! As a rule, aim to have no more than about 25% of the content written by a generative AI assistant.
-
-If you’re stuck, you may use ChatGPT to clarify the assignment — but not to solve it for you. To do this, copy the meta-prompt below into ChatGPT along with the assignment question.
-
-> You are acting as a tutor. Your job is to explain what this coding question is asking, clarify confusing wording, and highlight the relevant concepts students need to know — but do not provide the full solution or code that directly answers the question. Instead, focus on rephrasing the problem in simpler terms, identifying what’s being tested, and suggesting what steps or thought processes might help. Ask guiding questions to ensure the student is thinking critically. Do not write the final function, algorithm, or code implementation.
-
-Be mindful of your AI usage on assignments. AI can be a great tool to help your learning but it can also be detrimental if you let it do too much of the thinking for you.
+- [Submitting On Time](#submitting-on-time)
+- [Before You Start: Set Up GitHub](#before-you-start-set-up-github)
+- [Types of Assignments](#types-of-assignments)
+- [Using AI on Assignments](#using-ai-on-assignments)
+- [Assignment Setup](#assignment-setup)
+- [Submitting the Assignment](#submitting-the-assignment)
+  - [Resubmitting an Assignment](#resubmitting-an-assignment)
+  - [How to Undo a Commit to Main and Move Commits to Draft](#how-to-undo-a-commit-to-main-and-move-commits-to-draft)
 
 ## Submitting On Time
 
-"Grades" don't exist at Marcy. We only need performance data in order to know how you're doing, and make sure the people who need help get it as quickly as they can. It's ok if you didn't finish by the deadline! Just show us what you have. We'll have office hours and reviews, and we want to know what you are all struggling with so we can use those meetings effectively. **This is not about grades, its about seeing what you know, and where we can help!**
+"Grades" don't exist at Marcy. We only need performance data in order to know how you're doing, and make sure the people who need help get it as quickly as they can. It's ok if you didn't finish by the deadline! Just show us what you have. We'll have office hours and reviews, and we want to know what you are all struggling with so we can use those meetings effectively. **This is not about grades, it's about seeing what you know, and where we can help!**
 
-## How to Work On Assignments
+## Before You Start: Set Up GitHub
+
+Every assignment lives in a GitHub repository. To complete one, you clone the repository onto your computer, commit your work on a branch, push that branch back to GitHub, and open a pull request. Each of those steps needs your computer to be connected to your GitHub account, so complete the [GitHub Setup](../environment-setup/github-setup.md) guide before you start your first assignment.
+
+To learn more about how Git and GitHub work, including what branches and pull requests are, read [Module 0: Command Line Interfaces, Git, and GitHub](../mod-0-command-line-interfaces-git-and-github/README.md).
+
+## Types of Assignments
+
+There are two kinds of assignments at Marcy, and each kind has its own guide:
+
+- **Coding assignments** ask you to write, modify, and debug Python code, which automated tests check. Read the [Coding Assignments Guide](coding-assignments.md).
+- **Short response assignments** ask you to explain a concept in writing. Read the [Short Response Assignments Guide](short-response-assignments.md).
+
+Each guide explains how that kind of assignment is scored, what feedback to expect, and how you may use AI on it.
+
+## Using AI on Assignments
+
+Every assignment follows the [AI Policy](../guidelines-and-policies/ai-policy.md). Each assignment's `README.md` also has an **AI Use on This Assignment** section that says how you may use AI on that particular assignment. The [Coding Assignments Guide](coding-assignments.md#using-ai-on-coding-assignments) and the [Short Response Assignments Guide](short-response-assignments.md#using-ai-on-short-response-assignments) each explain what the policy means for that kind of assignment.
+
+## Assignment Setup
 
 For short response and coding assignments, you will create a new branch called `draft` to complete your work. When you are ready to submit, you will create a Pull Request (PR) and tag your instructor for review.
 
-Below, you will find detailed instructions for setting up your assignments and for submitting your assignments.
-
 {% hint style="info" %}
-Want to learn more about git branching and making Pull Requests? Check out the [Git Branching & PRs lesson](https://marcylabschool.gitbook.io/swe/mod-0-command-line-interfaces-git-and-github/4-git-branching)!
+Want to learn more about git branching and making Pull Requests? Check out the [Git Branching and PRs lesson](../mod-0-command-line-interfaces-git-and-github/4-git-branching.md)!
 {% endhint %}
-
-### Assignment Setup
 
 Upon receiving any assignment, you should do the following setup steps:
 
 1. Accept the assignment using the provided GitHub classroom link. It should generate a repository that is unique to you.
-2. Clone down your repository and `cd` into your repository.
-3. (_For coding assignments only_) Run the following commands:
-
-   ```sh
-   npm i
-   npm test
-   ```
-
-   This will install any necessary dependencies and then show you all the tests you need to work on. We may explain each function in the `README.md`, but always run the tests because they are crucial to explaining what the code literally must do.
-
-4. Create and checkout a new branch called `draft`
+2. Clone down your repository into the `development` folder for the current module (for example, `development/mod-1`) and `cd` into your repository.
+3. Create and checkout a new branch called `draft`
 
    ```sh
    git checkout -b draft
    ```
 
-### Submitting the Assignment
+4. (_For coding assignments only_) Create a virtual environment, install the packages the tests need, and run the tests. The [Coding Assignments Guide](coding-assignments.md#coding-assignment-setup) lists the commands.
+
+## Submitting the Assignment
 
 To submit an assignment, do the following:
 
@@ -442,10 +82,15 @@ To submit an assignment, do the following:
 
 5.  Tag your instructor as a **Reviewer**.
 
-    ![alt text](../.gitbook/assets/assignment-tag-reviewer.png)
+    ![Tag your instructor as a reviewer on the pull request](../.gitbook/assets/assignment-tag-reviewer.png)
 
-6.  Submit the URL of the pull request on canvas. The URL should start with `https://github.com` and end with `/pull/NUMBER`, like this: https://github.com/benspector-mls/hello-world/pull/3
-7.  Your instructor will provide feedback on GitHub and will either approve your branch to be merged or will request that you resubmit.
+Opening the pull request submits your assignment on the LMS, so there is nothing else to submit. Your instructor will provide feedback on GitHub and will either approve your branch to be merged or will request that you resubmit.
+
+### Resubmitting an Assignment
+
+An assignment that scores below 75% must be revised and resubmitted. To resubmit, commit your fixes on the same `draft` branch and push them. The new commits appear on the pull request you already opened, so you do not need to make a new pull request. Then resubmit the assignment on the LMS.
+
+**There is no limit to the number of times you can submit an assignment.** As such, you are encouraged to **always submit your assignments on time to ensure that your instructor can provide you feedback and support** to complete your assignments.
 
 ### How to Undo a Commit to Main and Move Commits to Draft
 
