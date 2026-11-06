@@ -33,10 +33,10 @@ reading, assignments, and project carry.
 
 | Chapter | Session                                                                        | Week | Day        | Date         |
 | ------- | ------------------------------------------------------------------------------ | ---- | ---------- | ------------ |
-| 2.1     | Intro to OOP: Classes, self, and Introspection                                 | 7    | 4          | Thu 11/12    |
-| 2.2     | Classes: `__init__`, `__repr__`, and Instance Attributes                       | 7    | 5          | Fri 11/13    |
-| 2.3     | Conventions: `_protected`, `@property`, `@dataclass`, Static and Class Methods | 8    | 1          | Mon 11/16    |
-| 2.4     | Inheritance and the Method Resolution Order                                    | 8    | 3          | Wed 11/18    |
+| 2.1     | Intro to OOP: Classes, `__init__`, and `self`                                  | 7    | 4          | Thu 11/12    |
+| 2.2     | Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass`         | 7    | 5          | Fri 11/13    |
+| 2.3     | Properties: Non-Public Attributes, `@property`, and Class Attributes            | 8    | 1          | Mon 11/16    |
+| 2.4     | Inheritance and Attribute Lookup                                               | 8    | 3          | Wed 11/18    |
 | 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                           | 8    | 4          | Thu 11/19    |
 | 2.6     | Functions as Values: Callbacks and Higher-Order Functions                      | 8    | 5          | Fri 11/20    |
 | 2.7     | Closures and Decorators                                                        | 9    | 1          | Mon 11/23    |
@@ -65,7 +65,7 @@ Every session that produces testable code carries one testing objective. Each se
 
 ---
 
-## 2.1 Intro to OOP: Classes, self, and Introspection
+## 2.1 Intro to OOP: Classes, `__init__`, and `self`
 
 **Week 7, Day 4 — Thursday 11/12**
 
@@ -73,17 +73,57 @@ Every session that produces testable code carries one testing objective. Each se
 
 _In the session:_
 
+- **Apply · R1** — Given a method call on a string or a list, such as `'hello'.upper()`, use `type()` and `dir()` to name the value's class and find the method among its names, and rewrite the call in the form `str.upper('hello')`.
 - **Understand · R1** — Given a function that builds and returns a dictionary and a class that stores the same data, explain in two or three sentences what the class provides that the function does not, naming encapsulation and the object's interface.
-- **Understand · R1** — Given a method definition and a call on an instance, explain what `self` refers to, naming the instance the method was called on as the value Python passes in.
-- **Apply · assignment only** — Given an unfamiliar object, use `type()`, `dir()`, and `obj.__dict__` to report its class, at least three of its methods, and the current value of every attribute it holds.
-- **Analyze · R1** — Given a program that stores related data across parallel lists, identify the data and the behavior that belong together, and name the one class that should own both.
+- **Apply · R1** — Given a description of an entity and the data it holds, define a class whose `__init__` stores at least three instance attributes on `self`, and one method that returns an answer computed from those attributes.
+- **Understand · R1** — Given a method definition and a call on an instance, explain what `self` refers to, naming the instance the method was called on as the value Python passes in, and rewrite the call in the form `Event.can_refund(jazz, today)`.
 
 _By the end of the module:_
 
 - **Evaluate · R1** — Given a described piece of data, decide whether a dictionary or a class is the better container, and defend the choice in one sentence naming the behavior involved.
 - **Understand · R2** — Given a class, describe its interface by listing the attributes and methods other code is meant to use, and name at least one it should not.
+- **Analyze · R1** — Given a program that stores related data across parallel lists, identify the data and the behavior that belong together, and name the one class that should own both.
 
-## 2.2 Classes: `__init__`, `__repr__`, and Instance Attributes
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to explain how a method call connects to the instance it was called on, describing what `self` refers to and why one method definition can return a different answer for each instance.
+
+**Question**
+
+This excerpt is from the case study's `Event` class:
+
+```python
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    def can_refund(self, today):
+        return today < self.date
+```
+
+```python
+pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+jazz = Event('Friday Night Jazz', date(2026, 11, 28), 40, 25)
+today = date(2026, 11, 25)
+
+print(pottery.can_refund(today))
+print(jazz.can_refund(today))
+```
+
+Both lines call the same `can_refund` method. What does each line print, and why does the same method give two different answers?
+
+**Level 2 Example**
+
+The first line prints `False` and the second prints `True`, because the pottery workshop already happened and the jazz concert hasn't happened yet.
+
+**Level 3 Example**
+
+The first line prints `False` and the second prints `True`. When I call `pottery.can_refund(today)`, Python passes `pottery` into the method as `self`, so `self.date` is the date `pottery` stored in `__init__`, November 20. November 25 is not before November 20, so the method returns `False`. When I call `jazz.can_refund(today)`, `self` is `jazz`, so `self.date` is November 28, and November 25 is before it, so the method returns `True`. There is only one `can_refund` method, but each instance holds its own `date`, and `self` decides whose date the method reads.
+
+## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass`
 
 **Week 7, Day 5 — Friday 11/13**
 
@@ -91,18 +131,58 @@ _By the end of the module:_
 
 _In the session:_
 
-- **Apply · R1** — Given a description of an entity and the data it holds, define a class whose `__init__` stores at least three instance attributes on `self`.
 - **Apply · R1** — Given a class, create at least two instances with different arguments, and demonstrate with `print()` that changing one instance's attribute leaves the other unchanged.
 - **Apply · R1** — Given a class with no `__repr__`, write one that returns the class name and at least two attribute values, so that printing an instance identifies which instance it is.
-- **Apply · R5 (ADDED)** — Given a class that must manage many entities, store a list of instances as an attribute and write a method that returns only those instances whose attribute matches a given value.
+- **Evaluate · R1** — Given two instances that hold identical data, predict whether `==` returns `True` with and without an `__eq__` method, and explain the difference between two names referring to the same object (`is`) and two objects holding equal data (`==`).
+- **Create · R1** — Given a class that only carries data and defines `__init__`, `__repr__`, and `__eq__` by hand, refactor it with `@dataclass`, and confirm that printing and comparing its instances give the same results as before.
 - **Testing** — See the 2.2 row of [Testing Objectives](#testing-objectives).
 
 _By the end of the module:_
 
-- **Apply · R6 (ADDED)** — Given two existing instances, define a third class that stores both as attributes, and reach a value on one of them through the new object in a single expression, such as `loan.member.name`.
-- **Analyze · R1** — Given an object printed as `<Item object at 0x104e2f10>`, explain what that output does and does not tell you, and state what `__repr__` would add.
+- **Apply · R5 (ADDED)** — Given a class that must manage many entities, store a list of instances as an attribute and write a method that returns only those instances whose attribute matches a given value.
+- **Apply · R6 (ADDED)** — Given two existing instances, define a third class that stores both as attributes, and reach a value on one of them through the new object in a single expression, such as `reservation.attendee.name`.
+- **Apply · assignment only** — Given an unfamiliar object, use `obj.__dict__` and `dir()` to report the current value of every attribute it holds and at least three of its methods.
+- **Analyze · R1** — Given an object printed as `<Event object at 0x104e2f10>`, explain what that output does and does not tell you, and state what `__repr__` would add.
+- **Evaluate · D1** — Given a class that only carries data, decide whether `@dataclass` or a plain class suits it better, and defend the choice by naming at least one method `@dataclass` would write for you.
 
-## 2.3 Conventions: `_protected`, `@property`, `@dataclass`, Static and Class Methods
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to explain where an object's data is stored, distinguishing a value an instance copies into its own attribute from another object that it holds and reaches through.
+
+**Question**
+
+This excerpt is from the case study's `Reservation` class. An event's `ticket_price()` returns its `base_price`.
+
+```python
+class Reservation:
+    def __init__(self, number, attendee, event):
+        self.number = number
+        self.attendee = attendee
+        self.event = event
+        self.price = event.ticket_price()
+```
+
+```python
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40, 25)
+maya_ticket = Reservation(1001, maya, jazz)
+
+jazz.base_price = 30
+
+print(maya_ticket.price)
+print(maya_ticket.event.base_price)
+```
+
+What do the two `print()` calls show, and why do they show different prices when both are about Maya's ticket to the same concert?
+
+**Level 2 Example**
+
+The first shows `25` and the second shows `30`, because the price changed after Maya booked her ticket.
+
+**Level 3 Example**
+
+The first shows `25` and the second shows `30`. When Maya's reservation was created, `__init__` called `event.ticket_price()` and stored the answer, the number `25`, in the reservation's own `price` attribute. That number belongs to `maya_ticket`, so changing the concert's price later doesn't touch it. But `self.event` stores the `jazz` object itself, not a copy of it, so `maya_ticket.event.base_price` reaches through the reservation to the same concert that was just changed and shows `30`. That's why Maya keeps the price she agreed to, while the reservation still knows the event's current details.
+
+## 2.3 Properties: Non-Public Attributes, `@property`, and Class Attributes
 
 **Week 8, Day 1 — Monday 11/16**
 
@@ -110,19 +190,62 @@ _By the end of the module:_
 
 _In the session:_
 
-- **Evaluate · R2** — Given a class with four public attributes, decide for each one whether it should be `_protected` by asking whether an invalid value there would break the program, and give a one-sentence reason per attribute.
-- **Apply · R2** — Given a `_protected` attribute, expose it through a `@property` getter so that code which previously read the attribute directly still works unchanged.
+- **Evaluate · R2** — Given a class with four public attributes, decide for each one whether it should stay public or become non-public behind a `@property`, by asking whether an invalid value there would break the program, and give a one-sentence reason per attribute.
+- **Apply · R2** — Given a non-public attribute, expose it through a `@property` getter so that code which previously read the attribute directly still works unchanged.
 - **Apply · R2** — Given a rule an attribute must satisfy, write a setter that raises `ValueError` with a message naming the rule, and leaves the stored value unchanged when an assignment is rejected.
 - **Understand · R2** — Explain what a single leading underscore asks of another programmer and what it does not prevent, naming at least one way the attribute can still be reached.
 - **Testing** — See the 2.3 row of [Testing Objectives](#testing-objectives).
 
 _By the end of the module:_
 
-- **Evaluate · D1** — Given a class that only carries data, decide whether `@dataclass` or a plain class suits it better, and defend the choice by naming at least one method `@dataclass` would write for you.
-- **Apply · assignment only** — Given a requirement that every record carry a unique ID, use a class attribute and a `@classmethod` to issue sequential IDs, so that no two instances share one.
-- **Understand · assignment only** — Given a method that uses neither `self` nor `cls`, explain why `@staticmethod` is the correct decorator for it.
+- **Apply · assignment only** — Given a value that every instance of a class shares, such as a service fee added to every concert ticket, store it as a class attribute and read it through the class name.
+- **Understand · assignment only** — Given a method marked `@classmethod` or `@staticmethod` in code you are reading, such as `date.today()`, explain what Python passes in as its first argument (the class, or nothing) and how the method is called.
 
-## 2.4 Inheritance and the Method Resolution Order
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to explain how a non-public attribute and a property setter work together to refuse an invalid value, and describe what the single leading underscore does and does not prevent.
+
+**Question**
+
+This excerpt is from the case study's `Event` class:
+
+```python
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    @property
+    def capacity(self):
+        return self._capacity
+
+    @capacity.setter
+    def capacity(self, value):
+        if value < 1:
+            raise ValueError(f'Capacity must be at least 1, not {value}.')
+        self._capacity = value
+```
+
+```python
+pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+
+pottery.capacity = 0     # Line A
+pottery._capacity = 0    # Line B
+```
+
+Imagine each line is run on its own, straight after `pottery` is created. What happens on Line A, and what happens on Line B? Explain why the two lines behave differently, and what the underscore in `_capacity` asks of other programmers.
+
+**Level 2 Example**
+
+Line A raises a `ValueError` because the capacity can't be 0. Line B works and sets the capacity to 0.
+
+**Level 3 Example**
+
+Line A raises `ValueError: Capacity must be at least 1, not 0.` Assigning to `pottery.capacity` runs the setter, which checks the value before storing it. Since 0 is less than 1, the setter raises the error before it reaches `self._capacity = value`, so the capacity stays 2. Line B assigns straight to `_capacity`, the attribute where the value is actually stored, so it skips the setter and the capacity becomes 0 with no check. Python doesn't stop this. The underscore makes `_capacity` non-public, which is a message to other programmers to go through the `capacity` property, where the rule is checked. Line B ignores that message, so the event now has a capacity the rule was written to refuse.
+
+## 2.4 Inheritance and Attribute Lookup
 
 **Week 8, Day 3 — Wednesday 11/18**
 
@@ -132,11 +255,10 @@ _In the session:_
 
 - **Apply · R3** — Given a superclass and a described subtype, define a subclass that calls `super().__init__()` and adds at least one attribute of its own.
 - **Apply · R3** — Given a superclass method, override it in two subclasses so that each returns a different result for the same call, using `super().method()` in at least one to extend rather than replace the parent's version.
-- **Analyze · assignment only** — Given a two-level hierarchy and an attribute access, predict which class supplies the attribute, naming the method resolution order Python searched to find it.
+- **Analyze · assignment only** — Given a two-level hierarchy and an attribute access, trace where Python finds the attribute, naming each place it looked in order (the instance, its class, then the parent class) and the place it stopped.
 
 _By the end of the module:_
 
-- **Analyze · assignment only** — Given a class, read `Class.__mro__` and explain the order it reports, naming `object` as the final entry.
 - **Evaluate · R3** — Given two classes where one holds the other, decide whether inheritance or composition describes the relationship, and defend the choice using "is a" and "has a".
 - **Evaluate · R3** — Given two proposed subclasses that differ only in the value of one attribute, judge whether they should be two classes, and name the alternative.
 - **Testing** — See the 2.4 row of [Testing Objectives](#testing-objectives).
@@ -149,7 +271,7 @@ _By the end of the module:_
 
 _In the session:_
 
-- **Understand · R4** — Given three classes that answer the same method name differently, define polymorphism in one sentence that names the caller's ignorance of the type as the benefit.
+- **Understand · R4** — Given `len()` called on a string, a list, and a dictionary, and three classes that answer the same method name differently, define polymorphism in one sentence that names the caller's ignorance of the type as the benefit.
 - **Apply · R4** — Given a list holding instances of at least two subtypes, write one loop that calls a shared method on every element, with no `isinstance()` and no `type()` in the loop body.
 - **Apply · R4** — Given a function containing an `if isinstance(...)` branch per subtype, refactor it so each subtype answers for itself, and confirm the function's output is unchanged.
 
@@ -203,14 +325,14 @@ _In the session:_
 
 - **Analyze · R6** — Given one user action, trace it through every object it touches, in order, naming the method called at each step.
 - **Analyze · R6** — Given the codebase, locate every place an invalid action is refused, name the class that performs each refusal, and state the status or rule it checks.
-- **Create · D1 (ADDED)** — Given the case study codebase, draw a UML class diagram showing every class, every attribute marked public or private, and every relationship between them.
+- **Create · D1 (ADDED)** — Given the case study codebase, draw a UML class diagram showing every class, every attribute marked public or non-public, and every relationship between them.
 - **Remember · D1 (optional)** — Given a provided UML class diagram of the case study, identify the class in the code that each box describes, for every box in the diagram.
 - **Testing** — See the Case study row of [Testing Objectives](#testing-objectives).
 
 _By the end of the module:_
 
 - **Analyze · R1** — Given the case study codebase, list every class and state in one line what data each one owns.
-- **Analyze · R2** — Given the codebase's protected attributes, explain for each one what would break if it were public.
+- **Analyze · R2** — Given the codebase's non-public attributes, explain for each one what would break if it were public.
 - **Evaluate · D1** — Given one structural decision the author made, judge it against one named alternative, and state what each one makes easy and what it makes hard.
 - **Evaluate · D1** — Compare the case study's structure with the structure chosen for your own project, naming at least one place the two differ and why.
 
@@ -286,85 +408,92 @@ Week 12, Day 5 — 12/18.**
 Grouped by session, in the order fellows meet them. Definitions are written to
 be read by a fellow, not by an instructor.
 
-## 2.1 Intro to OOP: Classes, self, and Introspection — Thu 11/12
+## 2.1 Intro to OOP: Classes, `__init__`, and `self` — Thu 11/12
 
 - **Object-oriented programming (OOP)** is a way of organizing a program around objects, where each object holds its own data and the methods that work on that data.
 - A **class** is a blueprint for making objects. It names the data an object will hold and defines the methods it will answer.
 - An **object**, also called an **instance**, is one thing made from a class. Two instances of the same class hold separate data.
-- An **attribute** is a piece of data stored on an object, reached with a dot: `member.name`.
+- An **attribute** is a piece of data stored on an object, reached with a dot: `event.name`.
 - A **method** is a function defined inside a class. It is called on an object, and it can read and change that object's attributes.
-- **Encapsulation** is bundling data together with the methods that operate on it, so that the data is changed through those methods rather than from anywhere in the program.
-- An **interface** is the set of attributes and methods that the rest of the program uses to interact with an object. It is the part of the object other code is allowed to touch.
-- **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `member.borrow()` passes `member` in as `self`.
 - **Introspection** is asking an object about itself while the program is running.
-- **`type(obj)`** returns the class an object was made from.
+- **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
 - **`dir(obj)`** returns the names of everything the object answers to, including its methods.
-- **`obj.__dict__`** returns a dictionary of the object's own attributes and their current values.
-- **`isinstance(obj, Class)`** asks whether an object was made from a class, or from one of its subclasses.
-
-## 2.2 Classes: `__init__`, `__repr__`, and Instance Attributes — Fri 11/13
-
 - **`__init__`** is the method Python runs when you create an instance. It receives the arguments passed to the class and stores them as attributes.
 
   ```python
-  class Member:
-      def __init__(self, name, limit):
+  class Event:
+      def __init__(self, name, date, capacity):
           self.name = name
-          self.limit = limit
+          self.date = date
+          self.capacity = capacity
   ```
 
-- **Instantiation** is the act of making an instance: `Member("Ada", 3)`.
-- An **instance attribute** belongs to one instance. Changing `ada.limit` does not change any other member's limit.
+- **Instantiation** is the act of making an instance: `Event('Friday Night Jazz', date(2026, 12, 5), 40)`.
+- **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `jazz.can_refund(today)` passes `jazz` in as `self`.
+- A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
+- **Encapsulation** is bundling data together with the methods that operate on it, so that the data is changed through those methods rather than from anywhere in the program.
+- An **interface** is the set of attributes and methods that the rest of the program uses to interact with an object. It is the part of the object other code is allowed to touch.
+
+## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
+
+- An **instance attribute** belongs to one instance. Changing `jazz.capacity` does not change any other event's capacity.
+- **`obj.__dict__`** returns a dictionary of the object's own attributes and their current values.
 - **`__repr__`** is the method Python calls to turn an object into a string for a programmer to read. Without it, printing an object shows its class name and a memory address, which tells you nothing about which object you are holding.
 
   ```python
   def __repr__(self):
-      return f"Member({self.name!r}, limit={self.limit})"
+      return f'Event({self.name!r}, {self.date})'
   ```
 
-- A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__` or `__repr__`. Python calls them for you at the right moment.
-- **Composition** is one object holding another object as an attribute. A `Loan` that stores a `Member` and an `Item` is composed of them, and `loan.member.name` reaches through one object to the data in another.
+- **Identity** is whether two names refer to the same object, which `is` checks. **Equality** is whether two objects hold equal data, which `==` checks.
+- **`__eq__`** is the method Python calls for `==`. Without one, `==` checks identity, so two events holding identical data are not equal.
 
-## 2.3 Conventions: `_protected`, `@property`, `@dataclass`, Static and Class Methods — Mon 11/16
+  ```python
+  def __eq__(self, other):
+      return self.name == other.name and self.date == other.date
+  ```
+
+- A **`@dataclass`** is a decorator that writes `__init__`, `__repr__`, and `__eq__` for you, from the attribute names you list. It suits a class that mostly carries data.
+- A **value object** is an object defined entirely by the data it holds, with little or no behavior of its own. Two value objects with equal data are interchangeable.
+- **`isinstance(obj, Class)`** asks whether an object was made from a class, or from one of its subclasses.
+- **Composition** is one object holding another object as an attribute. A `Reservation` that stores an `Attendee` and an `Event` is composed of them, and `reservation.attendee.name` reaches through one object to the data in another.
+
+## 2.3 Properties: Non-Public Attributes, `@property`, and Class Attributes — Mon 11/16
 
 - A **public attribute** has a plain name and anything in the program may read or change it.
-- A **`_protected` attribute** begins with a single underscore. The underscore is a message to other programmers: do not reach for this directly. Python does not stop them, which is why the convention has to be respected rather than enforced.
-- **Data hiding** is limiting access to an object's data so that invalid values cannot get in. A borrowing limit that any code can set to `-5` is a bug waiting to be written.
+- A **non-public attribute** has a name that begins with a single underscore, such as `_capacity`. The underscore is a message to other programmers: do not reach for this directly. Python does not stop them, which is why the convention has to be respected rather than enforced. Python's style guide, PEP 8, uses the word non-public. Other references call the same convention private, protected, or internal.
 - A **`@property`** turns a method into something that reads like an attribute, so a value can be computed or checked on the way out.
 - A **getter** is the method a `@property` decorates. It returns the value.
 - A **setter** is the method decorated with `@<name>.setter`. It runs when something assigns to the attribute, which is where validation belongs.
 
   ```python
-  @limit.setter
-  def limit(self, value):
-      if value < 0:
-          raise ValueError("A borrowing limit cannot be negative")
-      self._limit = value
+  @capacity.setter
+  def capacity(self, value):
+      if value < 1:
+          raise ValueError(f'Capacity must be at least 1, not {value}.')
+      self._capacity = value
   ```
 
 - **Validation** is checking a value before storing it, and refusing it when it is wrong.
-- A **`@dataclass`** is a decorator that writes `__init__`, `__repr__`, and `__eq__` for you, from the attribute names you list. It suits a class that mostly carries data.
-- A **value object** is an object defined entirely by the data it holds, with little or no behavior of its own. Two value objects with equal data are interchangeable.
-- A **class attribute** is defined in the class body rather than in `__init__`, and every instance shares the one copy. A counter that issues the next ID lives here.
-- A **`@classmethod`** receives the class itself as its first parameter, named **`cls`**, instead of an instance. It is for work that belongs to the class, such as handing out the next ID.
-- A **`@staticmethod`** receives neither `self` nor `cls`. It is a plain function that lives inside the class because that is where it belongs.
+- A **class attribute** is defined in the class body rather than in `__init__`, and every instance shares the one copy. A service fee added to every concert ticket lives here: `Concert.SERVICE_FEE`.
+- A **`@classmethod`** receives the class itself as its first parameter, named **`cls`**, instead of an instance, and is called on the class. You will read them in other code: `date.today()` is called on the `date` class and returns a new date.
+- A **`@staticmethod`** receives neither `self` nor `cls`. It is a plain function placed inside a class. Python's style guides prefer a function at the top level of a module, so you will read static methods more often than you write them.
 
-## 2.4 Inheritance and the Method Resolution Order — Wed 11/18
+## 2.4 Inheritance and Attribute Lookup — Wed 11/18
 
 - **Inheritance** is a relationship between two classes, where a subclass receives the attributes and methods of a superclass and can add to them.
 - A **superclass**, also called a **parent class**, is the class being inherited from.
-- A **subclass**, also called a **child class**, is the class doing the inheriting: `class Laptop(Item):`.
+- A **subclass**, also called a **child class**, is the class doing the inheriting: `class Concert(Event):`.
 - **`super()`** reaches the superclass from inside a subclass. `super().__init__(...)` runs the parent's setup, and `super().method()` runs the parent's version of a method you are overriding.
 - **Overriding** is defining a method in a subclass that already exists on the superclass. The subclass's version is the one that runs.
-- The **method resolution order (MRO)** is the order Python searches classes when it looks for an attribute or method: the instance's own class first, then its superclass, and onward to `object`.
-- **`Class.__mro__`** reports that order as a tuple, which is how you check what Python will find rather than guessing.
-- **`object`** is the class every Python class inherits from, and it is the last stop in every MRO.
+- **Attribute lookup** is the order Python searches when code reads an attribute or calls a method: the instance first, then its class, then the superclass, and onward to `object`. Python uses the first match it finds, which is why a subclass's override runs instead of the parent's version.
+- **`object`** is the class every Python class inherits from, and it is the last place attribute lookup searches.
 
 ## 2.5 Polymorphism, Duck Typing, and Abstract Base Classes — Thu 11/19
 
-- **Polymorphism** is different types of object answering the same method name in their own way, so that code calling the method does not need to know which type it is holding.
+- **Polymorphism** is different types of object answering the same request in their own way, so that code making the request does not need to know which type it is holding. `len()` works on a string, a list, and a dictionary, and each type answers in its own way.
 - A **shared interface**, or **contract**, is the set of method names every type in a group promises to answer. It is what makes polymorphism safe.
-- **Duck typing** is Python's habit of caring what an object can do rather than what class it came from. If it answers `due_date()`, it can be treated as something with a due date.
+- **Duck typing** is Python's habit of caring what an object can do rather than what class it came from. If it answers `ticket_price()`, it can be treated as something with a ticket price.
 - An **abstract base class (ABC)** is a class that cannot be instantiated and exists to declare the methods its subclasses must provide.
 - **`@abstractmethod`** marks a method a subclass is required to define. A subclass that forgets one raises `TypeError` the moment anything tries to instantiate it, rather than failing later at the call site.
 - A **concrete class** is a class you can actually instantiate, because every abstract method has been defined.
@@ -397,7 +526,7 @@ be read by a fellow, not by an instructor.
 - A **relationship** is one class knowing about another, drawn as a line between their boxes.
 - A **one-way reference** means class A holds a reference to class B, and B knows nothing about A.
 - A **bidirectional reference** means each class holds a reference to the other. It makes more questions easy to answer and gives you two places to keep in step.
-- In a diagram, **`+`** marks a public attribute or method and **`-`** marks a private one.
+- In a diagram, **`+`** marks a public attribute or method and **`-`** marks a non-public one (one whose name begins with `_`).
 
 ## 2.9 System Design Strategies — Wed 12/2
 
@@ -483,7 +612,7 @@ Every class you define has **at least 3 attributes**, **at least 2 methods**, an
 a `__repr__` that returns something you would want to see in a traceback.
 
 **2. Encapsulation.** **At least 3 attributes** across your system are
-`_protected` and reached through a `@property`. **At least 1 setter refuses an
+non-public and reached through a `@property`. **At least 1 setter refuses an
 invalid value** and tells the user why, instead of storing it.
 
 Ask of each attribute: would your system break if this held a wrong value? A fridge's capacity or a member's borrowing limit cannot go negative, and a loan's status has to be one of checked out, returned, overdue, or lost. Those need protecting. A donor's phone number or an item's description does not, because there is no wrong value to catch.
@@ -549,8 +678,8 @@ Not graded, not required. This is where to go once your required work runs.
    building the version you argued for.
 3. **A second higher-order function**, in the form you did not use for
    requirement 7.
-4. **Class-level ID generation.** A class attribute plus a `@classmethod` that
-   hands out the next unique ID, so no two records can collide.
+4. **Issue each ID from the coordinator.** The coordinator stores the next ID
+   and hands it to each new record it creates, so no two records can collide.
 5. **More tests than the two required.** Cover every status transition, including the ones that are supposed to fail, and use a fixture so each test starts from a system you did not have to build by hand.
 6. **Persistence.** Save to JSON on exit and load on start.
 
@@ -558,7 +687,7 @@ Not graded, not required. This is where to go once your required work runs.
 
 **1. `DESIGN.md`, due at the start of project week.** Five things:
 
-1. A **UML class diagram**. Draw it by hand and photograph it, or write it as text. Mark every attribute `+` public or `-` private.
+1. A **UML class diagram**. Draw it by hand and photograph it, or write it as text. Mark every attribute `+` public or `-` non-public (one whose name begins with `_`).
 2. **One line per class**: what data it owns, and what it can do.
 3. **One line per relationship**: which class knows about which, whether that is one-way or bidirectional, and why.
 4. **The three design strategies** you used, each named with its class, and one sentence on your higher-order function: which form you chose and what it bought you.
@@ -715,7 +844,7 @@ One point per required feature in your path's brief. These lines ask only whethe
 
 1. At least 5 classes are defined, each with at least 3 attributes and at least 2 methods, covering coordinator, superclass, 2 subclasses, and intermediary.
 2. Every class returns a useful string from `__repr__`.
-3. At least 3 attributes are `_protected` and reached through a `@property`.
+3. At least 3 attributes are non-public and reached through a `@property`.
 4. At least 1 `@property` setter refuses an invalid value and says why.
 5. Every subclass calls `super().__init__()`.
 6. At least 1 method is overridden and returns a different result per subclass.
@@ -732,7 +861,7 @@ One point per required feature in your path's brief. These lines ask only whethe
 
 ### System Design (3 points)
 
-1. `DESIGN.md` contains a UML class diagram that marks every attribute public or private, every class in the diagram exists in the code, and each class has a line saying what data it owns and what it can do.
+1. `DESIGN.md` contains a UML class diagram that marks every attribute public or non-public, every class in the diagram exists in the code, and each class has a line saying what data it owns and what it can do.
 2. Every relationship is listed with a direction and a reason.
 3. One design decision is written up with the options considered and the reasoning that settled it.
 
@@ -791,7 +920,7 @@ Five build days, and the share-out on the sixth. Commit at the end of every step
 
 **Day 1 — the entities, running.** Pick the simplest entity. Write `__init__` and `__repr__`, create two instances in `main.py`, and print them. Then write the superclass and its two subclasses, give them the one method each subclass answers differently, and loop over a mixed list calling it. By the end of today, objects exist and print.
 
-**Day 2 — protect the data, then connect it.** Turn the attributes that have wrong values into `_protected` with a `@property`, and make one setter raise `ValueError`. **Write your first test now**, while the setter is fresh: one `pytest.raises(ValueError)`. Then write the intermediary — the class that connects two entities, holding a `_status` and the methods that move it from one status to the next, each refusing to act from the wrong status.
+**Day 2 — protect the data, then connect it.** Make the attributes that could hold wrong values non-public with a `@property`, and make one setter raise `ValueError`. **Write your first test now**, while the setter is fresh: one `pytest.raises(ValueError)`. Then write the intermediary — the class that connects two entities, holding a `_status` and the methods that move it from one status to the next, each refusing to act from the wrong status.
 
 **Day 3 — the coordinator and the rules.** Write the class that owns the collections. Put the refusals in it: the capacity or limit check, and the already-out check. Add the methods that search or filter its lists, because the reports are going to need them. **Write your second test**: refuse an action, then assert the collection is the same length it was.
 
