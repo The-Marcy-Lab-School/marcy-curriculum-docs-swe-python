@@ -72,6 +72,7 @@ Then organize the project so that source code and tests live in separate folders
 ```
 testing-practice/
 ├── .venv/
+├── pytest.ini
 ├── requirements.txt
 ├── src/
 │   └── calc.py
@@ -79,7 +80,15 @@ testing-practice/
     └── test_calc.py
 ```
 
-`pytest` finds tests by name. It looks for files whose names start with `test_`, and inside them, for functions whose names start with `test_`. There is nothing to configure.
+`pytest` finds tests by name. It looks for files whose names start with `test_`, and inside them, for functions whose names start with `test_`. The file `pytest.ini` holds pytest's settings for this project. Create it in the project's root folder with these three lines:
+
+```
+[pytest]
+pythonpath = src
+testpaths = tests
+```
+
+`pythonpath = src` lets the tests import your code from the `src` folder, and `testpaths = tests` tells pytest that the tests live in `tests/`. The note after your first test explains why the first setting matters.
 
 ### First Test
 
@@ -97,7 +106,7 @@ Then, add the following code:
 
 ```python
 # test_calc.py
-from src.calc import add
+from calc import add
 
 
 def test_add():
@@ -106,7 +115,7 @@ def test_add():
     assert add(10, 5) == 15
 ```
 
-The first line imports `add` from `src/calc.py`. When a module sits inside a folder, you write the folder name, a dot, and then the module name, so `src.calc` means "the `calc` module inside the `src` folder". Python starts looking from the folder you run the tests in, which is why the hint below says to run them from the project's root folder.
+The first line imports `add` from `src/calc.py`. The test names the module alone, `calc`, without the `src` folder, because `pytest.ini` has already told Python to look inside `src/`.
 
 Each function whose name starts with `test_` is one test. Name it after the function it tests. The string on the first line is a docstring, the function description you met in chapter 1.3. In a test, the docstring says what the test checks. Inside, the `assert` statement is the whole mechanism:
 
@@ -119,7 +128,7 @@ A test can hold as many `assert` statements as you like. The test passes only if
 Run the tests with:
 
 ```sh
-python3 -m pytest
+pytest
 ```
 
 And you should see something like this (the Python and pytest version numbers will be whatever is on your machine):
@@ -128,6 +137,8 @@ And you should see something like this (the Python and pytest version numbers wi
 ============================= test session starts ==============================
 platform darwin -- Python 3.12.4, pytest-9.1.1, pluggy-1.6.0
 rootdir: /Users/ben/mod-1/testing-practice
+configfile: pytest.ini
+testpaths: tests
 collected 1 item
 
 tests/test_calc.py .                                                     [100%]
@@ -138,7 +149,7 @@ tests/test_calc.py .                                                     [100%]
 Each dot after a filename is one passing test. We see a passing test because every `assert` expression was `True`.
 
 {% hint style="info" %}
-**Why `python3 -m pytest` and not just `pytest`?** Installing pytest gives you a `pytest` command as well, and you will see it in other people's instructions. But `pytest` on its own does not put your project folder on the list of places Python looks for modules, so `from src.calc import add` fails with `ModuleNotFoundError: No module named 'src'`. Running it through `python3 -m` adds the folder you are in to that list. The project's root folder, `testing-practice/`, contains `src/`, so from there `from src.calc import add` works. If you `cd tests` first, Python adds `tests/` instead, finds no `src` there, and you are back to `ModuleNotFoundError`. So run `python3 -m pytest` from the project's root folder every time.
+**Why `pytest` can find `calc`: the `pytest.ini` file.** Your test lives in `tests/` and your code lives in `src/`, so when `test_calc.py` runs `from calc import add`, Python has to know to look inside `src/`. On its own it doesn't, and the import fails with `ModuleNotFoundError: No module named 'calc'`. The line `pythonpath = src` in `pytest.ini` adds the `src` folder to the places Python looks for modules. pytest reads `pytest.ini` before it runs any test, so the `pytest` command works on its own only as long as that file exists. Every assignment in this program comes with one. If `pytest` ever reports `ModuleNotFoundError` for a module you wrote, check that `pytest.ini` is in the project's root folder.
 {% endhint %}
 
 ### Practice: Add A Test
@@ -155,10 +166,10 @@ def test_add_negatives():
 
 </details>
 
-Run `python3 -m pytest` again and you should now see two dots. To see every test by name, add `-v` (for "verbose"):
+Run `pytest` again and you should now see two dots. To see every test by name, add `-v` (for "verbose"):
 
 ```sh
-python3 -m pytest -v
+pytest -v
 ```
 
 ```
@@ -230,7 +241,7 @@ When a function returns a decimal number, the test compares with `pytest.approx(
 
 ```python
 import pytest
-from src.calc import add
+from calc import add
 
 
 def test_add_decimals():
@@ -288,7 +299,7 @@ In your `testing-practice` project, put this function in a new file, `src/double
 Since we are now working with a mutable type (a list), we need to test two different things: that the _contents_ are right, and that the function gave us a _new_ list rather than the one we passed in.
 
 ```python
-from src.double_all import double_all_purely
+from double_all import double_all_purely
 
 
 def test_double_all_purely():
@@ -336,7 +347,7 @@ def double_all_purely(items):
 
 </details>
 
-Run `python3 -m pytest tests/test_double_all.py` again: the tests should still pass. (Giving pytest a file path runs only that file.)
+Run `pytest tests/test_double_all.py` again: the tests should still pass. (Giving pytest a file path runs only that file.)
 
 ## Test-Driven Development
 
@@ -419,7 +430,7 @@ def double(value):
         return value
 ```
 
-Run `python3 -m pytest tests/test_double_all.py`. All three tests still pass, so the refactor changed how `double` works without changing what it does. If a refactor ever makes a test fail, the test has caught the change in behavior right away, and you can undo the refactor before you build anything on top of it.
+Run `pytest tests/test_double_all.py`. All three tests still pass, so the refactor changed how `double` works without changing what it does. If a refactor ever makes a test fail, the test has caught the change in behavior right away, and you can undo the refactor before you build anything on top of it.
 
 </details>
 
@@ -459,7 +470,7 @@ An error that a function raises on purpose is part of what the function does, so
 
 ```python
 import pytest
-from src.bank import withdraw
+from bank import withdraw
 
 
 def test_withdraw():
@@ -524,7 +535,7 @@ def make_accounts():
 
 ```python
 import pytest
-from src.bank import get_empty_accounts, add_100_to_all_accounts, get_account_by_owner, transfer
+from bank import get_empty_accounts, add_100_to_all_accounts, get_account_by_owner, transfer
 
 
 def make_accounts():

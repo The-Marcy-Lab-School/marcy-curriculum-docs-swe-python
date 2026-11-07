@@ -64,7 +64,7 @@ This is a record of what the curriculum does, not a history of what it used to d
 
 **The demonstration package for the ecosystem chapter is `rich`.** It replaces `prompt-sync`. It has a visible effect, it is on PyPI, and it pulls in `markdown-it-py`, `pygments`, and `mdurl`, which gives the sub-dependency lesson something real to point at. Version numbers quoted in that chapter came from a live install and carry a "may vary" note.
 
-**Tests run with `python3 -m pytest`, never bare `pytest`.** With `src/` and `tests/` folders and no `__init__.py` files, the bare `pytest` command fails on `from src.calc import add` with `ModuleNotFoundError`, because it does not put the project root on the import path. `python3 -m pytest` does. Every chapter, cheat sheet, and project instruction uses the `-m` form and the testing chapter explains why in a callout.
+**Tests run with bare `pytest`, configured by `pytest.ini`.** Every repository with tests keeps its code in `src/` and its tests in `tests/`, with a `pytest.ini` that sets `pythonpath = src` and `testpaths = tests`. Those settings put `src/` on the import path, so a test imports with `from calc import add` and the bare `pytest` command runs every test. Without `pytest.ini`, that import fails with `ModuleNotFoundError`, and the TDD chapter explains this in a note. Every chapter, cheat sheet, and project instruction uses bare `pytest`, and Mod 2 lessons that write tests set up the same layout.
 
 **Screenshots of Node tooling are dropped, not relabelled.** The two Run and Debug screenshots showing `index.js` and the "JavaScript Debug Terminal" button are left out of the intro chapter; the language-neutral SVG of the debugger controls stays. Recapturing them against a `.py` file is on Ben's list.
 

@@ -656,15 +656,22 @@ all(x > 0 for x in nums)                 # every one?
 
 ```sh
 pip install pytest
-python3 -m pytest              # run all tests
-python3 -m pytest -v           # show each test by name
-python3 -m pytest tests/test_calc.py   # one file
+pytest              # run all tests (needs pytest.ini, below)
+pytest -v           # show each test by name
+pytest tests/test_calc.py   # one file
+```
+
+```python
+# pytest.ini, in the project's root folder, lets tests import from src/
+[pytest]
+pythonpath = src
+testpaths = tests
 ```
 
 ```python
 # tests/test_calc.py — files and functions start with test_
 import pytest
-from src.calc import add, is_even
+from calc import add, is_even
 
 def test_add():
     """add - adds two numbers"""          # docstring: what the test checks

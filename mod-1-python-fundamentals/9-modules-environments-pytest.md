@@ -50,7 +50,7 @@ In this lesson we'll learn how a program is split into pieces that each do one j
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
 - A **`.gitignore`** file lists the files and folders in a project that Git should not track. The `.venv/` and `__pycache__/` folders go in it. The `.venv` folder is never committed; it is rebuilt from `requirements.txt` instead.
-- **`pytest`** is the third-party package that runs the tests in your assignments. It finds files whose names start with `test_` and runs them with `python3 -m pytest`. It is a **developer dependency**: a package used by the developers of a project but not needed by the people who run it.
+- **`pytest`** is the third-party package that runs the tests in your assignments. It finds files whose names start with `test_` and runs them with the `pytest` command. It is a **developer dependency**: a package used by the developers of a project but not needed by the people who run it.
 
 ## Modularity
 
@@ -716,7 +716,7 @@ The general rule: commit the recipe, not the meal.
 
 Every assignment in this program comes with a `tests/` folder and a `requirements.txt` that lists `pytest`. `pytest` is the third-party package that has been checking your work.
 
-When you run `python3 -m pytest`, Python runs the `pytest` module from the active virtual environment. `pytest` then:
+When you run `pytest`, your Terminal runs the `pytest` command that was installed into the active virtual environment. `pytest` then:
 
 - finds every file in the project whose name starts with `test_`, such as `tests/test_debug.py`;
 - runs every function in those files whose name starts with `test_`. Each one imports a function from your code, calls it with an input whose answer is already known, and checks that your function returned that answer;
@@ -727,17 +727,17 @@ When you run `python3 -m pytest`, Python runs the `pytest` module from the activ
 The lesson on test-driven development, later in this module, teaches you to write tests of your own.
 
 {% hint style="warning" %}
-**Predict, then run.** In an assignment folder with its environment activated, deactivate the environment with `deactivate`, then run `python3 -m pytest`. What happens?
+**Predict, then run.** In an assignment folder with its environment activated, deactivate the environment with `deactivate`, then run `pytest`. What happens?
 
 <details><summary>What actually happens</summary>
 
 ```
-/usr/local/bin/python3: No module named pytest
+zsh: command not found: pytest
 ```
 
-(The path at the front is wherever Python lives on your computer, so yours may differ.) `pytest` was installed into `.venv`, and with `.venv` turned off, `python3` is the copy of Python that came with your computer, which has never heard of it.
+(On Ubuntu the message is worded differently, but it also says the command was not found.) The `pytest` command was installed into `.venv`, and with `.venv` turned off, your Terminal has no `pytest` command to run.
 
-This is the error you will see most often for the rest of the year, and it almost always means one of two things: you forgot to activate the environment, or you forgot to install the package into it. Check the `(.venv)` at the front of your prompt first.
+This kind of error is the one you will see most often for the rest of the year: `command not found` for a tool like `pytest`, or `No module named ...` when your code imports a package. It almost always means one of two things: you forgot to activate the environment, or you forgot to install the package into it. Check the `(.venv)` at the front of your prompt first.
 
 Activate the environment again with `source .venv/bin/activate` before moving on.
 
@@ -772,7 +772,7 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 
 # Run every test in the project
-python3 -m pytest
+pytest
 ```
 
 ## Summary

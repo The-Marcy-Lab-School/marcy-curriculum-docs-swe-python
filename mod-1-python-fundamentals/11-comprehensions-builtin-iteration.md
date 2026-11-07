@@ -233,9 +233,9 @@ def double(value):
         return value
 ```
 
-The folder's `test_double_all.py` file has three tests for `double_all_purely`, and all three pass with the loop. Follow the setup steps in the lecture code's README to install pytest, then run `python3 -m pytest` from inside the `refactor-with-tests` folder to see them pass.
+The folder's `test_double_all.py` file has three tests for `double_all_purely`, and all three pass with the loop. Follow the setup steps in the lecture code's README to install pytest, then run `pytest` from inside the `refactor-with-tests` folder to see them pass.
 
-Refactor `double_all_purely` to use a list comprehension and run `python3 -m pytest` again. If every test still passes, the comprehension does what the loop did.
+Refactor `double_all_purely` to use a list comprehension and run `pytest` again. If every test still passes, the comprehension does what the loop did.
 
 **<details><summary>Solution</summary>**
 

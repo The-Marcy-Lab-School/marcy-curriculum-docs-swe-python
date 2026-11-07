@@ -581,7 +581,7 @@ The program prints `2` and then crashes with `KeyError: 'Sula'`. Bracket notatio
   - A package can have **sub-dependencies**, other packages it needs, and `pip` installs those too.
 - **`requirements.txt`** is a file listing the packages a project needs. `pip freeze > requirements.txt` writes it; `pip install -r requirements.txt` reads it.
 - A **`.gitignore`** file lists the files and folders in a project that Git should not track. The `.venv/` and `__pycache__/` folders go in it. The `.venv` folder is never committed; it is rebuilt from `requirements.txt` instead.
-- **`pytest`** is the third-party package that runs the tests in your assignments. It finds files whose names start with `test_` and runs them with `python3 -m pytest`. It is a **developer dependency**: a package used by the developers of a project but not needed by the people who run it.
+- **`pytest`** is the third-party package that runs the tests in your assignments. It finds files whose names start with `test_` and runs them with the `pytest` command. It is a **developer dependency**: a package used by the developers of a project but not needed by the people who run it.
 
 **You will be able to…**
 
@@ -597,7 +597,7 @@ _By the end of the module:_
 - Distinguish a standard library module from a third-party package and say which needs installing.
 - Use `pip list` and `pip show` to see what is installed and what a package requires, and rebuild an environment with `pip install -r requirements.txt`.
 - Explain the `ModuleNotFoundError` that appears when the environment is not activated, and check for that first.
-- Explain what `python3 -m pytest` does when it runs an assignment's tests, and why `pytest` is a developer dependency.
+- Explain what the `pytest` command does when it runs an assignment's tests, and why `pytest` is a developer dependency.
 - Read a traceback that crosses two modules, and say where to look next for the value that caused the error.
 - Split the madlib program into a module for the story and a `main.py` for the input.
 
@@ -656,7 +656,7 @@ The program prints `Hello, test!` and then `Hello, Ada!`. Importing a file runs 
 
 _In the session:_
 
-- Write a test function with `assert` and a docstring, run the tests with `python3 -m pytest`, and read a failure report to find which assertion failed and what the function actually returned.
+- Write a test function with `assert` and a docstring, run the tests with `pytest`, and read a failure report to find which assertion failed and what the function actually returned.
 - Test a pure function with `==` for its contents and `is not` for a new list, then refactor it from a loop that changes a copy by index to a loop that appends to a new list while its tests stay green.
 - Apply the TDD cycle to a new requirement: write a failing test, implement just enough to pass, refactor.
 - Predict the error a new test raises before the code it checks has been written, and explain what that failure shows about the test.
@@ -667,7 +667,7 @@ _By the end of the module:_
 - Refactor a function by combining branches that do the same job, and run the tests to confirm that its behavior did not change.
 - Develop the bank account functions test-first, including a `transfer` that raises a `ValueError` when the sender cannot afford it.
 - Assert a boolean result with `is True` or `is False` and a decimal result with `pytest.approx()`, and say what each catches that `==` would miss.
-- Explain why the tests are run with `python3 -m pytest` from the project's root folder rather than with `pytest`.
+- Explain how `pytest.ini` lets the `pytest` command import code from the `src` folder, and predict the error a test reports when the file is missing.
 - Raise a `ValueError` from a function that is handed a value it cannot work with, test it with `pytest.raises`, and read the `DID NOT RAISE` failure when it does not.
 - Explain why a test that crashes does not stop the other tests, and why a test file that cannot be imported stops the whole run.
 
@@ -724,12 +724,13 @@ The passing tests tell Malik that the new loop still does what the old one did, 
 - **List comprehensions** provide declarative ways to build new lists from existing ones, making code more readable and reducing the need for explicit loops.
   - `[expression for item in items]` **transforms** each element and returns a new list with the transformed values, useful for converting data formats or applying calculations.
   - `[item for item in items if test]` **filters**, creating a new list containing only elements that pass a test condition.
-- Passing tests confirm that a comprehension does what the loop it replaced did, so a tested loop can be refactored into a comprehension with confidence.
-- **`sum()`**, **`min()`**, and **`max()`** combine a list of numbers into a single value, and **`len()`** counts the elements in any list. To use `sum()`, `min()`, or `max()` on a list of records, first build a list of numbers from the records with a comprehension.
-- The **accumulator pattern** combines a list into one value: create a variable that holds a starting value, update it once per element in a loop, and return it when the loop ends.
-- A **frequency counter** is an accumulator whose starting value is an empty dictionary. It builds a lookup table that maps each value in a list to the number of times that value appears.
-- Finding the **first** element that passes a test is a `for` loop with an early `return`.
-- **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list **in place**, which means it changes the list itself and returns `None`. Both take `reverse=True` for descending order.
+- Patterns for using lists:
+  - **`sum()`**, **`min()`**, and **`max()`** combine a list of numbers into a single value, and **`len()`** counts the elements in any list.
+    - To use `sum()`, `min()`, or `max()` on a list of records, first build a list of numbers from the records with a comprehension.
+  - The **accumulator pattern** combines a list into one value: create a variable that holds a starting value, update it once per element in a loop, and return it when the loop ends.
+  - A **frequency counter** is an accumulator whose starting value is an empty dictionary. It builds a lookup table that maps each value in a list to the number of times that value appears.
+  - Finding the **first** element that passes a test is a `for` loop with an early `return`.
+  - **`sorted()`** returns a new sorted list and **`.sort()`** sorts a list **in place**, which means it changes the list itself and returns `None`. Both take `reverse=True` for descending order.
 
 **You will be able to…**
 

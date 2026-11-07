@@ -318,7 +318,7 @@ Tests are code that checks other code. The tests in the `tests/` folder import t
 
 **Question 1**
 
-With your virtual environment activated, run `python3 -m pytest` from the project folder and check that every test passes. Then, in `clear_tasks()`, change the message `'All tasks cleared!'` to `'Tasks cleared!'`. Before you run the tests again, predict which tests will fail. Why does a test in `test_menu.py` fail when you changed only `tasks.py`? Undo the change when you are done.
+With your virtual environment activated, run `pytest` from the project folder and check that every test passes. Then, in `clear_tasks()`, change the message `'All tasks cleared!'` to `'Tasks cleared!'`. Before you run the tests again, predict which tests will fail. Why does a test in `test_menu.py` fail when you changed only `tasks.py`? Undo the change when you are done.
 
 The comment above `view_tasks()` also describes output: it shows an example of what the function prints. If a teammate changed the checkbox for a completed task from `[x]` to `[✓]`, which would tell them that something else needs updating, the comment or the tests? What does that suggest about what comments are good for, and what tests are good for?
 
@@ -327,7 +327,7 @@ The comment above `view_tasks()` also describes output: it shows an example of w
 Open `tests/test_menu.py` and find `test_adding_a_task`. The test plays the part of the user: `type_answers('1', 'Buy groceries', '', '4', '')` lists everything the user types, in order, and `type_answers` (defined at the top of the file, with comments explaining it) hands those answers to `input()` one at a time. For each of the five answers, name the `input()` call in `show_menu()` that receives it.
 
 {% hint style="warning" %}
-**Predict, then run.** In `test_adding_a_task`, delete the last `''`, so that the test gives four answers. Run `python3 -m pytest`. Which test fails, and what does its message say? Undo the change when you are done.
+**Predict, then run.** In `test_adding_a_task`, delete the last `''`, so that the test gives four answers. Run `pytest`. Which test fails, and what does its message say? Undo the change when you are done.
 {% endhint %}
 
 **Question 3**
@@ -335,7 +335,7 @@ Open `tests/test_menu.py` and find `test_adding_a_task`. The test plays the part
 Open `tests/conftest.py`. The function `reset_tasks()` runs before every test and puts the two sample tasks back into `tasks`. Why do the tests need this? Think about what the list looks like after `test_clearing_all_tasks` has run.
 
 {% hint style="warning" %}
-**Predict, then run.** In `reset_tasks()`, replace the last line with `pass`, a statement that does nothing, so the function still runs before every test but no longer resets the list. Run `python3 -m pytest`. How many tests fail? Then run only `python3 -m pytest tests/test_tasks.py::test_sample_tasks_are_present_at_start`. Does it pass or fail on its own, and why is the result different? Undo the change when you are done.
+**Predict, then run.** In `reset_tasks()`, replace the last line with `pass`, a statement that does nothing, so the function still runs before every test but no longer resets the list. Run `pytest`. How many tests fail? Then run only `pytest tests/test_tasks.py::test_sample_tasks_are_present_at_start`. Does it pass or fail on its own, and why is the result different? Undo the change when you are done.
 {% endhint %}
 
 **Question 4**
@@ -347,7 +347,7 @@ Open `tests/test_tasks.py` and find the test for `view_tasks()`. It uses `capsys
 Chapter 1.10 described test-driven development: write a test for a feature before the feature exists, watch it fail (red), then write just enough code to make it pass (green). Try it on the [Toggle Complete extension](#extension-opportunities) (see below). In `tests/test_tasks.py`, add `toggle_task` to the import line at the top. Then write a test that calls `toggle_task(1)` twice and checks `tasks[1]["is_complete"]` after each call. What value should it have after the first call, and after the second?
 
 {% hint style="warning" %}
-**Predict, then run.** Before you write `toggle_task()`, run `python3 -m pytest`. What does the error say? What happened to the other tests in `test_tasks.py`, and to the tests in `test_menu.py` and `test_main.py`?
+**Predict, then run.** Before you write `toggle_task()`, run `pytest`. What does the error say? What happened to the other tests in `test_tasks.py`, and to the tests in `test_menu.py` and `test_main.py`?
 {% endhint %}
 
 Now write `toggle_task()` in `tasks.py` and run the tests again. Chapter 1.10 says that a failing test proves the test is actually checking something. What could go wrong with a test that you only ever saw pass?
@@ -367,7 +367,7 @@ completed_tasks = [task for task in tasks if task["is_complete"]]
 Read the comprehension aloud, starting from the `for`. With the two sample tasks, which tasks end up in `completed_tasks`, and what does the line after it print? Then rewrite the comprehension as a `for` loop that starts with an empty list and uses `.append()`. Which version is easier to read, and why?
 
 {% hint style="warning" %}
-**Predict, then run.** Replace the comprehension in `view_tasks()` with your loop and run `python3 -m pytest`. Will the tests still pass? Then move your `.append()` line out of the `if` statement, so that it runs for every task, and run the tests again. Which test fails, and what does that tell you about how tests protect a refactor? Put the comprehension back when you are done.
+**Predict, then run.** Replace the comprehension in `view_tasks()` with your loop and run `pytest`. Will the tests still pass? Then move your `.append()` line out of the `if` statement, so that it runs for every task, and run the tests again. Which test fails, and what does that tell you about how tests protect a refactor? Put the comprehension back when you are done.
 {% endhint %}
 
 **Question 2**
@@ -476,7 +476,7 @@ Now that the core Task Manager app is complete, it's time to add new features! P
 - **Show Incomplete Tasks**: Add a menu option to display only tasks that are not completed.
 - **Mark All as Completed**: Add a menu option that marks every task as completed.
 - **Data Persistence**: Look into the `json.dump()` and `json.load()` functions from the `json` module, together with the built-in `open()` function, to figure out how to store the tasks in a `.json` file whenever the user exits and then retrieve those tasks when they start up again.
-- **Tests**: The `tests/` folder already tests every function in `tasks.py`. Add tests to `tests/test_tasks.py` for each feature you build, following the pattern of the tests already there, and run them with `python3 -m pytest`.
+- **Tests**: The `tests/` folder already tests every function in `tasks.py`. Add tests to `tests/test_tasks.py` for each feature you build, following the pattern of the tests already there, and run them with `pytest`.
 
 ### Tips
 
