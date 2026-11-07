@@ -134,7 +134,7 @@ _In the session:_
 - **Apply · R1** — Given a class, create at least two instances with different arguments, and demonstrate with `print()` that changing one instance's attribute leaves the other unchanged.
 - **Apply · R1** — Given a class with no `__repr__`, write one that returns the class name and at least two attribute values, so that printing an instance identifies which instance it is.
 - **Evaluate · R1** — Given two instances that hold identical data, predict whether `==` returns `True` with and without an `__eq__` method, and explain the difference between two names referring to the same object (`is`) and two objects holding equal data (`==`).
-- **Create · R1** — Given a class that only carries data and defines `__init__`, `__repr__`, and `__eq__` by hand, refactor it with `@dataclass`, and confirm that printing and comparing its instances give the same results as before.
+- **Create · R1** — Given a class that only carries data and defines `__init__`, `__repr__`, and `__eq__` by hand, refactor it with `@dataclass`, and confirm that comparing its instances gives the same results as before and that printing an instance still identifies it.
 - **Testing** — See the 2.2 row of [Testing Objectives](#testing-objectives).
 
 _By the end of the module:_
@@ -431,8 +431,8 @@ be read by a fellow, not by an instructor.
 - **Instantiation** is the act of making an instance: `Event('Friday Night Jazz', date(2026, 12, 5), 40)`.
 - **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `jazz.can_refund(today)` passes `jazz` in as `self`.
 - A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
-- **Encapsulation** is bundling data together with the methods that operate on it, so that the data is changed through those methods rather than from anywhere in the program.
-- An **interface** is the set of attributes and methods that the rest of the program uses to interact with an object. It is the part of the object other code is allowed to touch.
+- **Encapsulation** is bundling data together with the methods that operate on it, so that the data is meant to be changed through those methods rather than from anywhere in the program.
+- An **interface** is the set of attributes and methods that the rest of the program uses to interact with an object. It is the part of the object other code is meant to use.
 
 ## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
 
@@ -611,9 +611,10 @@ on your path.
 Every class you define has **at least 3 attributes**, **at least 2 methods**, and
 a `__repr__` that returns something you would want to see in a traceback.
 
-**2. Encapsulation.** **At least 3 attributes** across your system are
-non-public and reached through a `@property`. **At least 1 setter refuses an
-invalid value** and tells the user why, instead of storing it.
+**2. Encapsulation.** **At least 3 attributes that have a rule** across your
+system are non-public and guarded by a `@property`. A read-only property counts.
+**At least 1 setter refuses an invalid value** and tells the user why, instead
+of storing it.
 
 Ask of each attribute: would your system break if this held a wrong value? A fridge's capacity or a member's borrowing limit cannot go negative, and a loan's status has to be one of checked out, returned, overdue, or lost. Those need protecting. A donor's phone number or an item's description does not, because there is no wrong value to catch.
 
@@ -844,7 +845,7 @@ One point per required feature in your path's brief. These lines ask only whethe
 
 1. At least 5 classes are defined, each with at least 3 attributes and at least 2 methods, covering coordinator, superclass, 2 subclasses, and intermediary.
 2. Every class returns a useful string from `__repr__`.
-3. At least 3 attributes are non-public and reached through a `@property`.
+3. At least 3 attributes that have a rule are non-public and guarded by a `@property`. A read-only property counts.
 4. At least 1 `@property` setter refuses an invalid value and says why.
 5. Every subclass calls `super().__init__()`.
 6. At least 1 method is overridden and returns a different result per subclass.

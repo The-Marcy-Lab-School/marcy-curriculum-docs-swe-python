@@ -9,6 +9,7 @@ That skill matters beyond this module. In Mod 3, AI moves from tutor to implemen
 **By the end of this module, you will be able to:**
 
 - Design a system of classes for a stakeholder's problem, deciding which class owns each piece of data and each rule.
+- Design each class's interface so that its names, properties, and methods communicate how its data is meant to be used.
 - Write classes that protect their own data, refusing an invalid value or an invalid action with a message that says why.
 - Use inheritance and polymorphism so that one loop can work with several kinds of object without checking which kind each one is.
 - Write a decorator that stops a method from running when an object is in the wrong state.
@@ -16,9 +17,15 @@ That skill matters beyond this module. In Mod 3, AI moves from tutor to implemen
 - Write a specification another developer could build your system from without asking you a question.
 - Explain each design decision in your system, naming the alternative you rejected and why.
 
-## One Idea Throughout: Refusal
+## Two Ideas Throughout
+
+### Refusal
 
 A Mod 1 program accepts whatever it is given. A well-designed system refuses: it turns down a negative ticket count, a second check-in for the same reservation, or a booking for a sold-out show, and it says why. Every lesson in this module adds a new way for a system to refuse an invalid change instead of letting it in silently, and the project ends with you demonstrating a refusal live.
+
+### Interfaces That Communicate Intent
+
+A system is a set of objects that work together through their interfaces: the attributes and methods each object offers the rest of the program. Python enforces very little about how an object's data is used, and any line can read or change any attribute. So a well-designed interface communicates how its data is meant to be used, through the names and tools it chooses. A plain attribute says other code may read and change it. An underscore says the data belongs to the class. A property with no setter says a value can be read but not changed, and a method named for a rule, such as `can_refund()`, says where that rule is checked. Every lesson adds a way for an interface to say what it intends, and your design document records those intentions, so that the next developer, or a model you hand the document to, can use your system the way you meant it to be used.
 
 ## The Case Study: Venue Tickets
 
