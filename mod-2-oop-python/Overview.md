@@ -9,7 +9,7 @@ That skill matters beyond this module. In Mod 3, AI moves from tutor to implemen
 **By the end of this module, you will be able to:**
 
 - Design a system of classes for a stakeholder's problem, deciding which class owns each piece of data and each rule.
-- Design each class's interface so that its names, properties, and methods communicate how its data is meant to be used.
+- Design each class's interface so that the rest of the system can use the class's data only in the ways it intends.
 - Write classes that protect their own data, refusing an invalid value or an invalid action with a message that says why.
 - Use inheritance and polymorphism so that one loop can work with several kinds of object without checking which kind each one is.
 - Write a decorator that stops a method from running when an object is in the wrong state.
@@ -23,9 +23,11 @@ That skill matters beyond this module. In Mod 3, AI moves from tutor to implemen
 
 A Mod 1 program accepts whatever it is given. A well-designed system refuses: it turns down a negative ticket count, a second check-in for the same reservation, or a booking for a sold-out show, and it says why. Every lesson in this module adds a new way for a system to refuse an invalid change instead of letting it in silently, and the project ends with you demonstrating a refusal live.
 
-### Interfaces That Communicate Intent
+### Interfaces That Constrain How Data Is Used
 
-A system is a set of objects that work together through their interfaces: the attributes and methods each object offers the rest of the program. Python enforces very little about how an object's data is used, and any line can read or change any attribute. So a well-designed interface communicates how its data is meant to be used, through the names and tools it chooses. A plain attribute says other code may read and change it. An underscore says the data belongs to the class. A property with no setter says a value can be read but not changed, and a method named for a rule, such as `can_refund()`, says where that rule is checked. Every lesson adds a way for an interface to say what it intends, and your design document records those intentions, so that the next developer, or a model you hand the document to, can use your system the way you meant it to be used.
+The big shift in this module is from writing functions to designing a system of classes that work together. Two questions shape every decision in that design: which object owns each piece of data, and how that object lets the rest of the system use its data. A class answers the second question with its **interface**, the attributes and methods it offers to other code. A well-designed interface constrains whoever uses the class to use it only as intended. The venue owns its reservations, so other code books a ticket by calling `venue.book()`, which checks the venue's rules, rather than adding to the venue's list directly. A reservation's status can be read through `reservation.status`, but it can only change through `pay()`, `check_in()`, and `refund()`, and each of those refuses to act from the wrong status. Refusal is how an interface holds to its constraints when other code tries something it was not designed to allow.
+
+Each lesson adds a tool for building interfaces like these, and your design document records which class owns each piece of data and what its interface lets other code do with it.
 
 ## The Case Study: Venue Tickets
 

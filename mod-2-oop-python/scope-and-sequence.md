@@ -411,28 +411,32 @@ be read by a fellow, not by an instructor.
 ## 2.1 Intro to OOP: Classes, `__init__`, and `self` — Thu 11/12
 
 - **Object-oriented programming (OOP)** is a way of organizing a program around objects, where each object holds its own data and the methods that work on that data.
-- A **class** is a blueprint for making objects. It names the data an object will hold and defines the methods it will answer.
-- An **object**, also called an **instance**, is one thing made from a class. Two instances of the same class hold separate data.
-- An **attribute** is a piece of data stored on an object, reached with a dot: `event.name`.
-- A **method** is a function defined inside a class. It is called on an object, and it can read and change that object's attributes.
+  - The act of bundling data and the methods that work on that data is called **encapsulation**.
+  - The resulting bundle of attributes and methods that the rest of the program uses to interact with the data is called an **interface**.
+  - As a result, the rest of the program is constrained to change the data through those methods rather than from anywhere in the program.
+- A **class** is a blueprint for making "objects" that conform to an interface of your own design. The `class` syntax names the "attributes" an object will hold and defines the "methods" that are available.
+  - An **object**, also called an **instance**, is one thing made from a class. Each instance of the same class holds separate data.
+  - An **attribute** is a piece of data stored on an object, reached with a dot: `event.name`.
+  - A **method** is a function defined inside a class. It is called on an object, and it can read and change that object's attributes.
+  - **`__init__`** is the method Python runs when you create an instance. It receives the arguments passed to the class and stores them as attributes.
+    ```python
+    class Event:
+        def __init__(self, name, date, capacity):
+            self.name = name
+            self.date = date
+            self.capacity = capacity
+        def can_refund(self, today):
+            return today < self.date
+    ```
+  - **Instantiation** is the act of making an instance by invoking the class name. Python invokes the `__init__` method for you:
+    ```py
+    jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+    ```
+  - **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `jazz.can_refund(today)` passes `jazz` in as `self`.
+  - A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
 - **Introspection** is asking an object about itself while the program is running.
-- **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
-- **`dir(obj)`** returns the names of everything the object answers to, including its methods.
-- **`__init__`** is the method Python runs when you create an instance. It receives the arguments passed to the class and stores them as attributes.
-
-  ```python
-  class Event:
-      def __init__(self, name, date, capacity):
-          self.name = name
-          self.date = date
-          self.capacity = capacity
-  ```
-
-- **Instantiation** is the act of making an instance: `Event('Friday Night Jazz', date(2026, 12, 5), 40)`.
-- **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `jazz.can_refund(today)` passes `jazz` in as `self`.
-- A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
-- **Encapsulation** is bundling data together with the methods that operate on it, so that the data is meant to be changed through those methods rather than from anywhere in the program.
-- An **interface** is the set of attributes and methods that the rest of the program uses to interact with an object. It is the part of the object other code is meant to use.
+  - **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
+  - **`dir(obj)`** returns the names of everything the object answers to, including its methods.
 
 ## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
 
