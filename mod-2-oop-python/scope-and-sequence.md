@@ -441,25 +441,21 @@ be read by a fellow, not by an instructor.
 ## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
 
 - An **instance attribute** belongs to one instance. Changing `jazz.capacity` does not change any other event's capacity.
-- **`obj.__dict__`** returns a dictionary of the object's own attributes and their current values.
+  - **`obj.__dict__`** returns a dictionary of the object's own attributes and their current values.
+- **`isinstance(obj, Class)`** asks whether an object was made from a class, or from one of its subclasses.
 - **`__repr__`** is the method Python calls to turn an object into a string for a programmer to read. Without it, printing an object shows its class name and a memory address, which tells you nothing about which object you are holding.
-
   ```python
   def __repr__(self):
       return f'Event({self.name!r}, {self.date})'
   ```
-
 - **Identity** is whether two names refer to the same object, which `is` checks. **Equality** is whether two objects hold equal data, which `==` checks.
-- **`__eq__`** is the method Python calls for `==`. Without one, `==` checks identity, so two events holding identical data are not equal.
-
-  ```python
-  def __eq__(self, other):
-      return self.name == other.name and self.date == other.date
-  ```
-
+  - **`__eq__`** is the method Python calls for `==`. Without one, `==` checks identity, so two events holding identical data are not equal.
+    ```python
+    def __eq__(self, other):
+        return self.name == other.name and self.date == other.date
+    ```
 - A **`@dataclass`** is a decorator that writes `__init__`, `__repr__`, and `__eq__` for you, from the attribute names you list. It suits a class that mostly carries data.
-- A **value object** is an object defined entirely by the data it holds, with little or no behavior of its own. Two value objects with equal data are interchangeable.
-- **`isinstance(obj, Class)`** asks whether an object was made from a class, or from one of its subclasses.
+  - A **value object** is an object defined entirely by the data it holds, with little or no behavior of its own. Two value objects with equal data are interchangeable.
 - **Composition** is one object holding another object as an attribute. A `Reservation` that stores an `Attendee` and an `Event` is composed of them, and `reservation.attendee.name` reaches through one object to the data in another.
 
 ## 2.3 Properties: Non-Public Attributes, `@property`, and Class Attributes — Mon 11/16
@@ -467,18 +463,16 @@ be read by a fellow, not by an instructor.
 - A **public attribute** has a plain name and anything in the program may read or change it.
 - A **non-public attribute** has a name that begins with a single underscore, such as `_capacity`. The underscore is a message to other programmers: do not reach for this directly. Python does not stop them, which is why the convention has to be respected rather than enforced. Python's style guide, PEP 8, uses the word non-public. Other references call the same convention private, protected, or internal.
 - A **`@property`** turns a method into something that reads like an attribute, so a value can be computed or checked on the way out.
-- A **getter** is the method a `@property` decorates. It returns the value.
-- A **setter** is the method decorated with `@<name>.setter`. It runs when something assigns to the attribute, which is where validation belongs.
-
-  ```python
-  @capacity.setter
-  def capacity(self, value):
-      if value < 1:
-          raise ValueError(f'Capacity must be at least 1, not {value}.')
-      self._capacity = value
-  ```
-
-- **Validation** is checking a value before storing it, and refusing it when it is wrong.
+  - A **getter** is the method a `@property` decorates. It returns the value.
+  - A **setter** is the method decorated with `@<name>.setter`. It runs when something assigns to the attribute, which is where validation belongs.
+    ```python
+    @capacity.setter
+    def capacity(self, value):
+        if value < 1:
+            raise ValueError(f'Capacity must be at least 1, not {value}.')
+        self._capacity = value
+    ```
+  - **Validation** is checking a value before storing it, and refusing it when it is wrong.
 - A **class attribute** is defined in the class body rather than in `__init__`, and every instance shares the one copy. A service fee added to every concert ticket lives here: `Concert.SERVICE_FEE`.
 - A **`@classmethod`** receives the class itself as its first parameter, named **`cls`**, instead of an instance, and is called on the class. You will read them in other code: `date.today()` is called on the `date` class and returns a new date.
 - A **`@staticmethod`** receives neither `self` nor `cls`. It is a plain function placed inside a class. Python's style guides prefer a function at the top level of a module, so you will read static methods more often than you write them.
