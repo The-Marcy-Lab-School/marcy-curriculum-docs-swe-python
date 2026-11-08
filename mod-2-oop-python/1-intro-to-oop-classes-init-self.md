@@ -249,7 +249,7 @@ print(float.is_integer(price))      # True
 
 ## Classes and Instances
 
-Strings, lists, and dates are classes written into Python by its creators. A program can define its own classes too enabling the programming to define its own types of data and the methods that its instances can utilize.
+Strings, lists, and dates are classes written into Python by its creators. A program can define its own classes too, which lets the programmer define new types of data and the methods their instances can use.
 
 ### Defining a Class
 
