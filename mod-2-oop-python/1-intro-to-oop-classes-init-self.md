@@ -9,9 +9,6 @@
   - [Idea 2. The Methods Available to a Value Live in its Class](#idea-2-the-methods-available-to-a-value-live-in-its-class)
   - [Idea 3. The Value Before the Dot Is the First Argument](#idea-3-the-value-before-the-dot-is-the-first-argument)
   - [Challenge: Rewrite the Call](#challenge-rewrite-the-call)
-- [The Problem a Class Solves](#the-problem-a-class-solves)
-  - [Parallel Lists Drift Apart](#parallel-lists-drift-apart)
-  - [Dictionaries Keep the Data Together but Not the Rules](#dictionaries-keep-the-data-together-but-not-the-rules)
 - [Classes and Instances](#classes-and-instances)
   - [Defining a Class](#defining-a-class)
   - [`__init__` Gives Every Instance the Same Shape](#__init__-gives-every-instance-the-same-shape)
@@ -22,6 +19,8 @@
   - [A Method That Takes Arguments](#a-method-that-takes-arguments)
   - [Challenge: Room Rentals](#challenge-room-rentals)
 - [Encapsulation and the Interface](#encapsulation-and-the-interface)
+  - [Parallel Lists Drift Apart](#parallel-lists-drift-apart)
+  - [Dictionaries Keep the Data Together but Not the Rules](#dictionaries-keep-the-data-together-but-not-the-rules)
   - [One Place for the Data and Its Rules](#one-place-for-the-data-and-its-rules)
   - [The Interface](#the-interface)
   - [Dictionary or Class?](#dictionary-or-class)
@@ -248,68 +247,9 @@ print(float.is_integer(price))      # True
 
 </details>
 
-## The Problem a Class Solves
-
-Strings, lists, and dates are classes written into Python by its creators. A program can define its own classes too, and the reason to do it is a problem you have probably met already: **keeping related data together, along with the rules about it**.
-
-### Parallel Lists Drift Apart
-
-A venue needs to know each event's name, its capacity, and how many seats are sold. One way to store that is three lists, lined up by position:
-
-```python
-names = ['Movie Night: Coco', 'Friday Night Jazz', 'Intro to Pottery']
-capacities = [30, 40, 2]
-seats_sold = [5, 12, 2]
-
-def seats_left(i):
-    return capacities[i] - seats_sold[i]
-
-print(f'{names[1]}: {seats_left(1)} seats left')
-# Friday Night Jazz: 28 seats left
-
-names.sort() # sorts the names but not the capacities or seats_sold
-
-print(f'{names[1]}: {seats_left(1)} seats left')
-# Intro to Pottery: 28 seats left
-```
-
-Sorting `names` moved each name to a new position, but it did not move the capacities or the seat counts. Python has no way to know that the three lists belong together, so nothing errors. The program now reports 28 seats left for a workshop that is sold out, and a customer who reads that will try to book a seat that does not exist.
-
-### Dictionaries Keep the Data Together but Not the Rules
-
-A list of dictionaries fixes the drift, because each event's data lives in one record. The rules about that data still live somewhere else, in separate functions:
-
-```python
-def make_event(name, capacity):
-    return {'name': name, 'capacity': capacity, 'seats_sold': 0}
-
-def seats_left(event):
-    return event['capacity'] - event['seats_sold']
-
-def sell_ticket(event):
-    if seats_left(event) == 0:
-        print(f"{event['name']} is sold out.")
-        return
-    event['seats_sold'] += 1
-
-pottery = make_event('Intro to Pottery', 2)
-sell_ticket(pottery)
-sell_ticket(pottery)
-sell_ticket(pottery)    # Intro to Pottery is sold out.
-```
-
-The venue's rule, "never sell more seats than the event holds", is written in `sell_ticket()`. But nothing connects the dictionary to that function. Any line anywhere in the program can change the record directly:
-
-```python
-pottery['seats_sold'] += 1
-print(seats_left(pottery))    # -1
-```
-
-That code bypassed `sell_ticket()`, so the rule never ran, and the workshop is now oversold. Someone reading `pottery` also has no way to discover that `sell_ticket()` exists, because a dictionary only shows its keys. The rule is in one file and the data is in another, and **the program only works if every programmer remembers to use the `sell_ticket` function, which enforces the rule**.
-
 ## Classes and Instances
 
-A class puts the data and the functions that work on it in the same place. An event made from a class carries its own `sell_ticket()` method, so anyone holding an event can see what the event can do, and the rule sits right beside the data it protects.
+Strings, lists, and dates are classes written into Python by its creators. A program can define its own classes too enabling the programming to define its own types of data and the methods that its instances can utilize.
 
 ### Defining a Class
 
@@ -488,7 +428,7 @@ print(pottery.seats_left())  # 0
 - `sell_ticket()` is the only "official" way to change the `seats_sold` attribute. It refuses to sell a seat when none are left, and says why. Otherwise, it adds one to the event's count.
   - `sell_ticket()` calls `self.seats_left()`. Since `self` is the event, `self.seats_left()` asks the same event how many seats it has left.
 
-This is the same venue rule as the dictionary version, but it now travels with the data. Any code holding an event can call `sell_ticket()` on it, and finds the rule there instead of in some other file.
+The venue's rule now travels with the data. Any code holding an event can call `sell_ticket()` on it, and finds the rule there instead of in some other file.
 
 ### `self` Is the Value Before the Dot
 
@@ -632,6 +572,63 @@ print(Room.cost(hall, 2))   # 300, the same call as hall.cost(2)
 </details>
 
 ## Encapsulation and the Interface
+
+A class keeps an event's data and its rules together. To see why that matters, here is what goes wrong when a program keeps them apart, first in parallel lists and then in dictionaries.
+
+### Parallel Lists Drift Apart
+
+A venue needs to know each event's name, its capacity, and how many seats are sold. One way to store that is three lists, lined up by position:
+
+```python
+names = ['Movie Night: Coco', 'Friday Night Jazz', 'Intro to Pottery']
+capacities = [30, 40, 2]
+seats_sold = [5, 12, 2]
+
+def seats_left(i):
+    return capacities[i] - seats_sold[i]
+
+print(f'{names[1]}: {seats_left(1)} seats left')
+# Friday Night Jazz: 28 seats left
+
+names.sort() # sorts the names but not the capacities or seats_sold
+
+print(f'{names[1]}: {seats_left(1)} seats left')
+# Intro to Pottery: 28 seats left
+```
+
+Sorting `names` moved each name to a new position, but it did not move the capacities or the seat counts. Python has no way to know that the three lists belong together, so nothing errors. The program now reports 28 seats left for a workshop that is sold out, and a customer who reads that will try to book a seat that does not exist.
+
+### Dictionaries Keep the Data Together but Not the Rules
+
+A list of dictionaries fixes the drift, because each event's data lives in one record. The rules about that data still live somewhere else, in separate functions:
+
+```python
+def make_event(name, capacity):
+    return {'name': name, 'capacity': capacity, 'seats_sold': 0}
+
+def seats_left(event):
+    return event['capacity'] - event['seats_sold']
+
+def sell_ticket(event):
+    if seats_left(event) == 0:
+        print(f"{event['name']} is sold out.")
+        return
+    event['seats_sold'] += 1
+
+pottery = make_event('Intro to Pottery', 2)
+sell_ticket(pottery)
+sell_ticket(pottery)
+sell_ticket(pottery)    # Intro to Pottery is sold out.
+```
+
+The venue's rule, "never sell more seats than the event holds", is written in `sell_ticket()`. But nothing connects the dictionary to that function. Any line anywhere in the program can change the record directly:
+
+```python
+pottery['seats_sold'] += 1
+print(seats_left(pottery))    # -1
+```
+
+That code bypassed `sell_ticket()`, so the rule never ran, and the workshop is now oversold. Someone reading `pottery` also has no way to discover that `sell_ticket()` exists, because a dictionary only shows its keys. The rule is in one file and the data is in another, and **the program only works if every programmer remembers to use the `sell_ticket` function, which enforces the rule**.
 
 ### One Place for the Data and Its Rules
 
