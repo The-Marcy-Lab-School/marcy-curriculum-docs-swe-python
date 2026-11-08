@@ -305,7 +305,7 @@ pottery['seats_sold'] += 1
 print(seats_left(pottery))    # -1
 ```
 
-That code bypassed `sell_ticket()`, so the rule never ran, and the workshop is now oversold. Someone reading `pottery` also has no way to discover that `sell_ticket()` exists, because a dictionary only shows its keys. The rule is in one file and the data is in another, and **the program only works if every programmer remembers to use the `sell_ticket` method which enforces rule**.
+That code bypassed `sell_ticket()`, so the rule never ran, and the workshop is now oversold. Someone reading `pottery` also has no way to discover that `sell_ticket()` exists, because a dictionary only shows its keys. The rule is in one file and the data is in another, and **the program only works if every programmer remembers to use the `sell_ticket` function, which enforces the rule**.
 
 ## Classes and Instances
 
@@ -323,7 +323,7 @@ jazz = Event()
 pottery = Event()
 
 print(type(jazz))        # <class '__main__.Event'>
-print(type(pottery ))    # <class '__main__.Event'>
+print(type(pottery))     # <class '__main__.Event'>
 print(jazz is pottery)   # False
 ```
 
@@ -347,9 +347,9 @@ print(pottery.date)
 Whoever set up `pottery` forgot its date, and nothing stopped them. The mistake only shows up later, when some other line reads `pottery.date` and the program stops with an `AttributeError`. The error message names the class (`'Event' object`) and the attribute it could not find (`'date'`), but it cannot tell you which line forgot to set it. Every event needs the same set of attributes, the same _shape_, and adding them by hand leaves that to memory.
 
 {% hint style="info" %}
-💡 `date` is a class an calling `date(2026, 12, 5)` creates a new instance of the `date` class. So, why is it written in lowercase and not `Date`?
+💡 `date` is a class and calling `date(2026, 12, 5)` creates a new instance of the `date` class. So, why is it written in lowercase and not `Date`?
 
-Built-in classes like `str` and `float` are written in lowercase. According to PEP8, imported modules like `date` that mimic built-in classes should use lowercase names too.
+Built-in classes like `str` and `float` are written in lowercase, and `date` follows the same style. PEP 8 allows a class that is used mainly by calling it, as `date(2026, 12, 5)` is, to be named like a function.
 {% endhint %}
 
 ### `__init__` Gives Every Instance the Same Shape
@@ -484,9 +484,9 @@ pottery.sell_ticket()        # Intro to Pottery is sold out.
 print(pottery.seats_left())  # 0
 ```
 
-- `seats_left()` reads two attributes of the event it was called on (`self.capacity` and `self.seats_old`) and returns the difference.
+- `seats_left()` reads two attributes of the event it was called on (`self.capacity` and `self.seats_sold`) and returns the difference.
 - `sell_ticket()` is the only "official" way to change the `seats_sold` attribute. It refuses to sell a seat when none are left, and says why. Otherwise, it adds one to the event's count.
-  - `sell_ticket()` calls `self.seats_left()`. Since, `self` is the event, so `self.seats_left()` asks the same event how many seats it has left.
+  - `sell_ticket()` calls `self.seats_left()`. Since `self` is the event, `self.seats_left()` asks the same event how many seats it has left.
 
 This is the same venue rule as the dictionary version, but it now travels with the data. Any code holding an event can call `sell_ticket()` on it, and finds the rule there instead of in some other file.
 
