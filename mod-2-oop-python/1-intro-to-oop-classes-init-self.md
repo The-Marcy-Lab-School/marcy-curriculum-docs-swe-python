@@ -661,7 +661,7 @@ The list starts with the dunder methods that Python provides. Read past them, an
 
 An object's **interface** is the set of attributes and methods the rest of the program uses to interact with it, and it constrains other code to use the object only as intended. For `Event`, the interface is `name`, `date`, `capacity`, `seats_left()`, `sell_ticket()`, and `can_refund()`.
 
-`seats_sold` is different. Other code may read it, but code that changes it directly skips the sold-out check, which is the problem the class was written to solve. So `seats_sold` is not part of the interface for changing an event's seats. The interface constrains other code to change the seat count only through `sell_ticket()`, where the sold-out check runs.
+The interface also decides how each piece of data is allowed to change. Other code can read `seats_sold` at any time, but the only way the interface offers to change it is `sell_ticket()`, which adds one seat and refuses when the event is full. Because every sale goes through that one method, the seat count can only change in one way: up by one, and never past `capacity`. A programmer reading the class can therefore predict every value `seats_sold` will ever hold, without searching the whole program for lines that touch it. Code that wrote `pottery.seats_sold += 1` instead would skip the sold-out check, and the seat count would stop being predictable.
 
 Thinking in terms of an interface tells you two things about a class:
 

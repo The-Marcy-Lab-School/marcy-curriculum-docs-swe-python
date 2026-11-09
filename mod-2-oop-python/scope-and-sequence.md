@@ -31,23 +31,23 @@ reading, assignments, and project carry.
 
 ## Session calendar
 
-| Chapter | Session                                                                        | Week | Day        | Date         |
-| ------- | ------------------------------------------------------------------------------ | ---- | ---------- | ------------ |
-| 2.1     | Intro to OOP: Classes, `__init__`, and `self`                                  | 7    | 4          | Thu 11/12    |
-| 2.2     | Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass`         | 7    | 5          | Fri 11/13    |
-| 2.3     | Properties: Non-Public Attributes, `@property`, and Class Attributes            | 8    | 1          | Mon 11/16    |
-| 2.4     | Inheritance and Attribute Lookup                                               | 8    | 3          | Wed 11/18    |
-| 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                           | 8    | 4          | Thu 11/19    |
-| 2.6     | Functions as Values: Callbacks and Higher-Order Functions                      | 8    | 5          | Fri 11/20    |
-| 2.7     | Closures and Decorators                                                        | 9    | 1          | Mon 11/23    |
-| —       | Case Study                                                                     | 9    | 3          | Wed 11/25    |
-| 2.8     | System Design and UML Diagrams                                                 | 10   | 1          | Mon 11/30    |
-| 2.9     | System Design Strategies                                                       | 10   | 3          | Wed 12/2     |
-| 2.10    | Writing a Specification You Can Hand Off                                       | 10   | 5          | Fri 12/4     |
-| —       | Project, build days 1-4                                                        | 11   | 1, 3, 4, 5 | 12/7 - 12/11 |
-| —       | Project, build day 5, due end of day                                           | 12   | 1          | Mon 12/14    |
-| —       | Project share-out                                                              | 12   | 3          | Wed 12/16    |
-| —       | Mod 2 Assessment                                                               | 12   | 5          | Fri 12/18    |
+| Chapter | Session                                                                | Week | Day        | Date         |
+| ------- | ---------------------------------------------------------------------- | ---- | ---------- | ------------ |
+| 2.1     | Intro to OOP: Classes, `__init__`, and `self`                          | 7    | 4          | Thu 11/12    |
+| 2.2     | Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` | 7    | 5          | Fri 11/13    |
+| 2.3     | Properties: Non-Public Attributes, `@property`, and Class Attributes   | 8    | 1          | Mon 11/16    |
+| 2.4     | Inheritance and Attribute Lookup                                       | 8    | 3          | Wed 11/18    |
+| 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                   | 8    | 4          | Thu 11/19    |
+| 2.6     | Functions as Values: Callbacks and Higher-Order Functions              | 8    | 5          | Fri 11/20    |
+| 2.7     | Closures and Decorators                                                | 9    | 1          | Mon 11/23    |
+| —       | Case Study                                                             | 9    | 3          | Wed 11/25    |
+| 2.8     | System Design and UML Diagrams                                         | 10   | 1          | Mon 11/30    |
+| 2.9     | System Design Strategies                                               | 10   | 3          | Wed 12/2     |
+| 2.10    | Writing a Specification You Can Hand Off                               | 10   | 5          | Fri 12/4     |
+| —       | Project, build days 1-4                                                | 11   | 1, 3, 4, 5 | 12/7 - 12/11 |
+| —       | Project, build day 5, due end of day                                   | 12   | 1          | Mon 12/14    |
+| —       | Project share-out                                                      | 12   | 3          | Wed 12/16    |
+| —       | Mod 2 Assessment                                                       | 12   | 5          | Fri 12/18    |
 
 ## Testing Objectives
 
@@ -81,7 +81,7 @@ _In the session:_
 _By the end of the module:_
 
 - **Evaluate · R1** — Given a described piece of data, decide whether a dictionary or a class is the better container, and defend the choice in one sentence naming the behavior involved.
-- **Understand · R2** — Given a class, describe its interface by listing the attributes and methods other code is meant to use, and name at least one it should not.
+- **Understand · R2** — Given a class whose methods change its data, explain how the class's interface constrains the ways other code can change that data, naming the rule each method enforces and the values the data can hold as a result, and describe one way the data could go wrong if other code changed the attribute directly.
 - **Analyze · R1** — Given a program that stores related data across parallel lists, identify the data and the behavior that belong together, and name the one class that should own both.
 
 ### Exit Ticket
