@@ -17,7 +17,8 @@ and the project requirement it serves.
 Tags read **Bloom level · what it serves**:
 
 - **R1**-**R9** are the project's nine requirements, **D1** its `DESIGN.md`
-  deliverable, and **D4** the five-minute share-out. See the project proposal.
+  deliverable, **D3** its `REFLECTIONS.md`, and **D4** the five-minute
+  share-out. See the project proposal.
 - **assignment only** means the objective is assessed by an assignment and the
   project does not require it.
 - **(ADDED)** marks an objective with no topic behind it in the scope and
@@ -399,6 +400,8 @@ Week 12, Day 5 — 12/18.**
 - **Apply · R8** — Given your own system, organize it across at least three modules with an `if __name__ == "__main__":` guard, and validate every `input()` so the program never raises in front of a user.
 - **Apply · R9** — Given your own class with a validating setter, write a pytest test proving the setter raises `ValueError`, and a second proving that a refused action left the collection unchanged.
 - **Evaluate · D1** — Defend every design decision in your system to a reviewer, naming the alternative rejected and the reason.
+- **Evaluate · D3** — Given a design decision from your own system and the alternative you rejected, write 150-250 words naming what each option made easy and what it made hard, and state the condition under which you would now choose the other one.
+- **Understand · D3** — Given one concept from this module and your own codebase, explain the concept in plain terms in 150-250 words and cite the file and the method where it earns its keep.
 - **Evaluate · D4** — Given five minutes and your own system, explain the stakeholder's problem, walk a room through your UML diagram, demonstrate one refusal live, and defend the design decision you found hardest.
 
 ---
