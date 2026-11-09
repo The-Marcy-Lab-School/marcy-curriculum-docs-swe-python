@@ -200,6 +200,7 @@ _By the end of the module:_
 
 - **Apply · assignment only** — Given a value that every instance of a class shares, such as a service fee added to every concert ticket, store it as a class attribute and read it through the class name.
 - **Understand · assignment only** — Given a method marked `@classmethod` or `@staticmethod` in code you are reading, such as `date.today()`, explain what Python passes in as its first argument (the class, or nothing) and how the method is called.
+- **Understand · assignment only** — Given a class with a `__capacity` attribute and code outside the class that fails to reach it, explain the renaming Python performed and name the attribute that code would have to ask for instead.
 
 ### Exit Ticket
 
@@ -462,6 +463,7 @@ be read by a fellow, not by an instructor.
 
 - A **public attribute** has a plain name and anything in the program may read or change it.
 - A **non-public attribute** has a name that begins with a single underscore, such as `_capacity`. The underscore is a message to other programmers: do not reach for this directly. Python does not stop them, which is why the convention has to be respected rather than enforced. Python's style guide, PEP 8, uses the word non-public. Other references call the same convention private, protected, or internal.
+- A **name-mangled attribute** has a name that begins with two underscores, such as `__capacity`. Python renames it to `_ClassName__capacity`, so code outside the class cannot reach it by the name written in the class body. It exists to stop a subclass from accidentally overwriting a parent's attribute, not to make data private. You will read it more often than you write it.
 - A **`@property`** turns a method into something that reads like an attribute, so a value can be computed or checked on the way out.
   - A **getter** is the method a `@property` decorates. It returns the value.
   - A **setter** is the method decorated with `@<name>.setter`. It runs when something assigns to the attribute, which is where validation belongs.
