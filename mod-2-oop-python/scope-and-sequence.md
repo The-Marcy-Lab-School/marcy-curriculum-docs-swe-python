@@ -193,11 +193,11 @@ _In the session:_
 - **Evaluate · R2** — Given a class with four public attributes, decide for each one whether it should stay public or become non-public behind a `@property`, by asking whether an invalid value there would break the program, and give a one-sentence reason per attribute.
 - **Apply · R2** — Given a non-public attribute, expose it through a `@property` getter so that code which previously read the attribute directly still works unchanged.
 - **Apply · R2** — Given a rule an attribute must satisfy, write a setter that raises `ValueError` with a message naming the rule, and leaves the stored value unchanged when an assignment is rejected.
-- **Understand · R2** — Explain what a single leading underscore asks of another programmer and what it does not prevent, naming at least one way the attribute can still be reached.
 - **Testing** — See the 2.3 row of [Testing Objectives](#testing-objectives).
 
 _By the end of the module:_
 
+- **Understand · R2** — Given a non-public attribute behind a validating property and a line of code that assigns to it directly, explain what the single leading underscore asks of another programmer and what it does not prevent, naming at least one way the attribute can still be reached.
 - **Apply · assignment only** — Given a value that every instance of a class shares, such as a service fee added to every concert ticket, store it as a class attribute and read it through the class name.
 - **Understand · assignment only** — Given a method marked `@classmethod` or `@staticmethod` in code you are reading, such as `date.today()`, explain what Python passes in as its first argument (the class, or nothing) and how the method is called.
 
