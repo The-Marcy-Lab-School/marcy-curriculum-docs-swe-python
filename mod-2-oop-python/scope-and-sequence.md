@@ -35,7 +35,7 @@ reading, assignments, and project carry.
 | ------- | ---------------------------------------------------------------------- | ---- | ---------- | ------------ |
 | 2.1     | Intro to OOP: Classes, `__init__`, and `self`                          | 7    | 4          | Thu 11/12    |
 | 2.2     | Composition, `__repr__`, `__eq__`, and `@dataclass` | 7    | 5          | Fri 11/13    |
-| 2.3     | Properties: Non-Public Attributes, `@property`, and Class Attributes   | 8    | 1          | Mon 11/16    |
+| 2.3     | Properties: Non-Public Attributes and `@property`   | 8    | 1          | Mon 11/16    |
 | 2.4     | Inheritance and Attribute Lookup                                       | 8    | 3          | Wed 11/18    |
 | 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                   | 8    | 4          | Thu 11/19    |
 | 2.6     | Functions as Values: Callbacks and Higher-Order Functions              | 8    | 5          | Fri 11/20    |
@@ -179,7 +179,7 @@ The first shows `25` and the second shows `30`, because the price changed after 
 
 The first shows `25` and the second shows `30`. When Maya's reservation was created, `__init__` called `event.ticket_price()` and stored the answer, the number `25`, in the reservation's own `price` attribute. That number belongs to `maya_ticket`, so changing the concert's price later doesn't touch it. But `self.event` stores the `jazz` object itself, not a copy of it, so `maya_ticket.event.base_price` reaches through the reservation to the same concert that was just changed and shows `30`. That's why Maya keeps the price she agreed to, while the reservation still knows the event's current details.
 
-## 2.3 Properties: Non-Public Attributes, `@property`, and Class Attributes
+## 2.3 Properties: Non-Public Attributes and `@property`
 
 **Week 8, Day 1 — Monday 11/16**
 
@@ -195,7 +195,6 @@ _In the session:_
 
 _By the end of the module:_
 
-- **Apply · assignment only** — Given a value that every instance of a class shares, such as a service fee added to every concert ticket, store it as a class attribute and read it through the class name.
 - **Understand · assignment only** — Given a method marked `@classmethod` or `@staticmethod` in code you are reading, such as `date.today()`, explain what Python passes in as its first argument (the class, or nothing) and how the method is called.
 
 ### Exit Ticket
@@ -257,6 +256,7 @@ _In the session:_
 
 _By the end of the module:_
 
+- **Apply · assignment only** — Given a value that every instance of a class shares, such as a service fee added to every concert ticket, store it as a class attribute and read it through the class name.
 - **Evaluate · R3** — Given two classes where one holds the other, decide whether inheritance or composition describes the relationship, and defend the choice using "is a" and "has a".
 - **Evaluate · R3** — Given two proposed subclasses that differ only in the value of one attribute, judge whether they should be two classes, and name the alternative.
 - **Testing** — See the 2.4 row of [Testing Objectives](#testing-objectives).
@@ -343,7 +343,7 @@ _By the end of the module:_
 _In the session:_
 
 - **Create · D1** — Given a stakeholder's description of a problem, draw a UML class diagram naming every class, its responsibilities, and its relationships.
-- **Apply · D1** — Given a class diagram, mark every attribute `+` or `-`, and give a one-sentence reason for each `-`.
+- **Apply · D1** — Given a class diagram, mark every attribute and method `+` or `-`, give a one-sentence reason for each `-`, and identify any helper that needs none of the object's data as a module function rather than a method.
 - **Evaluate · D1** — Given two related classes, decide whether the reference between them is one-way or bidirectional, and defend the choice by naming the question each direction makes easy to answer.
 
 _By the end of the module:_
@@ -454,12 +454,17 @@ be read by a fellow, not by an instructor.
 - A **`@dataclass`** is a decorator that writes `__init__`, `__repr__`, and `__eq__` for you, from the attribute names you list. It suits a class that mostly carries data.
   - A **value object** is an object defined entirely by the data it holds, with little or no behavior of its own. Two value objects with equal data are interchangeable.
 
-## 2.3 Properties: Non-Public Attributes, `@property`, and Class Attributes — Mon 11/16
+## 2.3 Properties: Non-Public Attributes and `@property` — Mon 11/16
 
 - A **public attribute** has a plain name and anything in the program may read or change it.
-- A **non-public attribute** has a name that begins with a single underscore, such as `_capacity`. The underscore is a message to other programmers: do not reach for this directly. Python does not stop them, which is why the convention has to be respected rather than enforced. Python's style guide, PEP 8, uses the word non-public. Other references call the same convention private, protected, or internal.
-- A **`@property`** turns a method into something that reads like an attribute, so a value can be computed or checked on the way out.
+- A **non-public attribute** has a name that begins with a single underscore, such as `_capacity`. The underscore is a message to other programmers: do not reach for this directly. Python does not stop them, which is why the convention has to be respected rather than enforced. Python's style guide, PEP 8, uses the word "non-public". Other references call the same convention "private", "protected", or "internal".
+- A **`@property`** turns a method into something that reads like an attribute, so a value can be computed on the way out, or checked on the way in.
   - A **getter** is the method a `@property` decorates. It returns the value.
+    ```py
+    @property
+    def capacity(self):
+        return self._capacity
+    ```
   - A **setter** is the method decorated with `@<name>.setter`. It runs when something assigns to the attribute, which is where validation belongs.
     ```python
     @capacity.setter
@@ -469,7 +474,9 @@ be read by a fellow, not by an instructor.
         self._capacity = value
     ```
   - **Validation** is checking a value before storing it, and refusing it when it is wrong.
-- A **class attribute** is defined in the class body rather than in `__init__`, and every instance shares the one copy. A service fee added to every concert ticket lives here: `Concert.SERVICE_FEE`.
+
+**Advanced Topics**:
+
 - A **`@classmethod`** receives the class itself as its first parameter, named **`cls`**, instead of an instance, and is called on the class. You will read them in other code: `date.today()` is called on the `date` class and returns a new date.
 - A **`@staticmethod`** receives neither `self` nor `cls`. It is a plain function placed inside a class. Python's style guides prefer a function at the top level of a module, so you will read static methods more often than you write them.
 
@@ -480,6 +487,7 @@ be read by a fellow, not by an instructor.
 - A **subclass**, also called a **child class**, is the class doing the inheriting: `class Concert(Event):`.
 - **`super()`** reaches the superclass from inside a subclass. `super().__init__(...)` runs the parent's setup, and `super().method()` runs the parent's version of a method you are overriding.
 - **Overriding** is defining a method in a subclass that already exists on the superclass. The subclass's version is the one that runs.
+- A **class attribute** is defined in the class body rather than in `__init__`, and every instance shares the one copy. A service fee added to every concert ticket lives here: `Concert.SERVICE_FEE`.
 - **Attribute lookup** is the order Python searches when code reads an attribute or calls a method: the instance first, then its class, then the superclass, and onward to `object`. Python uses the first match it finds, which is why a subclass's override runs instead of the parent's version.
   - **`obj.__dict__`** holds the attributes stored on one object. Comparing an instance's `__dict__` with its class's `__dict__` shows which step of attribute lookup finds a name.
 - **`object`** is the class every Python class inherits from, and it is the last place attribute lookup searches.
@@ -522,6 +530,7 @@ be read by a fellow, not by an instructor.
 - A **one-way reference** means class A holds a reference to class B, and B knows nothing about A.
 - A **bidirectional reference** means each class holds a reference to the other. It makes more questions easy to answer and gives you two places to keep in step.
 - In a diagram, **`+`** marks a public attribute or method and **`-`** marks a non-public one (one whose name begins with `_`).
+- A **helper** is a method or function that other code in the class or module calls, rather than the rest of the program. A helper that reads or changes the object's data is a non-public method. A helper that only works on the values it is given is a module function.
 
 ## 2.9 System Design Strategies — Wed 12/2
 

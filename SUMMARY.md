@@ -58,6 +58,8 @@
 - [2. Object-Oriented Programming](mod-2-oop-python/README.md)
   - [Overview](mod-2-oop-python/Overview.md)
   - [2.1 Intro to OOP, Classes, `__init__`, and `self`](mod-2-oop-python/1-intro-to-oop-classes-init-self.md)
+  - [2.2 Composition, `__repr__`, `__eq__`, and `@dataclass`](mod-2-oop-python/2-instances-repr-eq-dataclass.md)
+  - [2.3 Properties: Non-Public Attributes and `@property`](mod-2-oop-python/3-properties-non-public-attributes.md)
 
 ## Fullstack & AI-Assisted Development
 
