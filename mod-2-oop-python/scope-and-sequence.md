@@ -73,7 +73,6 @@ Every session that produces testable code carries one testing objective. Each se
 
 _In the session:_
 
-- **Apply · R1** — Given a method call on a string or a list, such as `'hello'.upper()`, use `type()` and `dir()` to name the value's class and find the method among its names, and rewrite the call in the form `str.upper('hello')`.
 - **Understand · R1** — Given a function that builds and returns a dictionary and a class that stores the same data, explain in two or three sentences what the class provides that the function does not, naming encapsulation and the object's interface.
 - **Apply · R1** — Given a description of an entity and the data it holds, define a class whose `__init__` stores at least three instance attributes on `self`, and one method that returns an answer computed from those attributes.
 - **Understand · R1** — Given a method definition and a call on an instance, explain what `self` refers to, naming the instance the method was called on as the value Python passes in, and rewrite the call in the form `Event.can_refund(jazz, today)`.

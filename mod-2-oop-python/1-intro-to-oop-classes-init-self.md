@@ -4,21 +4,21 @@
 
 - [Key Terms](#key-terms)
 - [The Case Study: Venue Tickets](#the-case-study-venue-tickets)
-- [How a Method Reaches Its Value](#how-a-method-reaches-its-value)
-  - [Idea 1. Every Value Comes from a Class](#idea-1-every-value-comes-from-a-class)
-  - [Idea 2. The Methods Available to a Value Live in its Class](#idea-2-the-methods-available-to-a-value-live-in-its-class)
-  - [Idea 3. The Value Before the Dot Is the First Argument](#idea-3-the-value-before-the-dot-is-the-first-argument)
-  - [Challenge: Rewrite the Call](#challenge-rewrite-the-call)
-- [Classes and Instances](#classes-and-instances)
+- [What is a Data Type? And What is a Class?](#what-is-a-data-type-and-what-is-a-class)
+  - [Every Value is an "Instance" of a "Class"](#every-value-is-an-instance-of-a-class)
+  - [`dir` Tells Us what a Class and its Instances Can Do](#dir-tells-us-what-a-class-and-its-instances-can-do)
+  - [Instances Find Their Methods in Their Class](#instances-find-their-methods-in-their-class)
+- [Creating your own Classes](#creating-your-own-classes)
   - [Defining a Class](#defining-a-class)
+  - [Attributes](#attributes)
   - [`__init__` Gives Every Instance the Same Shape](#__init__-gives-every-instance-the-same-shape)
-  - [Data Goes on `self`](#data-goes-on-self)
+  - [A Common Mistake: Data Goes on `self`](#a-common-mistake-data-goes-on-self)
 - [Methods and `self`](#methods-and-self)
   - [Writing a Method](#writing-a-method)
   - [`self` Is the Value Before the Dot](#self-is-the-value-before-the-dot)
   - [A Method That Takes Arguments](#a-method-that-takes-arguments)
   - [Challenge: Room Rentals](#challenge-room-rentals)
-- [Encapsulation and the Interface](#encapsulation-and-the-interface)
+- [Why Use Classes? Encapsulation and the Interface](#why-use-classes-encapsulation-and-the-interface)
   - [Parallel Lists Drift Apart](#parallel-lists-drift-apart)
   - [Dictionaries Keep the Data Together but Not the Rules](#dictionaries-keep-the-data-together-but-not-the-rules)
   - [One Place for the Data and Its Rules](#one-place-for-the-data-and-its-rules)
@@ -84,42 +84,58 @@ Choose a few options from the menu. Try to book the Intro to Pottery workshop, w
 
 Most of the code in the case study will be unfamiliar the first time you open it, and that is on purpose. Every lesson in this module comes back to the same files, so you will see the same code again and again. By the time a lesson explains an idea, you will already have seen it working in this application. Today, you only need to read the parts each question quotes.
 
-## How a Method Reaches Its Value
+## What is a Data Type? And What is a Class?
 
-Strings and lists come with methods. `'hello'.upper()` returns `'HELLO'`, and `seats.append('A3')` adds `'A3'` to the end of the list `seats`. A method is a function attached to a value, and you call it with dot notation: `value.method()`.
+As we've learned previously, the `type()` function returns the type of data it is given.
 
-That raises a question. A function only knows what its parameters are given, and `upper()` is called with empty parentheses. So how does `upper()` know which string to capitalize?
+```py
+print(type('hello'))        # <class 'str'>
+print(type(3.5))            # <class 'float'>
+print(type(['A1', 'A2']))   # <class 'list'>
+```
 
-The answer is the idea this whole module is built on, and it requires understanding three things:
+But what really is that `<class 'str'>` message all about? What is a class? Why do we care?
 
-1. Every value in Python comes from a class
-2. The methods available to a value live in its class
-3. The value before the dot is the first argument of the method
+### Every Value is an "Instance" of a "Class"
 
-### Idea 1. Every Value Comes from a Class
+A **class** is a blueprint for making values of one kind, such as `str`, `float`, and `list`. But a class is more than just a name for a type of value.
 
-The `type()` function returns the class a value was made from:
+Classes are **callable** (like functions) and create an **instance** of that class (a.k.a. an "instance object" or just "object"). You've already used these classes to convert one type of value into another (e.g. use `str()` to convert a number into a string):
+
+```python
+# These both create string "instances"
+# The first approach is just more convenient
+favorite_number = '42'
+boiling_point = str(212)
+
+# type() returns the class a value was made from
+print(type(favorite_number))     # <class 'str'>
+print(type(boiling_point))      # <class 'str'>
+```
+
+The built-in data types you have used so far have convenient syntax for creating instances of their type:
+
+- Strings have quotes `""`
+- Lists have `[]`
+- Dictionaries have `{}`
+
+As a result, you rarely have to call the class itself. However, pretty much every other class, like the `date` class from the `datetime` module in Python's standard library, can only be instantiated by calling the class:
 
 ```python
 from datetime import date
 
-print(type('hello'))              # <class 'str'>
-print(type(['A1', 'A2']))         # <class 'list'>
-print(type(3.5))                  # <class 'float'>
-print(type(date(2026, 12, 5)))    # <class 'datetime.date'>
+knicks_victory = date(2026, 6, 13)
+print(type(knicks_victory)) # <class 'datetime.date'>
+
+marcy_founded = date(2019, 9, 20)
+print(type(marcy_founded)) # <class 'datetime.date'>
 ```
 
-A **class** is a blueprint for making values of one kind.
+We now know that every piece of data in Python is really an "instance" of a class. So, what is the point?
 
-- `str` is the class for strings
-- `list` is the class for lists
-- `float` is the class for floats
-- `date` is the class for dates (remember this new type of value! we will use it later in this lesson)
-- and so on...
+### `dir` Tells Us what a Class and its Instances Can Do
 
-Each string you have ever written is one **instance** of `str`: one value made from that blueprint. `'hello'` and `'goodbye'` are two instances of the same class, holding different text.
-
-In fact, when you had previously used the `float` function to convert an input string into a float, you were creating a new "float instance".
+Previously when you used the `float` function to convert an input string into a float, you were creating a new "float instance".
 
 ```python
 user_input = input("enter a number: ")
@@ -129,30 +145,71 @@ user_float = float(user_input)
 print(type(user_float))  # <class 'float'>
 ```
 
-### Idea 2. The Methods Available to a Value Live in its Class
+Why do this? Because floats are allowed to do things that strings cannot, and vice versa.
 
-Python stores the methods available to a value in its class. The `dir()` function lists every name a value answers to:
+For example, you can subtract floats but not strings, and strings have methods like `upper()` that floats don't.
+
+We can see what an instance of a class can "do" using the `dir()` function which produces a list:
 
 ```python
-
 print(dir('hello'))
 # ['__add__', '__class__', '__contains__', ..., 'swapcase', 'title', 'translate', 'upper', 'zfill']
 
-print(dir(str))
-# The same as above
+print(dir(5.5))
+# ['__abs__', '__add__', '__bool__', ..., 'is_integer', 'real']
 
 print('upper' in dir('hello')) # True
-print('hello'.upper()) # HELLO
-
 print('upper' in dir(5.5)) # False
+
+# upper works on strings, not floats
+print('hello'.upper()) # HELLO
 print(5.5.upper()) # AttributeError: 'float' object has no attribute 'upper'
 ```
 
-`dir('hello')` returns 81 names in Python 3.14. The ones at the end, such as `'title'` and `'upper'`, are the string methods you already use. The ones at the start, wrapped in double underscores, are **dunder methods** ("double underscore"). Python calls those for you at the right moment. For example, it calls `__add__` when you write `'hello' + ' there'`. You will write your own dunder method later in this lesson.
+`dir()` lists two kinds of names:
+
+1. The ones at the end, such as `'title'` and `'upper'`, are the methods and other attributes of a value.
+2. The ones at the start, wrapped in double underscores, are **dunder methods** ("double underscore" methods). Python calls those for you when specific native Python operations are used. For example:
+
+   - When you write `'hello' + ' world'` Python calls `__add__`
+   - When you write `5.5 - 2.0` Python calls `__sub__`
+
+   `__sub__` is defined for the `float` class but not for `str`, which is why `-` can be used on floats but not strings:
+
+   ```python
+   # subtraction works on floats, not strings
+   print(5.5 - 2.0) # 3.5
+   print('hello' - 'world') # TypeError: unsupported operand type(s) for -: 'str' and 'str'
+   ```
 
 {% hint style="info" %}
 💡 Asking a value about itself while the program runs, as `type()` and `dir()` do, is called **introspection**.
 {% endhint %}
+
+### Instances Find Their Methods in Their Class
+
+Every instance of a particular type finds its methods in its class. This is why every string has the `upper()` method and every `float` has the `__sub__` dunder method.
+
+So, checking `dir('hello')` and `dir(str)` gives us the same list:
+
+```py
+print(dir('hello'))
+# ['__add__', '__class__', '__contains__', ..., 'swapcase', 'title', 'translate', 'upper', 'zfill']
+
+print(dir(str))
+# the same list
+
+print(dir(str) == dir('hello')) # True
+```
+
+In fact, you can even call `upper()` directly on the `str` class.
+
+```py
+print(str.upper('hello'))   # HELLO
+print('hello'.upper())      # HELLO
+```
+
+And this is actually how `'hello'.upper()` works! When you call `'hello'.upper()`, Python looks for the `str.upper()` method and calls it with `'hello'` as the argument!
 
 **<details><summary>Take a guess: when does Python call `__contains__` and `__eq__` for you?</summary>**
 
@@ -160,94 +217,28 @@ Python calls `__contains__` for you when checking membership with `in` and `not 
 
 </details>
 
-### Idea 3. The Value Before the Dot Is the First Argument
-
-As we saw with `print(dir(str))`, `.upper()` is a function stored in the class `str`, and `'hello'` can use it because it is an instance of `str`. This means that you can call it through the string _or_ through the class:
-
-```python
-print(str.upper('hello'))    # called on the class str, with 'hello' as the argument -> HELLO
-print('hello'.upper())       # called on the string instance with no argument -> HELLO
-```
-
-The two lines make the same call. Here is Python's rule for invoking methods: **when you call a method on a value (`'hello'.upper()`), Python finds the method in the value's class (`str.upper`) and calls it with the value as the first argument (`str.upper('hello')`).**
-
-`'hello'.upper()` is a shorter way to write `str.upper('hello')`. The method never needed the string inside its parentheses, because Python put it there for you.
-
-The same rule holds for every class:
-
 {% hint style="warning" %}
-**Predict, then run.** Each call below is written on the class instead of on the value. What does the program print?
+**Predict, then run.** Is `__add__` one of the names in `dir(list)`? Will `[1, 2, 3] + [4, 5, 6]` work, or will it raise an error?
 
 ```python
-seats = ['A1', 'A2']
-list.append(seats, 'A3')
-print(seats)
-
-print(str.upper('sold out'))
+print(dir(list))
+print([1, 2, 3] + [4, 5, 6])
 ```
 
 <details><summary>What actually happens</summary>
 
 ```
-['A1', 'A2', 'A3']
-SOLD OUT
+['__add__', '__class__', '__class_getitem__', '__contains__', ..., 'remove', 'reverse', 'sort']
+[1, 2, 3, 4, 5, 6]
 ```
 
-- `list.append(seats, 'A3')` is the same call as `seats.append('A3')`. `seats` is the first argument, so `append` adds `'A3'` to the list `seats` refers to.
-- `str.upper('sold out')` is the same call as `'sold out'.upper()`, so it returns a new, capitalized string.
+- `'__add__'` is the first name in `dir(list)`, so the `list` class defines the dunder method that `+` calls.
+- When you write `[1, 2, 3] + [4, 5, 6]`, Python calls `__add__` from the `list` class, which returns a new list holding the items of the first list followed by the items of the second.
 
 </details>
 {% endhint %}
 
-Nobody writes `str.upper('hello')` in a real program, because `'hello'.upper()` is shorter and says the same thing. The long form is worth knowing because it shows what the short form does. When you write your own classes later in this lesson, the methods you write will receive their value the same way.
-
-### Challenge: Rewrite the Call
-
-For each value and method call below, use `type()` to name its class, check with `dir()` that the method is one of the names the value answers to, and then rewrite the method call so that it is made through the class. Each rewritten line should print the same result as the original.
-
-```python
-event_names = ['Friday Night Jazz', 'Intro to Pottery', 'Friday Night Jazz']
-print(event_names.count('Friday Night Jazz'))
-
-price = 25.0
-print(price.is_integer())
-```
-
-For example:
-
-```py
-# What is given
-email = 'MAYA@EXAMPLE.COM'
-print(email.lower())
-
-# You write
-email = 'MAYA@EXAMPLE.COM'
-print(type(email))              # <class 'str'>
-print('lower' in dir(email))    # True
-print(str.lower(email))         # maya@example.com
-```
-
-**<details><summary>Solution</summary>**
-
-```python
-event_names = ['Friday Night Jazz', 'Intro to Pottery', 'Friday Night Jazz']
-print(type(event_names))                        # <class 'list'>
-print('count' in dir(event_names))              # True
-print(list.count(event_names, 'Friday Night Jazz'))  # 2
-
-price = 25.0
-print(type(price))                  # <class 'float'>
-print('is_integer' in dir(price))   # True
-print(float.is_integer(price))      # True
-```
-
-- `type()` names the class, and that class name goes before the dot in the rewritten call.
-- The value that was before the dot becomes the first argument.
-- `count` already took an argument, `'Friday Night Jazz'`. That argument moves to second place, after the list.
-
-</details>
-
-## Classes and Instances
+## Creating your own Classes
 
 Strings, lists, and dates are classes written into Python by its creators. A program can define its own classes too, which lets the programmer define new types of data and the methods their instances can use.
 
@@ -271,6 +262,8 @@ print(jazz is pottery)   # False
 - `Event()` calls the class, like a function, and the call returns a new instance. Making an instance is called **instantiation**.
 - `type(jazz)` reports that `jazz` was made from `Event`. The `__main__` in front is Python's name for the file you ran, so `__main__.Event` means "the `Event` class defined in this file".
 - `jazz is pottery` is `False`, because each call to `Event()` makes a separate object.
+
+### Attributes
 
 An **attribute** is a piece of data stored on an object, and you reach it with a dot. You could add attributes to each instance one at a time:
 
@@ -299,8 +292,9 @@ Built-in classes like `str` and `float` are written in lowercase, and `date` fol
 ```python
 from datetime import date
 
-
 class Event:
+    # invoked when calling Event(name, date, capacity)
+    # `self` is the new instance created and is always the first parameter
     def __init__(self, name, date, capacity):
         self.name = name
         self.date = date
@@ -323,11 +317,9 @@ Here is what happens when Python runs `Event('Friday Night Jazz', date(2026, 12,
 4. `self.seats_sold = 0` gives every new event a starting value that does not come from an argument. A brand-new event has sold no seats, so `__init__` sets the count itself rather than asking for it.
 5. Python returns the finished instance, and `jazz` refers to it.
 
-`__init__` never uses `return`. Its job is to fill in the instance Python already made, and Python hands that instance back for you.
+`__init__` is a **dunder method**, like `__add__` on strings. You never call `__init__` yourself. Python calls it at the right moment, which is when you create an instance. `__init__` never uses `return`. Its job is to fill in the instance Python already made, and Python hands that instance back for you.
 
 Every event is now built by the same method, so every event has a name, a date, and a capacity. Leaving one out is no longer something that can happen quietly: calling `Event('Intro to Pottery', date(2026, 11, 20))` without a capacity raises a `TypeError` on that line, which names the missing argument.
-
-`__init__` is a **dunder method**, like `__add__` on strings. You never call `__init__` yourself. Python calls it at the right moment, which is when you create an instance.
 
 {% hint style="info" %}
 💡 In `self.name = name`, the two `name`s are two different things. `self.name` is an attribute stored on the instance, and it lasts as long as the instance does. `name` is a parameter of `__init__`, and it disappears when `__init__` finishes. They share a spelling only because the parameter holds the value the attribute should get.
@@ -338,7 +330,6 @@ Every event is now built by the same method, so every event has a name, a date, 
 
 ```python
 from datetime import date
-
 
 class Event:
     def __init__(self, name, date, capacity):
@@ -367,7 +358,7 @@ Each call to `Event(...)` creates a new instance and runs `__init__` on it, so `
 </details>
 {% endhint %}
 
-### Data Goes on `self`
+### A Common Mistake: Data Goes on `self`
 
 An attribute only exists if `__init__` stores it on `self`. This version forgets `self.` on one line:
 
@@ -432,7 +423,22 @@ The venue's rule now travels with the data. Any code holding an event can call `
 
 ### `self` Is the Value Before the Dot
 
-Every method's first parameter is `self`, and `self` follows the same rule as `'hello'.upper()`. When you call a method on an instance, Python finds the method in the instance's class and passes the instance in as the first argument:
+Every method's first parameter is `self`, but none of the calls above put anything in the parentheses for it. Strings work the same way: `'hello'.upper()` has empty parentheses, yet `upper()` knows which string to capitalize.
+
+As we saw with `print(dir(str))`, `.upper()` is a function stored in the class `str`, and `'hello'` can use it because it is an instance of `str`. This means that you can call it through the string _or_ through the class:
+
+```python
+print(str.upper('hello'))    # called on the class str, with 'hello' as the argument -> HELLO
+print('hello'.upper())       # called on the string instance with no argument -> HELLO
+```
+
+The two lines make the same call. Here is Python's rule for invoking methods: **when you call a method on a value (`'hello'.upper()`), Python finds the method in the value's class (`str.upper`) and calls it with the value as the first argument (`str.upper('hello')`).**
+
+{% hint style="info" %}
+💡 The method never needed the string inside its parentheses, because Python put it there for you. Nobody writes `str.upper('hello')` in a real program, because `'hello'.upper()` is shorter and says the same thing. The long form is worth knowing because it shows what the short form does.
+{% endhint %}
+
+The same rule holds for the classes you write. When you call a method on an instance, Python finds the method in the instance's class and passes the instance in as the first argument, `self`:
 
 ```python
 jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
@@ -571,7 +577,7 @@ print(Room.cost(hall, 2))   # 300, the same call as hall.cost(2)
 
 </details>
 
-## Encapsulation and the Interface
+## Why Use Classes? Encapsulation and the Interface
 
 A class keeps an event's data and its rules together. To see why that matters, here is what goes wrong when a program keeps them apart, first in parallel lists and then in dictionaries.
 
