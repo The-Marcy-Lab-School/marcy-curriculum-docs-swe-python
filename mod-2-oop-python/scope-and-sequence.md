@@ -34,7 +34,7 @@ reading, assignments, and project carry.
 | Chapter | Session                                                                | Week | Day        | Date         |
 | ------- | ---------------------------------------------------------------------- | ---- | ---------- | ------------ |
 | 2.1     | Intro to OOP: Classes, `__init__`, and `self`                          | 7    | 4          | Thu 11/12    |
-| 2.2     | Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` | 7    | 5          | Fri 11/13    |
+| 2.2     | Composition, `__repr__`, `__eq__`, and `@dataclass` | 7    | 5          | Fri 11/13    |
 | 2.3     | Properties: Non-Public Attributes, `@property`, and Class Attributes   | 8    | 1          | Mon 11/16    |
 | 2.4     | Inheritance and Attribute Lookup                                       | 8    | 3          | Wed 11/18    |
 | 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                   | 8    | 4          | Thu 11/19    |
@@ -55,7 +55,7 @@ Every session that produces testable code carries one testing objective. Each se
 
 | Session    | Placement                | Objective                                                                                                                                                                                          |
 | ---------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2.2        | In the session           | **Apply · R9** — Given a class, implement a pytest test that creates two instances and asserts that changing one instance's attribute leaves the other's unchanged.                                |
+| 2.2        | In the session           | **Apply · R9** — Given a class with `__eq__` and a method that refuses to add an instance equal to one it already holds, implement a pytest test that adds an equal instance a second time and asserts that the collection still holds one. |
 | 2.3        | In the session           | **Apply · R9** — Given a validating setter, implement one test that uses `pytest.raises(ValueError)` on an invalid assignment, and a second that asserts the stored value is unchanged afterwards. |
 | 2.4        | By the end of the module | **Apply · R3** — Given a method overridden in two subclasses, implement one test per subclass that asserts the result each returns for the same call.                                              |
 | 2.5        | By the end of the module | **Apply · assignment only** — Given an abstract base class, implement a test that uses `pytest.raises(TypeError)` to show that a subclass missing an abstract method cannot be instantiated.       |
@@ -122,7 +122,7 @@ The first line prints `False` and the second prints `True`, because the pottery 
 
 The first line prints `False` and the second prints `True`. When I call `pottery.can_refund(today)`, Python passes `pottery` into the method as `self`, so `self.date` is the date `pottery` stored in `__init__`, November 20. November 25 is not before November 20, so the method returns `False`. When I call `jazz.can_refund(today)`, `self` is `jazz`, so `self.date` is November 28, and November 25 is before it, so the method returns `True`. There is only one `can_refund` method, but each instance holds its own `date`, and `self` decides whose date the method reads.
 
-## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass`
+## 2.2 Composition, `__repr__`, `__eq__`, and `@dataclass`
 
 **Week 7, Day 5 — Friday 11/13**
 
@@ -130,7 +130,8 @@ The first line prints `False` and the second prints `True`. When I call `pottery
 
 _In the session:_
 
-- **Apply · R1** — Given a class, create at least two instances with different arguments, and demonstrate with `print()` that changing one instance's attribute leaves the other unchanged.
+- **Apply · R5 (ADDED)** — Given a class that must manage many entities, store a list of instances as an attribute and write a method that returns only those instances whose attribute matches a given value.
+- **Apply · R6 (ADDED)** — Given two existing instances, define a third class that stores both as attributes, and reach a value on one of them through the new object in a single expression, such as `reservation.attendee.name`.
 - **Apply · R1** — Given a class with no `__repr__`, write one that returns the class name and at least two attribute values, so that printing an instance identifies which instance it is.
 - **Evaluate · R1** — Given two instances that hold identical data, predict whether `==` returns `True` with and without an `__eq__` method, and explain the difference between two names referring to the same object (`is`) and two objects holding equal data (`==`).
 - **Create · R1** — Given a class that only carries data and defines `__init__`, `__repr__`, and `__eq__` by hand, refactor it with `@dataclass`, and confirm that comparing its instances gives the same results as before and that printing an instance still identifies it.
@@ -138,9 +139,6 @@ _In the session:_
 
 _By the end of the module:_
 
-- **Apply · R5 (ADDED)** — Given a class that must manage many entities, store a list of instances as an attribute and write a method that returns only those instances whose attribute matches a given value.
-- **Apply · R6 (ADDED)** — Given two existing instances, define a third class that stores both as attributes, and reach a value on one of them through the new object in a single expression, such as `reservation.attendee.name`.
-- **Apply · assignment only** — Given an unfamiliar object, use `obj.__dict__` and `dir()` to report the current value of every attribute it holds and at least three of its methods.
 - **Analyze · R1** — Given an object printed as `<Event object at 0x104e2f10>`, explain what that output does and does not tell you, and state what `__repr__` would add.
 - **Evaluate · D1** — Given a class that only carries data, decide whether `@dataclass` or a plain class suits it better, and defend the choice by naming at least one method `@dataclass` would write for you.
 
@@ -255,6 +253,7 @@ _In the session:_
 - **Apply · R3** — Given a superclass and a described subtype, define a subclass that calls `super().__init__()` and adds at least one attribute of its own.
 - **Apply · R3** — Given a superclass method, override it in two subclasses so that each returns a different result for the same call, using `super().method()` in at least one to extend rather than replace the parent's version.
 - **Analyze · assignment only** — Given a two-level hierarchy and an attribute access, trace where Python finds the attribute, naming each place it looked in order (the instance, its class, then the parent class) and the place it stopped.
+- **Apply · assignment only** — Given an unfamiliar object, use `obj.__dict__` and `dir()` to report the current value of every attribute it holds and at least three of its methods.
 
 _By the end of the module:_
 
@@ -437,11 +436,9 @@ be read by a fellow, not by an instructor.
   - **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
   - **`dir(obj)`** returns the names of everything the object answers to, including its methods.
 
-## 2.2 Instances: Instance Attributes, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
+## 2.2 Composition, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
 
-- An **instance attribute** belongs to one instance. Changing `jazz.capacity` does not change any other event's capacity.
-  - **`obj.__dict__`** returns a dictionary of the object's own attributes and their current values.
-- **`isinstance(obj, Class)`** asks whether an object was made from a class, or from one of its subclasses.
+- **Composition** is one object holding another object, or a list of objects, as an attribute. A `Venue` that stores a list of `Event` objects is composed of them, and `venue.events[0].name` reaches through the venue and its list to the data in one event.
 - **`__repr__`** is the method Python calls to turn an object into a string for a programmer to read. Without it, printing an object shows its class name and a memory address, which tells you nothing about which object you are holding.
   ```python
   def __repr__(self):
@@ -453,9 +450,9 @@ be read by a fellow, not by an instructor.
     def __eq__(self, other):
         return self.name == other.name and self.date == other.date
     ```
+- A **refusal** is a method turning down an action that would break its object's data, saying why, and changing nothing.
 - A **`@dataclass`** is a decorator that writes `__init__`, `__repr__`, and `__eq__` for you, from the attribute names you list. It suits a class that mostly carries data.
   - A **value object** is an object defined entirely by the data it holds, with little or no behavior of its own. Two value objects with equal data are interchangeable.
-- **Composition** is one object holding another object as an attribute. A `Reservation` that stores an `Attendee` and an `Event` is composed of them, and `reservation.attendee.name` reaches through one object to the data in another.
 
 ## 2.3 Properties: Non-Public Attributes, `@property`, and Class Attributes — Mon 11/16
 
@@ -484,6 +481,7 @@ be read by a fellow, not by an instructor.
 - **`super()`** reaches the superclass from inside a subclass. `super().__init__(...)` runs the parent's setup, and `super().method()` runs the parent's version of a method you are overriding.
 - **Overriding** is defining a method in a subclass that already exists on the superclass. The subclass's version is the one that runs.
 - **Attribute lookup** is the order Python searches when code reads an attribute or calls a method: the instance first, then its class, then the superclass, and onward to `object`. Python uses the first match it finds, which is why a subclass's override runs instead of the parent's version.
+  - **`obj.__dict__`** holds the attributes stored on one object. Comparing an instance's `__dict__` with its class's `__dict__` shows which step of attribute lookup finds a name.
 - **`object`** is the class every Python class inherits from, and it is the last place attribute lookup searches.
 
 ## 2.5 Polymorphism, Duck Typing, and Abstract Base Classes — Thu 11/19
