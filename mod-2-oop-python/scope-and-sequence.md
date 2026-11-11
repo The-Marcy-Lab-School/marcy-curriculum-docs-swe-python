@@ -434,7 +434,7 @@ be read by a fellow, not by an instructor.
   - A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
 - **Introspection** is asking an object about itself while the program is running.
   - **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
-  - **`dir(obj)`** returns the names of everything the object answers to, including its methods.
+  - **`dir(obj)`** returns the names of every attribute that can be accessed through the object, including its methods.
 
 ## 2.2 Composition, `__repr__`, `__eq__`, and `@dataclass` — Fri 11/13
 
@@ -631,7 +631,7 @@ A subclass that only sets `self.kind = "laptop"` doesn’t behave differently. T
 **4. Polymorphism.** **At least 1 loop** calls the same method on a list holding
 more than one subtype. That loop contains **no `isinstance()` and no `type()`**thus relying solely on method overrides to alter behavior.
 
-In `DESIGN.md`, list the method names that every one of those subtypes defines. That list is the contract the loop depends on: the loop can stay the same because every object in it answers to the same method names.
+In `DESIGN.md`, list the method names that every one of those subtypes defines. That list is the contract the loop depends on: the loop can stay the same because the same method names can be accessed through every object in it.
 
 **5. Collections of objects.** **At least 1 class stores a list of instances of another class you wrote** as an attribute — a fridge holding its deliveries, a member holding their loans — and has **at least 2 methods that search or filter that list** and return the matches. A list of dictionaries does not count.
 

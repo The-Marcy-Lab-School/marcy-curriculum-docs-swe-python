@@ -57,7 +57,7 @@
   - A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
 - **Introspection** is asking an object about itself while the program is running.
   - **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
-  - **`dir(obj)`** returns the names of everything the object answers to, including its methods.
+  - **`dir(obj)`** returns the names of every attribute that can be accessed through the object, including its methods.
 
 ## The Case Study: Venue Tickets
 
@@ -728,4 +728,4 @@ str.upper(5)
 
 ## Summary
 
-Strings and lists already have methods, and a method reaches its value because Python passes the value before the dot in as the first argument: `'hello'.upper()` is the same call as `str.upper('hello')`, where `str` is a class and the string is an instance of it. `type()` and `dir()` show this, by naming a value's class and listing the methods it answers to. Programs that keep data in one place and the functions that change it in another, as parallel lists or dictionaries passed to functions, let any line change the data, with nothing tying the rules to the data. A class bundles the data with the methods that work on it, which is called **encapsulation**, and the methods the rest of the program uses are its **interface**. `__init__` runs when an instance is created and stores its data on `self`, so every instance has the same shape and its own values. A method you write receives its instance as `self` by the same rule `str.upper()` follows: `jazz.can_refund(today)` is `Event.can_refund(jazz, today)`.
+Strings and lists already have methods, and a method reaches its value because Python passes the value before the dot in as the first argument: `'hello'.upper()` is the same call as `str.upper('hello')`, where `str` is a class and the string is an instance of it. `type()` and `dir()` show this, by naming a value's class and listing the methods that can be accessed through it. Programs that keep data in one place and the functions that change it in another, as parallel lists or dictionaries passed to functions, let any line change the data, with nothing tying the rules to the data. A class bundles the data with the methods that work on it, which is called **encapsulation**, and the methods the rest of the program uses are its **interface**. `__init__` runs when an instance is created and stores its data on `self`, so every instance has the same shape and its own values. A method you write receives its instance as `self` by the same rule `str.upper()` follows: `jazz.can_refund(today)` is `Event.can_refund(jazz, today)`.
