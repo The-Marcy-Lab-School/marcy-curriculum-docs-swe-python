@@ -40,7 +40,9 @@ The case study is a complete system, so it lets you explore what no single lesso
 - **How one action travels through a system.** Buying a ticket passes through several objects, and tracing it shows what each one is responsible for.
 - **Where the rules live.** Every refusal in the code belongs to a particular class, and each one enforces a rule about the venue.
 - **What the tests protect.** Each test in the case study guards one rule, and reading the tests is a quick way to find the rules that matter most.
-- **What the whole system looks like as a diagram.** Drawing the classes and their relationships, or matching a provided diagram to the code, shows the design the code carries out.
+- **What the whole system looks like as a diagram.** In 2.8, drawing the case study's classes and their relationships shows the design the code carries out.
+
+The case study session, after 2.7, reviews the whole module through the case study's tests. For each idea the module taught, you find the test that protects it and state its rule in one sentence, trace a user action from a test through every object it touches, and predict which tests fail when one rule in the code is broken. The session also introduces fixtures, the shared setup in `tests/conftest.py` that gives every test a new venue, and you leave with a rule that no test protects yet, which your own project's tests can learn from.
 
 ## Part 1: Objects That Own Their Data (2.1–2.3)
 
@@ -75,7 +77,7 @@ Concerts, workshops, and screenings are alike in most ways and different in a fe
 
 **2.4 Inheritance.** An `Event` superclass holds what is shared, and subclasses override what differs. `super().__init__()` runs the parent's setup. When code reads an attribute or calls a method, Python looks on the instance first, then on its class, then on the parent class, and uses the first one it finds. That search is how a subclass's version of a method replaces the parent's. A class attribute belongs to the class rather than to one instance, so it holds a value every instance shares, such as a concert's service fee, and the same search is how an instance finds it.
 
-**2.5 Polymorphism.** `len()` already works on a string, a list, and a dictionary, and a `for` loop works over all three: each type answers the same request in its own way. That is polymorphism, and your own classes can do it too. One loop asks every event in a mixed list for its price, with no `isinstance()` check. The loop works because every kind of event answers the same method names, and that list of names is the **contract**. Writing the contract down is the first time you record an agreement between pieces of code, which makes it a small specification.
+**2.5 Polymorphism.** `len()` already works on a string, a list, and a dictionary, and a `for` loop works over all three: each type answers the same request in its own way. That is polymorphism, and your own classes can do it too. One loop asks every event in a mixed list for its price, with no `isinstance()` check. The loop works because the same method names can be accessed through every kind of event, and that list of names is the **contract**. Writing the contract down is the first time you record an agreement between pieces of code, which makes it a small specification.
 
 Decorators are built from two earlier ideas, functions as values and closures, so they take two lessons.
 
@@ -91,7 +93,7 @@ You also read a decorator factory, such as `@requires_status("paid")`: a functio
 
 Once a system has five or more classes, the hard question is no longer how to write a class but which class owns what. Deciding that at the keyboard leads to restructuring halfway through the build. This part makes the design a document that comes before the code.
 
-**2.8 UML.** You draw the classes, their responsibilities, and their relationships, and you decide whether each relationship is one-way or bidirectional.
+**2.8 UML.** You draw the classes, their responsibilities, and their relationships, and you decide whether each relationship is one-way or bidirectional. The case study is the first system you draw.
 
 **2.9 Strategies.** This lesson names three patterns that the case study has used since the first lesson:
 

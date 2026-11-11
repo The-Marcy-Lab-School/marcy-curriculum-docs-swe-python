@@ -548,15 +548,19 @@ The third test protects the edge of the rule. If someone later writes `value < 1
 </details>
 
 {% hint style="warning" %}
-**Check for understanding.** These two tests are from the case study's `tests/test_events.py`. The `jazz` fixture is the sample Friday Night Jazz concert, which has a capacity of `40`.
+**Check for understanding.** These two tests are based on two in the case study's `tests/test_events.py`, with the event built inside each test. (In the case study's file, the event comes from shared setup in `tests/conftest.py`, which the case study session explains.)
 
 ```python
-def test_capacity_setter_refuses_a_capacity_below_one(jazz):
+def test_capacity_setter_refuses_a_capacity_below_one():
+    jazz = Event('Friday Night Jazz', date(2026, 12, 13), 40, 25)
+
     with pytest.raises(ValueError):
         jazz.capacity = 0
 
 
-def test_a_refused_capacity_leaves_the_stored_value_unchanged(jazz):
+def test_a_refused_capacity_leaves_the_stored_value_unchanged():
+    jazz = Event('Friday Night Jazz', date(2026, 12, 13), 40, 25)
+
     with pytest.raises(ValueError):
         jazz.capacity = -5
 

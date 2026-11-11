@@ -61,7 +61,7 @@ Every session that produces testable code carries one testing objective. Each se
 | 2.5        | By the end of the module | **Apply · assignment only** — Given an abstract base class, implement a test that uses `pytest.raises(TypeError)` to show that a subclass missing an abstract method cannot be instantiated.       |
 | 2.7        | By the end of the module | **Apply · R7, R9** — Given a method guarded by a status-checking decorator, implement a test showing that a call from the wrong status leaves the object unchanged.                                |
 | 2.9        | In the session           | **Apply · R9** — Given a coordinator or status-driven class, implement a test that attempts a refused action and asserts that the status and every collection are unchanged afterwards.            |
-| Case study | In the session           | **Analyze · R9** — Given the case study's tests, name the rule each test protects.                                                                                                                 |
+| Case study | In the session           | **Analyze · R9** — Given the case study's tests and the fixtures in `tests/conftest.py`, name the rule each test protects, and explain where each test's objects come from.                                                                                                                 |
 
 ---
 
@@ -321,14 +321,15 @@ _By the end of the module:_
 
 _In the session:_
 
-- **Analyze · R6** — Given one user action, trace it through every object it touches, in order, naming the method called at each step.
-- **Analyze · R6** — Given the codebase, locate every place an invalid action is refused, name the class that performs each refusal, and state the status or rule it checks.
-- **Create · D1 (ADDED)** — Given the case study codebase, draw a UML class diagram showing every class, every attribute marked public or non-public, and every relationship between them.
-- **Remember · D1 (optional)** — Given a provided UML class diagram of the case study, identify the class in the code that each box describes, for every box in the diagram.
+- **Analyze · R9** — Given an idea taught in Mod 2, such as a setter's refusal, a subclass's override, or a status guard, locate the case study test that protects it, and state in one sentence the rule that test protects.
+- **Analyze · R6** — Given a test that performs one user action, such as booking a ticket, trace the action from the test through every object it touches, in order, naming the method called at each step.
+- **Evaluate · R9** — Given a described change that breaks one rule in the case study's code, predict which tests fail and which still pass, and justify each prediction by naming the rule the failing test protects.
 - **Testing** — See the Case study row of [Testing Objectives](#testing-objectives).
 
 _By the end of the module:_
 
+- **Create · R9** — Given the case study codebase, find one rule that no test protects, such as a workshop's materials fee never being negative, and write a test that fails until the code enforces that rule.
+- **Analyze · R6** — Given the codebase, locate every place an invalid action is refused, name the class that performs each refusal, and state the status or rule it checks.
 - **Analyze · R1** — Given the case study codebase, list every class and state in one line what data each one owns.
 - **Analyze · R2** — Given the codebase's non-public attributes, explain for each one what would break if it were public.
 - **Evaluate · D1** — Given one structural decision the author made, judge it against one named alternative, and state what each one makes easy and what it makes hard.
@@ -349,6 +350,7 @@ _In the session:_
 _By the end of the module:_
 
 - **Create · D1** — Given only a spoken description of a system, produce a diagram with at least four classes and every relationship labeled.
+- **Create · D1** — Given the case study codebase, draw a UML class diagram showing every class, every attribute and method marked public or non-public, and every relationship between them.
 - **Evaluate · R1** — Given a class carrying more than four responsibilities, judge whether it should be split, and name the classes that would replace it.
 
 ## 2.9 System Design Strategies
@@ -483,14 +485,14 @@ be read by a fellow, not by an instructor.
 ## 2.4 Inheritance and Attribute Lookup — Wed 11/18
 
 - **Inheritance** is a relationship between two classes, where a subclass receives the attributes and methods of a superclass and can add to them.
-- A **superclass**, also called a **parent class**, is the class being inherited from.
-- A **subclass**, also called a **child class**, is the class doing the inheriting: `class Concert(Event):`.
-- **`super()`** reaches the superclass from inside a subclass. `super().__init__(...)` runs the parent's setup, and `super().method()` runs the parent's version of a method you are overriding.
-- **Overriding** is defining a method in a subclass that already exists on the superclass. The subclass's version is the one that runs.
+  - A **superclass**, also called a **parent class**, is the class being inherited from.
+  - A **subclass**, also called a **child class**, is the class doing the inheriting: `class Concert(Event):`.
+  - **`super()`** reaches the superclass from inside a subclass. `super().__init__(...)` runs the parent's setup, and `super().method()` runs the parent's version of a method you are overriding.
+  - **Overriding** is defining a method in a subclass that already exists on the superclass. The subclass's version is the one that runs.
 - A **class attribute** is defined in the class body rather than in `__init__`, and every instance shares the one copy. A service fee added to every concert ticket lives here: `Concert.SERVICE_FEE`.
 - **Attribute lookup** is the order Python searches when code reads an attribute or calls a method: the instance first, then its class, then the superclass, and onward to `object`. Python uses the first match it finds, which is why a subclass's override runs instead of the parent's version.
   - **`obj.__dict__`** holds the attributes stored on one object. Comparing an instance's `__dict__` with its class's `__dict__` shows which step of attribute lookup finds a name.
-- **`object`** is the class every Python class inherits from, and it is the last place attribute lookup searches.
+  - **`object`** is the class every Python class inherits from, and it is the last place attribute lookup searches.
 
 ## 2.5 Polymorphism, Duck Typing, and Abstract Base Classes — Thu 11/19
 
@@ -520,6 +522,7 @@ be read by a fellow, not by an instructor.
 
 - An **investigation question** asks you to find an answer in code you did not write, rather than to write new code.
 - To **trace** an action is to follow it through every object it touches, in order, naming what each one does with it.
+- A **fixture** is a function marked `@pytest.fixture` that builds an object for tests. When a test names a fixture as a parameter, pytest runs the function and passes in what it returns, so every test receives a new object.
 
 ## 2.8 System Design and UML Diagrams — Mon 11/30
 

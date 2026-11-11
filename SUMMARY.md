@@ -60,6 +60,7 @@
   - [2.1 Intro to OOP, Classes, `__init__`, and `self`](mod-2-oop-python/1-intro-to-oop-classes-init-self.md)
   - [2.2 Composition, `__repr__`, `__eq__`, and `@dataclass`](mod-2-oop-python/2-instances-repr-eq-dataclass.md)
   - [2.3 Properties: Non-Public Attributes and `@property`](mod-2-oop-python/3-properties-non-public-attributes.md)
+  - [2.4 Inheritance and Attribute Lookup](mod-2-oop-python/4-inheritance-attribute-lookup.md)
 
 ## Fullstack & AI-Assisted Development
 
