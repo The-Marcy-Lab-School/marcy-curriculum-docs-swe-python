@@ -56,6 +56,8 @@
 
 ## Master Curriculum Design Document — F26 Transition Year
 
+> **This document is the initial draft of our intentions for F26.** We wrote it before the year began, and we built [the F26 scope and sequence](scope-and-sequence.md) from it. Where the two disagree, the scope and sequence describes what is taught this year and when. Three items in this draft will not happen this year, because the scope and sequence has no session for them and F26 has no Lab block to hold them: the Q1 endgame critique unit (§5 and §8), and the regression hunt and harder salted code review that §7 schedules every two weeks in Q2.
+
 ---
 
 ## Executive Summary
@@ -79,7 +81,7 @@ This merges two source documents: the **Curriculum Transition Plan** (vision, co
 1. The skills framework was originally written against a PERN/JavaScript assumption. All language-specific content needs to be converted to Python/Flask.
 2. The taste-and-discernment progression has been promoted from a sub-note to its own section (§4.1). It is the clearest developmental ladder in the taxonomy, and other skill groups should be calibrated against it rather than assessed as binary have/have-not. As of this revision, debugging has a parallel ladder at §4.2 — §4 as a whole is titled "Developmental Ladders" to hold both.
 3. A build-order queue (§9) has been added to reflect the transition plan's staging constraint.
-4. Quarter labels are consistent throughout: **Q1** = months 0–3, **Q2** = months 3–6, **Q3** = months 6–9, **Q4** = months 9–11 (capstone).
+4. Quarter labels are consistent throughout: **Q1** runs from the start of school to Christmas, **Q2** from New Year to spring break in March, **Q3** from late March to Memorial Day, and **Q4** (capstone) from early June to graduation in August. [The scope and sequence](scope-and-sequence.md) gives the exact dates.
 5. **Revision pass:** Q3 has been restructured from four full-quarter specialization tracks into a rotating systems-module design ("AI-Led Project Building and Exposure to Systems Design"). Technical Interview Prep now threads through Q1–Q3 rather than being absent from the arc. This changes §2, §5 (Q3), §6, §7 (Q1–Q3), §9, and §10 (the DSA-gap risk). Where the restructure resolves or changes a previously flagged risk, that's noted inline rather than silently removed, so the reasoning stays visible.
 6. An Executive Summary has been added above this section as an external-facing framing layer — it argues the case for the shift (the "Juniors-with-AI Paradox" and the Marcy differentiator); Sections 1–10 remain the internal design reference.
 7. **Second revision pass:** added the Debugging Ladder (§4.2), a direct behavioral definition of "ownership without authorship" for Q4 — see the cross-reference there. Also added two open design questions (Group 2's reframe-as-strength question in §3, Group 4's token-cost-as-standing-expense question in §3) and one build item (§9) generalizing the Q3 cost-module funding question into a program-wide policy question.
@@ -104,7 +106,7 @@ The current program is optimized for a different language and a different end go
 
 ## 2. Fellowship Arc
 
-### Q1 (Months 0–3): Computational Thinking & Responsible Use of AI
+### Q1 (Start of School to Christmas): Computational Thinking and Responsible Use of AI
 
 **Python topics:** CLI, Git & GitHub · Python syntax · Python ecosystem (pip, venv, requirements.txt — _confirm this is still the right stack to teach, or whether a modern, more abstracted tool like `uv` now serves the pedagogical goal better_) · OOP (everything is an object)
 
@@ -123,11 +125,11 @@ The current program is optimized for a different language and a different end go
 - How do we deliberately expose fellows to the pain of a poorly designed class, given they won't be hand-writing enough broken ones to feel it by accident at this pace?
 - What's the fast, low-noise way to identify who's struggling with computational fluency during Technical Interview Prep, and what precisely they're struggling with? Willingness to talk through an idea out loud may be a better early signal than correctness.
 
-### Q2 (Months 3–6): Fullstack & AI-Assisted Development
+### Q2 (New Year to Spring Break): Fullstack and AI-Assisted Development
 
 **Format:** Given a list of problems, fellows choose one and build a fullstack solution to it — the first quarter where the problem isn't fully handed to them.
 
-**Topics:** HTML & CSS · APIs · Servers (Flask) and Server-Side Rendering · Databases (Postgres, SQL) · Essential tools and libraries (pandas, itertools, etc.)
+**Topics:** HTML & CSS · APIs · Servers (Flask) and Server-Side Rendering · Databases (Postgres, SQL)
 
 **AI topics:** Model selection and evaluation · What AI is good at and bad at · Token and context window management · Skills and memory · AI-assisted workflow (research → plan → implement → test → refine → iterate)
 
@@ -137,15 +139,15 @@ The current program is optimized for a different language and a different end go
 
 **Design intent:** The mode inverts here — AI moves from tutor to implementer. The failure mode inverts with it (see §3, Group 5).
 
-### Q3 (Months 6–9): AI-Led Project Building and Exposure to Systems Design
+### Q3 (Late March to Memorial Day): AI-Led Project Building and Exposure to Systems Design
 
 **Reframed from a four-track specialization quarter into a systems-exposure quarter.** Fellows no longer commit to one of four tracks for the full quarter. Instead, they're given a functioning full-stack CRUD application and asked to leverage AI to quickly assess options and implement a solution across a rotation of systems constraints:
 
+- **Deployment & environments** — get it running somewhere real, and configure environment variables correctly across environments. This module runs first, so that every later module presents against a running application rather than a local server.
 - **Security** — implement an auth strategy that actually protects the application.
 - **Testing** — add 10 new features without breaking existing functionality.
 - **Cost** — given a fixed budget (e.g. $30 in Anthropic API credits), build a feature that calls the Claude API for recommendations, and refine the approach to minimize cost.
 - **Bottlenecks & sandboxing** — safely execute third-party or untrusted code.
-- **Deployment & environments** — get it running somewhere real, and configure environment variables correctly across environments.
 
 **Goals.** Move from exposure to ideas (in seminar) to tangible experience (in the build). The skill being drilled is the same across all five modules: develop a mental model of the constraint fast enough to make a decision, articulate that decision, communicate it to AI so it can implement it, and communicate it to a stakeholder to validate it.
 
@@ -168,7 +170,7 @@ The current program is optimized for a different language and a different end go
 
 **Design intent.** This still builds ecosystem literacy and the failure catalogue (Group 1) — but now through repeated, tight loops across systems constraints rather than three months embedded in one domain. It also substantially changes the track-equity risk raised in the original design (see §5): a fellow no longer bets a full quarter, and their income, on which track they picked.
 
-### Q4 (Months 9–11): Capstone — Real Stakeholder
+### Q4 (Early June to Graduation in August): Capstone — Real Stakeholder
 
 **Design intent:** The first time requirements are genuinely ambiguous and shifting, because a real stakeholder supplies them. Problem framing (§3, Group 2) becomes the primary load.
 
@@ -439,7 +441,7 @@ This is the concrete, behavioral version of what the Executive Summary names abs
 - **Plausible-wrong detection as a named unit.** Build a Flask/Postgres-specific defect taxonomy fellows can name by sight: hallucinated library methods, silently swallowed exceptions, N+1 queries through an ORM, string-concatenated SQL, mutable default arguments, missing input validation. Naming a defect class is what makes it findable.
 - **Debugging code you didn't write**, explicitly taught. Q2 makes this most of the job and it is currently unlisted.
 - **Scope containment.** A fellow asks for a route handler and gets a restructured blueprint. Accepting that silently is how architecture ownership evaporates.
-- **Security earlier than feels natural.** Flask + Postgres + AI generation reliably produces confidently insecure code. Input validation and secret management belong in Q2, not deferred to the Q3 Cloud track — only a quarter of fellows take that track.
+- **Security earlier than feels natural.** Flask + Postgres + AI generation reliably produces confidently insecure code. Input validation and secret management belong in Q2, and the Q3 Security module, which every fellow takes, hardens what Q2 establishes.
 
 ### Q3 — AI-Led Systems Exposure
 
@@ -600,6 +602,8 @@ A calendar date is the wrong answer. The gate is **prediction accuracy**: a fell
 
 **Differentiate mode, not access, and not pace.** This is the equitable form: evidence-based, individually paced, and it doesn't punish a fellow for arriving with less exposure. It tells us what reps they still need.
 
+**For F26.** Q2 is where every fellow is expected to begin practicing implementer mode. We may not be able to run the individual readiness judgment this section describes in the first year. In its place, each Q2 assignment offers a tutor-mode option and an implementer-mode option, so a fellow who is not yet ready to delegate can still complete the assignment in tutor mode. Q1 assignments have no implementer-mode option.
+
 ### Handling the Q1 AI policy
 
 "Don't generate code" for three months followed by "generate code" is a hard inversion. Two consequences to design around:
@@ -611,6 +615,8 @@ A calendar date is the wrong answer. The gate is **prediction accuracy**: a fell
 ---
 
 ## 9. Build Order for This Year
+
+> This build order is the proposal we made before the year began. We intended to follow it, but it was likely more ambitious than we could manage. It remains a useful record of how we envisioned the year ahead.
 
 The transition plan's constraint is staging. This is the design queue.
 
