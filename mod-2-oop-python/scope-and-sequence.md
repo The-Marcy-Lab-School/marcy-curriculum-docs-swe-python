@@ -38,8 +38,8 @@ reading, assignments, and project carry.
 | 2.3     | Properties: Non-Public Attributes and `@property`   | 8    | 1          | Mon 11/16    |
 | 2.4     | Inheritance and Attribute Lookup                                       | 8    | 3          | Wed 11/18    |
 | 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                   | 8    | 4          | Thu 11/19    |
-| 2.6     | Functions as Values: Callbacks and Higher-Order Functions              | 8    | 5          | Fri 11/20    |
-| 2.7     | Closures and Decorators                                                | 9    | 1          | Mon 11/23    |
+| 2.6     | Functions as Values: Callbacks, Higher-Order Functions, and Closures   | 8    | 5          | Fri 11/20    |
+| 2.7     | Decorators                                                             | 9    | 1          | Mon 11/23    |
 | —       | Case Study                                                             | 9    | 3          | Wed 11/25    |
 | 2.8     | System Design and UML Diagrams                                         | 10   | 1          | Mon 11/30    |
 | 2.9     | System Design Strategies                                               | 10   | 3          | Wed 12/2     |
@@ -104,8 +104,8 @@ class Event:
 ```
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
-jazz = Event('Friday Night Jazz', date(2026, 11, 28), 40, 25)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
+jazz = Event('Friday Night Jazz', date(2026, 11, 28), capacity=40, base_price=25)
 today = date(2026, 11, 25)
 
 print(pottery.can_refund(today))
@@ -160,7 +160,7 @@ class Reservation:
 ```
 
 ```python
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40, 25)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25)
 maya_ticket = Reservation(1001, maya, jazz)
 
 jazz.base_price = 30
@@ -225,7 +225,7 @@ class Event:
 ```
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
 pottery.capacity = 0     # Line A
 pottery._capacity = 0    # Line B
@@ -269,18 +269,19 @@ _By the end of the module:_
 
 _In the session:_
 
-- **Understand · R4** — Given `len()` called on a string, a list, and a dictionary, and three classes that answer the same method name differently, define polymorphism in one sentence that names the caller's ignorance of the type as the benefit.
+- **Understand · R4** — Given `len()` called on a string, a list, and a dictionary, and three classes that define the same method differently, define polymorphism in one sentence that names the caller's ignorance of the type as the benefit.
 - **Apply · R4** — Given a list holding instances of at least two subtypes, write one loop that calls a shared method on every element, with no `isinstance()` and no `type()` in the loop body.
-- **Apply · R4** — Given a function containing an `if isinstance(...)` branch per subtype, refactor it so each subtype answers for itself, and confirm the function's output is unchanged.
+- **Apply · R4** — Given a function containing an `if isinstance(...)` branch per subtype, refactor it so each subtype decides for itself in its own method, and confirm the function's output is unchanged.
 
 _By the end of the module:_
 
 - **Apply · assignment only** — Given a hierarchy, define an abstract base class with at least one `@abstractmethod`, and predict the error raised when a subclass that omits it is instantiated.
 - **Evaluate · R4, D1** — Given a hierarchy, decide whether to enforce its contract with an abstract base class or to document a duck-typed contract, and defend the choice by naming the case in which each one fails.
-- **Analyze · R4** — Given a group of classes meant to be interchangeable, state their shared contract by listing every method name all of them must answer.
+- **Evaluate · R4** — Given a class that does not inherit from a group's superclass, predict whether a loop over the group can use it, and justify the prediction by naming the methods the loop calls, in terms of duck typing.
+- **Analyze · R4** — Given a group of classes meant to be interchangeable, state their shared contract by listing every method name all of them must define.
 - **Testing** — See the 2.5 row of [Testing Objectives](#testing-objectives).
 
-## 2.6 Functions as Values: Callbacks and Higher-Order Functions
+## 2.6 Functions as Values: Callbacks, Higher-Order Functions, and Closures
 
 **Week 8, Day 5 — Friday 11/20**
 
@@ -291,12 +292,13 @@ _In the session:_
 - **Understand · R7** — Given examples including `sorted(items, key=...)`, define a higher-order function in one sentence, and state for each example which of the two conditions it meets.
 - **Apply · R7** — Given a list of objects, use `sorted()` with a `key=` function, written once as a named function and once as a `lambda`, to order the objects by one attribute.
 - **Apply · R5, R7** — Given a list of objects and two different criteria, write one method that takes a function as a parameter and returns only the elements for which it is true, then call that method with both criteria.
+- **Analyze · R7** — Given a function that returns an inner function using one of its parameters, explain which variable the returned function closes over, and why it can still reach that variable after the outer function has returned.
 
 _By the end of the module:_
 
 - **Analyze · R7** — Given a call that passes a function's result, such as `is_sold_out()`, where the function itself, `is_sold_out`, was expected, explain the error Python raises and correct the call.
 
-## 2.7 Closures and Decorators
+## 2.7 Decorators
 
 **Week 9, Day 1 — Monday 11/23**
 
@@ -430,7 +432,7 @@ be read by a fellow, not by an instructor.
     ```
   - **Instantiation** is the act of making an instance by invoking the class name. Python invokes the `__init__` method for you:
     ```py
-    jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+    jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
     ```
   - **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `jazz.can_refund(today)` passes `jazz` in as `self`.
   - A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
@@ -496,26 +498,27 @@ be read by a fellow, not by an instructor.
 
 ## 2.5 Polymorphism, Duck Typing, and Abstract Base Classes — Thu 11/19
 
-- **Polymorphism** is different types of object answering the same request in their own way, so that code making the request does not need to know which type it is holding. `len()` works on a string, a list, and a dictionary, and each type answers in its own way.
-- A **shared interface**, or **contract**, is the set of method names every type in a group promises to answer. It is what makes polymorphism safe.
-- **Duck typing** is Python's habit of caring what an object can do rather than what class it came from. If it answers `ticket_price()`, it can be treated as something with a ticket price.
+- **Polymorphism** is different types of object responding to the same method call in their own way, so that the code making the call does not need to know which type it is holding. `len()` works on a string, a list, and a dictionary, and each type works out its own length.
+- A **shared interface**, or **contract**, is the set of method names every type in a group promises to define. It is what makes polymorphism safe.
+  - **Duck typing** is writing code that relies on the methods an object defines rather than on the class it came from. A loop that calls `ticket_price()` on every item works with any object that defines `ticket_price()`, whether or not its class inherits from `Event`.
 - An **abstract base class (ABC)** is a class that cannot be instantiated and exists to declare the methods its subclasses must provide.
-- **`@abstractmethod`** marks a method a subclass is required to define. A subclass that forgets one raises `TypeError` the moment anything tries to instantiate it, rather than failing later at the call site.
-- A **concrete class** is a class you can actually instantiate, because every abstract method has been defined.
+  - **`@abstractmethod`** marks a method a subclass is required to define. A subclass that forgets one raises `TypeError` the moment anything tries to instantiate it, rather than failing later at the call site.
+  - A **concrete class** is a class you can actually instantiate, because every abstract method has been defined.
 
-## 2.6 Functions as Values: Callbacks and Higher-Order Functions — Fri 11/20
+## 2.6 Functions as Values: Callbacks, Higher-Order Functions, and Closures — Fri 11/20
 
-- A **first-class function** is a function treated as a value: assigned to a variable, stored in a list, passed as an argument, or returned from another function. Python functions are first class.
-- A **higher-order function** is a function that takes a function as an argument, returns a function, or both. `sorted(events, key=...)` is one: it takes a function that tells it what to sort by.
-- A **callback** is a function passed into another function so that it can be called later, at the moment the receiving function decides.
+- A function treated as a value is considered "**first-class**": Python functions are first class because they can be assigned to a variable, stored in a list, passed as an argument, or returned from another function.
+- A **higher-order function** is a function that takes a function as an argument, returns a function, or both. `sorted(events, key=...)` is one: it takes a function in its `key` parameter that tells it how to sort the values in the given list.
+- A function passed into another function so that it can be called later, at the moment the receiving function decides, is called a **callback**.
+  - A function that takes one value and returns `True` or `False`, such as a function that tells `find_events()` whether one event matches, is called a **predicate**.
 - A **`lambda`** is a function written in one expression without a name, such as `lambda event: event.date`. It is most often written directly where a callback is expected.
+- A **closure** is formed when an inner function refers to a variable from the function that enclosed it. The inner function keeps access to that variable after the outer function has returned.
 
-## 2.7 Closures and Decorators — Mon 11/23
+## 2.7 Decorators — Mon 11/23
 
-- A **closure** is formed when an inner function refers to a variable from the function that enclosed it. The inner function keeps access to that variable after the outer function has returned, which is how a decorator remembers the function it wrapped.
 - A **decorator** is a higher-order function that takes a function, wraps it in another function, and returns the wrapper. The wrapper can run code before and after the original.
-- The **`@` syntax** applies a decorator: writing `@requires_paid` above a method is the same as reassigning the method to the decorator's result.
-- A **wrapper** is the inner function a decorator returns. It is what gets called in place of the original function.
+  - A **wrapper** is the inner function a decorator returns. It is what gets called in place of the original function.
+  - The **`@` syntax** applies a decorator: writing `@requires_paid` above a method is the same as reassigning the method to the decorator's result.
 - A **decorator factory** is a function that takes an argument and builds a decorator from it. `@requires_status("paid")` first calls `requires_status("paid")`, which returns a decorator, and then applies that decorator to the method. `@app.route("/")` in Flask works the same way.
 
 ## Case Study — Wed 11/25

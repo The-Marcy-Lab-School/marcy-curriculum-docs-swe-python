@@ -73,17 +73,17 @@ A `Reservation` that holds an `Attendee` and an `Event` brings these ideas toget
 
 ## Part 2: Families of Objects (2.4–2.7)
 
-Concerts, workshops, and screenings are alike in most ways and different in a few, such as price and refund rule. Written in the Mod 1 style, every function would branch with `if`/`elif` on the kind of event, and adding a new kind of event would mean editing every one of those functions. This part lets each kind of event answer for itself.
+Concerts, workshops, and screenings are alike in most ways and different in a few, such as price and refund rule. Written with `isinstance()` checks, every function that handles events branches on the kind of event, and adding a new kind of event means editing every one of those functions. This part lets each kind of event decide for itself.
 
 **2.4 Inheritance.** An `Event` superclass holds what is shared, and subclasses override what differs. `super().__init__()` runs the parent's setup. When code reads an attribute or calls a method, Python looks on the instance first, then on its class, then on the parent class, and uses the first one it finds. That search is how a subclass's version of a method replaces the parent's. A class attribute belongs to the class rather than to one instance, so it holds a value every instance shares, such as a concert's service fee, and the same search is how an instance finds it.
 
 **2.5 Polymorphism.** `len()` already works on a string, a list, and a dictionary, and a `for` loop works over all three: each type answers the same request in its own way. That is polymorphism, and your own classes can do it too. One loop asks every event in a mixed list for its price, with no `isinstance()` check. The loop works because the same method names can be accessed through every kind of event, and that list of names is the **contract**. Writing the contract down is the first time you record an agreement between pieces of code, which makes it a small specification.
 
-Decorators are built from two earlier ideas, functions as values and closures, so they take two lessons.
+Decorators are built from functions as values and closures, so they take two lessons: 2.6 teaches both ideas, and 2.7 builds decorators from them.
 
-**2.6 Functions as Values.** Functions are values: they can be stored, passed to another function, and returned from one. A higher-order function takes or returns a function, as `sorted(events, key=...)` does, and a `lambda` writes a short function directly where one is expected.
+**2.6 Functions as Values.** Functions are values: they can be stored, passed to another function, and returned from one. A higher-order function takes or returns a function, as `sorted(events, key=...)` does, and a `lambda` writes a short function directly where one is expected. A function can also build a new function and hand it back, such as a test for whichever month the staff ask about. The inner function keeps access to the variables of the function around it, such as that month, which makes it a **closure**.
 
-**2.7 Closures and Decorators.** A closure is an inner function that keeps access to the variables of the function around it, and a decorator uses a closure to wrap one function in another.
+**2.7 Decorators.** A decorator is a function that takes a function and returns a closure that wraps it, so code can run before and after the original without editing it.
 
 A decorator is a **reusable refusal**. A reservation may only be checked in once it is paid, so `check_in()` should refuse to run from any other status. Without a decorator, every method that requires a status repeats the same check, and forgetting it in one method lets an invalid change through. You write one decorator per status, named for the rule it enforces, such as `@requires_paid` above `check_in()`.
 
