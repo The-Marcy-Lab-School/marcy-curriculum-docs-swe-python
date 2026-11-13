@@ -8,14 +8,14 @@ The three breaks fall on the quarter boundaries. Q1 ends on Friday, December 18 
 
 Breaks: winter recess December 21 to January 4, spring break March 22 to 26, summer office closure May 31 to June 4.
 
-Holidays assumed off and removed from the counts below: Indigenous Peoples' Day (October 12), Veterans Day (November 11), Thanksgiving (November 26), MLK Day (January 18), Presidents' Day (February 15), and Independence Day observed (July 5). The Wednesday before Thanksgiving is a teaching day.
+Holidays assumed off and removed from the counts below: Indigenous Peoples' Day (October 12), Veterans Day (November 11), Thanksgiving (November 26), MLK Day (January 18), Presidents' Day (February 15), Juneteenth observed (June 18), and Independence Day observed (July 5). The Wednesday before Thanksgiving is a teaching day.
 
 | Quarter                                             | Dates             | Weeks | Sessions |
 | --------------------------------------------------- | ----------------- | ----- | -------- |
 | Q1 Computational Thinking and Responsible Use of AI | Sept 28 to Dec 18 | 12    | 45       |
 | Q2 Fullstack and AI-Assisted Development            | Jan 6 to Mar 19   | 11    | 41       |
 | Q3 AI-Led Project Building and Systems Design       | Mar 29 to May 28  | 9     | 36       |
-| Q4 Capstone                                         | Jun 7 to Aug 27   | 12    | 47       |
+| Q4 Capstone                                         | Jun 7 to Aug 27   | 12    | 46       |
 
 ## Q1: Computational Thinking and Responsible Use of AI
 
@@ -141,7 +141,7 @@ Q3 has no slack. Thirty-six sessions of demand sit in thirty-six sessions of sup
 
 ## Q4: Capstone
 
-June 7 to August 27, forty-seven sessions across twelve weeks, for a real stakeholder. The stakeholder requirement translation assessment runs in the first two weeks; the handoff test, cold-context handoff, and full-cycle review run in the final week.
+June 7 to August 27, forty-six sessions across twelve weeks, for a real stakeholder. The stakeholder requirement translation assessment runs in the first two weeks; the handoff test, cold-context handoff, and full-cycle review run in the final week.
 
 ## Decisions this schedule depends on
 
