@@ -4,9 +4,8 @@
 
 - [Key Terms](#key-terms)
 - [Asking Which Kind of Event](#asking-which-kind-of-event)
-- [Letting Each Kind of Event Decide](#letting-each-kind-of-event-decide)
-  - [Challenge: A Refund Deadline Without `isinstance()`](#challenge-a-refund-deadline-without-isinstance)
-- [Writing Down the Contract](#writing-down-the-contract)
+  - [Letting Each Kind of Event Decide](#letting-each-kind-of-event-decide)
+  - [Challenge: Library Loans Without `isinstance()`](#challenge-library-loans-without-isinstance)
 - [Duck Typing](#duck-typing)
 - [Abstract Base Classes](#abstract-base-classes)
 - [Abstract Base Class or Duck Typing?](#abstract-base-class-or-duck-typing)
@@ -86,12 +85,13 @@ def can_refund(event, today):
         # Can be refunded up to 2 days before
         return today <= event.date - timedelta(days=2)
     else:
+        # All other events cannot be refunded
         return False
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
-pottery = Workshop('Intro to Pottery', date(2026, 12, 9), 12, 15, 10)
-coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 8)
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 
 # today is 4 days before the concert, 8 before the workshop
 today = date(2026, 12, 1)
@@ -118,7 +118,7 @@ for event in [jazz, pottery, coco]:
 class Tour(Event):
     BOOKING_FEE = 3
 
-harbor = Tour('Harbor History Walk', date(2026, 12, 12), 15, 20)
+harbor = Tour('Harbor History Walk', date(2026, 12, 12), capacity=15, base_price=20)
 print(ticket_price(harbor))
 print(can_refund(harbor, date(2026, 12, 1)))
 ```
@@ -136,9 +136,17 @@ Nothing crashes, so the venue undercharges every tour and turns away every tour 
 
 </details>
 
-Each kind of event is already a class, so each class can hold its own version of each rule. Then the menu can call `event.ticket_price()` on any event and get the right answer without asking which kind of event it has. Code that calls the same method on different kinds of object, and gets each kind's own answer, is called **polymorphism**. The rest of this chapter builds on it: writing down which methods every kind of event must provide, using objects that share no parent class, and making Python refuse a kind of event that leaves a method out.
+Each kind of event is already a class, so each class can hold its own version of each rule. Then the menu can call `event.ticket_price()` on any event and get the right answer without asking which kind of event it has.
 
-## Letting Each Kind of Event Decide
+Code that calls the same method on different kinds of object, and gets each kind's own answer, is called **polymorphism**.
+
+The rest of this chapter builds on the idea of polymorphism:
+
+- Using objects that share no parent class
+- Writing down which methods every kind of event must provide
+- Making Python refuse a kind of event that leaves a method out.
+
+### Letting Each Kind of Event Decide
 
 **The Problem:** The `ticket_price()` and `can_refund()` functions ask every event which kind it is, so every new kind of event needs a new branch in every function, and a missed branch gives a wrong answer without an error.
 
@@ -160,9 +168,11 @@ class Event:
         self.capacity = capacity
         self.base_price = base_price
 
+    # Standard pricing for all events unless overridden
     def ticket_price(self):
         return self.base_price
 
+    # Standard refund policy for all events unless overridden
     def can_refund(self, today):
         return today < self.date
 
@@ -198,24 +208,42 @@ class Screening(Event):
         return False
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
-pottery = Workshop('Intro to Pottery', date(2026, 12, 9), 12, 15, 10)
-coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 8)
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 events = [jazz, pottery, coco]
 
+# today is 4 days before the concert, 8 before the workshop
+today = date(2026, 12, 1)
+
 for event in events:
-    print(f'{event.name}: ${event.ticket_price()}')
+    price = event.ticket_price()
+    marker = ' (refundable)' if event.can_refund(today) else ''
+    print(f'{event.name}: ${price}{marker}')
 # Friday Night Jazz: $30
-# Intro to Pottery: $25
+# Intro to Pottery: $25 (refundable)
 # Movie Night: Coco: $8
 
 print(len('Coco'), len(['A1', 'A2']), len({'jazz': 30}))   # 4 2 1
 ```
 
 {% hint style="warning" %}
-**Predict, then run.** The venue adds guided tours again: the base price plus a $3 booking fee, refundable until the day before. This time `Tour` defines its own `ticket_price()` and receives `Event`'s `can_refund()`. What does the loop print?
+**Predict, then run.** The venue adds guided tours again: the base price plus a $3 booking fee, refundable until the day before. This time `Tour` defines its own `ticket_price()` and reuses `Event`'s `can_refund()`. What does the loop print?
 
 ```python
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    def ticket_price(self):
+        return self.base_price
+
+    def can_refund(self, today):
+        return today < self.date
+
 class Tour(Event):
     BOOKING_FEE = 3
 
@@ -223,10 +251,9 @@ class Tour(Event):
         return super().ticket_price() + Tour.BOOKING_FEE
 
 
-harbor = Tour('Harbor History Walk', date(2026, 12, 12), 15, 20)
+harbor = Tour('Harbor History Walk', date(2026, 12, 12), capacity=15, base_price=20)
 events.append(harbor)
 
-today = date(2026, 12, 1)
 for event in events:
     price = event.ticket_price()
     marker = ' (refundable)' if event.can_refund(today) else ''
@@ -245,7 +272,6 @@ Harbor History Walk: $23 (refundable)
 - The loop is the same for every event. Each call runs the version of the method defined on that event's own class.
 - `harbor.ticket_price()` runs `Tour`'s version: `Event`'s base price, `20`, plus the booking fee, `3`.
 - `harbor.can_refund(today)` runs `Event`'s version, because `Tour` does not override it, and December 1 comes before December 12.
-- Friday Night Jazz is not refundable, because its refunds closed on November 28.
 
 Adding tours took one new class. The loop did not change.
 
@@ -285,76 +311,6 @@ for car in cars:
 
 </details>
 
-### Challenge: A Refund Deadline Without `isinstance()`
-
-The refund desk prints the last day each ticket can be refunded, using this function:
-
-```python
-board_games = Event('Board Game Night', date(2026, 12, 18), 25, 5)
-
-
-def refund_deadline(event):
-    if isinstance(event, Concert):
-        return event.date - timedelta(days=7)
-    elif isinstance(event, Workshop):
-        return event.date - timedelta(days=2)
-    elif isinstance(event, Screening):
-        return None
-    else:
-        return event.date - timedelta(days=1)
-
-
-for event in [jazz, pottery, coco, board_games]:
-    print(f'{event.name}: {refund_deadline(event)}')
-# Friday Night Jazz: 2026-11-28
-# Intro to Pottery: 2026-12-07
-# Movie Night: Coco: None
-# Board Game Night: 2026-12-17
-```
-
-Refactor it so that each kind of event works out its own deadline. Give `Event` and each subclass that needs one a `refund_deadline()` method, delete the function, and change the loop to call `event.refund_deadline()`. The loop must print the same four lines as before.
-
-**<details><summary>Solution</summary>**
-
-```python
-class Event:
-    # ... __init__, ticket_price(), and can_refund() from above ...
-
-    def refund_deadline(self):
-        return self.date - timedelta(days=1)
-
-
-class Concert(Event):
-    # ... __init__, ticket_price(), and can_refund() from above ...
-
-    def refund_deadline(self):
-        return self.date - timedelta(days=7)
-
-
-class Workshop(Event):
-    # ... __init__, ticket_price(), and can_refund() from above ...
-
-    def refund_deadline(self):
-        return self.date - timedelta(days=2)
-
-
-class Screening(Event):
-    # ... can_refund() from above ...
-
-    def refund_deadline(self):
-        return None
-
-
-for event in [jazz, pottery, coco, board_games]:
-    print(f'{event.name}: {event.refund_deadline()}')
-```
-
-- Each branch of the old function becomes the `refund_deadline()` method of the class it checked for.
-- The `else` branch becomes `Event`'s version, so a plain event, and any future kind of event that does not override the method, gets the day before.
-- The loop no longer mentions any kind of event, and it prints the same four lines.
-
-</details>
-
 {% hint style="warning" %}
 **Check for understanding.** Open `src/menu.py` in the case study and find `print_events()`. It prints each event's price with `event.ticket_price()`. Which kinds of event can be in the list it loops over, and how does the loop work out which kind's price to print? What would have to change in `print_events()` if the venue added a `Tour` subclass with its own `ticket_price()`?
 
@@ -367,50 +323,136 @@ for event in [jazz, pottery, coco, board_games]:
 </details>
 {% endhint %}
 
-## Writing Down the Contract
+### Challenge: Library Loans Without `isinstance()`
 
-**The Problem:** The menu calls `ticket_price()` on every event, and the refund desk calls `can_refund(today)`. A new kind of event works with that code only if it provides both methods, and nothing in the code says so. A subclass whose author forgets to override `ticket_price()` does not crash: it charges `Event`'s base price, and the mistake shows up only as wrong prices.
-
-**New Concepts:**
-
-- A **contract**, also called a **shared interface**, is the set of method names every type in a group promises to define, so that code using the group can call them on any member.
-- The contract for the venue's events is two methods: `ticket_price()` and `can_refund(today)`.
-- Writing the contract down, in the design document or in a comment above the base class, is the first time a program records an agreement between pieces of code. That makes it a small specification.
-- Inheritance gives every subclass a version of every method, so a subclass that forgets an override still has one: the parent's version, which may be wrong for it.
-
-**Code:**
+A library lends three kinds of item. A book can be borrowed for 21 days and costs $1 for each day it is late. A DVD can be borrowed for 7 days and costs $3 for each day it is late. A magazine can be borrowed for 14 days and has no late fee. The library's program writes these rules in two functions outside the classes:
 
 ```python
-# Contract: every kind of event defines
-#   ticket_price()      the price of one ticket
-#   can_refund(today)   whether a ticket can still be refunded on that day
-
-class MidnightConcert(Event):
-    # Meant to charge the $5 service fee, but its author forgot ticket_price()
-    def __init__(self, name, date, capacity, base_price, performer):
-        super().__init__(name, date, capacity, base_price)
-        self.performer = performer
+class LibraryItem:
+    def __init__(self, title):
+        self.title = title
 
 
-late_set = MidnightConcert('Midnight Set', date(2026, 12, 19), 40, 25, 'Lena Ortiz')
-print(late_set.ticket_price())   # 25, not 30: Event's version, with no service fee
+class Book(LibraryItem):
+    pass
+
+
+class DVD(LibraryItem):
+    pass
+
+
+class Magazine(LibraryItem):
+    pass
+
+
+# One branch for each kind of item
+def loan_days(item):
+    if isinstance(item, Book):
+        return 21
+    elif isinstance(item, DVD):
+        return 7
+    else:
+        return 14
+
+
+# One branch for each kind of item
+def late_fee(item, days_late):
+    if isinstance(item, Book):
+        # $1 a day
+        return days_late
+    elif isinstance(item, DVD):
+        # $3 a day
+        return days_late * 3
+    else:
+        # No late fee
+        return 0
+
+
+shelf = [Book('Kindred'), DVD('Spirited Away'), Magazine('National Geographic')]
+
+for item in shelf:
+    days = loan_days(item)
+    fee = late_fee(item, 4)
+    print(f'{item.title}: {days}-day loan, ${fee} if 4 days late')
+# Kindred: 21-day loan, $4 if 4 days late
+# Spirited Away: 7-day loan, $12 if 4 days late
+# National Geographic: 14-day loan, $0 if 4 days late
 ```
 
-{% hint style="warning" %}
-**Check for understanding.** Open `DESIGN.md` in the case study and find the shared contract in section 5. Which method names does it list? Then search the `src` folder for each one, skipping `events.py` and `events_abc.py`, and name every place in the application that calls it.
+Refactor the program so that each kind of item decides its own loan period and late fee.
 
-<details><summary>Answer</summary>
+Then, Add an `Audiobook` class without changing the loop, and add `Audiobook('Born a Crime')` to the shelf.
 
-- The contract lists `ticket_price()` and `can_refund(today)`.
-- `ticket_price()` is called in two places:
-  - `print_events()` in `src/menu.py`, which prints every event's price;
-  - `Reservation.__init__()` in `src/reservation.py`, which copies the price when a ticket is booked.
-- `can_refund(today)` is called in `Venue.refund()` in `src/venue.py`, which refuses a refund once the window has closed.
+**<details><summary>Need a hint?</summary>**
 
-Each of those calls works on any kind of event only because every kind of event defines both methods. A new kind of event has to keep the contract, or one of those three places gives a wrong answer.
+1. Move the rules into two methods, `loan_days()` and `late_fee(days_late)`, and delete the two functions.
+2. Change the loop to call the methods. It should print the same three lines.
+3. The library starts lending audiobooks, which can be borrowed for 14 days and cost $1 for each day they are late. Add an `Audiobook` class without changing the loop, and add `Audiobook('Born a Crime')` to the shelf.
+
+```
+Kindred: 21-day loan, $4 if 4 days late
+Spirited Away: 7-day loan, $12 if 4 days late
+National Geographic: 14-day loan, $0 if 4 days late
+Born a Crime: 14-day loan, $4 if 4 days late
+```
 
 </details>
-{% endhint %}
+
+**<details><summary>Solution</summary>**
+
+```python
+class LibraryItem:
+    def __init__(self, title):
+        self.title = title
+
+    # Standard loan period for all items unless overridden
+    def loan_days(self):
+        return 14
+
+    # Standard late fee for all items unless overridden
+    def late_fee(self, days_late):
+        return 0
+
+
+class Book(LibraryItem):
+    def loan_days(self):
+        return 21
+
+    def late_fee(self, days_late):
+        return days_late
+
+
+class DVD(LibraryItem):
+    def loan_days(self):
+        return 7
+
+    def late_fee(self, days_late):
+        return days_late * 3
+
+
+class Magazine(LibraryItem):
+    pass
+
+
+class Audiobook(LibraryItem):
+    def late_fee(self, days_late):
+        return days_late
+
+
+shelf = [Book('Kindred'), DVD('Spirited Away'), Magazine('National Geographic'), Audiobook('Born a Crime')]
+
+for item in shelf:
+    days = item.loan_days()
+    fee = item.late_fee(4)
+    print(f'{item.title}: {days}-day loan, ${fee} if 4 days late')
+```
+
+- Each `isinstance()` branch becomes a method on the class that the branch named, so the `Book` branches become `Book`'s methods and the `DVD` branches become `DVD`'s.
+- The `else` branches become `LibraryItem`'s versions. `Magazine` defines no methods, because attribute lookup finds `LibraryItem`'s versions for it.
+- The loop calls `item.loan_days()` and `item.late_fee(4)` without asking which kind of item it holds.
+- Adding audiobooks took one new class and no change to the loop. `Audiobook` overrides only `late_fee()` and receives the 14-day loan from `LibraryItem`.
+
+</details>
 
 ## Duck Typing
 
@@ -455,47 +497,68 @@ class MuseumTour:
     def ticket_price(self):
         return self.price
 
+    def can_refund(self, today):
+        return today < self.date
 
-gallery = MuseumTour('Gallery After Dark', date(2026, 12, 11), 12)
+
+gallery = MuseumTour('Gallery After Dark', date(2026, 12, 11), price=12)
 menu = [jazz, coco, gallery]
 
-# Checking the class: the museum tour is skipped, even though it has ticket_price()
+# Checking the class: the museum tour is skipped, even though it has both methods
 for item in menu:
     if isinstance(item, Event):
-        print(f'{item.name}: ${item.ticket_price()}')
+        price = item.ticket_price()
+        marker = ' (refundable)' if item.can_refund(today) else ''
+        print(f'{item.name}: ${price}{marker}')
 # Friday Night Jazz: $30
 # Movie Night: Coco: $8
 
-# Duck typing: every item that has ticket_price() works
+# Duck typing: every item that has both methods works
 for item in menu:
-    print(f'{item.name}: ${item.ticket_price()}')
+    price = item.ticket_price()
+    marker = ' (refundable)' if item.can_refund(today) else ''
+    print(f'{item.name}: ${price}{marker}')
 # Friday Night Jazz: $30
 # Movie Night: Coco: $8
-# Gallery After Dark: $12
+# Gallery After Dark: $12 (refundable)
 ```
 
 {% hint style="warning" %}
-**Predict, then run.** The refund desk loops over the same menu. What does this print?
+**Predict, then run.** A second partner, a botanical garden, sends its own class, `GardenTour`. It defines `ticket_price()` but not `can_refund()`. What does the menu loop print?
 
 ```python
-today = date(2026, 12, 1)
-for event in menu:
-    print(event.name, event.can_refund(today))
+class GardenTour:
+    def __init__(self, name, date, price):
+        self.name = name
+        self.date = date
+        self.price = price
+
+    def ticket_price(self):
+        return self.price
+
+
+lanterns = GardenTour('Lantern Walk', date(2026, 12, 14), price=10)
+menu = [jazz, gallery, lanterns, coco]
+
+for item in menu:
+    price = item.ticket_price()
+    marker = ' (refundable)' if item.can_refund(today) else ''
+    print(f'{item.name}: ${price}{marker}')
 ```
 
 <details><summary>What actually happens</summary>
 
 ```
-Friday Night Jazz False
-Movie Night: Coco False
-AttributeError: 'MuseumTour' object has no attribute 'can_refund'
+Friday Night Jazz: $30
+Gallery After Dark: $12 (refundable)
+AttributeError: 'GardenTour' object has no attribute 'can_refund'
 ```
 
-- The first two events are a `Concert` and a `Screening`, and both define `can_refund()`.
-- `MuseumTour` defines `ticket_price()` but not `can_refund()`, so it keeps half of the contract.
-- Python does not check the contract when `gallery` is created. The missing method is found only when the refund loop calls it, and the program stops there.
+- The concert and the museum tour both define `ticket_price()` and `can_refund()`, so their lines print.
+- `lanterns.ticket_price()` returns `10`, but `GardenTour` has no `can_refund()`, so the next line raises `AttributeError` before the walk's line is printed.
+- Python does not check which methods `lanterns` has when it is created. The missing method is found only when the loop calls it, and the program stops there, so the screening is never listed.
 
-The menu loop worked, so the gap stayed hidden until the refund desk ran.
+Creating `lanterns` raised no error, so the gap stayed hidden until the menu reached it.
 
 </details>
 {% endhint %}
@@ -531,10 +594,18 @@ It does not use inheritance: `Dog` and `Cat` share no parent class apart from `o
 
 ## Abstract Base Classes
 
-**The Problem:** A missing method is found only when something calls it. `MuseumTour`'s missing `can_refund()` stayed hidden until the refund desk ran, and a subclass of `Event` that forgets an override inherits the wrong rule without any error. The contract needs to be checked when an object is created, not when one of its methods is called.
+**The Problem:** The menu calls `ticket_price()` and `can_refund(today)` on every event. A kind of event works with the menu only if it defines both methods, but nothing in the code says so, and nothing checks it. A missing method goes unnoticed in two ways:
+
+- `GardenTour`, which does not inherit from `Event`, has no `can_refund()`, and the gap stayed hidden until the menu loop reached it.
+- A subclass of `Event` whose author forgets an override does not crash. It still has the method, because it inherits `Event`'s version, and it gives a wrong answer without any error.
+
+The program needs to state which methods every kind of event must define, and to check them when an object is created rather than when one of its methods is called.
 
 **New Concepts:**
 
+- A **contract**, also called a **shared interface**, is the set of method names every type in a group promises to define, so that code using the group can call them on any member. The contract for the venue's events is two methods: `ticket_price()` and `can_refund(today)`.
+- Writing the contract down, in the design document or in a comment above the base class, records an agreement between pieces of code. A comment cannot enforce the agreement, though: a subclass that breaks it still runs.
+- Inheritance gives every subclass a version of every method, so a subclass that forgets an override still has one: the parent's version, which may be wrong for it.
 - An **abstract base class (ABC)** is a class that cannot be instantiated and exists to declare the methods its subclasses must provide. It inherits from `ABC`, which comes from the standard library's `abc` module.
 - **`@abstractmethod`** marks a method every subclass must define. A subclass that leaves one out raises `TypeError` the moment anything tries to instantiate it.
 - A **concrete class** is a class you can instantiate, because it defines every abstract method.
@@ -543,10 +614,29 @@ It does not use inheritance: `Dog` and `Cat` share no parent class apart from `o
 
 **Code:**
 
+Without an abstract base class, using the `Event` from Letting Each Kind of Event Decide, a subclass that forgets an override is created and used without complaint:
+
+```python
+class MidnightConcert(Event):
+    # Meant to charge the $5 service fee, but its author forgot ticket_price()
+    def __init__(self, name, date, capacity, base_price, performer):
+        super().__init__(name, date, capacity, base_price)
+        self.performer = performer
+
+
+late_set = MidnightConcert('Midnight Set', date(2026, 12, 19), capacity=40, base_price=25, performer='Lena Ortiz')
+print(late_set.ticket_price())   # 25, not 30: Event's version, with no service fee
+```
+
+With an abstract base class, the contract is written as code, and Python checks it whenever an object is created:
+
 ```python
 from abc import ABC, abstractmethod
 
 
+# Contract: every kind of event defines
+#   ticket_price()      the price of one ticket
+#   can_refund(today)   whether a ticket can still be refunded on that day
 class Event(ABC):
     def __init__(self, name, date, capacity, base_price):
         self.name = name
@@ -583,13 +673,13 @@ class Festival(Event):
         return super().ticket_price()
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())   # 30: Concert defines both methods, so it is a concrete class
 
-Festival('Summer Festival', date(2026, 12, 10), 500, 40)
+Festival('Summer Festival', date(2026, 12, 10), capacity=500, base_price=40)
 # TypeError: Can't instantiate abstract class Festival without an implementation for abstract method 'can_refund'
 
-Event('Open Mic', date(2026, 12, 10), 20, 0)
+Event('Open Mic', date(2026, 12, 10), capacity=20, base_price=0)
 # TypeError: Can't instantiate abstract class Event without an implementation for abstract methods 'can_refund', 'ticket_price'
 ```
 
@@ -626,6 +716,22 @@ classDiagram
 ```
 
 {% hint style="warning" %}
+**Check for understanding.** Open `DESIGN.md` in the case study and find the shared contract in section 5. Which method names does it list? Then search the `src` folder for each one, skipping `events.py` and `events_abc.py`, and name every place in the application that calls it.
+
+<details><summary>Answer</summary>
+
+- The contract lists `ticket_price()` and `can_refund(today)`.
+- `ticket_price()` is called in two places:
+  - `print_events()` in `src/menu.py`, which prints every event's price;
+  - `Reservation.__init__()` in `src/reservation.py`, which copies the price when a ticket is booked.
+- `can_refund(today)` is called in `Venue.refund()` in `src/venue.py`, which refuses a refund once the window has closed.
+
+Each of those calls works on any kind of event only because every kind of event defines both methods. A new kind of event has to keep the contract, or one of those three places gives a wrong answer.
+
+</details>
+{% endhint %}
+
+{% hint style="warning" %}
 **Predict, then run.** With `Event` as an abstract base class, a screening is written the way it was before, defining only `can_refund()`. What happens when the program creates one?
 
 ```python
@@ -634,7 +740,7 @@ class Screening(Event):
         return False
 
 
-coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 8)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 ```
 
 <details><summary>What actually happens</summary>
@@ -658,7 +764,7 @@ TypeError: Can't instantiate abstract class Screening without an implementation 
 - In `events_abc.py`, `ticket_price()` is marked `@abstractmethod` on `Event`, so every subclass must define it. Without the one-line method, creating a screening would raise `TypeError`.
 - In `events.py`, `Event.ticket_price()` is an ordinary method, so `Screening` receives it and does not need its own.
 - Running the file prints `Python refused to create a Festival: Can't instantiate abstract class Festival without an implementation for abstract method 'can_refund'`.
-- The line `Festival('Summer Festival', date.today(), 500, 40)` causes it. `Festival` defines `ticket_price()` but not `can_refund()`, so Python refuses to create one, and the `except TypeError` block prints the message.
+- The line `Festival('Summer Festival', date.today(), capacity=500, base_price=40)` causes it. `Festival` defines `ticket_price()` but not `can_refund()`, so Python refuses to create one, and the `except TypeError` block prints the message.
 
 </details>
 {% endhint %}
@@ -676,23 +782,23 @@ TypeError: Can't instantiate abstract class Screening without an implementation 
 **Code:**
 
 ```python
-gallery = MuseumTour('Gallery After Dark', date(2026, 12, 11), 12)
+gallery = MuseumTour('Gallery After Dark', date(2026, 12, 11), price=12)
 print(gallery.ticket_price())   # 12: duck typing accepts any class that defines the method
 
-Festival('Summer Festival', date(2026, 12, 10), 500, 40)
+Festival('Summer Festival', date(2026, 12, 10), capacity=500, base_price=40)
 # TypeError: the abstract base class refuses an incomplete subclass before it is used
 ```
 
 {% hint style="warning" %}
 **Check for understanding.** For each situation, decide whether to enforce the contract with an abstract base class or to document a duck-typed contract, and defend the choice by naming the case in which the other option fails.
 
-1. The venue's own team adds a new kind of event every few months. A kind of event that forgot `can_refund()` would crash the refund desk on its first refund request.
-2. The venue's menu must also list tours from three partner museums. Each museum wrote its own tour class, and each class defines `ticket_price()`.
+1. The venue's own team adds a new kind of event every few months. A kind of event that forgot `can_refund()` would crash the menu the first time the menu listed one.
+2. The venue's menu must also list tours from three partner museums. Each museum wrote its own tour class, and each class defines `ticket_price()` and `can_refund(today)`.
 
 <details><summary>Answers</summary>
 
-1. **Abstract base class.** Every kind of event is a subclass the venue's team writes, so each one can inherit from an abstract `Event`, and a kind that forgets `can_refund()` is refused the first time anyone creates one, long before a refund request. A duck-typed contract would fail here, because the missing method would be found only when the refund desk called it.
-2. **A documented duck-typed contract.** The venue cannot make the museums' classes inherit from its `Event`, but the menu only needs `ticket_price()`, so writing that requirement down for the museums is enough. An abstract base class would fail here, because classes that do not inherit from it are never checked against it.
+1. **Abstract base class.** Every kind of event is a subclass the venue's team writes, so each one can inherit from an abstract `Event`, and a kind that forgets `can_refund()` is refused on the line that creates it. A duck-typed contract would fail here, because the missing method would be found only when the menu called it, partway through printing the menu.
+2. **A documented duck-typed contract.** The venue cannot make the museums' classes inherit from its `Event`, but the menu only needs `ticket_price()` and `can_refund(today)`, so writing those two requirements down for the museums is enough. An abstract base class would fail here, because classes that do not inherit from it are never checked against it.
 
 </details>
 {% endhint %}
@@ -740,7 +846,7 @@ from events import Concert, Event
 
 def test_an_event_itself_cannot_be_created():
     with pytest.raises(TypeError):
-        Event('Open Mic', date(2026, 12, 10), 20, 0)
+        Event('Open Mic', date(2026, 12, 10), capacity=20, base_price=0)
 
 
 def test_a_kind_of_event_missing_can_refund_cannot_be_created():
@@ -749,11 +855,11 @@ def test_a_kind_of_event_missing_can_refund_cannot_be_created():
             return super().ticket_price()
 
     with pytest.raises(TypeError):
-        Festival('Summer Festival', date(2026, 12, 10), 500, 40)
+        Festival('Summer Festival', date(2026, 12, 10), capacity=500, base_price=40)
 
 
 def test_a_complete_kind_of_event_can_be_created():
-    jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+    jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
     assert jazz.ticket_price() == 30
 ```
@@ -843,6 +949,6 @@ fest.ticket_price()
 - **Stub:** one paragraph, as in earlier chapters. It covers five things:
   - code that asks which kind of object it holds, with `isinstance()` and `if`/`elif`, needs a new branch for every new kind, and a missed branch gives a wrong answer without an error;
   - polymorphism lets each class define its own version of a method, so one loop calls `event.ticket_price()` on any event and gets that kind's answer;
-  - the contract is the list of method names every type in the group must define, and writing it down records an agreement between pieces of code;
   - duck typing needs no shared parent class, but a missing method is found only when it is called;
+  - the contract is the list of method names every type in the group must define, and writing it down records an agreement between pieces of code;
   - an abstract base class with `@abstractmethod` refuses an incomplete subclass when it is created, and a test with `pytest.raises(TypeError)` protects that refusal.

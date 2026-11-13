@@ -61,6 +61,8 @@
   - [2.2 Composition, `__repr__`, `__eq__`, and `@dataclass`](mod-2-oop-python/2-instances-repr-eq-dataclass.md)
   - [2.3 Properties: Non-Public Attributes and `@property`](mod-2-oop-python/3-properties-non-public-attributes.md)
   - [2.4 Inheritance and Attribute Lookup](mod-2-oop-python/4-inheritance-attribute-lookup.md)
+  - [2.5 Polymorphism, Duck Typing, and Abstract Base Classes](mod-2-oop-python/5-polymorphism-duck-typing-abc.md)
+  - [2.6 Functions as Values: Callbacks, Higher-Order Functions, and Closures](mod-2-oop-python/6-functions-as-values-hof.md)
 
 ## Fullstack & AI-Assisted Development
 
