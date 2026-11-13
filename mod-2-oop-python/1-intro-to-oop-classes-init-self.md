@@ -51,7 +51,7 @@
     ```
   - **Instantiation** is the act of making an instance by invoking the class name. Python invokes the `__init__` method for you:
     ```py
-    jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+    jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
     ```
   - **`self`** is the first parameter of every method, and it refers to the instance the method was called on. `jazz.can_refund(today)` passes `jazz` in as `self`.
   - A **dunder method** is a method whose name begins and ends with two underscores, such as `__init__`. Python calls them for you at the right moment.
@@ -302,14 +302,18 @@ class Event:
         self.seats_sold = 0
 
 
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
 
 print(jazz.name)          # Friday Night Jazz
 print(pottery.capacity)   # 2
 ```
 
-Here is what happens when Python runs `Event('Friday Night Jazz', date(2026, 12, 5), 40)`:
+{% hint style="info" %}
+💡 A bare number in a call does not say what it means. In `Event('Intro to Pottery', date(2026, 11, 20), 2)`, a reader has to look back at `__init__` to learn that `2` is the capacity. Once an event takes two numbers, such as a capacity and a ticket price, swapping them creates the wrong event without any error. Writing `capacity=2` passes the number as a keyword argument, so the call itself names the parameter that receives it. The name and the date do not need a label, because a string and a `date(...)` already show what they are. The examples in this module label every number this way.
+{% endhint %}
+
+Here is what happens when Python runs `Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)`:
 
 1. Python creates a new, empty `Event` instance.
 2. Python calls `__init__`, passing the new instance as the first argument, `self`, followed by the three arguments you wrote.
@@ -339,8 +343,8 @@ class Event:
         self.seats_sold = 0
 
 
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
 
 print(pottery.capacity)
 print(jazz.capacity)
@@ -371,7 +375,7 @@ class Event:
         seats_sold = 0
 
 
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 print(jazz.name)        # Friday Night Jazz
 print(jazz.seats_sold)
 # AttributeError: 'Event' object has no attribute 'seats_sold'
@@ -408,7 +412,7 @@ class Event:
         self.seats_sold += 1
 
 
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
 pottery.sell_ticket()
 pottery.sell_ticket()
 pottery.sell_ticket()        # Intro to Pottery is sold out.
@@ -441,7 +445,7 @@ The two lines make the same call. Here is Python's rule for invoking methods: **
 The same rule holds for the classes you write. When you call a method on an instance, Python finds the method in the instance's class and passes the instance in as the first argument, `self`:
 
 ```python
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 
 print(jazz.seats_left())
 # finds the Event.seats_left method and invokes it with jazz as the self argument -> 40
@@ -466,7 +470,7 @@ class Event:
         return 0
 
 
-jazz = Event('Friday Night Jazz', 40)
+jazz = Event('Friday Night Jazz', capacity=40)
 jazz.seats_left()
 # TypeError: Event.seats_left() takes 0 positional arguments but 1 was given
 ```
@@ -483,8 +487,8 @@ Read the message in two parts. `Event.seats_left() takes 0 positional arguments`
 **Predict, then run.** Using the `Event` class with `seats_left()` and `sell_ticket()` from above, what does this program print?
 
 ```python
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
 
 pottery.sell_ticket()
 pottery.sell_ticket()
@@ -519,7 +523,7 @@ class Event:
         return today < self.date
 
 
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 today = date(2026, 11, 12)
 
 print(jazz.can_refund(today))          # True
@@ -538,8 +542,8 @@ Riverside Community Hall also rents out its rooms. Write a class `Room` whose `_
 Then rewrite one of your method calls in the form `Room.cost(...)`.
 
 ```python
-studio = Room('Dance Studio', 25, 40)
-hall = Room('Main Hall', 200, 150)
+studio = Room('Dance Studio', seats=25, hourly_rate=40)
+hall = Room('Main Hall', seats=200, hourly_rate=150)
 
 print(studio.cost(3))     # 120
 print(hall.fits(180))     # True
@@ -562,8 +566,8 @@ class Room:
         return group_size <= self.seats
 
 
-studio = Room('Dance Studio', 25, 40)
-hall = Room('Main Hall', 200, 150)
+studio = Room('Dance Studio', seats=25, hourly_rate=40)
+hall = Room('Main Hall', seats=200, hourly_rate=150)
 
 print(studio.cost(3))       # 120
 print(hall.fits(180))       # True
@@ -646,7 +650,7 @@ pottery = make_event('Intro to Pottery', 2)
 sell_ticket(pottery)
 
 # The class version: the rule is a method of the event
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
 pottery.sell_ticket()
 ```
 

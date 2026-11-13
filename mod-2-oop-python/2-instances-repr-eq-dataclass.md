@@ -64,13 +64,13 @@ class Venue:
         self.events.append(event)
 
 hall = Venue('Riverside Community Hall')
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-pottery = Event('Intro to Pottery', date(2026, 12, 9), 12)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 12, 9), capacity=12)
 hall.add_event(jazz)
 hall.add_event(pottery)
 
 # You will often see classes instantiated directly in a method call like this
-hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), 15))
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
 ```
 
 - `hall` is an instance of `Venue`, and `hall.events` is a list of `Event` instances.
@@ -149,11 +149,11 @@ class Venue:
         return [event for event in self.events if event.date == day]
 
 hall = Venue('Riverside Community Hall')
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-pottery = Event('Intro to Pottery', date(2026, 12, 9), 12)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 12, 9), capacity=12)
 hall.add_event(jazz)
 hall.add_event(pottery)
-hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), 15))
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
 
 for event in hall.events_on(date(2026, 12, 5)):
     print(event.name)
@@ -173,7 +173,7 @@ The rest of the program asks the venue for the events on a day instead of loopin
 Add a method `events_in_month(month)` to `Venue` that returns a new list of the venue's events whose date falls in that month, where `month` is a number from 1 to 12.
 
 ```python
-hall.add_event(Event('New Year Concert', date(2027, 1, 2), 60))
+hall.add_event(Event('New Year Concert', date(2027, 1, 2), capacity=60))
 
 for event in hall.events_in_month(12):
     print(event.name)
@@ -256,8 +256,8 @@ class Event:
         return f'Event({self.name!r}, {self.date})'
 
 hall = Venue('Riverside Community Hall')
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
-hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), 15))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
 
 print(hall.events[0])     # Python calls __repr__ and prints what it returns -> Event('Friday Night Jazz', 2026-12-05)
 print(hall.events)        # [Event('Friday Night Jazz', 2026-12-05), Event('Holiday Crafts', 2026-12-05)]
@@ -326,7 +326,7 @@ def __repr__(self):
     return f'{type(self).__name__}({self.name!r}, {self.date})'
 ```
 
-The case study's `Event` takes a name, a date, a capacity, and a base price. What does `print(board_games)` show for `board_games = Event('Board Game Night', date(2026, 12, 18), 25, 5)`? Which parts of the f-string produce quotes in the output, and which do not?
+The case study's `Event` takes a name, a date, a capacity, and a base price. What does `print(board_games)` show for `board_games = Event('Board Game Night', date(2026, 12, 18), capacity=25, base_price=5)`? Which parts of the f-string produce quotes in the output, and which do not?
 
 <details><summary>Answer</summary>
 
@@ -359,8 +359,8 @@ class Venue:
         self.events.append(event)
 
 hall = Venue('Riverside Community Hall')
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
 
 print(hall.events)
 # [Event('Friday Night Jazz', 2026-12-05), Event('Friday Night Jazz', 2026-12-05)]
@@ -371,8 +371,8 @@ The check never printed its message, and the concert is now listed twice. Anyone
 The rule behind this: `in` checks each element of the list with `==`, and without an `__eq__` method, `==` on your objects checks **identity**. It asks whether the two names refer to the same object, which is the same question `is` asks. Each call to `Event(...)` creates a new object, so the event the staff typed in a second time is a different object from the one in the list, even though it holds the same data:
 
 ```python
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-jazz_again = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+jazz_again = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 
 print(jazz == jazz_again)   # False
 print(jazz is jazz_again)   # False
@@ -393,8 +393,8 @@ class Event:
     def __eq__(self, other):
         return self.name == other.name and self.date == other.date
 
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
-jazz_again = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+jazz_again = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 
 print(jazz == jazz_again)   # Python calls jazz.__eq__(jazz_again) -> True: same name, same date
 print(jazz is jazz_again)   # False: still two separate objects
@@ -406,8 +406,8 @@ Defining `__eq__` changes what `==` means for events. It does not change what `i
 
 ```python
 hall = Venue('Riverside Community Hall')
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
 # Friday Night Jazz on 2026-12-05 is already on the calendar.
 
 print(hall.events)
@@ -418,8 +418,8 @@ print(hall.events)
 **Predict, then run.** The venue holds one Friday Night Jazz, on December 5. A staff member types in the concert again with a capacity of 60, and then a second concert a week later. What does each call print, and how many events does the venue hold at the end?
 
 ```python
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 60))
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 12), 40))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=60))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 12), capacity=40))
 print(len(hall.events))
 ```
 
@@ -576,8 +576,8 @@ class Attendee:
 What do the two `print()` calls show, and why do they give different answers?
 
 ```python
-board_games = Event('Board Game Night', date(2026, 12, 18), 25, 5)
-board_games_bigger = Event('Board Game Night', date(2026, 12, 18), 40, 8)
+board_games = Event('Board Game Night', date(2026, 12, 18), capacity=25, base_price=5)
+board_games_bigger = Event('Board Game Night', date(2026, 12, 18), capacity=40, base_price=8)
 print(board_games == board_games_bigger)
 
 maya = Attendee('Maya Rodriguez', 'maya@example.com')
@@ -625,7 +625,7 @@ class Reservation:
 
 ```python
 hall = Venue('Riverside Community Hall')
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
 
 maya = Attendee('Maya Rodriguez', 'maya@example.com')
 first = Reservation(maya, hall.events[0])
@@ -633,7 +633,7 @@ print(first)
 print(first.attendee.name)
 
 second = Reservation(Attendee('Maya Rodriguez', 'maya@example.com'),
-                     Event('Friday Night Jazz', date(2026, 12, 5), 60))
+                     Event('Friday Night Jazz', date(2026, 12, 5), capacity=60))
 print(first == second)
 print(first.event is hall.events[0])
 ```
@@ -663,7 +663,7 @@ Give `Venue` a list of reservations, and a `book(attendee, event)` method that c
 
 ```python
 hall = Venue('Riverside Community Hall')
-jazz = Event('Friday Night Jazz', date(2026, 12, 5), 40)
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 hall.add_event(jazz)
 
 hall.book(Attendee('Maya Rodriguez', 'maya@example.com'), jazz)
@@ -769,18 +769,18 @@ from venue import Event, Venue
 
 def test_adding_an_equal_event_again_is_refused():
     hall = Venue('Riverside Community Hall')
-    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
+    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
 
-    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
+    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
 
     assert len(hall.events) == 1
 
 
 def test_an_event_on_another_day_is_added():
     hall = Venue('Riverside Community Hall')
-    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40))
+    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
 
-    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 12), 40))
+    hall.add_event(Event('Friday Night Jazz', date(2026, 12, 12), capacity=40))
 
     assert len(hall.events) == 2
 ```

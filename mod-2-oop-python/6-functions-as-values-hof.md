@@ -66,10 +66,10 @@ class Venue:
 
 
 hall = Venue('Riverside Community Hall')
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40, 25))
-hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), 12, 15))
-hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), 30, 8))
-hall.add_event(Event('Board Game Night', date(2027, 1, 8), 25, 0))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25))
+hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15))
+hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), capacity=30, base_price=8))
+hall.add_event(Event('Board Game Night', date(2027, 1, 8), capacity=25, base_price=0))
 
 print(hall.events_in_month(12))   # [Event('Friday Night Jazz', 2026-12-05), Event('Intro to Pottery', 2026-12-09)]
 print(hall.events_under(10))      # [Event('Movie Night: Coco', 2026-11-28), Event('Board Game Night', 2027-01-08)]
@@ -201,10 +201,10 @@ class Venue:
 
 
 hall = Venue('Riverside Community Hall')
-hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), 40, 25))
-hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), 12, 15))
-hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), 30, 8))
-hall.add_event(Event('Board Game Night', date(2027, 1, 8), 25, 0))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25))
+hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15))
+hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), capacity=30, base_price=8))
+hall.add_event(Event('Board Game Night', date(2027, 1, 8), capacity=25, base_price=0))
 
 
 def is_in_december(event):
@@ -700,7 +700,7 @@ print(names)   # ['Movie Night: Coco', 'Board Game Night']
 **Code:**
 
 ```python
-hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), 15, 10))
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15, base_price=10))
 
 by_day_then_name = sorted(hall.events, key=lambda event: (event.date, event.name))
 print([event.name for event in by_day_then_name])

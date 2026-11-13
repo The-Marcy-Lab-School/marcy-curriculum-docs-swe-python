@@ -73,7 +73,7 @@ class Event:
 `pottery` is an instance of `Event` for a workshop with capacity for two attendees. The third sale is refused, which is exactly what the class is for:
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.sell_ticket()
 pottery.sell_ticket()
 pottery.sell_ticket()        # Intro to Pottery is sold out.
@@ -96,7 +96,7 @@ That line never runs `sell_ticket()`, so the sold-out check never runs either, a
 Assigning a wrong value directly causes the same kind of trouble. A staff member updates a new workshop and types `0` when they meant `10`:
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.sell_ticket()
 pottery.sell_ticket()
 
@@ -113,7 +113,7 @@ The workshop just sold a ticket for a seat that does not exist, and nothing prin
 
 **<details><summary>Q: How would you debug this error?</summary>**
 
-The mistake happened on the line that set the capacity by hand, but the error showed up later, inside `sell_ticket()`. Whoever investigates an oversold workshop starts from `sell_ticket()`, which is working correctly, and has to work backwards to find the line that set the capacity. The same thing happens if the capacity is wrong from the start: `Event('Intro to Pottery', date(2026, 11, 20), 0, 15)` creates the event without complaint.
+The mistake happened on the line that set the capacity by hand, but the error showed up later, inside `sell_ticket()`. Whoever investigates an oversold workshop starts from `sell_ticket()`, which is working correctly, and has to work backwards to find the line that set the capacity. The same thing happens if the capacity is wrong from the start: `Event('Intro to Pottery', date(2026, 11, 20), capacity=0, base_price=15)` creates the event without complaint.
 
 </details>
 
@@ -167,7 +167,7 @@ The **`@property`** line above `seats_sold()` changes how the method is used. Yo
 This method is called a **getter**, because it gets the value. Notice what did not change:
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.sell_ticket()
 print(pottery.seats_sold)      # Python runs the seats_sold getter, which returns self._seats_sold -> 1
 print(pottery.seats_left())    # 1
@@ -181,7 +181,7 @@ print(pottery.seats_left())    # 1
 **Predict, then run.** The class defines how to read `seats_sold` and nothing else. What happens when code outside the class tries to add a seat directly?
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.seats_sold += 1
 ```
 
@@ -230,7 +230,7 @@ class Event:
 The getter works the same way as the one for `seats_sold`: it returns the value stored under the underscore name. Now the staff member's typing mistake is caught on the line where it happens:
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
 pottery.capacity = 0
 # ValueError: Capacity must be at least 1, not 0.
@@ -249,7 +249,7 @@ Notice that `__init__` assigns `self.capacity = capacity`, without an underscore
 **Predict, then run.** What happens when the event is created with a capacity of `0`?
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 0, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=0, base_price=15)
 print(pottery.name)
 ```
 
@@ -269,7 +269,7 @@ Creating the event runs `__init__`, and the line `self.capacity = capacity` in `
 Give the `Event` class a `base_price` property. Its setter should refuse a negative price by raising a `ValueError` whose message names the rule and the refused value, and `__init__` should run the setter. A price of `0` is allowed, because the venue runs free events.
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.base_price = 20
 print(pottery.base_price)   # 20
 
@@ -375,7 +375,7 @@ In the case study, `capacity` and `base_price` are reached through properties, a
 The underscore in `_capacity` does not stop anything. Python lets any code read or assign an attribute whose name starts with an underscore:
 
 ```python
-pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery._capacity = -5            # no error
 print(pottery.seats_left())       # -5
 ```
@@ -470,14 +470,14 @@ from event import Event
 
 
 def test_a_capacity_below_one_is_refused():
-    pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+    pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
     with pytest.raises(ValueError):
         pottery.capacity = 0
 
 
 def test_a_refused_capacity_leaves_the_stored_value_unchanged():
-    pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+    pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
     with pytest.raises(ValueError):
         pottery.capacity = 0
@@ -520,14 +520,14 @@ Write the same two tests for the `base_price` setter from Challenge: Base Price:
 
 ```python
 def test_a_negative_price_is_refused():
-    pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+    pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
     with pytest.raises(ValueError):
         pottery.base_price = -15
 
 
 def test_a_refused_price_leaves_the_stored_price_unchanged():
-    pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+    pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
     with pytest.raises(ValueError):
         pottery.base_price = -15
@@ -536,7 +536,7 @@ def test_a_refused_price_leaves_the_stored_price_unchanged():
 
 
 def test_a_price_of_zero_is_accepted():
-    pottery = Event('Intro to Pottery', date(2026, 11, 20), 2, 15)
+    pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
     pottery.base_price = 0
 
@@ -552,14 +552,14 @@ The third test protects the edge of the rule. If someone later writes `value < 1
 
 ```python
 def test_capacity_setter_refuses_a_capacity_below_one():
-    jazz = Event('Friday Night Jazz', date(2026, 12, 13), 40, 25)
+    jazz = Event('Friday Night Jazz', date(2026, 12, 13), capacity=40, base_price=25)
 
     with pytest.raises(ValueError):
         jazz.capacity = 0
 
 
 def test_a_refused_capacity_leaves_the_stored_value_unchanged():
-    jazz = Event('Friday Night Jazz', date(2026, 12, 13), 40, 25)
+    jazz = Event('Friday Night Jazz', date(2026, 12, 13), capacity=40, base_price=25)
 
     with pytest.raises(ValueError):
         jazz.capacity = -5
@@ -611,7 +611,7 @@ Python stored the value under the name `_Event__capacity`. `pottery.__capacity` 
 
 ### Class Methods
 
-Every object in this chapter is created by calling its class, such as `Event('Intro to Pottery', date(2026, 11, 20), 2, 15)`, and that is how you will create objects throughout this module. You will also meet two kinds of method in code you read, including Python's own libraries and the case study, that work differently from the methods you write.
+Every object in this chapter is created by calling its class, such as `Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)`, and that is how you will create objects throughout this module. You will also meet two kinds of method in code you read, including Python's own libraries and the case study, that work differently from the methods you write.
 
 A method marked `@classmethod` is called on the class itself, not on an instance, and Python passes in the class as its first argument, named `cls`. The case study's `src/main.py` calls one: `build_sample_venue(date.today())`. `date.today()` is called on the `date` class from the `datetime` module, and it returns a new `date` holding today's date:
 

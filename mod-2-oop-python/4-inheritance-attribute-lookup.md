@@ -90,8 +90,8 @@ class Workshop:
         return self.name == other.name and self.date == other.date
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
-pottery = Workshop('Intro to Pottery', date(2026, 12, 9), 12, 15, 10)
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
 
 print(jazz.ticket_price())      # 30
 print(pottery.ticket_price())   # 25
@@ -164,7 +164,7 @@ class Screening(Event):
     pass
 
 
-coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 8)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 print(coco.ticket_price())           # 8
 print(isinstance(coco, Screening))   # True
 print(isinstance(coco, Event))       # True
@@ -174,7 +174,7 @@ print(isinstance(coco, Event))       # True
 **Predict, then run.** `Screening` has no `__repr__` of its own, and the one it receives is written inside `Event`. Does `print(coco)` show `Event('Movie Night: Coco', 2026-12-18)` or `Screening('Movie Night: Coco', 2026-12-18)`?
 
 ```python
-coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 8)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 print(coco)
 ```
 
@@ -248,7 +248,7 @@ class Concert(Event):
         self.performer = performer
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.name)        # Friday Night Jazz, stored by Event's __init__
 print(jazz.performer)   # The Blue Notes, stored by Concert's __init__
 ```
@@ -257,7 +257,7 @@ print(jazz.performer)   # The Blue Notes, stored by Concert's __init__
 **Predict, then run.** A concert ticket should cost its base price plus a $5 service fee. Based on how `Concert` is currently written, what does `jazz` charge for a ticket?
 
 ```python
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())
 ```
 
@@ -292,8 +292,8 @@ class Screening(Event):
         return False
 
 
-coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 8)
-board_games = Event('Board Game Night', date(2026, 12, 18), 25, 5)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
+board_games = Event('Board Game Night', date(2026, 12, 18), capacity=25, base_price=5)
 
 print(coco.can_refund(date(2026, 12, 1)))          # False, from Screening's version
 print(board_games.can_refund(date(2026, 12, 1)))   # True, from Event's version
@@ -348,7 +348,7 @@ class Concert(Event):
         return today <= self.date - timedelta(days=7)
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())                     # 30: Event's 25, plus Concert's 5
 print(jazz.can_refund(date(2026, 11, 30)))     # False: refunds closed on November 28
 ```
@@ -358,7 +358,7 @@ print(jazz.can_refund(date(2026, 11, 30)))     # False: refunds closed on Novemb
 Write `Workshop` as a subclass of `Event`. Its `__init__` takes a fifth argument, `materials_fee`, and stores it. Its `ticket_price()` extends `Event`'s version by adding the materials fee, and its `can_refund()` allows a refund until two days before the workshop.
 
 ```python
-pottery = Workshop('Intro to Pottery', date(2026, 12, 9), 12, 15, 10)
+pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
 print(pottery)                                # Workshop('Intro to Pottery', 2026-12-09)
 print(pottery.ticket_price())                 # 25
 print(pottery.can_refund(date(2026, 12, 7)))  # True
@@ -428,7 +428,7 @@ class Concert(Event):
     # ... can_refund() from above ...
 
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())   # 30
 ```
 
@@ -436,8 +436,8 @@ print(jazz.ticket_price())   # 30
 **Predict, then run.** The venue raises the service fee for every concert, including the two already scheduled. What do the last two lines print?
 
 ```python
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
-choir = Concert('Winter Choir', date(2026, 12, 19), 80, 10, 'Riverside Singers')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+choir = Concert('Winter Choir', date(2026, 12, 19), capacity=80, base_price=10, performer='Riverside Singers')
 
 Concert.SERVICE_FEE = 6
 
@@ -480,7 +480,7 @@ The program needs a rule that says where to look for a name the instance does no
 **Code:**
 
 ```python
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
 print(jazz.__dict__)
 # {'name': 'Friday Night Jazz', 'date': datetime.date(2026, 12, 5), 'capacity': 40, 'base_price': 25, 'performer': 'The Blue Notes'}
@@ -651,17 +651,17 @@ from events import Concert, Screening, Workshop
 
 
 def test_a_concert_adds_the_service_fee():
-    jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+    jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
     assert jazz.ticket_price() == 30
 
 
 def test_a_workshop_adds_the_materials_fee():
-    pottery = Workshop('Intro to Pottery', date(2026, 12, 9), 12, 25, 10)
+    pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=25, materials_fee=10)
     assert pottery.ticket_price() == 35
 
 
 def test_a_screening_charges_the_base_price():
-    coco = Screening('Movie Night: Coco', date(2026, 12, 18), 30, 25)
+    coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=25)
     assert coco.ticket_price() == 25
 ```
 
@@ -695,9 +695,9 @@ Change the line back before moving on.
 
 ```python
 def test_each_kind_of_event_prices_its_tickets_differently():
-    jazz = Concert('Friday Night Jazz', date(2026, 12, 13), 40, 25, 'The Blue Notes')
-    pottery = Workshop('Intro to Pottery', date(2026, 12, 5), 2, 15, 10)
-    spirited_away = Screening('Movie Night: Spirited Away', date(2026, 12, 21), 30, 8)
+    jazz = Concert('Friday Night Jazz', date(2026, 12, 13), capacity=40, base_price=25, performer='The Blue Notes')
+    pottery = Workshop('Intro to Pottery', date(2026, 12, 5), capacity=2, base_price=15, materials_fee=10)
+    spirited_away = Screening('Movie Night: Spirited Away', date(2026, 12, 21), capacity=30, base_price=8)
 
     assert jazz.ticket_price() == 30            # 25 plus the 5 service fee
     assert pottery.ticket_price() == 25         # 15 plus the 10 materials fee
@@ -734,7 +734,7 @@ class Concert(Event):
     def __init__(self, name, date, capacity, base_price, performer):
         self.performer = performer      # super().__init__() is missing
 
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.name)
 # AttributeError: 'Concert' object has no attribute 'name'
 ```
@@ -744,7 +744,7 @@ print(jazz.name)
 Assigning to a class attribute's name through an instance does not change the class attribute. It creates a new instance attribute with the same name on that one instance:
 
 ```python
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 jazz.SERVICE_FEE = 0
 
 print(jazz.SERVICE_FEE)      # 0
@@ -767,7 +767,7 @@ print(jazz.ticket_price())   # 30
 **Code:**
 
 ```python
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), 40, 25, 'The Blue Notes')
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
 print(isinstance(jazz, Concert))   # True
 print(isinstance(jazz, Event))     # True
