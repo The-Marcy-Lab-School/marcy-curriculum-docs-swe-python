@@ -126,7 +126,7 @@ git checkout development
 
 We care deeply about the quality of the code that is produced at Marcy. Even if your application works as described, was it created following best practices? Did you effectively use all of the skills from the module? Were you able to learn and grow from this project-building process?
 
-To ensure that your project meets Marcy's standards of excellence, your project will be assessed on the following criteria (22 points total):
+To ensure that your project meets Marcy's standards of excellence, your project will be assessed on the following criteria (23 points total):
 
 - Technical Details (16 points)
   - Core Python Concepts (8 points)
