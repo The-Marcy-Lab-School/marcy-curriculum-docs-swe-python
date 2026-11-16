@@ -141,48 +141,48 @@ Technical details are broken up further into three groups:
 
 **Core Python Concepts (8 points)**
 
-1. Variables: Uses clear, descriptive `snake_case` names that explain what data they hold
-2. Functions: Breaks code into multiple functions that each handle specific tasks
-3. Conditionals: Includes at least one `if/elif/else` statement that changes behavior based on user input
-4. Loops: Uses at least one `while` loop to repeatedly prompt the user
-5. String Methods: Uses string methods (like `.lower()`, `.strip()`, etc.) to validate user input
-6. Built-in Iteration: Uses at least one list comprehension or built-in iteration tool (like `sorted()`, `sum()`, `enumerate()`, etc...)
-7. Dictionaries: Uses at least one dictionary to organize related data together
-8. Testing: Your program's _data layer_ has at least 4 testing functions. See [test_tasks.py](https://github.com/The-Marcy-Lab-School/swe-casestudy-1-cli-task-manager/blob/main/tests/test_tasks.py) from the case study for guidance.
+- [ ] 1. Variables: Uses clear, descriptive `snake_case` names that explain what data they hold
+- [ ] 2. Functions: Breaks code into multiple functions that each handle specific tasks
+- [ ] 3. Conditionals: Includes at least one `if/elif/else` statement that changes behavior based on user input
+- [ ] 4. Loops: Uses at least one `while` loop to repeatedly prompt the user
+- [ ] 5. String Methods: Uses string methods (like `.lower()`, `.strip()`, etc.) to validate user input
+- [ ] 6. Built-in Iteration: Uses at least one list comprehension or built-in iteration tool (like `sorted()`, `sum()`, `enumerate()`, etc...)
+- [ ] 7. Dictionaries: Uses at least one dictionary to organize related data together
+- [ ] 8. Testing: Your program's _data layer_ has at least 4 testing functions. See [test_tasks.py](https://github.com/The-Marcy-Lab-School/swe-casestudy-1-cli-task-manager/blob/main/tests/test_tasks.py) from the case study for guidance.
 
 **Code Organization (4 points)**
 
-1. Split your code into **at least 3 separate modules** (files)
-2. Use `import` statements to connect your modules, and an `if __name__ == "__main__":` guard in the entry point
-3. Follows a logical file structure:
+- [ ] 1. Split your code into **at least 3 separate modules** (files)
+- [ ] 2. Use `import` statements to connect your modules, and an `if __name__ == "__main__":` guard in the entry point
+- [ ] 3. Follows a logical file structure:
 
-- `main.py` — the entry point of the application, which starts the program and calls the menu.
-- `menu.py` — displays the menu, reads the user's input, and calls the function that matches each choice.
-- A data layer (choose a name!) — holds your application's data and the functions that manage it.
+  - `main.py` — the entry point of the application, which starts the program and calls the menu.
+  - `menu.py` — displays the menu, reads the user's input, and calls the function that matches each choice.
+  - A data layer (choose a name!) — holds your application's data and the functions that manage it.
 
-4. A `requirements.txt` file exists, and `.venv/` is listed in `.gitignore`
+- [ ] 4. A `requirements.txt` file exists, and `.venv/` is listed in `.gitignore`
 
 **User Interaction (4 points)**
 
-1. Creates an interactive experience that responds to user choices using the `input()` function
-2. Provides warning messages when invalid input is provided and allows the user to try again. The program never crashes with a traceback on bad input.
-3. Provides confirmation messages when user actions are completed.
-4. All messages printed to the console have consistent spacing and are free of spelling and grammar mistakes.
+- [ ] 1. Creates an interactive experience that responds to user choices using the `input()` function
+- [ ] 2. Provides warning messages when invalid input is provided and allows the user to try again. The program never crashes with a traceback on bad input.
+- [ ] 3. Provides confirmation messages when user actions are completed.
+- [ ] 4. All messages printed to the console have consistent spacing and are free of spelling and grammar mistakes.
 
 ### Reflection (2 points)
 
 In `REFLECTIONS.md`, respond to the prompts below. Your responses should each contain about 150-250 words and demonstrate thoughtful reflection.
 
-1. Which project requirement did you find most challenging and how did you overcome this challenge? Be specific in your response.
-2. Share one technical concept that you gained a deeper understanding of through building this project. Explain that concept in simple terms and explain how it is used in your project.
+- [ ] 1. Which project requirement did you find most challenging and how did you overcome this challenge? Be specific in your response.
+- [ ] 2. Share one technical concept that you gained a deeper understanding of through building this project. Explain that concept in simple terms and explain how it is used in your project.
 
 ### Professionalism and Craftsmanship (5 points)
 
-1. Code is functional and free of bugs. Does not raise errors when used under expected circumstances.
-2. Code is well-organized, spacing is consistent, variable/function names are descriptive, comments are concise and purposeful, and no unused code remains.
-3. Commits are small, frequent, and have meaningful commit messages.
-4. A branch is used for development while the `main` branch is always functional
-5. The `README.md` includes setup instructions, usage examples, and clear explanation of functionality. All writing in the `README.md` file and the `REFLECTIONS.md` file is polished and free of typos and grammatical errors.
+- [ ] 1. Code is functional and free of bugs. Does not raise errors when used under expected circumstances.
+- [ ] 2. Code is well-organized, spacing is consistent, variable/function names are descriptive, comments are concise and purposeful, and no unused code remains.
+- [ ] 3. Commits are small, frequent, and have meaningful commit messages.
+- [ ] 4. A branch is used for development while the `main` branch is always functional
+- [ ] 5. The `README.md` includes setup instructions, usage examples, and clear explanation of functionality. All writing in the `README.md` file and the `REFLECTIONS.md` file is polished and free of typos and grammatical errors.
 
 ## How to Submit
 
