@@ -499,8 +499,8 @@ be read by a fellow, not by an instructor.
 ## 2.5 Polymorphism, Duck Typing, and Abstract Base Classes — Thu 11/19
 
 - **Polymorphism** is different types of object responding to the same method call in their own way, so that the code making the call does not need to know which type it is holding. `len()` works on a string, a list, and a dictionary, and each type works out its own length.
-- A **shared interface**, or **contract**, is the set of method names every type in a group promises to define. It is what makes polymorphism safe.
   - **Duck typing** is writing code that relies on the methods an object defines rather than on the class it came from. A loop that calls `ticket_price()` on every item works with any object that defines `ticket_price()`, whether or not its class inherits from `Event`.
+- A **shared interface**, or **contract**, is the set of method names every type in a group promises to define. It is what makes polymorphism safe.
 - An **abstract base class (ABC)** is a class that cannot be instantiated and exists to declare the methods its subclasses must provide.
   - **`@abstractmethod`** marks a method a subclass is required to define. A subclass that forgets one raises `TypeError` the moment anything tries to instantiate it, rather than failing later at the call site.
   - A **concrete class** is a class you can actually instantiate, because every abstract method has been defined.
