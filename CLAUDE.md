@@ -48,7 +48,7 @@ Step two, write the three things the tool cannot judge:
 
 ## The module document comes first
 
-Once every chapter of a module has been converted, write `learning-objectives-key-terms.md` in the module's directory before reporting the module as done. It is the first thing Ben reviews for a module, before any chapter, because it shows in two pages whether the module teaches the right things in the right order.
+Once every chapter of a module has been converted, write `scope-and-sequence.md` in the module's directory before reporting the module as done. It is the first thing Ben reviews for a module, before any chapter, because it shows in two pages whether the module teaches the right things in the right order.
 
 It has one entry per chapter, including the case study and the project, in chapter order. Each entry has three parts:
 
@@ -61,9 +61,9 @@ It has one entry per chapter, including the case study and the project, in chapt
   - **Level 2 Example** — a response at the unistructural and multistructural levels of the SOLO framework. The response is correct, or nearly correct, and names the right facts or steps, but it does not connect them or explain the mechanism. The response is usually one or two sentences long.
   - **Level 3 Example** — a response at the relational and extended abstract levels of the SOLO framework. The response reaches the same answer and explains the chain of cause and effect that produces it, using the lesson's key terms correctly. Where the question includes a variation, the response carries the explanation over to that variation.
 
-  Write both examples in a fellow's voice, in plain first person or second person, and never make the Level 3 example longer only by adding facts that do not connect to the answer. Use only commands, terms, and analogies that the chapter itself teaches. If the question names a person, choose a name and refer to that person by name rather than by a pronoun. `mod-0-command-line-interfaces-git-and-github/learning-objectives-key-terms.md` is the model for exit tickets. The sync script replaces only the Key terms block, so it leaves exit tickets alone.
+  Write both examples in a fellow's voice, in plain first person or second person, and never make the Level 3 example longer only by adding facts that do not connect to the answer. Use only commands, terms, and analogies that the chapter itself teaches. If the question names a person, choose a name and refer to that person by name rather than by a pronoun. `mod-0-command-line-interfaces-git-and-github/scope-and-sequence.md` is the model for exit tickets. The sync script replaces only the Key terms block, so it leaves exit tickets alone.
 
-`mod-1-python-fundamentals/learning-objectives-key-terms.md` is the model for key terms and objectives. Rerun `python3 scripts/sync-key-terms.py <module-dir>` whenever a chapter's Key Terms section changes; `--check` reports without writing.
+`mod-1-python-fundamentals/scope-and-sequence.md` is the model for key terms and objectives. Rerun `python3 scripts/sync-key-terms.py <module-dir>` whenever a chapter's Key Terms section changes; `--check` reports without writing.
 
 ## Tables of contents
 

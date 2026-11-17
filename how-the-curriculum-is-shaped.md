@@ -101,7 +101,7 @@ Every lesson follows the same outline, so a fellow always knows where the proble
 - **Expect pushback, and ask for a recommendation rather than a list of options.**
 - **Record each settled decision where future work will find it:** the `CLAUDE.md` files, `scope-and-sequence.md`, or `conversion-decisions.md`.
 - **Commit one reviewed lesson at a time.**
-- **Settle the module objectives document first.** Each module's `learning-objectives-key-terms.md` shows in two pages whether the module teaches the right things in the right order, so it is reviewed before any chapter.
+- **Settle the module objectives document first.** Each module's `scope-and-sequence.md` shows in two pages whether the module teaches the right things in the right order, so it is reviewed before any chapter.
 
 ## Knowledge the role needs
 

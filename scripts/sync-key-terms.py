@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Copy each chapter's Key Terms section into the module's learning-objectives-key-terms.md.
+"""Copy each chapter's Key Terms section into the module's scope-and-sequence.md.
 
 Usage:  python3 scripts/sync-key-terms.py <module-dir>
 Example: python3 scripts/sync-key-terms.py mod-1-python-fundamentals
 
-In learning-objectives-key-terms.md, an entry that should track a chapter carries a
+In scope-and-sequence.md, an entry that should track a chapter carries a
 marker line right after its heading:
 
     <!-- key-terms-from: 3-functions.md -->
@@ -45,7 +45,7 @@ def main():
     if len(args) != 1:
         sys.exit(__doc__)
     module = args[0]
-    doc_path = os.path.join(module, "learning-objectives-key-terms.md")
+    doc_path = os.path.join(module, "scope-and-sequence.md")
     doc = open(doc_path, encoding="utf-8").read()
 
     out = doc
