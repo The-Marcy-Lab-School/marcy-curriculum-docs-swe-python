@@ -142,6 +142,8 @@ print(f"One {purchase_1['item']}, please")  # One coffee, please
 **Predict, then run.** There is no `"discount"` in `purchase_1`.
 
 ```python
+purchase_1 = {"item": "coffee", "price": 3.50}
+
 print(purchase_1["discount"])
 ```
 
@@ -159,6 +161,8 @@ Asking a dictionary for a key it does not have is an error, just like asking a l
 When you are not sure a key exists, use the `.get()` method instead. It returns `None` for a missing key, or a default value of your choosing:
 
 ```python
+purchase_1 = {"item": "coffee", "price": 3.50}
+
 print(purchase_1.get("discount"))     # None
 print(purchase_1.get("discount", 0))  # 0
 print(purchase_1.get("item"))         # coffee
@@ -169,6 +173,8 @@ A default of `0` is the right answer here, because a purchase with no discount h
 You can also ask first using the `in` operator to avoid the error.
 
 ```python
+purchase_1 = {"item": "coffee", "price": 3.50}
+
 if "discount" in purchase_1:
     print(purchase_1["discount"])
 ```
@@ -177,6 +183,8 @@ if "discount" in purchase_1:
 **Predict, then run.** `purchase_1` has a _value_ `"coffee"`. Does the `in` operator tell us if a value is in a dictionary?
 
 ```python
+purchase_1 = {"item": "coffee", "price": 3.50}
+
 if "coffee" in purchase_1:
     print(purchase_1["item"])
 ```
@@ -457,6 +465,14 @@ Watch the quotes. `menu[item]` uses the value of the variable `item`, which is `
 A key held in a variable is what makes a lookup table useful. The program below asks for each item by name and finds its price on the menu, so the user no longer types prices at all:
 
 ```python
+# unchanged from Lookup Tables: Finding a Value from a Key
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+
 purchases = []
 
 while True:

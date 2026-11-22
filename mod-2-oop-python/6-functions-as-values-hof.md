@@ -96,17 +96,10 @@ What changes from one question to the next is the test, and the test is a piece 
 
 **The Problem:** To hand a test to the venue, the test has to be something a program can store in a variable and pass as an argument, the way it stores and passes a string or a number.
 
-**New Concepts:**
-
-- `def is_free(event):` creates a function and assigns it to the name `is_free`, the same way `price = 0` assigns a number to `price`.
-- The name on its own, with no parentheses, is the function itself. `type(is_free)` reports `<class 'function'>`.
-- The name followed by parentheses, `is_free(event)`, calls the function, and the call produces whatever the function returns.
-- Because a function is a value, it can be given a second name, stored in a list or a dictionary, and passed as an argument. A function that can be used in every way a value can is called a **first-class function**.
-
 **Code:**
 
 ```python
-def is_free(event):
+def is_free(event):          # creates a function and assigns it to the name is_free
     return event.ticket_price() == 0
 
 
@@ -119,6 +112,13 @@ print(is_free(board_games))  # True: the value the call returned
 check = is_free              # a second name for the same function; nothing is called
 print(check(board_games))    # True
 ```
+
+**New Concepts:**
+
+- `def is_free(event):` creates a function and assigns it to the name `is_free`, the same way `price = 0` assigns a number to `price`.
+- The name on its own, with no parentheses, is the function itself. `type(is_free)` reports `<class 'function'>`.
+- The name followed by parentheses, `is_free(event)`, calls the function, and the call produces whatever the function returns.
+- Because a function is a value, it can be given a second name, stored in a list or a dictionary, and passed as an argument. A function that can be used in every way a value can is called a **first-class function**.
 
 **<details><summary>Q: Pop quiz! Name the data type stored in each variable below.</summary>**
 
@@ -177,14 +177,6 @@ DOORS OPEN AT 7
 
 **The Problem:** `events_in_month()` and `events_under()` differ only in their test. One method that receives the test as a parameter could replace both of them, and every search the staff have not thought of yet.
 
-**New Concepts:**
-
-- A function passed into another function is called a **callback**. The function that receives it is a **higher-order function**.
-- Inside the higher-order function, the callback is an ordinary parameter. `find_events()` calls `matches(event)` once for each event, at the moment it decides, and keeps the event when the call returns `True`.
-- The higher-order function never names the test. The caller decides what the test is, so the same method answers any question about the events.
-- A function that tests something and returns `True` or `False` is often called a predicate. `matches` is a predicate.
-- A higher-order function can also return a function. The end of this chapter builds one.
-
 **Code:**
 
 ```python
@@ -196,7 +188,8 @@ class Venue:
     def add_event(self, event):
         self.events.append(event)
 
-    def find_events(self, matches):
+    def find_events(self, matches):   # a higher-order function: matches is the callback
+        # calls matches on each event, and keeps the event when it returns True
         return [event for event in self.events if matches(event)]
 
 
@@ -207,16 +200,25 @@ hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), capacity=30, base_
 hall.add_event(Event('Board Game Night', date(2027, 1, 8), capacity=25, base_price=0))
 
 
-def is_in_december(event):
+def is_in_december(event):   # a predicate: returns True or False
     return event.date.month == 12
 
 def is_free(event):
     return event.ticket_price() == 0
 
 
+# the caller chooses the test, so one method answers both questions
 print(hall.find_events(is_in_december))   # [Event('Friday Night Jazz', 2026-12-05), Event('Intro to Pottery', 2026-12-09)]
 print(hall.find_events(is_free))          # [Event('Board Game Night', 2027-01-08)]
 ```
+
+**New Concepts:**
+
+- A function passed into another function is called a **callback**. The function that receives it is a **higher-order function**.
+- Inside the higher-order function, the callback is an ordinary parameter. `find_events()` calls `matches(event)` once for each event, at the moment it decides, and keeps the event when the call returns `True`.
+- The higher-order function never names the test. The caller decides what the test is, so the same method answers any question about the events.
+- A function that tests something and returns `True` or `False` is often called a predicate. `matches` is a predicate.
+- A higher-order function can also return a function. The end of this chapter builds one.
 
 {% hint style="warning" %}
 **Predict, then run.** This version of the test prints a line every time it runs. What does the program print, and in what order?
@@ -328,20 +330,21 @@ def name_starts_with_s(attendee):
 
 **The Problem:** Writing `hall.find_events(is_free())` looks almost the same as `hall.find_events(is_free)`, but the parentheses call `is_free` too early, before `find_events()` has an event to give it, and the program stops with an error that seems to have nothing to do with searching.
 
+**Code:**
+
+```python
+# the name with no parentheses passes the function itself
+print(hall.find_events(is_free))     # [Event('Board Game Night', 2027-01-08)]
+
+hall.find_events(is_free())          # is_free() runs first, before find_events() starts
+# TypeError: is_free() missing 1 required positional argument: 'event'
+```
+
 **New Concepts:**
 
 - Python works out every argument before it calls a function. In `hall.find_events(is_free())`, it runs `is_free()` first, and `find_events()` never starts.
 - `is_free()` with nothing in the parentheses is a call that is missing its `event` argument, so Python raises a `TypeError` that names the missing parameter.
 - Passing a callback means writing its name with no parentheses. The higher-order function adds the parentheses, and the argument, when it calls the callback.
-
-**Code:**
-
-```python
-print(hall.find_events(is_free))     # [Event('Board Game Night', 2027-01-08)]
-
-hall.find_events(is_free())
-# TypeError: is_free() missing 1 required positional argument: 'event'
-```
 
 **<details><summary>Q: Why does the error mention `is_free()` instead of `find_events()`?</summary>**
 
@@ -382,22 +385,24 @@ This time the error comes from inside `find_events()`, one step away from the li
 
 **The Problem:** A test that is one line long and used once still needs a `def`, a name, and a place in the file above the call. A reader of `hall.find_events(is_cheap)` has to look somewhere else to find out what "cheap" means.
 
+**Code:**
+
+```python
+# a lambda: parameter before the colon, returned expression after it
+print(hall.find_events(lambda event: event.ticket_price() < 10))
+# [Event('Movie Night: Coco', 2026-11-28), Event('Board Game Night', 2027-01-08)]
+
+# written right where find_events() expects a callback, with no def and no name
+print(hall.find_events(lambda event: 'Night' in event.name))
+# [Event('Friday Night Jazz', 2026-12-05), Event('Movie Night: Coco', 2026-11-28), Event('Board Game Night', 2027-01-08)]
+```
+
 **New Concepts:**
 
 - A **`lambda`** writes a function in one expression, right where it is used: `lambda event: event.ticket_price() < 10`.
 - The parameters come before the colon, and the expression after the colon is what the function returns. A `lambda` has no `return` keyword, and it can hold only one expression.
 - `lambda event: event.ticket_price() < 10` and a `def is_cheap(event):` that returns the same expression are the same function, except that the `lambda` has no name.
 - Use a `lambda` for a callback that fits comfortably on one line and is used in one place. Once a test needs a second line or a name to explain it, use `def`. PEP 8 also says not to assign a `lambda` to a name, as in `is_cheap = lambda event: ...`, because `def` does the same job and gives the function a name that shows up in error messages.
-
-**Code:**
-
-```python
-print(hall.find_events(lambda event: event.ticket_price() < 10))
-# [Event('Movie Night: Coco', 2026-11-28), Event('Board Game Night', 2027-01-08)]
-
-print(hall.find_events(lambda event: 'Night' in event.name))
-# [Event('Friday Night Jazz', 2026-12-05), Event('Movie Night: Coco', 2026-11-28), Event('Board Game Night', 2027-01-08)]
-```
 
 {% hint style="warning" %}
 **Check for understanding.** Rewrite each search as a single call to `hall.find_events()` with a `lambda`, and say what each search returns.
@@ -426,13 +431,6 @@ print(hall.find_events(lambda event: event.date.year == 2027))
 
 **The Problem:** `sorted()` can put numbers or strings in order, but it cannot put events in order, because Python does not know whether one event is less than another. Sorting a list of prices first loses track of which event each price belongs to, and the staff need the events themselves in order, by date or by price.
 
-**New Concepts:**
-
-- `sorted()` is a built-in higher-order function. Its `key` parameter takes a callback, and `sorted()` calls it once on each element to get the value to compare.
-- `key` decides the order, but it never changes the elements: `sorted(hall.events, key=...)` still returns the events, not their dates or prices.
-- `key` takes a named function or a `lambda`, written without parentheses, because `sorted()` calls it itself. `reverse=True` still reverses the order.
-- `min()` and `max()` take `key` the same way, and return the element whose key is smallest or largest.
-
 **Code:**
 
 ```python
@@ -440,18 +438,28 @@ def event_date(event):
     return event.date
 
 
+# sorted() calls the key once on each event and compares the dates it returns
 by_date = sorted(hall.events, key=event_date)                          # a named function
 by_date = sorted(hall.events, key=lambda event: event.date)            # the same order, with a lambda
-print([event.name for event in by_date])
+print([event.name for event in by_date])   # by_date holds the events, not their dates
 # ['Movie Night: Coco', 'Friday Night Jazz', 'Intro to Pottery', 'Board Game Night']
 
+# reverse=True puts the highest price first
 by_price = sorted(hall.events, key=lambda event: event.ticket_price(), reverse=True)
 print([event.name for event in by_price])
 # ['Friday Night Jazz', 'Intro to Pottery', 'Movie Night: Coco', 'Board Game Night']
 
+# min() and max() take key the same way, and return the whole event
 print(min(hall.events, key=lambda event: event.ticket_price()))   # Event('Board Game Night', 2027-01-08)
 print(max(hall.events, key=lambda event: event.capacity))         # Event('Friday Night Jazz', 2026-12-05)
 ```
+
+**New Concepts:**
+
+- `sorted()` is a built-in higher-order function. Its `key` parameter takes a callback, and `sorted()` calls it once on each element to get the value to compare.
+- `key` decides the order, but it never changes the elements: `sorted(hall.events, key=...)` still returns the events, not their dates or prices.
+- `key` takes a named function or a `lambda`, written without parentheses, because `sorted()` calls it itself. `reverse=True` still reverses the order.
+- `min()` and `max()` take `key` the same way, and return the element whose key is smallest or largest.
 
 {% hint style="warning" %}
 **Predict, then run.** What happens when `sorted()` is given the events with no `key`?
@@ -510,27 +518,28 @@ print([event.name for event in by_name])
 
 **The Problem:** A staff member types in a month, and the program has to find that month's events. `find_events()` calls its callback with one argument, the event, so the callback has no way to receive the month as a second argument. Writing one test per month, `is_in_december()`, `is_in_january()`, and ten more like them, brings back the repetition `find_events()` was meant to remove.
 
+**Code:**
+
+```python
+def matches_month(month):                 # higher-order: it returns a function
+    def matches(event):                   # the inner function, created on each call
+        return event.date.month == month
+    return matches                        # no parentheses: returns the inner function itself
+
+
+in_december = matches_month(12)             # builds the test; no event is tested yet
+print(in_december)                          # <function matches_month.<locals>.matches at 0x1004831c0>
+# find_events() calls the test later, once for each event
+print(hall.find_events(in_december))        # [Event('Friday Night Jazz', 2026-12-05), Event('Intro to Pottery', 2026-12-09)]
+print(hall.find_events(matches_month(1)))   # [Event('Board Game Night', 2027-01-08)]
+```
+
 **New Concepts:**
 
 - A function can be defined inside another function. The **inner function** is created each time the outer function runs.
 - `return matches`, with no parentheses, hands back the inner function itself. The caller can store it in a variable or pass it straight to `find_events()`.
 - Calling the outer function and calling the function it returns are two separate steps, and they happen at different times: `matches_month(12)` builds the test, and `find_events()` calls the test later, once for each event.
 - `matches_month` is a higher-order function by the second condition: it returns a function.
-
-**Code:**
-
-```python
-def matches_month(month):
-    def matches(event):
-        return event.date.month == month
-    return matches
-
-
-in_december = matches_month(12)
-print(in_december)                          # <function matches_month.<locals>.matches at 0x1004831c0>
-print(hall.find_events(in_december))        # [Event('Friday Night Jazz', 2026-12-05), Event('Intro to Pottery', 2026-12-09)]
-print(hall.find_events(matches_month(1)))   # [Event('Board Game Night', 2027-01-08)]
-```
 
 {% hint style="warning" %}
 **Predict, then run.** Someone changes the last line of `matches_month()` from `return matches` to `return matches()`. What happens when the program calls `matches_month(12)`?
@@ -579,24 +588,25 @@ Read the message in two parts: `matches_month.<locals>.matches()` names the func
 
 **The Problem:** `find_events()` calls `in_december` long after `matches_month(12)` has returned, and `in_december` still compares each event's month with `12`. A function's parameters normally disappear when the function returns, so it is not obvious how `matches` can still use `month`.
 
-**New Concepts:**
-
-- An inner function that refers to a variable of the function around it keeps access to that variable after the outer function returns. The inner function together with the variables it keeps is called a **closure**, and the inner function is said to close over those variables. `matches` closes over `month`.
-- Each call to the outer function creates new variables and a new inner function, so each function it returns has its own copy of what it closed over. `matches_month(12)` and `matches_month(1)` return two closures, one holding `12` and one holding `1`.
-- Code outside the closure has no name for the variable it holds: `month` exists only inside the closure, so `print(month)` at the top level raises `NameError: name 'month' is not defined`.
-
 **Code:**
 
 ```python
 def make_announcer(venue_name):
     def announce(message):
-        print(f'{venue_name}: {message}')
+        print(f'{venue_name}: {message}')   # announce closes over venue_name
     return announce
 
 
 main_hall = make_announcer('Riverside Community Hall')
+# make_announcer() has already returned, and the closure still uses venue_name
 main_hall('Doors open at 7.')     # Riverside Community Hall: Doors open at 7.
 ```
+
+**New Concepts:**
+
+- An inner function that refers to a variable of the function around it keeps access to that variable after the outer function returns. The inner function together with the variables it keeps is called a **closure**, and the inner function is said to close over those variables. `matches` closes over `month`.
+- Each call to the outer function creates new variables and a new inner function, so each function it returns has its own copy of what it closed over. `matches_month(12)` and `matches_month(1)` return two closures, one holding `12` and one holding `1`.
+- Code outside the closure has no name for the variable it holds: `month` exists only inside the closure, so `print(month)` at the top level raises `NameError: name 'month' is not defined`.
 
 **<details><summary>Q: In the function below, which function is the outer function, which is the inner function, and which variable from the outer function does the inner function refer to?</summary>**
 
@@ -620,6 +630,13 @@ Every `lambda` that uses a variable from the function around it is a closure, so
 **Predict, then run.** The venue also announces events in its annex. What do the three calls print?
 
 ```python
+# unchanged from Closures
+def make_announcer(venue_name):
+    def announce(message):
+        print(f'{venue_name}: {message}')
+    return announce
+
+
 main_hall = make_announcer('Riverside Community Hall')
 annex = make_announcer('Riverside Annex')
 
@@ -671,75 +688,76 @@ The method holds two `lambda` functions. For each one, say which function calls 
 
 **The Problem:** Code written by other programmers sometimes uses `map()` and `filter()`, two built-in higher-order functions, for jobs that a list comprehension also does.
 
+**Code:**
+
+```python
+# filter() keeps events where the callback returns True; list() collects them
+cheap = list(filter(lambda event: event.ticket_price() < 10, hall.events))
+# map() calls the callback on every event and collects the results
+names = list(map(lambda event: event.name, cheap))
+print(names)   # ['Movie Night: Coco', 'Board Game Night']
+
+# the same result as a comprehension, which Python programmers prefer
+names = [event.name for event in hall.events if event.ticket_price() < 10]
+print(names)   # ['Movie Night: Coco', 'Board Game Night']
+```
+
 **New Concepts:**
 
 - `filter(callback, items)` keeps the items for which the callback returns `True`. `map(callback, items)` calls the callback on every item and collects the results.
 - Both return an object that produces values one at a time, so `list()` turns the result into a list.
 - Python programmers prefer comprehensions for these jobs, because the expression sits in the line instead of inside a callback. Recognize `map()` and `filter()`, and write comprehensions.
 
-**Code:**
-
-```python
-cheap = list(filter(lambda event: event.ticket_price() < 10, hall.events))
-names = list(map(lambda event: event.name, cheap))
-print(names)   # ['Movie Night: Coco', 'Board Game Night']
-
-names = [event.name for event in hall.events if event.ticket_price() < 10]
-print(names)   # ['Movie Night: Coco', 'Board Game Night']
-```
-
 ### Sorting by More Than One Value
 
 **The Problem:** Two events on the same date tie when sorting by date, and their order is left as it was in the list. A listing that should show them alphabetically within each day needs a second value to compare.
-
-**New Concepts:**
-
-- A `key` can return a tuple, such as `(event.date, event.name)`.
-- Python compares tuples one position at a time: by the first value, and by the second only when the first values are equal.
 
 **Code:**
 
 ```python
 hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15, base_price=10))
 
+# the key returns a tuple: compared by date, then by name when dates are equal
 by_day_then_name = sorted(hall.events, key=lambda event: (event.date, event.name))
 print([event.name for event in by_day_then_name])
 # ['Movie Night: Coco', 'Friday Night Jazz', 'Holiday Crafts', 'Intro to Pottery', 'Board Game Night']
 ```
 
+**New Concepts:**
+
+- A `key` can return a tuple, such as `(event.date, event.name)`.
+- Python compares tuples one position at a time: by the first value, and by the second only when the first values are equal.
+
 ### A Dictionary of Functions in Place of an `if`/`elif` Chain
 
 **The Problem:** A menu that runs a different function for each choice is often written as a long `if`/`elif` chain, such as the eight branches of `show_menu()` in the case study's `src/menu.py`. Adding a choice means adding another branch.
 
-**New Concepts:**
-
-- A dictionary can map each choice to the function that handles it. Looking up the choice and calling what comes back replaces the whole chain. This pattern is called a **dispatch table**.
-- It only works when every function takes the same arguments. In `show_menu()`, `register(venue)` takes one argument and `book_ticket(venue, today)` takes two, which is one reason the case study keeps its `if`/`elif` chain.
-
 **Code:**
 
 ```python
+# every function in the table takes the same argument, venue
 def list_events(venue):
     print([event.name for event in venue.events])
 
 def count_events(venue):
     print(len(venue.events))
 
+# a dispatch table: each choice maps to the function that handles it
 actions = {'1': list_events, '2': count_events}
 
 choice = '2'
+# looks up the function for the choice, then calls it with hall
 actions[choice](hall)   # 5
 ```
+
+**New Concepts:**
+
+- A dictionary can map each choice to the function that handles it. Looking up the choice and calling what comes back replaces the whole chain. This pattern is called a **dispatch table**.
+- It only works when every function takes the same arguments. In `show_menu()`, `register(venue)` takes one argument and `book_ticket(venue, today)` takes two, which is one reason the case study keeps its `if`/`elif` chain.
 
 ### Changing a Closed-Over Variable with `nonlocal`
 
 **The Problem:** A closure can read the variables it closes over, but assigning to one, such as adding one to a count, raises an error.
-
-**New Concepts:**
-
-- An assignment such as `count += 1` inside the inner function makes `count` a new variable belonging to the inner function, so Python reads it before it has a value and raises `UnboundLocalError`.
-- `nonlocal count` tells Python that `count` belongs to the enclosing function, so the assignment changes the closed-over variable.
-- Each counter made by `make_counter()` has its own `count`.
 
 **Code:**
 
@@ -747,7 +765,7 @@ actions[choice](hall)   # 5
 def make_counter():
     count = 0
     def counter():
-        count += 1
+        count += 1            # the assignment makes count a new variable of counter()
         return count
     return counter
 
@@ -761,16 +779,22 @@ door()
 def make_counter():
     count = 0
     def counter():
-        nonlocal count
+        nonlocal count        # count is make_counter()'s variable, so += changes it
         count += 1
         return count
     return counter
 
 
 door = make_counter()
-box_office = make_counter()
+box_office = make_counter()   # a second counter with its own count
 print(door(), door(), box_office(), door())   # 1 2 1 3
 ```
+
+**New Concepts:**
+
+- An assignment such as `count += 1` inside the inner function makes `count` a new variable belonging to the inner function, so Python reads it before it has a value and raises `UnboundLocalError`.
+- `nonlocal count` tells Python that `count` belongs to the enclosing function, so the assignment changes the closed-over variable.
+- Each counter made by `make_counter()` has its own `count`.
 
 ## Summary
 

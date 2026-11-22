@@ -228,6 +228,8 @@ By default, regular expressions are case sensitive and, unless otherwise specifi
 Passing the `re.IGNORECASE` flag as a third argument allows for case-**insensitive** matches:
 
 ```python
+import re
+
 print(re.search(r"cat", "the cat in the hat", re.IGNORECASE))  # a match
 print(re.search(r"cat", "the Cat in the hat", re.IGNORECASE))  # also a match
 ```
@@ -235,6 +237,8 @@ print(re.search(r"cat", "the Cat in the hat", re.IGNORECASE))  # also a match
 The match object knows where the match was found. `.start()` returns the index of the first match:
 
 ```python
+import re
+
 phrase = 'How now brown cow?'
 print(re.search(r"brow", phrase).start())  # 8
 print(re.search(r"ow", phrase).start())    # 1
@@ -247,6 +251,8 @@ Be careful: if there is no match, `re.search` returns `None`, and `None.start()`
 `re.findall` returns a list containing every match between the string and the given pattern.
 
 ```python
+import re
+
 phrase = 'My cat named caterpillar loves catnip.'
 
 print(re.findall(r"cat", phrase))       # ['cat', 'cat', 'cat']
@@ -262,6 +268,8 @@ There is no "first match only" version to worry about here. `re.search` finds th
 `re.sub` replaces matches between the string and the given pattern with the given `replacement` string.
 
 ```python
+import re
+
 phrase = "my cat is named Catherine"
 
 # Replace every "cat", regardless of case
@@ -273,6 +281,8 @@ print(new_phrase)  # Prints 'my dog is named dogherine'
 By default, `re.sub` replaces ALL matches. You can limit it with the `count` keyword argument:
 
 ```python
+import re
+
 phrase = "my cat is named Catherine"
 
 # Replace only the first "cat", regardless of case

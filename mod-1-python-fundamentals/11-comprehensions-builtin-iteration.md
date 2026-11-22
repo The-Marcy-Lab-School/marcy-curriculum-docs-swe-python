@@ -432,6 +432,14 @@ We've seen the accumulator pattern for building an _integer_ total and a _list_ 
 Here we have some code that creates a lookup table dictionary mapping each type of item to the number of purchases of that item (e.g. "coffee" is in 2 purchases, "bagel" is in 1 purchase, etc...). This kind of lookup table is called a **frequency counter**.
 
 ```python
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+
 def get_item_counts(purchases):
     # The starting value here is an empty {}
     counts = {}
@@ -507,6 +515,14 @@ for purchase in purchases:
 While a filtering comprehension is used to get ALL values that pass a test, sometimes you only want the first one. A comprehension cannot stop early: it checks every element and builds a whole list, even when the first element already passed. The plain way is a `for` loop that leaves as soon as it finds it:
 
 ```python
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+
 def find_purchase(purchases, item):
     for purchase in purchases:
         if purchase["item"] == item:

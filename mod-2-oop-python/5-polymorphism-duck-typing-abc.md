@@ -150,17 +150,12 @@ The rest of this chapter builds on the idea of polymorphism:
 
 **The Problem:** The `ticket_price()` and `can_refund()` functions ask every event which kind it is, so every new kind of event needs a new branch in every function, and a missed branch gives a wrong answer without an error.
 
-**New Concepts:**
-
-- Each subclass defines its own `ticket_price()` and `can_refund()`, overriding `Event`'s versions, so the rule for each kind of event lives in that kind's class.
-- Code that uses an event calls `event.ticket_price()` and never checks the kind. Attribute lookup finds the method on the event's own class, or on `Event` when the subclass does not override it.
-- **Polymorphism** is different types of object responding to the same method call in their own way, so that the code making the call does not need to know which type it is holding. The word comes from Greek: _poly_, "many", and _morph_, "form".
-- Python's built-in types already work this way: `len()` works on a string, a list, and a dictionary, and each type works out its own length.
-- Adding a kind of event now means writing one new class. No code that uses events has to change.
-
 **Code:**
 
 ```python
+from datetime import date, timedelta
+
+
 class Event:
     def __init__(self, name, date, capacity, base_price):
         self.name = name
@@ -184,10 +179,10 @@ class Concert(Event):
         super().__init__(name, date, capacity, base_price)
         self.performer = performer
 
-    def ticket_price(self):
+    def ticket_price(self):             # overrides Event's ticket_price()
         return super().ticket_price() + Concert.SERVICE_FEE
 
-    def can_refund(self, today):
+    def can_refund(self, today):        # overrides Event's can_refund()
         return today <= self.date - timedelta(days=7)
 
 
@@ -204,7 +199,7 @@ class Workshop(Event):
 
 
 class Screening(Event):
-    def can_refund(self, today):
+    def can_refund(self, today):        # the only override: ticket_price() comes from Event
         return False
 
 
@@ -217,15 +212,24 @@ events = [jazz, pottery, coco]
 today = date(2026, 12, 1)
 
 for event in events:
-    price = event.ticket_price()
+    price = event.ticket_price()        # never checks the kind: runs the event's own class's version
     marker = ' (refundable)' if event.can_refund(today) else ''
     print(f'{event.name}: ${price}{marker}')
 # Friday Night Jazz: $30
 # Intro to Pottery: $25 (refundable)
 # Movie Night: Coco: $8
 
+# polymorphism in built-in types: each type works out its own length
 print(len('Coco'), len(['A1', 'A2']), len({'jazz': 30}))   # 4 2 1
 ```
+
+**New Concepts:**
+
+- Each subclass defines its own `ticket_price()` and `can_refund()`, overriding `Event`'s versions, so the rule for each kind of event lives in that kind's class.
+- Code that uses an event calls `event.ticket_price()` and never checks the kind. Attribute lookup finds the method on the event's own class, or on `Event` when the subclass does not override it.
+- **Polymorphism** is different types of object responding to the same method call in their own way, so that the code making the call does not need to know which type it is holding. The word comes from Greek: _poly_, "many", and _morph_, "form".
+- Python's built-in types already work this way: `len()` works on a string, a list, and a dictionary, and each type works out its own length.
+- Adding a kind of event now means writing one new class. No code that uses events has to change.
 
 {% hint style="warning" %}
 **Predict, then run.** The venue adds guided tours again: the base price plus a $3 booking fee, refundable until the day before. This time `Tour` defines its own `ticket_price()` and reuses `Event`'s `can_refund()`. What does the loop print?
@@ -458,16 +462,6 @@ for item in shelf:
 
 **The Problem:** Polymorphism and inheritance are easy to confuse, because so far every kind of event got its polymorphism from inheritance. A subclass receives the superclass's methods and overrides the ones that differ, so every kind of event is guaranteed to have `ticket_price()`. But a partner museum now wants to sell its tours through the venue's menu, and its `MuseumTour` class was written by another team. It does not inherit from `Event`, so nothing guarantees that it has the methods the menu calls.
 
-**New Concepts:**
-
-- Code can decide whether it can use an object in one of two ways:
-  - **Checking the class.** The code asks "What is this object's class?", with `isinstance(item, Event)`, and infers from the answer which methods can be called on it. It turns away any object whose class it does not name, even an object that has every method the code needs.
-  - **Duck typing.** The code asks "Can this object perform the action I need?" It calls the method, and Python's attribute lookup searches the object and its classes for a method with that name, whichever class the object came from.
-- The concept follows the old saying: "If it walks like a duck and it quacks like a duck, then it must be a duck."
-- Unrelated classes can define the same method. `list` and `str` do not inherit from each other, but each defines `__len__`. `len()` calls its argument's `__len__` without checking the argument's type, so it works on both, and on any class you write that defines `__len__`.
-- Inheritance guarantees polymorphism: every subclass receives the superclass's methods, so code that uses the superclass's interface works with every subclass. Polymorphism between classes that share no superclass is called duck typing. So polymorphism can come from inheritance, but it does not require it.
-- Code written the duck-typed way checks nothing in advance. A method the object lacks is discovered only when code calls it, which may be far from the line that created the object.
-
 **Code:**
 
 ```python
@@ -479,7 +473,7 @@ class Playlist:
     def __init__(self, songs):
         self.songs = songs
 
-    def __len__(self):
+    def __len__(self):          # len() calls __len__ without checking the class
         return len(self.songs)
 
 
@@ -488,13 +482,13 @@ print(len(my_playlist))    # 3: Playlist defines __len__, and inherits from neit
 ```
 
 ```python
-class MuseumTour:
+class MuseumTour:                       # does not inherit from Event
     def __init__(self, name, date, price):
         self.name = name
         self.date = date
         self.price = price
 
-    def ticket_price(self):
+    def ticket_price(self):             # defines the method the menu calls, as every event does
         return self.price
 
     def can_refund(self, today):
@@ -506,7 +500,7 @@ menu = [jazz, coco, gallery]
 
 # Checking the class: the museum tour is skipped, even though it has both methods
 for item in menu:
-    if isinstance(item, Event):
+    if isinstance(item, Event):         # asks "What is this object's class?"
         price = item.ticket_price()
         marker = ' (refundable)' if item.can_refund(today) else ''
         print(f'{item.name}: ${price}{marker}')
@@ -515,13 +509,23 @@ for item in menu:
 
 # Duck typing: every item that has both methods works
 for item in menu:
-    price = item.ticket_price()
+    price = item.ticket_price()         # attribute lookup finds ticket_price() on any class
     marker = ' (refundable)' if item.can_refund(today) else ''
     print(f'{item.name}: ${price}{marker}')
 # Friday Night Jazz: $30
 # Movie Night: Coco: $8
 # Gallery After Dark: $12 (refundable)
 ```
+
+**New Concepts:**
+
+- Code can decide whether it can use an object in one of two ways:
+  - **Checking the class.** The code asks "What is this object's class?", with `isinstance(item, Event)`, and infers from the answer which methods can be called on it. It turns away any object whose class it does not name, even an object that has every method the code needs.
+  - **Duck typing.** The code asks "Can this object perform the action I need?" It calls the method, and Python's attribute lookup searches the object and its classes for a method with that name, whichever class the object came from.
+- The concept follows the old saying: "If it walks like a duck and it quacks like a duck, then it must be a duck."
+- Unrelated classes can define the same method. `list` and `str` do not inherit from each other, but each defines `__len__`. `len()` calls its argument's `__len__` without checking the argument's type, so it works on both, and on any class you write that defines `__len__`.
+- Inheritance guarantees polymorphism: every subclass receives the superclass's methods, so code that uses the superclass's interface works with every subclass. Polymorphism between classes that share no superclass is called duck typing. So polymorphism can come from inheritance, but it does not require it.
+- Code written the duck-typed way checks nothing in advance. A method the object lacks is discovered only when code calls it, which may be far from the line that created the object.
 
 {% hint style="warning" %}
 **Predict, then run.** A second partner, a botanical garden, sends its own class, `GardenTour`. It defines `ticket_price()` but not `can_refund()`. What does the menu loop print?
@@ -601,17 +605,6 @@ It does not use inheritance: `Dog` and `Cat` share no parent class apart from `o
 
 The program needs to state which methods every kind of event must define, and to check them when an object is created rather than when one of its methods is called.
 
-**New Concepts:**
-
-- A **contract**, also called a **shared interface**, is the set of method names every type in a group promises to define, so that code using the group can call them on any member. The contract for the venue's events is two methods: `ticket_price()` and `can_refund(today)`.
-- Writing the contract down, in the design document or in a comment above the base class, records an agreement between pieces of code. A comment cannot enforce the agreement, though: a subclass that breaks it still runs.
-- Inheritance gives every subclass a version of every method, so a subclass that forgets an override still has one: the parent's version, which may be wrong for it.
-- An **abstract base class (ABC)** is a class that cannot be instantiated and exists to declare the methods its subclasses must provide. It inherits from `ABC`, which comes from the standard library's `abc` module.
-- **`@abstractmethod`** marks a method every subclass must define. A subclass that leaves one out raises `TypeError` the moment anything tries to instantiate it.
-- A **concrete class** is a class you can instantiate, because it defines every abstract method.
-- An abstract method can still have a body. `Event.ticket_price()` returns the base price, and a subclass reaches it with `super().ticket_price()`. Marking it abstract makes every subclass decide its own price, even one that only charges the base price.
-- `Event` itself cannot be created, because its own methods are still marked abstract.
-
 **Code:**
 
 Without an abstract base class, using the `Event` from Letting Each Kind of Event Decide, a subclass that forgets an override is created and used without complaint:
@@ -631,24 +624,25 @@ print(late_set.ticket_price())   # 25, not 30: Event's version, with no service 
 With an abstract base class, the contract is written as code, and Python checks it whenever an object is created:
 
 ```python
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod     # from the standard library's abc module
+from datetime import date, timedelta
 
 
 # Contract: every kind of event defines
 #   ticket_price()      the price of one ticket
 #   can_refund(today)   whether a ticket can still be refunded on that day
-class Event(ABC):
+class Event(ABC):                       # inherits from ABC, so Event is an abstract base class
     def __init__(self, name, date, capacity, base_price):
         self.name = name
         self.date = date
         self.capacity = capacity
         self.base_price = base_price
 
-    @abstractmethod
+    @abstractmethod                     # every subclass must define ticket_price()
     def ticket_price(self):
-        return self.base_price
+        return self.base_price          # an abstract method can still have a body
 
-    @abstractmethod
+    @abstractmethod                     # every subclass must define can_refund()
     def can_refund(self, today):
         pass
 
@@ -661,7 +655,7 @@ class Concert(Event):
         self.performer = performer
 
     def ticket_price(self):
-        return super().ticket_price() + Concert.SERVICE_FEE
+        return super().ticket_price() + Concert.SERVICE_FEE   # reaches the abstract method's body
 
     def can_refund(self, today):
         return today <= self.date - timedelta(days=7)
@@ -714,6 +708,17 @@ classDiagram
         can_refund(today)
     }
 ```
+
+**New Concepts:**
+
+- A **contract**, also called a **shared interface**, is the set of method names every type in a group promises to define, so that code using the group can call them on any member. The contract for the venue's events is two methods: `ticket_price()` and `can_refund(today)`.
+- Writing the contract down, in the design document or in a comment above the base class, records an agreement between pieces of code. A comment cannot enforce the agreement, though: a subclass that breaks it still runs.
+- Inheritance gives every subclass a version of every method, so a subclass that forgets an override still has one: the parent's version, which may be wrong for it.
+- An **abstract base class (ABC)** is a class that cannot be instantiated and exists to declare the methods its subclasses must provide. It inherits from `ABC`, which comes from the standard library's `abc` module.
+- **`@abstractmethod`** marks a method every subclass must define. A subclass that leaves one out raises `TypeError` the moment anything tries to instantiate it.
+- A **concrete class** is a class you can instantiate, because it defines every abstract method.
+- An abstract method can still have a body. `Event.ticket_price()` returns the base price, and a subclass reaches it with `super().ticket_price()`. Marking it abstract makes every subclass decide its own price, even one that only charges the base price.
+- `Event` itself cannot be created, because its own methods are still marked abstract.
 
 {% hint style="warning" %}
 **Check for understanding.** Open `DESIGN.md` in the case study and find the shared contract in section 5. Which method names does it list? Then search the `src` folder for each one, skipping `events.py` and `events_abc.py`, and name every place in the application that calls it.
@@ -773,12 +778,6 @@ TypeError: Can't instantiate abstract class Screening without an implementation 
 
 **The Problem:** Both approaches let one loop treat many types of object the same way, but each one fails in a different case, so a design has to choose between them.
 
-**New Concepts:**
-
-- An abstract base class catches a missing method when the object is created. It fails when a class cannot or should not inherit from your base class, such as `MuseumTour`, which another team wrote.
-- Duck typing works with any class that defines the methods, including classes you did not write. It fails late: a missing method is discovered only when it is called.
-- With duck typing, the written contract is the only place the agreement is recorded, so writing it down matters even more.
-
 **Code:**
 
 ```python
@@ -788,6 +787,12 @@ print(gallery.ticket_price())   # 12: duck typing accepts any class that defines
 Festival('Summer Festival', date(2026, 12, 10), capacity=500, base_price=40)
 # TypeError: the abstract base class refuses an incomplete subclass before it is used
 ```
+
+**New Concepts:**
+
+- An abstract base class catches a missing method when the object is created. It fails when a class cannot or should not inherit from your base class, such as `MuseumTour`, which another team wrote.
+- Duck typing works with any class that defines the methods, including classes you did not write. It fails late: a missing method is discovered only when it is called.
+- With duck typing, the written contract is the only place the agreement is recorded, so writing it down matters even more.
 
 {% hint style="warning" %}
 **Check for understanding.** For each situation, decide whether to enforce the contract with an abstract base class or to document a duck-typed contract, and defend the choice by naming the case in which the other option fails.
@@ -806,12 +811,6 @@ Festival('Summer Festival', date(2026, 12, 10), capacity=500, base_price=40)
 ## Testing That an Incomplete Kind of Event Is Refused
 
 **The Problem:** The refusal of an incomplete kind of event depends on two `@abstractmethod` lines. If someone deletes one, every incomplete kind of event is created without complaint, and nothing fails until a missing method is called.
-
-**New Concepts:**
-
-- `with pytest.raises(TypeError):` around the line that creates an object passes only if creating it raises a `TypeError`.
-- The incomplete subclass is defined inside the test, because it exists only to be refused. Writing it in `src/` would add a broken kind of event to the application.
-- A third test creates a complete subclass, so the tests also fail if the abstract base class starts refusing everything.
 
 **Code:**
 
@@ -845,12 +844,12 @@ from events import Concert, Event
 
 
 def test_an_event_itself_cannot_be_created():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError):      # passes only if the line inside raises TypeError
         Event('Open Mic', date(2026, 12, 10), capacity=20, base_price=0)
 
 
 def test_a_kind_of_event_missing_can_refund_cannot_be_created():
-    class Festival(Event):
+    class Festival(Event):              # defined inside the test: it exists only to be refused
         def ticket_price(self):
             return super().ticket_price()
 
@@ -859,12 +858,19 @@ def test_a_kind_of_event_missing_can_refund_cannot_be_created():
 
 
 def test_a_complete_kind_of_event_can_be_created():
+    # a complete subclass: this test fails if Event starts refusing every subclass
     jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
     assert jazz.ticket_price() == 30
 ```
 
 With the virtual environment turned on and pytest installed, run `pytest` from the `abc-practice` folder. All three tests pass.
+
+**New Concepts:**
+
+- `with pytest.raises(TypeError):` around the line that creates an object passes only if creating it raises a `TypeError`.
+- The incomplete subclass is defined inside the test, because it exists only to be refused. Writing it in `src/` would add a broken kind of event to the application.
+- A third test creates a complete subclass, so the tests also fail if the abstract base class starts refusing everything.
 
 {% hint style="warning" %}
 **Predict, then run.** In `src/events.py`, delete the `@abstractmethod` line above `can_refund()`, and run `pytest` again. Which tests fail, and what does pytest report?
@@ -922,27 +928,28 @@ Name the rule each test protects. Why is `Festival` written inside the second te
 
 **The Problem:** Code written without the `abc` module often marks a method every subclass must define by making the base class's version raise `NotImplementedError`. That still finds a missing method only when it is called.
 
-**New Concepts:**
-
-- A base class method that raises `NotImplementedError` documents that subclasses must override it, and fails with a clear message if one does not.
-- The failure comes at the call, not at creation, so it has the same weakness as duck typing. `@abstractmethod` moves the failure to the moment the object is created.
-
 **Code:**
 
 ```python
 class OldEvent:
     def ticket_price(self):
+        # the base class's version raises, so every subclass must override it
         raise NotImplementedError('Each kind of event must define ticket_price().')
 
 
 class OldFestival(OldEvent):
-    pass
+    pass                # forgets to override ticket_price()
 
 
 fest = OldFestival()   # created without complaint
-fest.ticket_price()
+fest.ticket_price()    # the failure comes at the call, not at creation
 # NotImplementedError: Each kind of event must define ticket_price().
 ```
+
+**New Concepts:**
+
+- A base class method that raises `NotImplementedError` documents that subclasses must override it, and fails with a clear message if one does not.
+- The failure comes at the call, not at creation, so it has the same weakness as duck typing. `@abstractmethod` moves the failure to the moment the object is created.
 
 ## Summary
 

@@ -381,6 +381,8 @@ print(jazz is jazz_again)   # False
 To make `==` compare the data instead, which is **equality**, write `__eq__`. When Python evaluates `jazz == jazz_again`, it calls `jazz.__eq__(jazz_again)`: the object on the left of `==` arrives as `self`, and the object on the right arrives as the parameter, named `other` by convention. Whatever `__eq__` returns is the result of the `==`. Below we decide that if two events share a name and a date, they are equal:
 
 ```python
+from datetime import date
+
 class Event:
     def __init__(self, name, date, capacity):
         self.name = name
@@ -567,6 +569,8 @@ The comparisons give the same results. The printed form is slightly different: t
 **Check for understanding.** The case study's `Attendee` class, in `src/attendee.py`, is a dataclass. Its `Event` class, in `src/events.py`, is a plain class whose hand-written `__eq__` compares the name and the date:
 
 ```python
+from dataclasses import dataclass
+
 @dataclass
 class Attendee:
     name: str

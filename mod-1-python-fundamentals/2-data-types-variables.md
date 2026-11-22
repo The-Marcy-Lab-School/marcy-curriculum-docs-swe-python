@@ -580,6 +580,8 @@ Below is the order of precedence:
 Parentheses `()` can always be used to override the default order and make the evaluation order explicit:
 
 ```python
+# unchanged from the previous example
+fahrenheit = 212
 celsius = (fahrenheit - 32) * 5 / 9
 print(celsius)  # 100.0
 ```

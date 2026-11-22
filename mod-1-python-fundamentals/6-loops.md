@@ -190,6 +190,8 @@ A `for` loop over `range(100)` therefore runs 100 times.
 **Predict, then run.** What is the first number assigned to `roll_number` and what is the last number?
 
 ```python
+import random
+
 for roll_number in range(100):
     print(f"{roll_number + 1}. a {random.randint(1, 6)} was rolled")
 ```
@@ -218,6 +220,8 @@ Counting from zero is the convention in Python.
 `range()` can take a starting point and a step size as well, but note that the `stop` will always be excluded from the range:
 
 ```python
+import random
+
 for i in range(1, 101):      # 1, 2, 3, ... 100
     print(f"{i}. a {random.randint(1, 6)} was rolled")
 

@@ -454,6 +454,13 @@ def withdraw(balance, amount):
 The caller can then choose to catch it with `try` and `except`, or let it crash:
 
 ```python
+# unchanged from the previous example
+def withdraw(balance, amount):
+    if amount > balance:
+        raise ValueError(f"Cannot withdraw {amount} from a balance of {balance}")
+    return balance - amount
+
+
 balance = 100
 
 try:

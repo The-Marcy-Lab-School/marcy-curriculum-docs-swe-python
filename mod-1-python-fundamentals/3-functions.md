@@ -116,6 +116,11 @@ Notice that we've replaced the _specific_ variable names (`boiling_point_C`, `fr
 A function can be **invoked** to execute its statements by typing the function name and input values within parentheses `()`.
 
 ```python
+# unchanged from the previous example
+def convert_C_to_F(celsius):
+    fahrenheit = celsius * 9/5 + 32
+    print(fahrenheit)
+
 convert_C_to_F(100) # 212.0
 convert_C_to_F(0)   # 32.0
 convert_C_to_F(20)  # 68.0
@@ -262,6 +267,10 @@ Some things to remember:
 **Predict, then run.** What does each of these two calls do?
 
 ```python
+# unchanged from the previous example
+def print_sum(x, y):
+    print(x + y)
+
 print_sum('hello', 5)
 
 print_sum()
@@ -398,6 +407,10 @@ say_hello("Ben", "rock climb")
 Arguments can also be passed by **keyword**, naming the parameter they belong to. When you do, the order no longer matters:
 
 ```python
+# unchanged from the previous example
+def say_hello(name="friend", hobby="code"):
+    print(f"Hi, my name is {name}. I like to {hobby}!")
+
 say_hello(hobby="play the bass", name="Gonzalo")
 # Output: Hi, my name is Gonzalo. I like to play the bass!
 ```
@@ -689,6 +702,9 @@ The rule: if a function assigns to a name anywhere inside it, that name is local
 You can force Python to use the global one by adding `global count` as the first line of the function. **Do not.** If `increment` changes `count` directly, you can no longer tell what `count` holds by reading the lines around it. Any function anywhere in the file might have changed it, so tracking down a wrong value means reading every function. Pass the value in as a parameter and `return` the new value instead:
 
 ```python
+# unchanged from the previous example
+count = 0
+
 def increment(count):
     return count + 1
 

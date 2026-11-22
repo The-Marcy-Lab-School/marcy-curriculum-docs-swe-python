@@ -367,6 +367,8 @@ Each call to `Event(...)` creates a new instance and runs `__init__` on it, so `
 An attribute only exists if `__init__` stores it on `self`. This version forgets `self.` on one line:
 
 ```python
+from datetime import date
+
 class Event:
     def __init__(self, name, date, capacity):
         self.name = name

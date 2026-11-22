@@ -126,21 +126,12 @@ A concert, a workshop, and a screening are each a kind of event, and Python lets
 
 **The Problem:** The shared lines in `Concert` and `Workshop` need to live in one place, and each kind of event still needs to be its own class.
 
-**New Concepts:**
-
-- `Event` holds everything every event shares:
-  - the four attributes `name`, `date`, `capacity`, and `base_price`
-  - the default `ticket_price()` and `can_refund()`
-  - `__repr__`, and `__eq__`.
-- `class Screening(Event):` makes `Screening` a **subclass** of `Event`. The class in parentheses is the **superclass** (`Event`).
-- A subclass with nothing in its body receives every method of its superclass, including `__init__`, so `Screening(...)` takes the same four arguments `Event(...)` does.
-- An instance of a subclass is also an instance of its superclass, which `isinstance()` confirms.
-- `type(self).__name__` in `Event.__repr__` gives the name of the instance's own class, so a screening prints as `Screening(...)` without having to write its own `__repr__` (subclasses can inherit this shared `__repr__` from their superclass).
-
 **Code:**
 
 ```python
-class Event:
+from datetime import date
+
+class Event:                # the superclass: holds what every event shares
     def __init__(self, name, date, capacity, base_price):
         self.name = name
         self.date = date
@@ -154,21 +145,35 @@ class Event:
         return today < self.date
 
     def __repr__(self):
+        # type(self).__name__ is the name of the instance's own class, such as 'Screening'
         return f'{type(self).__name__}({self.name!r}, {self.date})'
 
     def __eq__(self, other):
         return self.name == other.name and self.date == other.date
 
 
-class Screening(Event):
-    pass
+class Screening(Event):     # Screening is a subclass of Event
+    pass                    # an empty body: Screening receives every method of Event
 
 
+# Screening receives Event's __init__, so it takes the same four arguments
 coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 print(coco.ticket_price())           # 8
+# an instance of a subclass is also an instance of its superclass
 print(isinstance(coco, Screening))   # True
 print(isinstance(coco, Event))       # True
 ```
+
+**New Concepts:**
+
+- `Event` holds everything every event shares:
+  - the four attributes `name`, `date`, `capacity`, and `base_price`
+  - the default `ticket_price()` and `can_refund()`
+  - `__repr__`, and `__eq__`.
+- `class Screening(Event):` makes `Screening` a **subclass** of `Event`. The class in parentheses is the **superclass** (`Event`).
+- A subclass with nothing in its body receives every method of its superclass, including `__init__`, so `Screening(...)` takes the same four arguments `Event(...)` does.
+- An instance of a subclass is also an instance of its superclass, which `isinstance()` confirms.
+- `type(self).__name__` in `Event.__repr__` gives the name of the instance's own class, so a screening prints as `Screening(...)` without having to write its own `__repr__` (subclasses can inherit this shared `__repr__` from their superclass).
 
 {% hint style="warning" %}
 **Predict, then run.** `Screening` has no `__repr__` of its own, and the one it receives is written inside `Event`. Does `print(coco)` show `Event('Movie Night: Coco', 2026-12-18)` or `Screening('Movie Night: Coco', 2026-12-18)`?
@@ -233,25 +238,26 @@ classDiagram
 
 **The Problem:** A concert needs a `performer`, but adding `performer` as a parameter to `Event.__init__` would mean that workshops and screenings would also take a performer.
 
-**New Concepts:**
-
-- A subclass can define its own `__init__`, which replaces the one it would have received from `Event`.
-- **`super()`** reaches the superclass from inside a subclass. `super().__init__(name, date, capacity, base_price)` runs `Event`'s `__init__` on the new instance, so the four shared attributes `name`, `date`, `capacity`, and `base_price` are stored by the one piece of code that stores them for every event.
-- The subclass then stores what only it has, with `self.performer = performer`.
-
 **Code:**
 
 ```python
 class Concert(Event):
+    # Concert's own __init__ replaces the one it would receive from Event
     def __init__(self, name, date, capacity, base_price, performer):
-        super().__init__(name, date, capacity, base_price)
-        self.performer = performer
+        super().__init__(name, date, capacity, base_price)  # runs Event's __init__ on the new instance
+        self.performer = performer                          # stores what only a concert has
 
 
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.name)        # Friday Night Jazz, stored by Event's __init__
 print(jazz.performer)   # The Blue Notes, stored by Concert's __init__
 ```
+
+**New Concepts:**
+
+- A subclass can define its own `__init__`, which replaces the one it would have received from `Event`.
+- **`super()`** reaches the superclass from inside a subclass. `super().__init__(name, date, capacity, base_price)` runs `Event`'s `__init__` on the new instance, so the four shared attributes `name`, `date`, `capacity`, and `base_price` are stored by the one piece of code that stores them for every event.
+- The subclass then stores what only it has, with `self.performer = performer`.
 
 {% hint style="warning" %}
 **Predict, then run.** A concert ticket should cost its base price plus a $5 service fee. Based on how `Concert` is currently written, what does `jazz` charge for a ticket?
@@ -279,16 +285,11 @@ The concert undercharges by $5. The next two sections give `Concert` a `ticket_p
 
 **The Problem:** Screening tickets are never refunded, but a `Screening` receives `Event`'s `can_refund()`, which allows a refund on any day before the event.
 
-**New Concepts:**
-
-- Defining a method in a subclass with the same name as one in the superclass is called **overriding**. The subclass's version runs for instances of the subclass.
-- The superclass's version is unchanged, and it still runs for every event that is not a `Screening`.
-
 **Code:**
 
 ```python
 class Screening(Event):
-    def can_refund(self, today):
+    def can_refund(self, today):    # overrides Event's can_refund(): the same name, so this version runs
         return False
 
 
@@ -298,6 +299,11 @@ board_games = Event('Board Game Night', date(2026, 12, 18), capacity=25, base_pr
 print(coco.can_refund(date(2026, 12, 1)))          # False, from Screening's version
 print(board_games.can_refund(date(2026, 12, 1)))   # True, from Event's version
 ```
+
+**New Concepts:**
+
+- Defining a method in a subclass with the same name as one in the superclass is called **overriding**. The subclass's version runs for instances of the subclass.
+- The superclass's version is unchanged, and it still runs for every event that is not a `Screening`.
 
 {% hint style="warning" %}
 **Check for understanding.** Suppose `Screening`'s method had been misspelled when it was written:
@@ -327,12 +333,6 @@ An override has to use exactly the same name as the superclass's method. Python 
 
 **The Problem:** A concert's ticket price is the base price plus the service fee. Writing `return self.base_price + 5` in `Concert` repeats `Event`'s rule for the base price, so if the venue later changes how every event's base price is worked out, such as a member discount, concerts would keep the old rule.
 
-**New Concepts:**
-
-- `super().ticket_price()` runs `Event`'s version of the method on the same instance and hands back its result, the base price.
-- The override then adds only what is different about a concert: the $5 service fee.
-- An override without `super()` replaces the parent's version entirely. Calling `super()` inside the override extends the parent's version instead.
-
 **Code:**
 
 ```python
@@ -342,16 +342,22 @@ class Concert(Event):
         self.performer = performer
 
     def ticket_price(self):
-        return super().ticket_price() + 5
+        return super().ticket_price() + 5               # extends: Event's result, plus the fee
 
     def can_refund(self, today):
-        return today <= self.date - timedelta(days=7)
+        return today <= self.date - timedelta(days=7)   # replaces Event's version, with no super()
 
 
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())                     # 30: Event's 25, plus Concert's 5
 print(jazz.can_refund(date(2026, 11, 30)))     # False: refunds closed on November 28
 ```
+
+**New Concepts:**
+
+- `super().ticket_price()` runs `Event`'s version of the method on the same instance and hands back its result, the base price.
+- The override then adds only what is different about a concert: the $5 service fee.
+- An override without `super()` replaces the parent's version entirely. Calling `super()` inside the override extends the parent's version instead.
 
 ### Challenge: A Workshop
 
@@ -405,25 +411,19 @@ class Workshop(Event):
 
 **A Solution with Another Problem**: Storing the fee on each concert in `__init__`, with `self.service_fee = 5`, gives the fee a name but gives every concert its own copy. When the venue raises the fee to $6, every concert that already exists still holds `5`, and the venue charges two different fees for the same kind of ticket. Or, every existing concert needs to have its `service_fee` updated individually.
 
-**New Concepts:**
-
-- The fee is information about concerts in general, not about one concert, so it belongs to the class.
-- A **class attribute** is assigned in the class body, outside any method. There is only one copy of it, and that copy belongs to the class.
-- `Concert.SERVICE_FEE` reads the class attribute through the class's name, the same way the case study's `Concert` class does.
-- The name is written in capital letters because the fee is a **constant**: a value the program reads but does not change while it runs. Capitals tell a reader at a glance that nothing should be assigned to it.
-
 **Code:**
 
 ```python
 class Concert(Event):
-    SERVICE_FEE = 5
+    # capital letters mark a constant
+    SERVICE_FEE = 5     # a class attribute: assigned in the class body, one copy for every concert
 
     def __init__(self, name, date, capacity, base_price, performer):
         super().__init__(name, date, capacity, base_price)
         self.performer = performer
 
     def ticket_price(self):
-        return super().ticket_price() + Concert.SERVICE_FEE
+        return super().ticket_price() + Concert.SERVICE_FEE  # read through the class's name
 
     # ... can_refund() from above ...
 
@@ -431,6 +431,13 @@ class Concert(Event):
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())   # 30
 ```
+
+**New Concepts:**
+
+- The fee is information about concerts in general, not about one concert, so it belongs to the class.
+- A **class attribute** is assigned in the class body, outside any method. There is only one copy of it, and that copy belongs to the class.
+- `Concert.SERVICE_FEE` reads the class attribute through the class's name, the same way the case study's `Concert` class does.
+- The name is written in capital letters because the fee is a **constant**: a value the program reads but does not change while it runs. Capitals tell a reader at a glance that nothing should be assigned to it.
 
 {% hint style="warning" %}
 **Predict, then run.** The venue raises the service fee for every concert, including the two already scheduled. What do the last two lines print?
@@ -467,22 +474,12 @@ Both concerts read `Concert.SERVICE_FEE` when `ticket_price()` runs, and there i
 
 The program needs a rule that says where to look for a name the instance does not hold, and which version of a method runs when two classes both define it, as `Concert` and `Event` both define `ticket_price()`.
 
-**New Concepts:**
-
-- When code reads `jazz.something`, Python searches in a fixed order, called **attribute lookup**: the instance → then its class → then the superclass → then `object`. It uses the first match it finds and stops searching.
-- That order is why an override wins: Python finds `ticket_price` on `Concert` before it reaches `Event`.
-- It is also how an instance reads a class attribute: `jazz.SERVICE_FEE` finds nothing on the instance and finds the fee on `Concert`. Code outside the class reads a class attribute through the class, as `Concert.SERVICE_FEE`, so that a reader can see at a glance that the value is shared.
-- **`obj.__dict__`** shows what one place holds. Comparing the instance's `__dict__` with each class's `__dict__` shows which step of the search finds a name.
-- **`object`** is the class every class inherits from. It supplies methods nobody wrote, such as `__ne__`, which is why `!=` works on events even though `Event` only defines `__eq__`.
-- `dir()` lists every name the search can reach, from every step. `__dict__` lists only what one place holds.
-- If no step has the name, Python raises `AttributeError`.
-
 **Code:**
 
 ```python
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
-print(jazz.__dict__)
+print(jazz.__dict__)   # only the attributes stored on the instance itself
 # {'name': 'Friday Night Jazz', 'date': datetime.date(2026, 12, 5), 'capacity': 40, 'base_price': 25, 'performer': 'The Blue Notes'}
 
 print('SERVICE_FEE' in jazz.__dict__)       # False
@@ -490,10 +487,11 @@ print('SERVICE_FEE' in Concert.__dict__)    # True: found one step up, on the cl
 print('ticket_price' in Concert.__dict__)   # True: found on Concert, so Event's version is never reached
 print('__repr__' in Concert.__dict__)       # False
 print('__repr__' in Event.__dict__)         # True: found one step further up
+# __ne__ is the method that != calls
 print('__ne__' in Event.__dict__)           # False
 print('__ne__' in object.__dict__)          # True: found at the last step
 
-jazz.blah
+jazz.blah   # no step of the search has blah
 # AttributeError: 'Concert' object has no attribute 'blah'
 ```
 
@@ -503,6 +501,16 @@ Every name read through `jazz` is searched for in this order, and the search sto
 flowchart LR
     A["jazz (the instance)"] --> B["Concert"] --> C["Event"] --> D["object"]
 ```
+
+**New Concepts:**
+
+- When code reads `jazz.something`, Python searches in a fixed order, called **attribute lookup**: the instance → then its class → then the superclass → then `object`. It uses the first match it finds and stops searching.
+- That order is why an override wins: Python finds `ticket_price` on `Concert` before it reaches `Event`.
+- It is also how an instance reads a class attribute: `jazz.SERVICE_FEE` finds nothing on the instance and finds the fee on `Concert`. Code outside the class reads a class attribute through the class, as `Concert.SERVICE_FEE`, so that a reader can see at a glance that the value is shared.
+- **`obj.__dict__`** shows what one place holds. Comparing the instance's `__dict__` with each class's `__dict__` shows which step of the search finds a name.
+- **`object`** is the class every class inherits from. It supplies methods nobody wrote, such as `__ne__`, which is why `!=` works on events even though `Event` only defines `__eq__`.
+- `dir()` lists every name the search can reach, from every step. `__dict__` lists only what one place holds.
+- If no step has the name, Python raises `AttributeError`.
 
 **<details><summary>Q: A list `[]` holds its items, but where does a list's `append()` method live?</summary>**
 
@@ -560,12 +568,6 @@ This is true of instances of built-in data types such as lists, strings, integer
 
 **The Problem:** A program now has two ways to connect classes: one class can inherit from another, or one object can hold another. So, how do we choose?
 
-**New Concepts:**
-
-- **"Is a"** describes **inheritance**: a concert is an event and shares many of the same attributes as an event, so `Concert` inherits from `Event`.
-- **"Has a"** describes **composition**: a reservation has an attendee and an event but has different attributes from both, so `Reservation` holds them as attributes. We might say that "a reservation is composed of an attendee and the event they are attending"
-- Two proposed subclasses that differ only in the value of one attribute should usually be one class with that attribute. A `MatineeScreening` and an `EveningScreening` that differ only in their start time are one `Screening` class with a `start_time` attribute.
-
 **Code:**
 
 ```python
@@ -577,6 +579,12 @@ class Reservation:             # a reservation has an attendee and an event
     attendee: Attendee
     event: Event
 ```
+
+**New Concepts:**
+
+- **"Is a"** describes **inheritance**: a concert is an event and shares many of the same attributes as an event, so `Concert` inherits from `Event`.
+- **"Has a"** describes **composition**: a reservation has an attendee and an event but has different attributes from both, so `Reservation` holds them as attributes. We might say that "a reservation is composed of an attendee and the event they are attending"
+- Two proposed subclasses that differ only in the value of one attribute should usually be one class with that attribute. A `MatineeScreening` and an `EveningScreening` that differ only in their start time are one `Screening` class with a `start_time` attribute.
 
 {% hint style="warning" %}
 **Check for understanding.** A restaurant is designing its ordering system. For each pair of classes, decide whether the relationship is "is a" (inheritance), "has a" (composition), or "one class with an attribute", and give a one-sentence reason.
@@ -615,11 +623,6 @@ class Reservation:             # a reservation has an attendee and an event
 
 **The Problem:** Each subclass can override a method and break it on its own. A test of `Event.ticket_price()` passes even when `Workshop.ticket_price()` has stopped adding the materials fee.
 
-**New Concepts:**
-
-- Write one test per subclass that makes the same call and asserts the result that subclass should give.
-- Use the same base price in every test, so that the difference between the expected results is exactly what each subclass adds.
-
 **Code:**
 
 Set up a project with `Event` and its three subclasses in `src/events.py`, and the tests in `tests/test_events.py`:
@@ -650,22 +653,27 @@ from datetime import date
 from events import Concert, Screening, Workshop
 
 
-def test_a_concert_adds_the_service_fee():
+def test_a_concert_adds_the_service_fee():     # one test per subclass, each making the same call
     jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
-    assert jazz.ticket_price() == 30
+    assert jazz.ticket_price() == 30           # the base price, 25, plus the service fee, 5
 
 
 def test_a_workshop_adds_the_materials_fee():
     pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=25, materials_fee=10)
-    assert pottery.ticket_price() == 35
+    assert pottery.ticket_price() == 35        # the same base price, plus the materials fee, 10
 
 
 def test_a_screening_charges_the_base_price():
     coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=25)
-    assert coco.ticket_price() == 25
+    assert coco.ticket_price() == 25           # the same base price, with nothing added
 ```
 
 With the virtual environment turned on and pytest installed, run `pytest` from the `inheritance-practice` folder. All three tests pass.
+
+**New Concepts:**
+
+- Write one test per subclass that makes the same call and asserts the result that subclass should give.
+- Use the same base price in every test, so that the difference between the expected results is exactly what each subclass adds.
 
 {% hint style="warning" %}
 **Predict, then run.** In `src/events.py`, change the last line of `Workshop.ticket_price()` from `return super().ticket_price() + self.materials_fee` to `return self.materials_fee`, and run `pytest` again. Which tests fail, and what does pytest report?
@@ -723,10 +731,6 @@ If the concert broke, the first `assert` would fail with `assert 25 == 30`, and 
 
 **The Problem:** A subclass `__init__` that never calls `super().__init__()` creates the instance without the shared attributes, and nothing complains until code reads one of them.
 
-**New Concepts:**
-
-- The error appears on the line that reads `jazz.name`, not on the line that left out `super().__init__()`. The mistake and the symptom are in two different places, so whoever investigates starts from the wrong line.
-
 **Code:**
 
 ```python
@@ -734,10 +738,15 @@ class Concert(Event):
     def __init__(self, name, date, capacity, base_price, performer):
         self.performer = performer      # super().__init__() is missing
 
+# no error yet: the instance is created without name, date, capacity, or base_price
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
-print(jazz.name)
+print(jazz.name)    # the error appears here, not on the line that left out super().__init__()
 # AttributeError: 'Concert' object has no attribute 'name'
 ```
+
+**New Concepts:**
+
+- The error appears on the line that reads `jazz.name`, not on the line that left out `super().__init__()`. The mistake and the symptom are in two different places, so whoever investigates starts from the wrong line.
 
 ### Assigning a Class Attribute Through an Instance
 
@@ -758,57 +767,60 @@ print(jazz.ticket_price())   # 30
 
 **The Problem:** Code that asks whether an object is an event with `type(obj) == Event` gets `False` for every concert, workshop, and screening, so a check written that way turns away every subclass.
 
+**Code:**
+
+```python
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+
+# isinstance() asks whether jazz is a kind of Concert, or a kind of Event
+print(isinstance(jazz, Concert))   # True
+print(isinstance(jazz, Event))     # True
+# type() gives only the instance's own class, Concert
+print(type(jazz) == Concert)       # True
+print(type(jazz) == Event)         # False
+```
+
 **New Concepts:**
 
 - `isinstance(jazz, Event)` is `True`, because a concert is an event.
 - `type(jazz) == Event` is `False`, because `type()` names only the instance's own class.
 - Use `isinstance()` when asking whether an object is a kind of something.
 
-**Code:**
-
-```python
-jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
-
-print(isinstance(jazz, Concert))   # True
-print(isinstance(jazz, Event))     # True
-print(type(jazz) == Concert)       # True
-print(type(jazz) == Event)         # False
-```
-
 ### `__mro__`: The Lookup Order Written Down
 
 **The Problem:** When an attribute lookup finds a different method than expected, you need to see the exact order in which Python searches the classes.
+
+**Code:**
+
+```python
+print(Concert.__mro__)   # the classes, in the order attribute lookup searches them
+# (<class '__main__.Concert'>, <class '__main__.Event'>, <class 'object'>)
+```
 
 **New Concepts:**
 
 - `Concert.__mro__` holds the order Python searches the classes. MRO stands for method resolution order.
 - A class can name more than one superclass, which is called **multiple inheritance**, and `__mro__` is how Python orders the search then. Recognize it when you see it, and use single inheritance in your own classes.
 
-**Code:**
-
-```python
-print(Concert.__mro__)
-# (<class '__main__.Concert'>, <class '__main__.Event'>, <class 'object'>)
-```
-
 ### Not Every Object Has a `__dict__`
 
 **The Problem:** `__dict__` shows the attributes of an instance of a class you wrote, but using it to explore a built-in value fails.
-
-**New Concepts:**
-
-- Instances of the classes you write keep their attributes in a `__dict__`, but many built-in types do not.
-- `dir()` works on every object, so use it to explore a value whose class you did not write.
 
 **Code:**
 
 ```python
 seats = ['A1', 'A2']
 
+# dir() works on every object, including a list
 print('append' in dir(seats))   # True
 print(seats.__dict__)
 # AttributeError: 'list' object has no attribute '__dict__'
 ```
+
+**New Concepts:**
+
+- Instances of the classes you write keep their attributes in a `__dict__`, but many built-in types do not.
+- `dir()` works on every object, so use it to explore a value whose class you did not write.
 
 ## Summary
 

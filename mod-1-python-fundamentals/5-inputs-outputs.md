@@ -441,6 +441,9 @@ print(message[11])  # Output: ???
 Python also lets you count backwards from the end of a string with a negative index. `-1` is the last character, `-2` is the one before it, and so on:
 
 ```python
+# unchanged from the previous example
+message = 'Hello there!'
+
 print(message[-1])  # Output: !
 print(message[-2])  # Output: ???
 
@@ -516,6 +519,9 @@ print(fruits[0:6])
 Either number in a slice can be left out. Leaving out `start` begins the slice at the first character, and leaving out `end` continues the slice to the last character. A negative number counts from the end of the string, just as it does with a single index:
 
 ```python
+# unchanged from the previous example
+fruits = 'apples, bananas, cherries'
+
 print(fruits[:6])
 # Output: apples
 
