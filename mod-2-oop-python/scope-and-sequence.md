@@ -31,37 +31,37 @@ reading, assignments, and project carry.
 
 ## Session calendar
 
-| Chapter | Session                                                                | Week | Day        | Date         |
-| ------- | ---------------------------------------------------------------------- | ---- | ---------- | ------------ |
-| 2.1     | Intro to OOP: Classes, `__init__`, and `self`                          | 7    | 4          | Thu 11/12    |
-| 2.2     | Composition, `__repr__`, `__eq__`, and `@dataclass` | 7    | 5          | Fri 11/13    |
-| 2.3     | Properties: Non-Public Attributes and `@property`   | 8    | 1          | Mon 11/16    |
-| 2.4     | Inheritance and Attribute Lookup                                       | 8    | 3          | Wed 11/18    |
-| 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                   | 8    | 4          | Thu 11/19    |
-| 2.6     | Functions as Values: Callbacks, Higher-Order Functions, and Closures   | 8    | 5          | Fri 11/20    |
-| 2.7     | Decorators                                                             | 9    | 1          | Mon 11/23    |
-| —       | Case Study                                                             | 9    | 3          | Wed 11/25    |
-| 2.8     | System Design and UML Diagrams                                         | 10   | 1          | Mon 11/30    |
-| 2.9     | System Design Strategies                                               | 10   | 3          | Wed 12/2     |
-| 2.10    | Writing a Specification You Can Hand Off                               | 10   | 5          | Fri 12/4     |
-| —       | Project, build days 1-4                                                | 11   | 1, 3, 4, 5 | 12/7 - 12/11 |
-| —       | Project, build day 5, due end of day                                   | 12   | 1          | Mon 12/14    |
-| —       | Project share-out                                                      | 12   | 3          | Wed 12/16    |
-| —       | Mod 2 Assessment                                                       | 12   | 5          | Fri 12/18    |
+| Chapter | Session                                                              | Week | Day        | Date         |
+| ------- | -------------------------------------------------------------------- | ---- | ---------- | ------------ |
+| 2.1     | Intro to OOP: Classes, `__init__`, and `self`                        | 7    | 4          | Thu 11/12    |
+| 2.2     | Composition, `__repr__`, `__eq__`, and `@dataclass`                  | 7    | 5          | Fri 11/13    |
+| 2.3     | Properties: Non-Public Attributes and `@property`                    | 8    | 1          | Mon 11/16    |
+| 2.4     | Inheritance and Attribute Lookup                                     | 8    | 3          | Wed 11/18    |
+| 2.5     | Polymorphism, Duck Typing, and Abstract Base Classes                 | 8    | 4          | Thu 11/19    |
+| 2.6     | Functions as Values: Callbacks, Higher-Order Functions, and Closures | 8    | 5          | Fri 11/20    |
+| 2.7     | Decorators                                                           | 9    | 1          | Mon 11/23    |
+| —       | Case Study                                                           | 9    | 3          | Wed 11/25    |
+| 2.8     | System Design and UML Diagrams                                       | 10   | 1          | Mon 11/30    |
+| 2.9     | System Design Strategies                                             | 10   | 3          | Wed 12/2     |
+| 2.10    | Writing a Specification You Can Hand Off                             | 10   | 5          | Fri 12/4     |
+| —       | Project, build days 1-4                                              | 11   | 1, 3, 4, 5 | 12/7 - 12/11 |
+| —       | Project, build day 5, due end of day                                 | 12   | 1          | Mon 12/14    |
+| —       | Project share-out                                                    | 12   | 3          | Wed 12/16    |
+| —       | Mod 2 Assessment                                                     | 12   | 5          | Fri 12/18    |
 
 ## Testing Objectives
 
 Every session that produces testable code carries one testing objective. Each session below points to its row here, so the testing objectives can be read and revised together.
 
-| Session    | Placement                | Objective                                                                                                                                                                                          |
-| ---------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Session    | Placement                | Objective                                                                                                                                                                                                                                   |
+| ---------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2.2        | In the session           | **Apply · R9** — Given a class with `__eq__` and a method that refuses to add an instance equal to one it already holds, implement a pytest test that adds an equal instance a second time and asserts that the collection still holds one. |
-| 2.3        | In the session           | **Apply · R9** — Given a validating setter, implement one test that uses `pytest.raises(ValueError)` on an invalid assignment, and a second that asserts the stored value is unchanged afterwards. |
-| 2.4        | By the end of the module | **Apply · R3** — Given a method overridden in two subclasses, implement one test per subclass that asserts the result each returns for the same call.                                              |
-| 2.5        | By the end of the module | **Apply · assignment only** — Given an abstract base class, implement a test that uses `pytest.raises(TypeError)` to show that a subclass missing an abstract method cannot be instantiated.       |
-| 2.7        | By the end of the module | **Apply · R7, R9** — Given a method guarded by a status-checking decorator, implement a test showing that a call from the wrong status leaves the object unchanged.                                |
-| 2.9        | In the session           | **Apply · R9** — Given a coordinator or status-driven class, implement a test that attempts a refused action and asserts that the status and every collection are unchanged afterwards.            |
-| Case study | In the session           | **Analyze · R9** — Given the case study's tests and the fixtures in `tests/conftest.py`, name the rule each test protects, and explain where each test's objects come from.                                                                                                                 |
+| 2.3        | In the session           | **Apply · R9** — Given a validating setter, implement one test that uses `pytest.raises(ValueError)` on an invalid assignment, and a second that asserts the stored value is unchanged afterwards.                                          |
+| 2.4        | By the end of the module | **Apply · R3** — Given a method overridden in two subclasses, implement one test per subclass that asserts the result each returns for the same call.                                                                                       |
+| 2.5        | By the end of the module | **Apply · assignment only** — Given an abstract base class, implement a test that uses `pytest.raises(TypeError)` to show that a subclass missing an abstract method cannot be instantiated.                                                |
+| 2.7        | By the end of the module | **Apply · R7, R9** — Given a method guarded by a status-checking decorator, implement a test showing that a call from the wrong status leaves the object unchanged.                                                                         |
+| 2.9        | In the session           | **Apply · R9** — Given a coordinator or status-driven class, implement a test that attempts a refused action and asserts that the status and every collection are unchanged afterwards.                                                     |
+| Case study | In the session           | **Analyze · R9** — Given the case study's tests and the fixtures in `tests/conftest.py`, name the rule each test protects, and explain where each test's objects come from.                                                                 |
 
 ---
 
@@ -297,6 +297,44 @@ _In the session:_
 _By the end of the module:_
 
 - **Analyze · R7** — Given a call that passes a function's result, such as `is_sold_out()`, where the function itself, `is_sold_out`, was expected, explain the error Python raises and correct the call.
+
+### Exit Ticket
+
+**Learning Objective**: Fellows will be able to explain how a higher-order function uses a function it receives as a value, and how a function returned from another function keeps access to the variables of the function that built it.
+
+**Question**
+
+This excerpt is from the case study's `Venue` class. An event's `ticket_price()` returns its `base_price`.
+
+```python
+class Venue:
+    def find_events(self, matches):
+        return [event for event in self._events if matches(event)]
+```
+
+```python
+def priced_under(limit):
+    def matches(event):
+        return event.ticket_price() < limit
+    return matches
+
+hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15))
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25))
+hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), capacity=30, base_price=8))
+
+budget = priced_under(20)
+print([event.name for event in hall.find_events(budget)])
+```
+
+What does the last line print? Explain what `budget` holds, which function calls it, and how it can still compare prices with `20` after `priced_under()` has already returned.
+
+**Level 2 Example**
+
+It prints `['Intro to Pottery', 'Movie Night: Coco']`, because those are the two events that cost less than $20. `budget` is a function that checks whether an event is under $20.
+
+**Level 3 Example**
+
+It prints `['Intro to Pottery', 'Movie Night: Coco']`. Calling `priced_under(20)` defines the inner function `matches` and returns it without calling it, because `return matches` has no parentheses, so `budget` holds a function, not a `True` or `False`. `find_events()` is a higher-order function: it receives `budget` as its `matches` parameter and calls it once for each event, keeping the events it returns `True` for. By the time `find_events()` calls it, `priced_under()` has already returned, but `matches` uses `limit`, a variable from the function around it, so it is a closure and keeps access to `limit`, which is `20`. Pottery costs 15 and Coco costs 8, so those two are kept, and Jazz costs 25, so it is left out.
 
 ## 2.7 Decorators
 
