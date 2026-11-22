@@ -558,9 +558,9 @@ be read by a fellow, not by an instructor.
 ## 2.7 Decorators — Mon 11/23
 
 - A **decorator** is a higher-order function that takes a function, wraps it in another function, and returns the wrapper. The wrapper can run code before and after the original.
-  - A **wrapper** is the inner function a decorator returns. It is what gets called in place of the original function.
+  - A **wrapper** is the inner function a decorator returns. The wrapper is what gets called in place of the original function.
   - The **`@` syntax** applies a decorator: writing `@requires_paid` above a method is the same as reassigning the method to the decorator's result.
-- A **decorator factory** is a function that takes an argument and builds a decorator from it. `@requires_status("paid")` first calls `requires_status("paid")`, which returns a decorator, and then applies that decorator to the method. `@app.route("/")` in Flask works the same way.
+- A **decorator factory** is a function that takes an argument and builds a decorator from that argument. `@requires_status("paid")` first calls `requires_status("paid")`, which returns a decorator, and then applies that decorator to the method. `@app.route("/")` in Flask works the same way.
 
 ## Case Study — Wed 11/25
 
