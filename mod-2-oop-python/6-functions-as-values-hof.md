@@ -75,6 +75,46 @@ print(hall.events_in_month(12))   # [Event('Friday Night Jazz', 2026-12-05), Eve
 print(hall.events_under(10))      # [Event('Movie Night: Coco', 2026-11-28), Event('Board Game Night', 2027-01-08)]
 ```
 
+<!-- setup: event
+from datetime import date
+
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    def ticket_price(self):
+        return self.base_price
+
+    def __repr__(self):
+        return f'Event({self.name!r}, {self.date})'
+-->
+
+<!-- setup: first-hall
+class Venue:
+    def __init__(self, name):
+        self.name = name
+        self.events = []
+
+    def add_event(self, event):
+        self.events.append(event)
+
+    def events_in_month(self, month):
+        return [event for event in self.events if event.date.month == month]
+
+    def events_under(self, price):
+        return [event for event in self.events if event.ticket_price() < price]
+
+
+hall = Venue('Riverside Community Hall')
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25))
+hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15))
+hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), capacity=30, base_price=8))
+hall.add_event(Event('Board Game Night', date(2027, 1, 8), capacity=25, base_price=0))
+-->
+
 **<details><summary>Q: Which parts of the two search methods are the same, and which part is different?</summary>**
 
 The same in both:
@@ -98,6 +138,7 @@ What changes from one question to the next is the test, and the test is a piece 
 
 **Code:**
 
+<!-- uses: event, first-hall -->
 ```python
 def is_free(event):          # creates a function and assigns it to the name is_free
     return event.ticket_price() == 0
@@ -179,6 +220,7 @@ DOORS OPEN AT 7
 
 **Code:**
 
+<!-- uses: event -->
 ```python
 class Venue:
     def __init__(self, name):
@@ -212,6 +254,33 @@ print(hall.find_events(is_in_december))   # [Event('Friday Night Jazz', 2026-12-
 print(hall.find_events(is_free))          # [Event('Board Game Night', 2027-01-08)]
 ```
 
+<!-- setup: find-events
+class Venue:
+    def __init__(self, name):
+        self.name = name
+        self.events = []
+
+    def add_event(self, event):
+        self.events.append(event)
+
+    def find_events(self, matches):
+        return [event for event in self.events if matches(event)]
+
+
+hall = Venue('Riverside Community Hall')
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25))
+hall.add_event(Event('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15))
+hall.add_event(Event('Movie Night: Coco', date(2026, 11, 28), capacity=30, base_price=8))
+hall.add_event(Event('Board Game Night', date(2027, 1, 8), capacity=25, base_price=0))
+
+
+def is_in_december(event):
+    return event.date.month == 12
+
+def is_free(event):
+    return event.ticket_price() == 0
+-->
+
 **New Concepts:**
 
 - A function passed into another function is called a **callback**. The function that receives it is a **higher-order function**.
@@ -223,6 +292,7 @@ print(hall.find_events(is_free))          # [Event('Board Game Night', 2027-01-0
 {% hint style="warning" %}
 **Predict, then run.** This version of the test prints a line every time it runs. What does the program print, and in what order?
 
+<!-- uses: event, find-events -->
 ```python
 def is_cheap(event):
     print(f'Checking {event.name}')
@@ -272,6 +342,7 @@ The caller wrote the test, but `find_events()` decided when to run it and how ma
 
 The venue also keeps a list of attendees. Add a list of attendees to `Venue`, an `add_attendee(attendee)` method, and a higher-order method `find_attendees(matches)` that returns a new list of the attendees for whom `matches` returns `True`. Then call it twice, with two different named functions: once for the attendees whose email address ends with `@example.com`, and once for the attendees whose name starts with `S`.
 
+<!-- not-runnable -->
 ```python
 from dataclasses import dataclass
 
@@ -332,6 +403,7 @@ def name_starts_with_s(attendee):
 
 **Code:**
 
+<!-- uses: event, find-events -->
 ```python
 # the name with no parentheses passes the function itself
 print(hall.find_events(is_free))     # [Event('Board Game Night', 2027-01-08)]
@@ -361,6 +433,7 @@ The message names `is_free()` because that is the call that broke. The fix is to
 {% hint style="warning" %}
 **Predict, then run.** This time the callback is called with an argument, so no argument is missing. What happens?
 
+<!-- uses: event, find-events -->
 ```python
 board_games = hall.events[3]
 hall.find_events(is_free(board_games))
@@ -387,6 +460,7 @@ This time the error comes from inside `find_events()`, one step away from the li
 
 **Code:**
 
+<!-- uses: event, find-events -->
 ```python
 # a lambda: parameter before the colon, returned expression after it
 print(hall.find_events(lambda event: event.ticket_price() < 10))
@@ -412,6 +486,7 @@ print(hall.find_events(lambda event: 'Night' in event.name))
 
 <details><summary>Answers</summary>
 
+<!-- uses: event, find-events -->
 ```python
 print(hall.find_events(lambda event: event.capacity >= 30))
 # [Event('Friday Night Jazz', 2026-12-05), Event('Movie Night: Coco', 2026-11-28)]
@@ -433,6 +508,7 @@ print(hall.find_events(lambda event: event.date.year == 2027))
 
 **Code:**
 
+<!-- uses: event, find-events -->
 ```python
 def event_date(event):
     return event.date
@@ -464,6 +540,7 @@ print(max(hall.events, key=lambda event: event.capacity))         # Event('Frida
 {% hint style="warning" %}
 **Predict, then run.** What happens when `sorted()` is given the events with no `key`?
 
+<!-- uses: event, find-events -->
 ```python
 print(sorted(hall.events))
 ```
@@ -497,6 +574,7 @@ The venue's website shows its events three ways. Using `sorted()`, `min()`, and 
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: event, find-events -->
 ```python
 latest_first = sorted(hall.events, key=lambda event: event.date, reverse=True)
 print([event.name for event in latest_first])
@@ -520,6 +598,7 @@ print([event.name for event in by_name])
 
 **Code:**
 
+<!-- uses: event, find-events -->
 ```python
 def matches_month(month):                 # higher-order: it returns a function
     def matches(event):                   # the inner function, created on each call
@@ -702,6 +781,7 @@ The method holds two `lambda` functions. For each one, say which function calls 
 
 **Code:**
 
+<!-- uses: event, find-events -->
 ```python
 # filter() keeps events where the callback returns True; list() collects them
 cheap = list(filter(lambda event: event.ticket_price() < 10, hall.events))
@@ -726,6 +806,7 @@ print(names)   # ['Movie Night: Coco', 'Board Game Night']
 
 **Code:**
 
+<!-- uses: event, find-events -->
 ```python
 hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15, base_price=10))
 
@@ -734,6 +815,10 @@ by_day_then_name = sorted(hall.events, key=lambda event: (event.date, event.name
 print([event.name for event in by_day_then_name])
 # ['Movie Night: Coco', 'Friday Night Jazz', 'Holiday Crafts', 'Intro to Pottery', 'Board Game Night']
 ```
+
+<!-- setup: holiday-crafts
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15, base_price=10))
+-->
 
 **New Concepts:**
 
@@ -746,6 +831,7 @@ print([event.name for event in by_day_then_name])
 
 **Code:**
 
+<!-- uses: event, find-events, holiday-crafts -->
 ```python
 # every function in the table takes the same argument, venue
 def list_events(venue):

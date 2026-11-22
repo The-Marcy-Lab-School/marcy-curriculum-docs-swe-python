@@ -65,6 +65,10 @@ It has one entry per chapter, including the case study and the project, in chapt
 
 `mod-1-python-fundamentals/scope-and-sequence.md` is the model for key terms and objectives. Rerun `python3 scripts/sync-key-terms.py <module-dir>` whenever a chapter's Key Terms section changes; `--check` reports without writing.
 
+## Runnable code blocks
+
+The LMS shows every lesson and runs its Python, HTML and JavaScript blocks, each Python block in a fresh interpreter. Every runnable block must run on its own and print exactly what its output comments say. `authoring-guide.md` gives the syntax that works in both GitBook and the LMS, including the hidden `<!-- setup: … -->` and `<!-- uses: … -->` comments and `<!-- not-runnable -->`. After editing a lesson's code, run `python3.14 scripts/check-code-blocks.py <file.md>`.
+
 ## Tables of contents
 
 **Never put a bare `&` in a heading. Write "and".** GitBook drops the ampersand when it builds an anchor, so "Key Terms & Commands" publishes with the broken anchor `#key-terms--commands` and every link to it fails. `scripts/update-toc.py` makes this substitution automatically at every heading level and retargets any link pointing at an anchor it changed. An ampersand inside inline code is left alone, because `` `&&` `` is a shell operator rather than a conjunction, and an ampersand with no surrounding spaces such as "Q&A" is reported for a person to decide rather than mangled into "QandA".
