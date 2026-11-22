@@ -385,13 +385,13 @@ for item in shelf:
 
 Refactor the program so that each kind of item decides its own loan period and late fee.
 
-Then, Add an `Audiobook` class without changing the loop, and add `Audiobook('Born a Crime')` to the shelf.
+Then the library starts lending audiobooks, which can be borrowed for 14 days and cost $1 for each day they are late. Add an `Audiobook` class without changing the loop, and add `Audiobook('Born a Crime')` to the shelf.
 
 **<details><summary>Need a hint?</summary>**
 
 1. Move the rules into two methods, `loan_days()` and `late_fee(days_late)`, and delete the two functions.
 2. Change the loop to call the methods. It should print the same three lines.
-3. The library starts lending audiobooks, which can be borrowed for 14 days and cost $1 for each day they are late. Add an `Audiobook` class without changing the loop, and add `Audiobook('Born a Crime')` to the shelf.
+3. The `else` branches hold the rules for any item that is not a book or a DVD. If those rules move into `LibraryItem`, `Audiobook` only needs to define the method whose rule is different.
 
 ```
 Kindred: 21-day loan, $4 if 4 days late
@@ -524,7 +524,7 @@ for item in menu:
   - **Duck typing.** The code asks "Can this object perform the action I need?" It calls the method, and Python's attribute lookup searches the object and its classes for a method with that name, whichever class the object came from.
 - The concept follows the old saying: "If it walks like a duck and it quacks like a duck, then it must be a duck."
 - Unrelated classes can define the same method. `list` and `str` do not inherit from each other, but each defines `__len__`. `len()` calls its argument's `__len__` without checking the argument's type, so it works on both, and on any class you write that defines `__len__`.
-- Inheritance guarantees polymorphism: every subclass receives the superclass's methods, so code that uses the superclass's interface works with every subclass. Polymorphism between classes that share no superclass is called duck typing. So polymorphism can come from inheritance, but it does not require it.
+- Inheritance guarantees polymorphism: every subclass receives the superclass's methods, so code that uses the superclass's interface works with every subclass. **Duck typing** is one specific way to achieve polymorphism based on an object's behavior rather than its class hierarchy. So polymorphism can come from inheritance, but it does not require it.
 - Code written the duck-typed way checks nothing in advance. A method the object lacks is discovered only when code calls it, which may be far from the line that created the object.
 
 {% hint style="warning" %}
@@ -756,7 +756,7 @@ TypeError: Can't instantiate abstract class Screening without an implementation 
 
 - `ticket_price()` is marked abstract on `Event`, so every subclass must define it, even one whose price is only the base price.
 - `Screening` defines `can_refund()` but not `ticket_price()`, so Python refuses to create one.
-- The fix is a one-line method, `return super().ticket_price()`, which reaches the body of `Event`'s abstract method.
+- The fix is a `ticket_price()` method whose body is one line, `return super().ticket_price()`, which reaches the body of `Event`'s abstract method.
 
 </details>
 {% endhint %}
@@ -766,7 +766,7 @@ TypeError: Can't instantiate abstract class Screening without an implementation 
 
 <details><summary>Answer</summary>
 
-- In `events_abc.py`, `ticket_price()` is marked `@abstractmethod` on `Event`, so every subclass must define it. Without the one-line method, creating a screening would raise `TypeError`.
+- In `events_abc.py`, `ticket_price()` is marked `@abstractmethod` on `Event`, so every subclass must define it. Without that method, creating a screening would raise `TypeError`.
 - In `events.py`, `Event.ticket_price()` is an ordinary method, so `Screening` receives it and does not need its own.
 - Running the file prints `Python refused to create a Festival: Can't instantiate abstract class Festival without an implementation for abstract method 'can_refund'`.
 - The line `Festival('Summer Festival', date.today(), capacity=500, base_price=40)` causes it. `Festival` defines `ticket_price()` but not `can_refund()`, so Python refuses to create one, and the `except TypeError` block prints the message.

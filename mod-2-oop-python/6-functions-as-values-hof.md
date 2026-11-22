@@ -591,6 +591,18 @@ Read the message in two parts: `matches_month.<locals>.matches()` names the func
 **Code:**
 
 ```python
+# matches_month() from Functions That Return Functions
+def matches_month(month):
+    def matches(event):
+        return event.date.month == month   # matches closes over month
+    return matches
+
+
+in_december = matches_month(12)   # a closure holding month = 12
+in_january = matches_month(1)     # a second closure, holding its own month = 1
+# matches_month() has returned twice, and each closure still uses its own month
+
+
 def make_announcer(venue_name):
     def announce(message):
         print(f'{venue_name}: {message}')   # announce closes over venue_name
@@ -747,7 +759,7 @@ actions = {'1': list_events, '2': count_events}
 
 choice = '2'
 # looks up the function for the choice, then calls it with hall
-actions[choice](hall)   # 5
+actions[choice](hall)   # 5, including Holiday Crafts from the previous example
 ```
 
 **New Concepts:**

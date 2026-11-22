@@ -350,7 +350,7 @@ class Concert(Event):
 
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())                     # 30: Event's 25, plus Concert's 5
-print(jazz.can_refund(date(2026, 11, 30)))     # False: refunds closed on November 28
+print(jazz.can_refund(date(2026, 11, 30)))     # False: the last day for a refund was November 28
 ```
 
 **New Concepts:**
@@ -703,8 +703,8 @@ Change the line back before moving on.
 
 ```python
 def test_each_kind_of_event_prices_its_tickets_differently():
-    jazz = Concert('Friday Night Jazz', date(2026, 12, 13), capacity=40, base_price=25, performer='The Blue Notes')
-    pottery = Workshop('Intro to Pottery', date(2026, 12, 5), capacity=2, base_price=15, materials_fee=10)
+    jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+    pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
     spirited_away = Screening('Movie Night: Spirited Away', date(2026, 12, 21), capacity=30, base_price=8)
 
     assert jazz.ticket_price() == 30            # 25 plus the 5 service fee
@@ -824,7 +824,7 @@ print(seats.__dict__)
 
 ## Summary
 
-- **Stub:** one paragraph, as in earlier chapters. It covers four things:
+- **Stub:** one paragraph, as in earlier chapters. It covers five things:
   - shared code lives in a superclass, and each subclass writes only what differs;
   - `super().__init__()` runs the parent's setup, and `super().method()` extends the parent's version of a method;
   - a class attribute holds one value every instance shares, such as `Concert.SERVICE_FEE`;
