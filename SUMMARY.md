@@ -63,6 +63,7 @@
   - [2.4 Inheritance and Attribute Lookup](mod-2-oop-python/4-inheritance-attribute-lookup.md)
   - [2.5 Polymorphism, Duck Typing, and Abstract Base Classes](mod-2-oop-python/5-polymorphism-duck-typing-abc.md)
   - [2.6 Functions as Values: Callbacks, Higher-Order Functions, and Closures](mod-2-oop-python/6-functions-as-values-hof.md)
+  - [2.7 Decorators](mod-2-oop-python/7-decorators.md)
 
 ## Fullstack & AI-Assisted Development
 
