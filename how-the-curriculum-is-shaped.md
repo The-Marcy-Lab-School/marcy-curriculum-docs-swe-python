@@ -50,10 +50,10 @@ Nearly every decision about this curriculum comes back to one question: **what d
 Every lesson follows the same outline, so a fellow always knows where the problem, the new idea, and the practice will be.
 
 1. **Opening:** a prose opening, then Key Terms.
-2. **Sections**, each with three parts:
-    - **The Problem** says what goes wrong, and for whom.
-    - **New Concepts** has one bullet per idea, with each new term in bold.
-    - **Code** runs, with its outputs written in comments.
+2. **Sections**, each with three parts in this order:
+    - **The Problem** says what goes wrong, and for whom. Its subject is the class or method that has the problem, described with the lesson's own terms.
+    - **Code** runs, with its outputs written in comments. Brief inline comments point out each new idea on the line where it happens.
+    - **New Concepts** has one bullet per idea, with each new term in bold. Each bullet explains code the fellow has just read, so it can name the variables and lines in that code.
 3. **Devices**, with a check every few sections:
     - "Predict, then run" boxes;
     - checks for understanding written as near transfer, meaning different classes that cover the same range of cases (the restaurant check in 2.4 is an example);
