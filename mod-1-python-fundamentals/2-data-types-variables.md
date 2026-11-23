@@ -85,6 +85,7 @@ There are also three types that hold other data or hold code: lists, dictionarie
 
 **Challenge:** Identify the data types of the values below:
 
+<!-- not-runnable -->
 ```py
 [5]
 "5"
@@ -417,32 +418,36 @@ If you were confused by this example, that is okay. The point of this example is
 
 ```python
 # What you would expect to happen usually happens
-10 + 5 * 2
-False and True
-not False
-not not False
-not False and True
-not (False and True)
-"ana" in "banana"
-None is None
+print(10 + 5 * 2)
+print(False and True)
+print(not False)
+print(not not False)
+print(not False and True)
+print(not (False and True))
+print("ana" in "banana")
+print(None is None)
+```
 
+```python
 # Slightly unexpected results
-"10" > "2"
-"a" > "B"
-8 / 2
-"3" * 5
-"5" + 5
-not 0
-not 1
-not 2
-True + True + False
-[1, 2] * 2
+print("10" > "2")
+print("a" > "B")
+print(8 / 2)
+print("3" * 5)
+print(not 0)
+print(not 1)
+print(not 2)
+print(True + True + False)
+print([1, 2] * 2)
+print("5" + 5)
+```
 
+```python
 # Huh?
-0 or "Python"
-0.1 + 0.2 == 0.3
-[1, 2] == [1, 2]
-[1, 2] is [1, 2]
+print(0 or "Python")
+print(0.1 + 0.2 == 0.3)
+print([1, 2] == [1, 2])
+print([1, 2] is [1, 2])
 ```
 
 {% hint style="info" %}
@@ -454,91 +459,101 @@ The fastest way to check a prediction like these is the **Python REPL**. Run `py
 **<details><summary>Answers</summary>**
 
 ```python
-10 + 5 * 2
+# What you would expect to happen usually happens
+
+print(10 + 5 * 2)
 # Result: 20
 # Why: Multiplication comes first, then addition -> 10 + (5 * 2)
 
-False and True
+print(False and True)
 # Result: False
 # Why: `and` produces True only when both sides are True. The left side is already False, so the result is False.
 
-not False
+print(not False)
 # Result: True
 # Why: `not` flips False to True and True to False.
 
-not not False
+print(not not False)
 # Result: False
 # Why: Python works from the inside out. The inner `not False` produces True, and the outer `not` flips that True back to False.
 
-not False and True
+print(not False and True)
 # Result: True
 # Why: `not` is evaluated before `and`, so this is (not False) and True, which becomes True and True.
 
-not (False and True)
+print(not (False and True))
 # Result: True
 # Why: Parentheses go first. False and True produces False, and then `not` flips it to True. The result matches the line above only by coincidence: not True and False is False, but not (True and False) is True.
 
-"ana" in "banana"
+print("ana" in "banana")
 # Result: True
 # Why: For strings, `in` checks whether the left string appears anywhere inside the right string as a run of characters in a row: b-ana-na. "nab" in "banana" is False, because those letters never appear in that order.
 
-None is None
+print(None is None)
 # Result: True
 # Why: A Python program has only one None, so both sides are the very same object. That is why `x is None` is the standard way to check whether a variable holds None.
+```
 
-"10" > "2"
+```python
+# Slightly unexpected results
+
+print("10" > "2")
 # Result: False
 # Why: Strings are compared character by character, using each character's position in Python's character table, even when the characters are digits. Python compares the first characters, "1" and "2", and "1" comes before "2" in that table. That decides the result, so Python never looks at the "0". To compare the numbers, compare 10 > 2 without the quotes.
 
-"a" > "B"
+print("a" > "B")
 # Result: True
 # Why: The same character-by-character rule applies. Every uppercase letter comes before every lowercase letter in Python's character table, so "a" comes after "B", even though a comes before b in the alphabet.
 
-8 / 2
+print(8 / 2)
 # Result: 4.0 (not 4)
 # Why: `/` always returns a float. Use `//` if you want an integer
 
-"3" * 5
-# Result: "33333"
+print("3" * 5)
+# Result: 33333
 # Why: Multiplying a string by an integer repeats the string
 
-"5" + 5
-# Result: TypeError
-# Why: + adds two numbers (even different kinds, like 5 + 2.5) or joins two strings, but it has no meaning for a string and a number. Python won't guess whether you meant "55" or 10, so it stops with a TypeError.
-
-not 0
+print(not 0)
 # Result: True
 # Why: `not` first decides whether its value counts as True or False. The number 0 counts as False, so `not` flips it to True. Chapter 1.4 explains which values count as false.
 
-not 1
+print(not 1)
 # Result: False
 # Why: Every number other than 0 counts as True, so `not` flips 1 to False.
 
-not 2
+print(not 2)
 # Result: False
 # Why: 2 counts as True, just like 1 does. `not` never does arithmetic. It always produces True or False.
 
-True + True + False
+print(True + True + False)
 # Result: 2
 # Why: In Python, True evaluates to 1 and False evaluates to 0 in arithmetic contexts
 
-[1, 2] * 2
+print([1, 2] * 2)
 # Result: [1, 2, 1, 2]
 # Why: Like the "3" * 5 example, a list is repeated when multiplied by an integer
 
-0 or "Python"
-# Result: "Python"
+print("5" + 5)
+# Result: TypeError
+# Why: + adds two numbers (even different kinds, like 5 + 2.5) or joins two strings, but it has no meaning for a string and a number. Python won't guess whether you meant "55" or 10, so it stops with a TypeError.
+```
+
+```python
+# Huh?
+
+print(0 or "Python")
+# Result: Python
 # Why: `or` hands back the left side if it counts as true, and otherwise hands back the right side. 0 counts as false, so you get "Python". Chapter 1.4 explains which values count as false.
 
-0.1 + 0.2 == 0.3
+print(0.1 + 0.2 == 0.3)
 # Result: False
 # Why: A classic computer science trap. Due to how floating-point numbers are represented in binary (base-2), 0.1 + 0.2 actually evaluates to 0.30000000000000004, making the equality check fail.
 
-[1, 2] == [1, 2]
+print([1, 2] == [1, 2])
 # Result: True
 # Why: Both lists hold equal values
 
-[1, 2] is [1, 2]
+print([1, 2] is [1, 2])
 # Result: False
 # Why: Each [1, 2] you type creates a brand-new list, so this line makes two separate lists that happen to hold the same values. `==` asks "are these equal?", which is why the line above is True. `is` asks "are these the very same list?", and two separate lists are not.
 ```
@@ -550,11 +565,11 @@ True + True + False
 Each type works with some operators and not others. If you use an operator on a type that doesn't support it, the program stops with a `TypeError`:
 
 ```python
-5 + 2               # the value 7 is created
-"hello" + " world"  # the value "hello world" is created
+print(5 + 2)                # 7
+print("hello" + " world")   # hello world
 
-5 * 2               # the value 10 is created
-"hello" * "world"   # TypeError: can't multiply sequence by non-int of type 'str'
+print(5 * 2)                # 10
+print("hello" * "world")    # TypeError: can't multiply sequence by non-int of type 'str'
 ```
 
 ### Resolution Order of Operations
@@ -643,17 +658,17 @@ If arithmetic did _not_ come before comparison, Python would have read the expre
 **Examples**:
 
 ```py
-5 + 3           # 8
-"a" + "b"       # "ab"
-10 - 4          # 6
-4 * 2.5         # 10.0
-"hi" * 3        # "hihihi"
-7 / 2           # 3.5
-4 / 2           # 2.0
-7 // 2          # 3
-7.0 // 2        # 3.0
-7 % 2           # 1
-2 ** 3          # 8
+print(5 + 3)        # 8
+print("a" + "b")    # ab
+print(10 - 4)       # 6
+print(4 * 2.5)      # 10.0
+print("hi" * 3)     # hihihi
+print(7 / 2)        # 3.5
+print(4 / 2)        # 2.0
+print(7 // 2)       # 3
+print(7.0 // 2)     # 3.0
+print(7 % 2)        # 1
+print(2 ** 3)       # 8
 ```
 
 ---
@@ -676,13 +691,13 @@ _Note: Comparing incompatible types (e.g., `5 < "hello"`) raises a `TypeError` i
 **Examples**:
 
 ```py
-5 == 5              # True
-"a" != "b"          # True
-3 < 5               # True
-10 > 2              # True
-[1, 2] <= [1, 2]    # True
-5.0 >= 5            # True
-5 < "hello"         # TypeError
+print(5 == 5)              # True
+print("a" != "b")          # True
+print(3 < 5)               # True
+print(10 > 2)              # True
+print([1, 2] <= [1, 2])    # True
+print(5.0 >= 5)            # True
+print(5 < "hello")         # TypeError
 ```
 
 ---
@@ -700,10 +715,10 @@ _Note: Comparing incompatible types (e.g., `5 < "hello"`) raises a `TypeError` i
 **Examples**:
 
 ```py
-True and False      # False
-True or False       # True
-not True            # False
-5 > 3 and 2 > 1     # True
+print(True and False)     # False
+print(True or False)      # True
+print(not True)           # False
+print(5 > 3 and 2 > 1)    # True
 ```
 
 Whether a value that is not a boolean counts as `True` or `False` is decided by a rule called truthiness, which chapter 1.4 covers in full. The lights example and the `0 or "Python"` line in the challenge above both depend on that rule.
@@ -724,11 +739,15 @@ Whether a value that is not a boolean counts as `True` or `False` is decided by 
 **Examples**:
 
 ```py
-'a' in 'apple'    # True
-'x' in {'x': 1}   # True
-3 not in [1, 2]   # True
-x is None         # True
-a is not b        # True
+x = None
+a = [1, 2]
+b = [1, 2]
+
+print('a' in 'apple')     # True
+print('x' in {'x': 1})    # True
+print(3 not in [1, 2])    # True
+print(x is None)          # True
+print(a is not b)         # True
 ```
 
 ---

@@ -82,7 +82,8 @@ def check(path, show):
     setups = read_setups(lines)
     # a setup may depend on another setup, so setups only run in front of a block
     for name, code in setups.items():
-        if 'print(' in code:
+        # only a top-level print() runs when the setup runs; one inside a method is fine
+        if re.search(r'^print\(', code, re.MULTILINE):
             print(f'{path}  setup {name!r} contains print()')
     i = 0
     while i < len(lines):

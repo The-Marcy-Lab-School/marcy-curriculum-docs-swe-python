@@ -414,11 +414,62 @@ class Venue:
         return attendee
 ```
 
+<!-- setup: venue-attendees
+from dataclasses import dataclass
+
+
+@dataclass
+class Attendee:
+    name: str
+    email: str
+
+
+class Venue:
+    def __init__(self, name):
+        self.name = name
+        self._events = []
+        self._attendees = {}
+        self._reservations = []
+
+    @property
+    def attendees(self):
+        return list(self._attendees.values())
+
+    @staticmethod
+    def is_valid_email(email):
+        if '@' not in email:
+            return False
+        domain = email.split('@')[-1]
+        return '.' in domain
+
+    def add_attendee(self, attendee):
+        if not Venue.is_valid_email(attendee.email):
+            raise ValueError(f'"{attendee.email}" is not a valid email address.')
+        if attendee.email in self._attendees:
+            print(f'{attendee.email} is already registered.')
+            return None
+        self._attendees[attendee.email] = attendee
+        return attendee
+
+
+venue = Venue('Riverside Community Hall')
+sam = Attendee('Sam Ortiz', 'sam')
+-->
+
 `sam = Attendee('Sam Ortiz', 'sam')` has an email address with no `@` in it. Run each line below on its own, against a new venue. What does each one do to the venue's attendees, and which one does the underscore in `_attendees` ask you not to write?
 
+<!-- uses: venue-attendees -->
 ```python
 venue.attendees.append(sam)       # Line 1
+```
+
+<!-- uses: venue-attendees -->
+```python
 venue._attendees['sam'] = sam     # Line 2
+```
+
+<!-- uses: venue-attendees -->
+```python
 venue.add_attendee(sam)           # Line 3
 ```
 

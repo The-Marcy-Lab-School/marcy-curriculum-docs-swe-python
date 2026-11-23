@@ -518,8 +518,24 @@ print(jazz.seats_left())
 A method can take more arguments after `self`. They work the same way as any function's parameters, and the instance still arrives first:
 
 ```python
+from datetime import date
+
+
 class Event:
-    # __init__, seats_left, and sell_ticket as above
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.seats_sold = 0
+
+    def seats_left(self):
+        return self.capacity - self.seats_sold
+
+    def sell_ticket(self):
+        if self.seats_left() == 0:
+            print(f'{self.name} is sold out.')
+            return
+        self.seats_sold += 1
 
     def can_refund(self, today):
         return today < self.date
