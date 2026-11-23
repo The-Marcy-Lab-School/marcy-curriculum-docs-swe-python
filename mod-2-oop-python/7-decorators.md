@@ -28,7 +28,7 @@
 A reservation at the venue moves through a fixed series of statuses. It starts out reserved, becomes paid, and then is either checked in at the door or refunded. Each step is only allowed from one status:
 
 - A reservation can be `"paid"` only after it is `"reserved"`
-- A reservation can be `"checked_in"` in or `"refunded"` only after it is `"paid"`
+- A reservation can be `"checked_in"` or `"refunded"` only after it is `"paid"`
 
 Here is a `Reservation` class that enforces those rules, using only what you have learned so far:
 
@@ -45,13 +45,13 @@ class Reservation:
 
     def pay(self):
         if self._status != 'reserved':
-            print(f'Cannot pay: reservation #{self.number} is {self._status}.')
+            print('Reservation must be reserved in order to use pay.')
             return
         self._status = 'paid'
 
     def check_in(self):
         if self._status != 'paid':
-            print(f'Cannot check_in: reservation #{self.number} is {self._status}.')
+            print('Reservation must be paid in order to use check_in.')
             return
         self._status = 'checked_in'
 
@@ -60,7 +60,7 @@ class Reservation:
 
 
 maya = Reservation(1001, 'Maya Rodriguez')
-maya.check_in()          # Cannot check_in: reservation #1001 is reserved.
+maya.check_in()          # Reservation must be paid in order to use check_in.
 maya.refund()
 print(maya.status)       # refunded
 ```
@@ -288,7 +288,7 @@ def requires_paid(method):
     def wrapper(self):                      # receives the instance as self, as the method would
         if self.status != 'paid':
             # method.__name__ is the name of the method being refused, such as 'refund'
-            print(f'Cannot {method.__name__}: reservation #{self.number} is {self.status}.')
+            print(f'Reservation must be paid in order to use {method.__name__}.')
             return                          # refuses: the method's body never runs
         return method(self)                 # allowed: runs the original method
     return wrapper
@@ -306,7 +306,7 @@ class Reservation:
 
     def pay(self):
         if self._status != 'reserved':
-            print(f'Cannot pay: reservation #{self.number} is {self._status}.')
+            print('Reservation must be reserved in order to use pay.')
             return
         self._status = 'paid'
 
@@ -320,7 +320,7 @@ class Reservation:
 
 
 maya = Reservation(1001, 'Maya Rodriguez')
-maya.refund()            # Cannot refund: reservation #1001 is reserved.
+maya.refund()            # Reservation must be paid in order to use refund.
 print(maya.status)       # reserved
 
 maya.pay()
@@ -357,7 +357,7 @@ print(maya.status)       # refunded
 ```python
 sam = Reservation(1002, 'Sam Lee')
 sam.pay()
-sam.pay()                # Cannot pay: reservation #1002 is paid.
+sam.pay()                # Reservation must be reserved in order to use pay.
 print(sam.status)        # paid
 ```
 
@@ -367,7 +367,7 @@ print(sam.status)        # paid
 def requires_reserved(method):
     def wrapper(self):
         if self.status != 'reserved':
-            print(f'Cannot {method.__name__}: reservation #{self.number} is {self.status}.')
+            print(f'Reservation must be reserved in order to use {method.__name__}.')
             return
         return method(self)
     return wrapper
@@ -393,7 +393,7 @@ class Reservation:
 <details><summary>Answer</summary>
 
 - `@requires_reserved` guards `pay()`. `@requires_paid` guards `check_in()` and `refund()`.
-- The program prints `Cannot refund: reservation #1005 is reserved.` and the status stays `'reserved'`. The wrapper returns before it calls the original `refund()`, so the line `self._status = 'refunded'` never runs.
+- The program prints `Reservation must be paid in order to use refund.` and the status stays `'reserved'`. The wrapper returns before it calls the original `refund()`, so the line `self._status = 'refunded'` never runs.
 - `requires_paid` guards two methods. `method.__name__` is `'check_in'` in one wrapper and `'refund'` in the other, so one decorator prints the right name for whichever method was refused.
 
 </details>
@@ -507,7 +507,7 @@ Name the rule this test protects. Then suppose someone deleted `@requires_reserv
 
 - The test protects the rule that a reservation can be paid only once, while it is still reserved.
 - Without `@requires_reserved`, the second `pay()` runs its body and sets the status to `'paid'` again. The status is `'paid'` either way, so the `assert` passes and the test does not notice the missing guard.
-- The case study's version also asserts that `Cannot pay: reservation #... is paid.` was printed. Only the guard prints that message, so the extra check fails as soon as the guard is gone.
+- The case study's version also asserts that `Reservation must be reserved in order to use pay.` was printed. Only the guard prints that message, so the extra check fails as soon as the guard is gone.
 
 When a refused call would leave the same status as an allowed one, a test has to check something that only the refusal produces.
 
@@ -525,7 +525,7 @@ def requires_status(status):        # the factory: takes the required status
     def decorator(method):          # the decorator the factory builds and returns
         def wrapper(self):          # closes over both status and method
             if self.status != status:
-                print(f'Cannot {method.__name__}: reservation #{self.number} is {self.status}.')
+                print(f'Reservation must be {status} in order to use {method.__name__}.')
                 return
             return method(self)
         return wrapper
@@ -626,7 +626,7 @@ print(seat_label(row='C', number=3))       # C3, after the two announcements
 def requires_paid(method):
     def wrapper(self):
         if self.status != 'paid':
-            print(f'Cannot {method.__name__}: reservation #{self.number} is {self.status}.')
+            print(f'Reservation must be paid in order to use {method.__name__}.')
             return
         return method(self)
     return wrapper
@@ -650,7 +650,7 @@ def requires_paid(method):
     @wraps(method)                          # copies method's name onto wrapper
     def wrapper(self):
         if self.status != 'paid':
-            print(f'Cannot {method.__name__}: reservation #{self.number} is {self.status}.')
+            print(f'Reservation must be paid in order to use {method.__name__}.')
             return
         return method(self)
     return wrapper
