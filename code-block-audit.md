@@ -1,363 +1,336 @@
 # Code Block Audit: Lessons 1.1 to 2.7
 
-This document records the state of an audit of the Python code blocks in the GitBook lessons. It lists what has been fixed, what is waiting for Ben's decision, and how to check the work. It is a working document for the next session, not a page fellows read, so it is not listed in `SUMMARY.md`.
+This document tracks the work of making every runnable code block in the Module 1 and Module 2 lessons run in the LMS. It lists what each failing block needs, the decisions waiting for Ben, and how to check the work. It is a working document for the next session, not a page fellows read, so it is not listed in `SUMMARY.md`.
 
 ## The rule being applied
 
-Fellows copy a single code block out of a lesson and run it. Every Python block in a lesson should run when copied alone, and print what its output comments say.
+The LMS runs each Python block in a fresh interpreter, so a block can use only the names it defines itself. Every runnable block must run on its own and print exactly what its output comments say. [authoring-guide.md](authoring-guide.md) gives the full syntax. A block that depends on earlier code gets one of three fixes:
 
-When a block uses a name that an earlier block defines, copy that definition to the top of the block and mark it with a comment on the line above:
+- **A visible copy** of a short definition, about 8 lines or fewer, under a comment such as `# unchanged from the previous example`. The visible copies already in the lessons stay visible.
+- **A hidden setup:** a `<!-- setup: name … -->` comment placed directly after the visible block it copies, and a `<!-- uses: name -->` comment above the block that needs it.
+- **A `<!-- not-runnable -->` comment,** used only for a block the browser cannot run: a challenge prompt that fellows complete in the lecture code repository, a project file that imports from `src/` or imports `pytest`, a syntax template, or a REPL transcript.
 
-- `# unchanged from the previous example` when the code comes from the block immediately before.
-- An accurate equivalent that names the place in the same lesson when it comes from further back, such as `# unchanged from the first announce() example` or `# unchanged from A Decorator That Refuses` (a section heading). Never refer to another chapter by number.
-- A bare `import` line, such as `import re` or `from datetime import date`, needs no comment.
+Two kinds of failing block are left alone:
 
-Copy definitions exactly as the lesson writes them: the same keyword arguments, values and quotes. Use two blank lines after a top-level function or class, unless the lesson's other blocks consistently use one.
+- A block whose error is the one the lesson teaches.
+- A block that calls `input()`. The checking script gives blocks no keyboard input, so it reports an `EOFError` for these blocks, but the LMS gives them a terminal that accepts typing.
 
-Do not make the change, and report the block to Ben instead, when either of these is true:
+The LMS does not read the `setup`, `uses` and `not-runnable` comments yet. Until it does, the blocks that rely on them still fail in the LMS, so the fixes below take effect only once the LMS supports the comments.
 
-- **The fix would make the block hard to read quickly.** As a rough guide, this means the added lines would be longer than the code the block exists to show, or more than about 8 lines.
-- **The block's point depends on leaving earlier code out.** Examples are a short "Predict, then run" box about the order lines print in, a challenge prompt that a fellow runs after writing their own solution, a solution that shows only the changed part of a class with a `# ...` placeholder, and a numbered sequence of steps that continue one example.
+## Status
 
-Leave a block alone, without reporting it, when its error is intended:
+Lesson 2.6 is complete, in commit `f0050c4`. Its four setups and its not-runnable challenge prompt are the model for the other lessons.
 
-- The lesson teaches that error.
-- The block is a syntax template, such as `[expression for item in source_list]`.
-- The block is a file in a project that imports a local module or `pytest`.
-- The block calls `input()`.
+`python3.14 scripts/check-code-blocks.py` reports 193 failing blocks across Modules 1 and 2. They divide as follows:
 
-This rule is also saved in Claude's memory as `feedback_lesson_blocks_run_alone.md`.
-
-## Status of the changes
-
-None of the changes below is committed. Run `git diff` in this repository to see them.
-
-| File | Change |
+| Kind | Blocks |
 | --- | --- |
-| `mod-2-oop-python/7-decorators.md` | Unclear uses of "it" replaced with the noun they stand for (Ben's review). `loud_greet` and `loud_shout` renamed to `announced_greet` and `announced_shout` throughout, following Ben's edit. Five blocks given the definitions they need (listed below). This file also holds Ben's own uncommitted edits. |
-| `mod-2-oop-python/scope-and-sequence.md` | The 2.7 Key Terms for **wrapper** and **decorator factory** updated to match the lesson. `scripts/sync-key-terms.py` has no marker for 2.7, so these two terms are copied by hand. |
-| 13 lesson files in `mod-1-python-fundamentals/` and `mod-2-oop-python/` | Definitions or imports added to 29 blocks (listed below). Every change in these files adds lines and none removes or changes one. |
+| Needs a hidden setup | 79 |
+| Needs `<!-- not-runnable -->` | 39 |
+| Block rewritten (decisions 2 and 3) | 2 |
+| Accuracy problems 2 and 3 | 2 |
+| Intended error, left alone | 40 |
+| Calls `input()`, left alone | 31 |
 
-### Blocks fixed in lesson 2.7
+Lessons 2.1 to 2.5 hold 50 of the 79 setups, because the `Event` class grows in each section and most of their blocks build on it. 1.11 holds another 16, all of which need the same 8-line `purchases` list.
 
-| Block | Added | Comment |
-| --- | --- | --- |
-| `@announce` above `greet` | `announce()` | `# unchanged from the first announce() example` |
-| Challenge: Keep the Return Value, the `announced_shout` prompt | `announce()` | `# unchanged from the previous example` |
-| Advanced Topics, the `seat_label` block that raises `TypeError` | the one-argument `announce()` | `# unchanged from the first announce() example` |
-| `functools.wraps`, the block that prints `wrapper` | `requires_paid` and a `Reservation` holding only `check_in()` | `# unchanged from A Decorator That Refuses` and `# only check_in() is needed for this example` |
-| `functools.wraps`, the block that prints `check_in` | the same one-method `Reservation` | `# unchanged from the previous example` |
+## Settled decisions
 
-### Blocks fixed in the other lessons
+### 1. Blocks of bare expressions
 
-| Lesson | Blocks | Added |
-| --- | --- | --- |
-| 1.2 | 1 | `fahrenheit = 212` |
-| 1.3 | 4 | `convert_C_to_F`, `print_sum`, `say_hello` with defaults, and `count = 0`. These use one blank line after each `def`, because every block in 1.3 does. |
-| 1.5 | 2 | `message` and `fruits` |
-| 1.6 | 2 | `import random` |
-| 1.8 | 5 | `purchase_1` in four blocks, and `menu` in the lookup-table block |
-| 1.10 | 1 | `withdraw()` |
-| 1.11 | 2 | the `purchases` list, in the two blocks whose own code is at least 8 lines |
-| Regex reading | 5 | `import re` |
-| 2.1 | 1 | `from datetime import date` |
-| 2.2 | 2 | `from datetime import date` and `from dataclasses import dataclass` |
-| 2.4 | 1 | `from datetime import date` |
-| 2.5 | 2 | `from datetime import date, timedelta` |
-| 2.6 | 1 | `make_announcer()`, with `# unchanged from Closures` |
+**The problem:** some blocks are lists of bare expressions with each result written in a comment, such as `5 == 5  # True`. A script throws away the value of a bare expression, so pressing Run on such a block shows an empty terminal, and a fellow who expected to see `True` gets no feedback. The checking script cannot detect this, because the block runs without error.
 
-## Decisions waiting for Ben
+**The rule:** each expression in such a block is wrapped in `print()`, and each comment shows exactly what `print()` displays. `print()` shows a string without its quotes, so the comment reads `print("hi" * 3)  # hihihi`. The "Why" lines in 1.2's answers block still say which results are strings.
 
-### 1. The running examples
+How the rule applies to each block:
 
-Most of the blocks still failing continue one running example. Copying the example's setup into each block would add more lines than the block shows:
+- **1.1, line 94** (`5 + 5       # Evaluates to 10`) stays bare. The paragraph after it says that Python evaluates a bare expression and then throws the value away, and running the block and seeing nothing shows exactly that.
+- **1.2, line 88** (the "Identify the data types" challenge) gets `<!-- not-runnable -->`. Its values have no result comments, because fellows answer the challenge by reading.
+- **1.2, lines 418 and 456** (the predict prompt and its answers) each split into three blocks, one for each comment group: "What you would expect to happen usually happens", "Slightly unexpected results", and "Huh?". `"5" + 5` moves to the last line of the second group in both the prompt and the answers, so that every other line in that group prints before the `TypeError` stops the run.
+- **1.2, lines 552, 645, 678 and 702** wrap each line in `print()`. In 552 and 678, the line that raises the `TypeError` is already the last line, so every other line prints first. 552's comments, such as `# the value 7 is created`, become the printed values, such as `# 7`.
+- **1.2, line 726** defines `x = None`, `a = [1, 2]` and `b = [1, 2]` visibly at the top of the block, then wraps each line in `print()`. Two equal lists that are separate objects make `a is not b` print `True`, which shows the difference between `is` and `==` that the table above the block describes.
 
-| Running example | Lesson | Lines the setup would add | Blocks affected |
-| --- | --- | --- | --- |
-| `purchases` | 1.11 | 8 | 16 |
-| `menu` | 1.8 | 7 | 4 |
-| `Event`, which grows section by section | 2.1 to 2.5 | 16 to 55 | about 45 |
-| `hall` | 2.2 and 2.6 | 25 to 30 | about 20 |
+### 2. The placeholder in 2.1, "A Method That Takes Arguments"
 
-The recommendation is one sentence before the first block that builds on the example, telling fellows to run the following blocks together, for example: "The blocks in this section continue from the `hall` above; add each one to the bottom of the same file." This costs one line per section instead of 7 to 55 lines per block. Ben has not yet chosen between drafting those sentences and handling the blocks one by one.
+The block at line 520 writes `class Event:` with the placeholder comment `# __init__, seats_left, and sell_ticket as above`, so the class it defines has no `__init__`, and `Event('Friday Night Jazz', …)` raises `TypeError: Event() takes no arguments`. A hidden setup cannot fix this, because the visible block redefines `Event` after the setup runs. The block shows the full class instead.
 
-### 2. Blocks whose intended error cannot be reached alone
+### 3. The three lines in 2.3, "The Underscore Is a Convention"
 
-These blocks are meant to raise one error, but when a fellow runs one alone it stops earlier with a `NameError`. They matter more than the other unfixed blocks, because the fellow sees a different error from the one the lesson explains.
+The block at line 419 holds three lines, and its prompt says to run each line on its own against a new venue. One Run button runs all three lines against one venue, so line 3 runs after line 2 has already registered Sam, and its result differs from the answer. The block splits into three one-line blocks, each using the same setup.
 
-| Lesson | Line | Intended error | Fix size |
-| --- | --- | --- | --- |
-| 1.11 | 374 | `TypeError` | 8 lines (`purchases`) |
-| 2.1 | 270 | `AttributeError` | about 9 lines |
-| 2.4 | 734 | `AttributeError` | about 20 lines (`Event`) |
-| 2.6 | 339, 361, 459 | `TypeError` | about 30 lines (`hall`) |
+### 4. Refusal messages in assignment 2-4
 
-### 3. Other open questions from the lesson 2.7 review
-
-- **Refusal messages should state the rule.** Ben asked for each refusal message to say what the reservation needs, such as "Reservation must be reserved in order to pay" and "Reservation must be paid in order to check in". This applies to lesson 2.7 and to the case study repository `assignments-case-studies-lecture-code/mod-2/swe-casestudy-2-venue-tickets` (`src/reservation.py`, the three `capsys` assertions in `tests/test_reservation.py` and `tests/test_venue.py`, and the sample output in `README.md`). The previous messages leaving the rule out was not deliberate.
-  - The open question is the method name. The decorators build the message from `method.__name__`, which is `check_in`, with an underscore. The options are to keep the underscore, to convert it with `method.__name__.replace('_', ' ')`, or to phrase the rule without repeating the name, such as "Reservation must be paid first." The recommendation is to keep the underscore, because the line that teaches `method.__name__` then gains no new syntax, and the lesson's before and after versions print the same text.
-  - Leave the copy of the case study in `F26_SWE_PYTHON_LECTURE_CODE/mod-2/` alone. It already differs from the repository in four files.
-  - Assignment 2-4's guards get the same rule when that assignment is rewritten.
-- **The `"checked"` in typo at line 31 of 2.7.** The text should read `"checked_in"` or "checked in".
-- **The blank line after `def greet` in 2.7.** Ben's edited block, the first code block under Wrapping a Function, has one blank line between `def greet` and `greet('Maya')`. PEP 8 asks for two.
+Lesson 2.7, the case study repository `swe-casestudy-2-venue-tickets` and the 2.7 lecture code print a refused call as `Reservation must be <status> in order to use <method>.`, such as `Reservation must be paid in order to use check_in.` Assignment 2-4's guards use the same wording when that assignment is rewritten. The copy of the case study in `F26_SWE_PYTHON_LECTURE_CODE/mod-2/` keeps its old message, because it already differs from the repository in four files.
 
 ## Accuracy problems found, not yet fixed
 
-1. **Lesson 1.1, Logical Errors** (`1-intro-to-programming.md`, the `age = input(...)` block). `input()` returns a string, so `age < 21` raises `TypeError: '<' not supported between instances of 'str' and 'int'`. The prose presents the block as code that runs and gives a wrong answer. Writing `age = int(input(...))` keeps it a logical error.
-2. **Lesson 1.2, Membership and Identity** (`2-data-types-variables.md`, the block starting `'a' in 'apple'`). The block uses `x`, `a` and `b`, which the lesson never defines. Its `# True` comments hold only if `x` is `None` and `a` and `b` are different objects. A fix needs about 3 new lines.
-3. **Lesson 1.3, the `print_B` prediction answer.** The block holding `A C B B` is fenced as `py` but contains program output.
-4. **Lesson 2.6, Challenge: Finding Attendees.** The solution redefines `Venue`, but `hall` is still an object built from the old class. A fellow who reruns the prompt without rebuilding `hall` gets `AttributeError: 'Venue' object has no attribute 'add_attendee'`.
-5. **Chapter numbers in prose**, which break the rule against citing chapters by number:
-   - "chapter 1.8" in 1.7;
-   - "chapter 1.7", several times, in 1.8;
-   - "Chapter 1.7" in 1.10;
-   - "chapter 1.9", "Chapter 1.3" and "chapter 1.7" in 1.12.
-6. **Two typos in 1.11:**
-   - "the expression `test` expression is true", in section 3;
-   - "Calculate the total the price of every purchase", in the table.
+1. **Lesson 1.1, Logical Errors** (`1-intro-to-programming.md`, the `age = input(...)` block at line 404). `input()` returns a string, so `age < 21` raises `TypeError: '<' not supported between instances of 'str' and 'int'`. The prose presents the block as code that runs and gives a wrong answer. In the LMS, a fellow who runs the block and types an age sees the `TypeError`. Writing `age = int(input(...))` keeps it a logical error.
+2. **Lesson 1.2, Membership and Identity** (`2-data-types-variables.md`, the block at line 726 starting `'a' in 'apple'`). The block uses `x`, `a` and `b`, which the lesson never defines. Its `# True` comments hold only if `x` is `None` and `a` and `b` are different objects. Decision 1 gives the fix: define the three names visibly at the top of the block.
+3. **Lesson 1.3, the `print_B` prediction answer** (`3-functions.md`, line 211). The block holding `A C B B` is program output fenced as `py`, so the LMS gives it a Run button, and running it raises `NameError: name 'A' is not defined`. Fence it with no language.
+4. **Chapter numbers in prose**, which break the rule against citing chapters by number. Counting each "chapter" followed by a number, case ignored: 1.1 has 1, 1.2 has 6, 1.3 has 4, 1.4 has 1, 1.5 has 6, 1.6 has 5, 1.7 has 4, 1.8 has 5, 1.9 has 2, 1.10 has 8, 1.12 has 8, and the Module 1 case study has 5. Find them with `grep -ni "chapter [0-9]\.[0-9]" mod-1-python-fundamentals/*.md`.
+5. **Two typos in 1.11:**
+   - "the expression `test` expression is true", at line 305;
+   - "Calculate the total the price of every purchase", in the table at line 74.
 
-## Unfixed blocks, by lesson
+## Work remaining, by lesson
 
-Line numbers are the line of the opening ```` ```python ```` fence, as of the current uncommitted state. They shift as soon as a file is edited, so match each block by its first line as well. The numbers for 2.4 to 2.7 are already out of date, because each section's Code now comes before its New Concepts; match those blocks by their first line only.
+Line numbers are the line of the opening ` ```python ` fence as of commit `f0050c4`. Each setup added to a file shifts every line below it, so work from the bottom of a file upward, or match each block by its first line.
 
-The **Reason** column uses three codes:
+Under **Leave alone**, each lesson lists its intended errors and its `input()` blocks, so that the checking script's output can be matched against them.
 
-- **Long:** the setup would be too long to read quickly.
-- **Omits:** the block deliberately leaves the earlier code out.
-- **Error:** the block's intended error cannot be reached when it runs alone (see decision 2).
+### 1.1 Intro to Programming
+
+No block needs a fix. Line 94 stays bare under decision 1, and line 404 is accuracy problem 1.
+
+**Leave alone:** intended errors at 301, 378, 420, 433, 442, 451 and 462; `input()` at 404.
 
 ### 1.2 Data Types, Variables, and Operators
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 194 | `print("Story time!")` | Omits: step 2 of Assign, Reference and Reassign |
-| 207 | `print("Story time!")` | Omits: step 3 of the same list |
-| 726 | `'a' in 'apple'    # True` | See accuracy problem 2 |
+| 194 | `print("Story time!")` | Setup: the variables assigned in step 1 of Assign, Reassign, Reference |
+| 207 | `print("Story time!")` | Setup: the variables after steps 1 and 2 |
+| 391 | `# Python3 REPL` | Not runnable: a REPL transcript with `>>>` prompts |
+| 403 | `# Python3 REPL` | Not runnable: a REPL transcript with `>>>` prompts |
+| 726 | `'a' in 'apple'    # True` | Decision 1: define `x`, `a` and `b`, and print each line (also accuracy problem 2) |
+
+Decision 1 also changes blocks that the checker does not flag or that end in an intended error: 88 (not runnable), 418 and 456 (split into three and print), and 552, 645, 678 and 702 (print each line).
+
+**Leave alone:** after the decision 1 changes, the intended `TypeError` at the end of 552, of 678, and of the second block of each of 418 and 456.
 
 ### 1.3 Functions
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 304 | `say_hello('Ben', 'code')` | Omits: challenge prompt |
-| 351 | `print(add(12, add(5, 3)))` | Omits: one-line predict box; the fix is 3 lines |
-| 583 | `print(message, my_name)` | Omits: a line the reader adds to the bottom of the code above |
+| 211 | `A` | Fence with no language (accuracy problem 3) |
+| 304 | `say_hello('Ben', 'code')` | Not runnable: challenge prompt |
+| 351 | `print(add(12, add(5, 3)))` | Setup: `add()` |
+| 583 | `print(message, my_name)` | Setup: the code above it, since the prompt adds this line to the bottom of that code |
+
+**Leave alone:** intended errors at 269, 313 (the final `say_hello()` call), 422, 476, 528, 635 and 684.
+
+### 1.4 Conditional Statements
+
+**Leave alone:** `input()` at 207 and 217.
+
+### 1.5 Inputs and Outputs
+
+| Line | First line | Fix |
+| --- | --- | --- |
+| 326 | `def is_marcy_email(email):` | Not runnable: a question with a blank for fellows to fill |
+| 490 | `def starts_and_ends_with_a(text):` | Not runnable: a question with a blank for fellows to fill |
+
+**Leave alone:** intended errors at 227 and 251; `input()` at 96, 160, 203, 241, 297, 378, 457, 476, 577 and 779.
+
+### 1.6 Loops
+
+**Leave alone:** `input()` at 44, 143, 324, 358, 377, 401 and 449.
 
 ### 1.7 Lists
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 192 | `prices.clear()` | Omits: the question that follows says the list changed without `prices = ...` |
+| 192 | `prices.clear()` | Setup: `prices` |
+
+**Leave alone:** intended errors at 176 and 593; `input()` at 47 and 70.
 
 ### 1.8 Dictionaries
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 404 | `receipt["purchases"].append(...)` | Omits: the prompt says "without retyping any existing record" |
-| 462 | `item = "bagel"` | Long: `menu`, 7 lines |
-| 545 | `for purchase in purchases:` | Long: `purchases`, 7 lines |
-| 573 | `total = 0` | Long: `menu`, 7 lines |
-| 583 | `for item, price in menu.items():` | Long: `menu`, 7 lines |
+| 400 | `receipt["purchases"].append(...)` | Setup: `receipt`. A hidden setup keeps the solution true to its prompt, which says to update the receipt without retyping any existing record. |
+| 458 | `item = "bagel"` | Setup: `menu` |
+| 541 | `for purchase in purchases:` | Setup: `purchases` |
+| 569 | `total = 0` | Setup: `menu` |
+| 579 | `for item, price in menu.items():` | Setup: `menu` |
+
+**Leave alone:** intended errors at 144 and 339; `input()` at 259, 467 and 508.
+
+### 1.9 Modules, Environments, and pytest
+
+| Line | First line | Fix |
+| --- | --- | --- |
+| 235 | `from orders import is_on_menu` | Not runnable: project file |
+| 282 | `# Import the whole module…` | Not runnable: project file |
+| 319 | `import orders as o` | Not runnable: project file |
+| 400 | `import orders` | Not runnable: project file |
+| 503 | `from madlib import madlib` | Not runnable: project file |
+
+**Leave alone:** `input()` at 63, 115 and 452.
 
 ### 1.10 Test-Driven Development
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 279 | `nums = [1, 2, 3, 4]` | Long: 8 lines; the function sits directly above the question |
+| 107 | `# test_calc.py` | Not runnable: project file |
+| 242 | `import pytest` | Not runnable: test file |
+| 279 | `nums = [1, 2, 3, 4]` | Setup: `double_all_purely()` |
+| 301 | `from double_all import double_all_purely` | Not runnable: project file |
+| 478 | `import pytest` | Not runnable: test file |
+| 543 | `import pytest` | Not runnable: test file |
 
 ### 1.11 Comprehensions and Common List Operations
 
-Every fix in this lesson would add the 8-line `purchases` list.
+Every setup in this lesson is the 8-line `purchases` list, so one setup on the page serves all 16 blocks.
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 118 | `for purchase in purchases:` | Omits: challenge solution |
-| 152 | `customer_names = [purchase["customer"] ...` | Long |
-| 172 | `def format_line(purchase):` | Long. This block is the titled file `03_transform.py`, and the titled file `04_filter.py` does include the list, so the two files may be worth matching. |
-| 191 | `customer_names = []` | Long |
-| 275 | `payment_methods = [...]` | Omits: challenge solution |
-| 346 | `cash_items = [...]` | Omits: challenge solution |
-| 374 | `print(len(purchases))  # 5` | Error: intended `TypeError` |
-| 383 | `prices = [purchase["price"] ...]` | Long |
-| 396 | `def total(purchases):` | Long |
-| 414 | `def get_customer_names(purchases):` | Long |
-| 501 | `payment_counts = {}` | Omits: challenge solution |
-| 550 | `print(find_purchase_index(purchases, "coffee"))` | Omits: predict box; the fix is about 15 lines |
-| 565 | `def first_item_paid_by(purchases, payment):` | Omits: challenge prompt |
-| 649 | `cash_prices = sorted([...])` | Omits: challenge solution |
-| 661 | `prices = [...]  # tr...` | Long |
-| 672 | `print(sorted([...], ...))` | Long |
-| 689 | `coffee_prices = [...]` | Omits: challenge solution |
+| 118 | `for purchase in purchases:` | Setup: `purchases` (challenge solution) |
+| 152 | `customer_names = [purchase["customer"] …` | Setup: `purchases` |
+| 162 | `[expression for item in source_list]` | Not runnable: syntax template |
+| 172 | `def format_line(purchase):` | Setup: `purchases`. This block is the titled file `03_transform.py`, and the titled file `04_filter.py` shows the list visibly, so a visible copy would make the two files match. |
+| 191 | `# Imperative: High Control & High Effort:` | Setup: `purchases` |
+| 255 | `purchases = [` | Not runnable: challenge prompt with `???` |
+| 275 | `payment_methods = […]` | Setup: `purchases` (challenge solution) |
+| 307 | `[expression for item in source_list if test]` | Not runnable: syntax template |
+| 338 | `cash_items = ???` | Not runnable: challenge prompt |
+| 346 | `cash_items = […]` | Setup: `purchases` (challenge solution) |
+| 374 | `print(len(purchases))  # 5` | Setup: `purchases`. The block then reaches its intended `TypeError`. |
+| 383 | `prices = [purchase["price"] …]` | Setup: `purchases` |
+| 396 | `def total(purchases):` | Setup: `purchases` |
+| 414 | `def get_customer_names(purchases):` | Setup: `purchases` |
+| 500 | `payment_counts = {}` | Setup: `purchases` (challenge solution) |
+| 548 | `print(find_purchase_index(purchases, "coffee"))` | Setup: `purchases` and `find_purchase_index()` |
+| 563 | `def first_item_paid_by(purchases, payment):` | Not runnable: challenge prompt |
+| 639 | `cash_prices = ???` | Not runnable: challenge prompt |
+| 647 | `cash_prices = sorted([…])` | Setup: `purchases` (challenge solution) |
+| 659 | `prices = [purchase["price"] …]` | Setup: `purchases` |
+| 670 | `print(sorted([…], …))` | Setup: `purchases` |
+| 679 | `coffee_total = ???` | Not runnable: challenge prompt |
+| 687 | `coffee_prices = […]` | Setup: `purchases` (challenge solution) |
+
+### 1.12 Reading Unfamiliar Code
+
+| Line | First line | Fix |
+| --- | --- | --- |
+| 125 | `from inventory import restock, sell, report` | Not runnable: project file |
+| 226 | `sell("eggs", 1)` | Setup: the data and functions from `inventory.py` |
+
+**Leave alone:** `input()` at 284 and 340.
 
 ### 2.1 Intro to OOP, Classes, `__init__`, and `self`
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 53 | `jazz = Event(...)` | Long: Key Terms example, about 8 lines |
-| 270 | `jazz.name = 'Friday Night Jazz'` | Error: intended `AttributeError`; about 9 lines |
-| 449 | `jazz = Event(...)` | Long: about 16 lines |
-| 491 | `jazz = Event(...)` | Omits: predict box that tells fellows to use the class above |
-| 520 | `class Event:` | Omits: `# __init__, seats_left, and sell_ticket as above` placeholder |
-| 546 | `studio = Room(...)` | Omits: challenge prompt |
-| 638 | `pottery['seats_sold'] += 1` | Long: about 10 lines |
-| 649 | `pottery = make_event(...)` | Long: more than 20 lines |
-| 661 | `print(dir(pottery))` | Long: more than 20 lines |
+| 53 | `jazz = Event(...)` | Setup: `Event` (Key Terms example) |
+| 270 | `jazz.name = 'Friday Night Jazz'` | Setup. The block then reaches its intended `AttributeError`. |
+| 449 | `jazz = Event(...)` | Setup: `Event` |
+| 491 | `jazz = Event(...)` | Setup: `Event` (predict box) |
+| 520 | `class Event:` | Decision 2: show the full class |
+| 546 | `studio = Room(...)` | Not runnable: challenge prompt |
+| 638 | `pottery['seats_sold'] += 1` | Setup: the `pottery` dictionary |
+| 649 | `# The dictionary version…` | Setup: `make_event()` and the class |
+| 661 | `print(dir(pottery))` | Setup: the class version of `pottery` |
+
+**Leave alone:** intended errors at 154, 179, 369, 465 and 728; `input()` at 140.
 
 ### 2.2 Composition, `__repr__`, `__eq__`, and `@dataclass`
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 86 | `print(hall.events[0].name)` | Long: `hall`, about 25 lines |
-| 104 | `jazz.capacity = 60` | Omits: predict box |
-| 175 | `hall.add_event(...)` | Omits: challenge prompt |
-| 227 | `print(hall.events_on(...))` | Long: about 30 lines |
-| 248 | `class Event:` | Long: about 11 lines; the closest case to the limit |
-| 276 | `def __repr__(self):` | Omits: one method shown alone |
-| 291 | `blue_notes = Performer(...)` | Omits: challenge prompt |
-| 349 | `class Venue:` | Long: about 11 lines |
-| 373 | `jazz = Event(...)` | Long: about 8 lines, longer than the block |
-| 409 | `hall = Venue(...)` | Long: about 20 lines |
-| 422 | `hall.add_event(...)` | Omits: predict box |
-| 452 | `print(Performer(...) == Performer(...))` | Omits: challenge prompt |
-| 582 | `board_games = Event(...)` | Uses the case study's `Event`, which takes `base_price`; the lesson never defines that class, so there is nothing to copy |
-| 611 | `from dataclasses import dataclass` | Long: about 12 lines on Python 3.12. On Python 3.14 the block already runs alone, because 3.14 no longer evaluates annotations when a class is defined. |
-| 630 | `hall = Venue(...)` | Omits: predict box; more than 30 lines |
-| 668 | `hall = Venue(...)` | Omits: challenge prompt |
-| 860 | `print(jazz == 'Friday Night Jazz')` | Long: about 13 lines |
-| 880 | `tickets_sold = {jazz: 3}` | Long: about 13 lines |
+| 86 | `print(hall.events[0].name)` | Setup: `hall` |
+| 104 | `jazz.capacity = 60` | Setup (predict box) |
+| 175 | `hall.add_event(Event('New Year Concert', …))` | Not runnable: challenge prompt |
+| 227 | `print(hall.events_on(...))` | Setup: `hall` |
+| 248 | `class Event:` | Setup: `Venue` and `hall` |
+| 276 | `def __repr__(self):` | Setup: `hall`, built from an `Event` whose `__repr__` prints instead of returning. The visible block shows that method on its own, so the setup has to supply the class that holds it for the block to reach its intended `TypeError`. |
+| 291 | `blue_notes = Performer(...)` | Not runnable: challenge prompt |
+| 349 | `class Venue:` | Setup: `Event` |
+| 373 | `jazz = Event(...)` | Setup: `Event` with `__eq__` |
+| 409 | `hall = Venue(...)` | Setup: `Event` and `Venue` |
+| 422 | `hall.add_event(...)` | Setup (predict box) |
+| 452 | `print(Performer(...) == Performer(...))` | Not runnable: challenge prompt |
+| 582 | `board_games = Event(...)` | Setup: the case study's `Event`, which takes `base_price`. The lesson never shows that class, so copy it from the case study repository's `src/`. |
+| 630 | `hall = Venue(...)` | Setup (predict box) |
+| 668 | `hall = Venue(...)` | Not runnable: challenge prompt |
+| 767 | `# tests/test_venue.py` | Not runnable: test file |
+| 860 | `print(jazz == 'Friday Night Jazz')` | Setup: `jazz` |
+| 880 | `tickets_sold = {jazz: 3}` | Setup: `jazz` |
 
 ### 2.3 Properties: Non-Public Attributes and `@property`
 
-Every block here needs a 19-to-30-line `Event` with properties.
-
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 34 | `@capacity.setter` | Omits: Key Terms example showing a setter alone |
-| 75 | `pottery = Event(...)` | Long |
-| 89 | `pottery.seats_sold += 1` | Long |
-| 98 | `pottery = Event(...)` | Long |
-| 169 | `pottery = Event(...)` | Long |
-| 183 | `pottery = Event(...)` | Omits: predict box |
-| 232 | `pottery = Event(...)` | Long: the class above has a `# ...` placeholder, so the fix would merge two classes |
-| 251 | `pottery = Event(...)` | Omits: predict box |
-| 271 | `pottery = Event(...)` | Omits: challenge prompt |
-| 377 | `pottery = Event(...)` | Long |
-| 419 | `venue.attendees.append(sam)` | Omits: a question to reason about, not run |
-| 495 | `@capacity.setter` | Omits: a setter for fellows to paste into `src/event.py` |
+| 34 | `@capacity.setter` | Not runnable: a setter shown on its own in Key Terms |
+| 75 | `pottery = Event(...)` | Setup: `Event` |
+| 89 | `pottery.seats_sold += 1` | Setup: `pottery` |
+| 98 | `pottery = Event(...)` | Setup: `Event` |
+| 169 | `pottery = Event(...)` | Setup: `Event` with the `seats_sold` property |
+| 183 | `pottery = Event(...)` | Setup (predict box) |
+| 232 | `pottery = Event(...)` | Setup: the class at line 208 with its `# ...` placeholder filled in from the class before it |
+| 251 | `pottery = Event(...)` | Setup (predict box) |
+| 271 | `pottery = Event(...)` | Not runnable: challenge prompt |
+| 377 | `pottery = Event(...)` | Setup |
+| 419 | `venue.attendees.append(sam)` | Decision 3: split into three blocks with the same setup |
+| 465 | `from datetime import date` | Not runnable: test file |
+| 495 | `@capacity.setter` | Not runnable: a setter for fellows to paste into `src/event.py` |
+
+**Leave alone:** intended error at 600.
 
 ### 2.4 Inheritance and Attribute Lookup
 
-Most of these blocks need the 18-line `Event`, plus `Concert` or `Screening`.
-
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 178 | `coco = Screening(...)` | Omits: predict box |
-| 246 | `class Concert(Event):` | Long |
-| 261 | `jazz = Concert(...)` | Omits: predict box |
-| 291 | `class Screening(Event):` | Long |
-| 307 | `class Screening(Event):` | Omits: a check whose point is a misspelled method name; it calls nothing |
-| 340 | `class Concert(Event):` | Long |
-| 362 | `pottery = Workshop(...)` | Omits: challenge prompt |
-| 372 | `class Workshop(Event):` | Long: challenge solution |
-| 419 | `class Concert(Event):` | Omits: `# ... can_refund() from above ...` placeholder |
-| 440 | `jazz = Concert(...)` | Omits: predict box |
-| 484 | `jazz = Concert(...)` | Long: about 30 lines; its final `AttributeError` is intended |
-| 573 | `class Concert(Event):          # a concert is an event` | Long: a sketch with a `...` body |
-| 734 | `class Concert(Event):` | Error: intended `AttributeError` |
-| 748 | `jazz = Concert(...)` | Long |
-| 771 | `jazz = Concert(...)` | Long |
-| 791 | `print(Concert.__mro__)` | Long |
+| 181 | `coco = Screening(...)` | Setup: `Event` and `Screening` (predict box) |
+| 243 | `class Concert(Event):` | Setup: `Event` |
+| 265 | `jazz = Concert(...)` | Setup (predict box) |
+| 290 | `class Screening(Event):` | Setup: `Event` |
+| 311 | `class Screening(Event):` | Setup: `Event`. The block then runs without output, which suits a check about a misspelled method name. |
+| 338 | `class Concert(Event):` | Setup: `Event` |
+| 366 | `pottery = Workshop(...)` | Not runnable: challenge prompt |
+| 376 | `class Workshop(Event):` | Setup: `Event` (challenge solution) |
+| 416 | `class Concert(Event):` | Setup: `Event`. The `# ... can_refund() from above ...` placeholder leaves out a method that the block never calls, so the block runs correctly. |
+| 445 | `jazz = Concert(...)` | Setup (predict box) |
+| 479 | `jazz = Concert(...)` | Setup. The block then reaches its intended `AttributeError`. |
+| 573 | `class Concert(Event):          # a concert is an event` | Setup: `Event` |
+| 650 | `from datetime import date` | Not runnable: test file |
+| 736 | `class Concert(Event):` | Setup: `Event`. The block then reaches its intended `AttributeError`. |
+| 755 | `jazz = Concert(...)` | Setup |
+| 772 | `jazz = Concert(...)` | Setup |
+| 795 | `print(Concert.__mro__)` | Setup |
+
+**Leave alone:** intended errors at 519 and 811.
 
 ### 2.5 Polymorphism, Duck Typing, and Abstract Base Classes
 
-| Line | First line | Reason |
+| Line | First line | Fix |
 | --- | --- | --- |
-| 117 | `class Tour(Event):` | Omits: hidden question; about 45 lines |
-| 236 | `class Event:` | Omits: predict box; about 45 lines |
-| 493 | `class MuseumTour:` | Long: about 45 lines |
-| 532 | `class GardenTour:` | Omits: predict box; about 55 lines |
-| 622 | `class MidnightConcert(Event):` | Long: about 17 lines |
-| 741 | `class Screening(Event):` | Omits: predict box |
-| 788 | `gallery = MuseumTour(...)` | Long: about 35 lines |
+| 117 | `class Tour(Event):` | Setup (hidden question) |
+| 237 | `class Event:` | Setup (predict box) |
+| 484 | `class MuseumTour:` | Setup |
+| 533 | `class GardenTour:` | Setup (predict box) |
+| 612 | `class MidnightConcert(Event):` | Setup |
+| 742 | `class Screening(Event):` | Setup (predict box) |
+| 783 | `gallery = MuseumTour(...)` | Setup |
+| 839 | `from datetime import date` | Not runnable: test file |
 
-### 2.6 Functions as Values: Callbacks, Higher-Order Functions, and Closures
+**Leave alone:** intended errors at 626 and 933.
 
-Most of these blocks need `hall`, which is `Event`, `Venue` and five setup lines, about 30 lines in all.
+### 2.6 Functions as Values
 
-| Line | First line | Reason |
-| --- | --- | --- |
-| 108 | `def is_free(event):` | Long |
-| 190 | `class Venue:` | Long: about 15 lines |
-| 224 | `def is_cheap(event):` | Long |
-| 273 | `from dataclasses import dataclass` | Omits: challenge prompt |
-| 339 | `print(hall.find_events(is_free))` | Error: intended `TypeError` |
-| 361 | `board_games = hall.events[3]` | Error: intended `TypeError` |
-| 394 | `print(hall.find_events(lambda ...))` | Long |
-| 410 | `print(hall.find_events(lambda ...))` | Long |
-| 438 | `def event_date(event):` | Long |
-| 459 | `print(sorted(hall.events))` | Error: intended `TypeError` |
-| 492 | `latest_first = sorted(...)` | Long |
-| 522 | `def matches_month(month):` | Long |
-| 689 | `cheap = list(filter(...))` | Long |
-| 709 | `hall.add_event(Event('Holiday Crafts', ...))` | Long |
-| 728 | `def list_events(venue):` | Long: needs the five-event `hall`, which includes Holiday Crafts |
+Complete. **Leave alone:** intended errors at 407, 437, 544, 626 and 862.
 
 ### 2.7 Decorators
 
-| Block | Reason |
-| --- | --- |
-| The predict box `announced_greet = announce(greet)` / `print('ready')` | Omits: a three-line box about the order lines print in |
-| The `@requires_reserved` challenge prompt, `sam.pay()` twice | Omits: challenge prompt |
-| The `@requires_reserved` solution and the decorator factory block | Omits: `# ... from above ...` placeholders |
-| The two test blocks in Testing a Status Guard | Project files that import from `src/`; expected |
+| Line | First line | Fix |
+| --- | --- | --- |
+| 136 | `announced_greet = announce(greet)` | Setup: `announce()` and `greet()` (predict box) |
+| 357 | `sam = Reservation(1002, 'Sam Lee')` | Not runnable: challenge prompt |
+| 430 | `from reservation import Reservation` | Not runnable: test file |
+| 485 | `from datetime import date` | Not runnable: test file |
+
+**Leave alone:** intended error at 575.
 
 ## Not yet scanned
 
-The cheat sheet, the case study page and the project page in `mod-1-python-fundamentals/` were left out of the scan, along with any page outside Modules 1 and 2. Ben has not said whether they should be included.
+The scan covers the numbered lessons in Modules 1 and 2 and the regex reading. It leaves out the Module 1 cheat sheet, case study page and project page, and every page in other modules. The LMS also runs HTML and JavaScript blocks, which the checking script does not check.
 
 ## How to check the work
 
-The environment setup instructions have fellows install Python 3.14, which is at `/opt/homebrew/bin/python3.14` on this machine. The scan behind this document ran on Python 3.12, which explains the line 611 difference in 2.2. Run future scans with 3.14.
+Run the checking script with Python 3.14, the version fellows install:
 
-The script below extracts every ```` ```python ```` and ```` ```py ```` block from the lessons, runs each block alone in an empty folder, and prints each block that fails, with its last error line. Save it in the session's scratchpad, not in this repository, and run it from there.
-
-```python
-import os, re, subprocess
-
-ROOT = '/Users/benspector/Documents/curriculum-development/marcy-curriculum-docs-swe-python'
-PYTHON = '/opt/homebrew/bin/python3.14'
-LESSONS = (
-    [f'mod-1-python-fundamentals/{f}' for f in os.listdir(f'{ROOT}/mod-1-python-fundamentals') if re.match(r'\d+-.*\.md$', f) or f == 'regex.md']
-    + [f'mod-2-oop-python/{f}' for f in os.listdir(f'{ROOT}/mod-2-oop-python') if re.match(r'\d+-.*\.md$', f)]
-)
-
-for rel in sorted(LESSONS):
-    lines = open(f'{ROOT}/{rel}').read().split('\n')
-    i = 0
-    while i < len(lines):
-        fence = re.match(r'^(\s*)```(python|py)\s*$', lines[i])
-        if fence:
-            indent = len(fence.group(1))
-            j = i + 1
-            while not re.match(r'^\s*```\s*$', lines[j]):
-                j += 1
-            folder = f'run/{rel.replace("/", "_")}-{i + 1}'
-            os.makedirs(folder, exist_ok=True)
-            open(f'{folder}/b.py', 'w').write('\n'.join(line[indent:] for line in lines[i + 1:j]))
-            try:
-                result = subprocess.run([PYTHON, '-I', 'b.py'], cwd=folder, capture_output=True, text=True, timeout=5, stdin=subprocess.DEVNULL)
-                if result.returncode:
-                    print(f'{rel}:{i + 1}  {result.stderr.strip().splitlines()[-1]}')
-            except subprocess.TimeoutExpired:
-                print(f'{rel}:{i + 1}  TIMEOUT')
-            i = j
-        i += 1
+```sh
+python3.14 scripts/check-code-blocks.py mod-1-python-fundamentals/[0-9]*.md mod-1-python-fundamentals/regex.md mod-2-oop-python/[0-9]*.md
 ```
 
-Each failure the script prints falls into one of four groups:
-
-- an intended error;
-- `EOFError` from a block that calls `input()`;
-- a project file whose import fails;
-- one of the unfixed blocks listed above.
-
-After any fix, the block must print exactly what its output comments say, and the full list of failures should shrink by that block only.
+When this work is finished, every line the script prints should be an intended error or an `input()` block from the **Leave alone** lists above. After fixing a block, run the script on that lesson with `--show` and compare the block's output with its output comments.
