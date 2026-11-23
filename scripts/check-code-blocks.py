@@ -20,6 +20,13 @@ Each setup is defined once on the same page, in an HTML comment:
 A block marked with <!-- not-runnable --> is skipped. authoring-guide.md describes
 the full format.
 
+A setup is a copy of the visible block directly above it, so the script also reports a
+setup whose lines no longer appear, in order, in that block. That happens when someone
+edits the visible block and forgets the hidden copy. Comments, blank lines and import
+lines are ignored in the comparison, and the setup may leave lines out. A setup that
+copies code from anywhere else names its source in a line such as
+`# copies: the case study's src/events.py`, and the script skips it.
+
 The script prints one line for each failing block: the file, the line of the opening
 fence, and the last line of the error. Errors that a lesson teaches will appear in
 this list, and so will blocks that call input(), because the script gives them no
@@ -42,7 +49,7 @@ NOT_RUNNABLE = '<!-- not-runnable -->'
 
 
 def read_setups(lines):
-    """Map each setup name on the page to its code."""
+    """Map each setup name on the page to the index of its first line and its code."""
     setups = {}
     i = 0
     while i < len(lines):
@@ -51,17 +58,47 @@ def read_setups(lines):
             j = i + 1
             while lines[j].strip() != '-->':
                 j += 1
-            setups[start.group(1)] = '\n'.join(lines[i + 1:j])
+            setups[start.group(1)] = (i, '\n'.join(lines[i + 1:j]))
             i = j
         i += 1
     return setups
 
 
+def code_lines(lines):
+    """The lines that a copy must keep: no blank lines, comments or imports, and no trailing comments."""
+    kept = []
+    for line in lines:
+        # a trailing comment starts with '# '; '#{' inside an f-string has no space and stays
+        line = re.sub(r'\s+# .*$', '', line).rstrip()
+        stripped = line.strip()
+        if stripped and not stripped.startswith('#') and not re.match(r'(import|from) \S+', stripped):
+            kept.append(line)
+    return kept
+
+
+def matches_block_above(lines, start, code):
+    """Whether every code line of the setup appears, in order, in the visible block above it."""
+    end = start - 1
+    while not FENCE_END.match(lines[end]):
+        end -= 1
+    fence = end - 1
+    while not lines[fence].strip().startswith('```'):
+        fence -= 1
+    indent = len(lines[fence]) - len(lines[fence].lstrip())
+    block = iter(code_lines(line[indent:] for line in lines[fence + 1:end]))
+    # 'in' on an iterator consumes it up to the match, so the lines must appear in order
+    return all(line in block for line in code_lines(code.split('\n')))
+
+
 def comment_above(lines, fence_index):
     """The line holding a block's comment: directly above the fence, or above its {% code %} wrapper."""
     above = fence_index - 1
-    if lines[above].strip().startswith('{% code'):
-        above -= 1
+    # GitBook writes a blank line between {% code %} and its fence, so skip blank lines to find the wrapper
+    wrapper = above
+    while lines[wrapper].strip() == '':
+        wrapper -= 1
+    if lines[wrapper].strip().startswith('{% code'):
+        above = wrapper - 1
     return lines[above].strip()
 
 
@@ -81,10 +118,12 @@ def check(path, show):
     lines = open(path).read().split('\n')
     setups = read_setups(lines)
     # a setup may depend on another setup, so setups only run in front of a block
-    for name, code in setups.items():
+    for name, (start, code) in setups.items():
         # only a top-level print() runs when the setup runs; one inside a method is fine
         if re.search(r'^print\(', code, re.MULTILINE):
-            print(f'{path}  setup {name!r} contains print()')
+            print(f'{path}:{start + 1}  setup {name!r} contains print()')
+        if not re.search(r'^# copies: ', code, re.MULTILINE) and not matches_block_above(lines, start, code):
+            print(f'{path}:{start + 1}  setup {name!r} differs from the block above it')
     i = 0
     while i < len(lines):
         fence = FENCE.match(lines[i])
@@ -103,7 +142,7 @@ def check(path, show):
             if missing:
                 print(f'{path}:{i + 1}  unknown setup {missing}')
             block = '\n'.join(line[indent:] for line in lines[i + 1:j])
-            code = '\n\n'.join([setups[name] for name in names if name in setups] + [block])
+            code = '\n\n'.join([setups[name][1] for name in names if name in setups] + [block])
             with tempfile.TemporaryDirectory() as folder:
                 result = run(code, folder)
             if result is None:

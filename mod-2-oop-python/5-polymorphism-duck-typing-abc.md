@@ -106,6 +106,68 @@ for event in [jazz, pottery, coco]:
 # Movie Night: Coco: $8
 ```
 
+<!-- setup: isinstance-menu
+from datetime import date, timedelta
+
+
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+
+# Same as Event with a performer
+class Concert(Event):
+    def __init__(self, name, date, capacity, base_price, performer):
+        super().__init__(name, date, capacity, base_price)
+        self.performer = performer
+
+
+# Same as Event with a materials fee
+class Workshop(Event):
+    def __init__(self, name, date, capacity, base_price, materials_fee):
+        super().__init__(name, date, capacity, base_price)
+        self.materials_fee = materials_fee
+
+
+# Exact same as Event
+class Screening(Event):
+    pass
+
+
+# One branch for each kind of event
+def ticket_price(event):
+    if isinstance(event, Concert):
+        return event.base_price + 5
+    elif isinstance(event, Workshop):
+        return event.base_price + event.materials_fee
+    else:
+        return event.base_price
+
+
+# One branch for each kind of event
+def can_refund(event, today):
+    if isinstance(event, Concert):
+        # Can be refunded up to 7 days before
+        return today <= event.date - timedelta(days=7)
+    elif isinstance(event, Workshop):
+        # Can be refunded up to 2 days before
+        return today <= event.date - timedelta(days=2)
+    else:
+        # All other events cannot be refunded
+        return False
+
+
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
+
+# today is 4 days before the concert, 8 before the workshop
+today = date(2026, 12, 1)
+-->
+
 `can_refund` and `ticket_price` each work by asking which kind of event they have been given, with `isinstance()`, and then branching. The prices and refund answers are correct, but there are a few downsides to this approach:
 
 - The rules for each kind of event live outside the class they belong to.
@@ -114,6 +176,7 @@ for event in [jazz, pottery, coco]:
 
 **<details><summary>Q: The venue adds guided tours. A guided tour charges its base price plus a $3 booking fee, and its tickets can be refunded until the day before. `Tour` is added as a subclass, and nobody edits the two functions. What do the two `print()` calls show?</summary>**
 
+<!-- uses: isinstance-menu -->
 ```python
 class Tour(Event):
     BOOKING_FEE = 3
@@ -223,6 +286,66 @@ for event in events:
 print(len('Coco'), len(['A1', 'A2']), len({'jazz': 30}))   # 4 2 1
 ```
 
+<!-- setup: polymorphic-events
+from datetime import date, timedelta
+
+
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    # Standard pricing for all events unless overridden
+    def ticket_price(self):
+        return self.base_price
+
+    # Standard refund policy for all events unless overridden
+    def can_refund(self, today):
+        return today < self.date
+
+
+class Concert(Event):
+    SERVICE_FEE = 5
+
+    def __init__(self, name, date, capacity, base_price, performer):
+        super().__init__(name, date, capacity, base_price)
+        self.performer = performer
+
+    def ticket_price(self):             # overrides Event's ticket_price()
+        return super().ticket_price() + Concert.SERVICE_FEE
+
+    def can_refund(self, today):        # overrides Event's can_refund()
+        return today <= self.date - timedelta(days=7)
+
+
+class Workshop(Event):
+    def __init__(self, name, date, capacity, base_price, materials_fee):
+        super().__init__(name, date, capacity, base_price)
+        self.materials_fee = materials_fee
+
+    def ticket_price(self):
+        return super().ticket_price() + self.materials_fee
+
+    def can_refund(self, today):
+        return today <= self.date - timedelta(days=2)
+
+
+class Screening(Event):
+    def can_refund(self, today):        # the only override: ticket_price() comes from Event
+        return False
+
+
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
+events = [jazz, pottery, coco]
+
+# today is 4 days before the concert, 8 before the workshop
+today = date(2026, 12, 1)
+-->
+
 **New Concepts:**
 
 - Each subclass defines its own `ticket_price()` and `can_refund()`, overriding `Event`'s versions, so the rule for each kind of event lives in that kind's class.
@@ -234,6 +357,7 @@ print(len('Coco'), len(['A1', 'A2']), len({'jazz': 30}))   # 4 2 1
 {% hint style="warning" %}
 **Predict, then run.** The venue adds guided tours again: the base price plus a $3 booking fee, refundable until the day before. This time `Tour` defines its own `ticket_price()` and reuses `Event`'s `can_refund()`. What does the loop print?
 
+<!-- uses: polymorphic-events -->
 ```python
 class Event:
     def __init__(self, name, date, capacity, base_price):
@@ -481,6 +605,7 @@ my_playlist = Playlist(['Song A', 'Song B', 'Song C'])
 print(len(my_playlist))    # 3: Playlist defines __len__, and inherits from neither list nor str
 ```
 
+<!-- uses: polymorphic-events -->
 ```python
 class MuseumTour:                       # does not inherit from Event
     def __init__(self, name, date, price):
@@ -517,6 +642,24 @@ for item in menu:
 # Gallery After Dark: $12 (refundable)
 ```
 
+<!-- setup: museum-tour
+class MuseumTour:                       # does not inherit from Event
+    def __init__(self, name, date, price):
+        self.name = name
+        self.date = date
+        self.price = price
+
+    def ticket_price(self):             # defines the method the menu calls, as every event does
+        return self.price
+
+    def can_refund(self, today):
+        return today < self.date
+
+
+gallery = MuseumTour('Gallery After Dark', date(2026, 12, 11), price=12)
+menu = [jazz, coco, gallery]
+-->
+
 **New Concepts:**
 
 - Code can decide whether it can use an object in one of two ways:
@@ -530,6 +673,7 @@ for item in menu:
 {% hint style="warning" %}
 **Predict, then run.** A second partner, a botanical garden, sends its own class, `GardenTour`. It defines `ticket_price()` but not `can_refund()`. What does the menu loop print?
 
+<!-- uses: polymorphic-events, museum-tour -->
 ```python
 class GardenTour:
     def __init__(self, name, date, price):
@@ -609,6 +753,7 @@ The program needs to state which methods every kind of event must define, and to
 
 Without an abstract base class, using the `Event` from Letting Each Kind of Event Decide, a subclass that forgets an override is created and used without complaint:
 
+<!-- uses: polymorphic-events -->
 ```python
 class MidnightConcert(Event):
     # Meant to charge the $5 service fee, but its author forgot ticket_price()
@@ -677,6 +822,53 @@ Event('Open Mic', date(2026, 12, 10), capacity=20, base_price=0)
 # TypeError: Can't instantiate abstract class Event without an implementation for abstract methods 'can_refund', 'ticket_price'
 ```
 
+<!-- setup: abc-event
+from abc import ABC, abstractmethod     # from the standard library's abc module
+from datetime import date, timedelta
+
+
+# Contract: every kind of event defines
+#   ticket_price()      the price of one ticket
+#   can_refund(today)   whether a ticket can still be refunded on that day
+class Event(ABC):                       # inherits from ABC, so Event is an abstract base class
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    @abstractmethod                     # every subclass must define ticket_price()
+    def ticket_price(self):
+        return self.base_price          # an abstract method can still have a body
+
+    @abstractmethod                     # every subclass must define can_refund()
+    def can_refund(self, today):
+        pass
+
+
+class Concert(Event):
+    SERVICE_FEE = 5
+
+    def __init__(self, name, date, capacity, base_price, performer):
+        super().__init__(name, date, capacity, base_price)
+        self.performer = performer
+
+    def ticket_price(self):
+        return super().ticket_price() + Concert.SERVICE_FEE   # reaches the abstract method's body
+
+    def can_refund(self, today):
+        return today <= self.date - timedelta(days=7)
+
+
+class Festival(Event):
+    # Forgot can_refund()
+    def ticket_price(self):
+        return super().ticket_price()
+
+
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+-->
+
 Here is the contract as a class diagram. `Event` is marked abstract, a `*` after a method marks it abstract, and each concrete subclass defines both methods:
 
 ```mermaid
@@ -739,6 +931,7 @@ Each of those calls works on any kind of event only because every kind of event 
 {% hint style="warning" %}
 **Predict, then run.** With `Event` as an abstract base class, a screening is written the way it was before, defining only `can_refund()`. What happens when the program creates one?
 
+<!-- uses: abc-event -->
 ```python
 class Screening(Event):
     def can_refund(self, today):
@@ -780,6 +973,7 @@ TypeError: Can't instantiate abstract class Screening without an implementation 
 
 **Code:**
 
+<!-- uses: polymorphic-events, museum-tour, abc-event -->
 ```python
 gallery = MuseumTour('Gallery After Dark', date(2026, 12, 11), price=12)
 print(gallery.ticket_price())   # 12: duck typing accepts any class that defines the method
@@ -836,6 +1030,7 @@ testpaths = tests
 
 `src/events.py` holds the abstract `Event` and the `Concert` from Abstract Base Classes, with `from abc import ABC, abstractmethod` and `from datetime import timedelta` at the top. Then write three tests:
 
+<!-- not-runnable -->
 ```python
 from datetime import date
 

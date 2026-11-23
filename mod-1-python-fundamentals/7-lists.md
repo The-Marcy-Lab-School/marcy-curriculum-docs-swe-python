@@ -187,8 +187,14 @@ prices[1] = 1.75
 print(prices)  # [3.5, 1.75, 4.0, 3.0]
 ```
 
+<!-- setup: sale-prices
+prices = [3.50, 2.25, 4.00, 3.00]
+prices[1] = 1.75
+-->
+
 We can even empty a list in one go:
 
+<!-- uses: sale-prices -->
 ```python
 prices.clear()  # prices now has no values
 print(prices)  # []

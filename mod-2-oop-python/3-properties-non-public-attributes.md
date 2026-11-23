@@ -31,6 +31,7 @@
         return self._capacity
     ```
   - A **setter** is the method decorated with `@<name>.setter`. It runs when something assigns to the attribute, which is where validation belongs.
+    <!-- not-runnable -->
     ```python
     @capacity.setter
     def capacity(self, value):
@@ -70,14 +71,42 @@ class Event:
         self.seats_sold += 1
 ```
 
+<!-- setup: event
+from datetime import date
+
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+        self.seats_sold = 0
+
+    def seats_left(self):
+        return self.capacity - self.seats_sold
+
+    def sell_ticket(self):
+        if self.seats_left() == 0:
+            print(f'{self.name} is sold out.')
+            return
+        self.seats_sold += 1
+-->
+
 `pottery` is an instance of `Event` for a workshop with capacity for two attendees. The third sale is refused, which is exactly what the class is for:
 
+<!-- uses: event -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.sell_ticket()
 pottery.sell_ticket()
 pottery.sell_ticket()        # Intro to Pottery is sold out.
 ```
+
+<!-- setup: sold-out-pottery
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
+pottery.sell_ticket()
+pottery.sell_ticket()
+-->
 
 That third call is a **refusal**: `sell_ticket()` turned down an action that would have broken the event's data, said why, and changed nothing. A venue refuses in the same way when it turns down an event that is already on its calendar.
 
@@ -86,6 +115,7 @@ That third call is a **refusal**: `sell_ticket()` turned down an action that wou
 
 Any line anywhere in the program can change `seats_sold` directly:
 
+<!-- uses: event, sold-out-pottery -->
 ```python
 pottery.seats_sold += 1
 print(pottery.seats_left())   # -1
@@ -95,6 +125,7 @@ That line never runs `sell_ticket()`, so the sold-out check never runs either, a
 
 Assigning a wrong value directly causes the same kind of trouble. A staff member updates a new workshop and types `0` when they meant `10`:
 
+<!-- uses: event -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.sell_ticket()
@@ -158,6 +189,29 @@ class Event:
         self._seats_sold += 1
 ```
 
+<!-- setup: seats-sold-property
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+        self._seats_sold = 0
+
+    @property
+    def seats_sold(self):
+        return self._seats_sold
+
+    def seats_left(self):
+        return self.capacity - self.seats_sold
+
+    def sell_ticket(self):
+        if self.seats_left() == 0:
+            print(f'{self.name} is sold out.')
+            return
+        self._seats_sold += 1
+-->
+
 The **`@property`** line above `seats_sold()` changes how the method is used. You never call `seats_sold()` with parentheses. Instead, when code reads `pottery.seats_sold`, Python runs the method for you and hands back whatever it returns, so the method looks like an attribute from the outside.
 
 {% hint style="info" %}
@@ -166,6 +220,7 @@ The **`@property`** line above `seats_sold()` changes how the method is used. Yo
 
 This method is called a **getter**, because it gets the value. Notice what did not change:
 
+<!-- uses: event, seats-sold-property -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.sell_ticket()
@@ -180,6 +235,7 @@ print(pottery.seats_left())    # 1
 {% hint style="warning" %}
 **Predict, then run.** The class defines how to read `seats_sold` and nothing else. What happens when code outside the class tries to add a seat directly?
 
+<!-- uses: event, seats-sold-property -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.seats_sold += 1
@@ -227,8 +283,43 @@ class Event:
     # ... the seats_sold property, seats_left(), and sell_ticket() from above ...
 ```
 
+<!-- setup: capacity-setter
+# copies: the block above, with its placeholder filled in from the class before it
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity      # runs the setter below
+        self.base_price = base_price
+        self._seats_sold = 0
+
+    @property
+    def capacity(self):
+        return self._capacity
+
+    @capacity.setter
+    def capacity(self, value):
+        if value < 1:
+            raise ValueError(f'Capacity must be at least 1, not {value}.')
+        self._capacity = value
+
+    @property
+    def seats_sold(self):
+        return self._seats_sold
+
+    def seats_left(self):
+        return self.capacity - self.seats_sold
+
+    def sell_ticket(self):
+        if self.seats_left() == 0:
+            print(f'{self.name} is sold out.')
+            return
+        self._seats_sold += 1
+-->
+
 The getter works the same way as the one for `seats_sold`: it returns the value stored under the underscore name. Now the staff member's typing mistake is caught on the line where it happens:
 
+<!-- uses: event, capacity-setter -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 
@@ -248,6 +339,7 @@ Notice that `__init__` assigns `self.capacity = capacity`, without an underscore
 {% hint style="warning" %}
 **Predict, then run.** What happens when the event is created with a capacity of `0`?
 
+<!-- uses: event, capacity-setter -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=0, base_price=15)
 print(pottery.name)
@@ -268,6 +360,7 @@ Creating the event runs `__init__`, and the line `self.capacity = capacity` in `
 
 Give the `Event` class a `base_price` property. Its setter should refuse a negative price by raising a `ValueError` whose message names the rule and the refused value, and `__init__` should run the setter. A price of `0` is allowed, because the venue runs free events.
 
+<!-- not-runnable -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery.base_price = 20
@@ -374,6 +467,7 @@ In the case study, `capacity` and `base_price` are reached through properties, a
 
 The underscore in `_capacity` does not stop anything. Python lets any code read or assign an attribute whose name starts with an underscore:
 
+<!-- uses: event, capacity-setter -->
 ```python
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2, base_price=15)
 pottery._capacity = -5            # no error
@@ -415,6 +509,7 @@ class Venue:
 ```
 
 <!-- setup: venue-attendees
+# copies: the Venue above, with is_valid_email() from the case study's src/venue.py and Attendee from src/attendee.py
 from dataclasses import dataclass
 
 
@@ -513,6 +608,7 @@ testpaths = tests
 
 Then write the two tests, one per promise:
 
+<!-- not-runnable -->
 ```python
 from datetime import date
 
@@ -543,6 +639,7 @@ The second test needs `with pytest.raises(ValueError):` as well. Without it, the
 {% hint style="warning" %}
 **Predict, then run.** Swap the two lines in the setter so that it stores the value before it checks it. Which test fails, and what does pytest report?
 
+<!-- not-runnable -->
 ```python
 @capacity.setter
 def capacity(self, value):

@@ -101,6 +101,16 @@ for purchase in purchases:
 # muffin: $3.00
 ```
 
+<!-- setup: purchases
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+-->
+
 ### Challenge: Café Report, Part 1
 
 Add to the report with one line per purchase that says the customer's name and how the customer paid. Write a loop that prints these lines:
@@ -115,6 +125,7 @@ Ada paid by card
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: purchases -->
 ```python
 for purchase in purchases:
     print(f"{purchase['customer']} paid by {purchase['payment']}")
@@ -149,6 +160,7 @@ print(customer_names)  # ['Ada', 'Zo', 'Malik', 'Priya', 'Ada']
 
 This job, transforming every value and collecting the results in a new list, is so common that Python gives it its own syntax called a **List Comprehension**. It looks like this:
 
+<!-- uses: purchases -->
 ```python
 customer_names = [purchase["customer"] for purchase in purchases]
 
@@ -159,6 +171,7 @@ You can read this syntax like this: "for each `purchase` in `purchases`, compute
 
 The list comprehension syntax can be generalized like this:
 
+<!-- not-runnable -->
 ```python
 [expression for item in source_list]
 ```
@@ -167,8 +180,8 @@ Python reads this and builds a new list by evaluating `expression` once for ever
 
 The expression can be any expression, including a call to a function you wrote. In this example, `format_line` turns one purchase into a line of a receipt, and the comprehension calls it once for every purchase:
 
+<!-- uses: purchases -->
 {% code title="03_transform.py" %}
-
 ```python
 def format_line(purchase):
     return f"{purchase['item']}: ${purchase['price']:.2f}"
@@ -188,6 +201,7 @@ The loop and the comprehension build the same list, so which should you use? The
 
 The `for` loop is the **Imperative** way to do this task meaning **you define and control every step of the process**. This means that you can insert additional steps to customize the solution but it does require more effort to both read and write this code:
 
+<!-- uses: purchases -->
 ```python
 # Imperative: High Control & High Effort:
 customer_names = []
@@ -252,6 +266,7 @@ The comprehension still calls the `double` helper function, so each value is sti
 
 The report needs a list of how each purchase was paid so that we can tell if at least one customer paid in cash. Write a comprehension that builds it:
 
+<!-- not-runnable -->
 ```python
 purchases = [
     {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
@@ -272,6 +287,7 @@ print("At least one customer paid in cash" if "cash" in payment_methods else "No
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: purchases -->
 ```python
 payment_methods = [purchase["payment"] for purchase in purchases]
 ```
@@ -304,6 +320,7 @@ print(adas_purchases)
 
 In this example, `[purchase for purchase in purchases]` would return a new list with every purchase in its entirety. Adding the `if` to the end keeps only the purchases for which the expression `test` expression is true. Here is the general shape:
 
+<!-- not-runnable -->
 ```python
 [expression for item in source_list if test]
 ```
@@ -335,6 +352,7 @@ Read it from the `for` outward: "for each `purchase` in `purchases`, keep it if 
 
 The café counts its cash drawer at the end of the day, so the report lists the items that customers paid for in cash. Write one comprehension that builds the list:
 
+<!-- not-runnable -->
 ```python
 cash_items = ???
 
@@ -343,6 +361,7 @@ print(cash_items)  # ['bagel', 'juice']
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: purchases -->
 ```python
 cash_items = [purchase["item"] for purchase in purchases if purchase["payment"] == "cash"]
 ```
@@ -371,6 +390,7 @@ print(sum(prices) / len(prices))  # 3.25, the average
 
 These functions have one limitation: `sum()`, `min()`, and `max()` only work on a list of numbers. Try them on the list of purchases:
 
+<!-- uses: purchases -->
 ```python
 print(len(purchases))  # 5
 print(sum(purchases))  # TypeError: unsupported operand type(s) for +: 'int' and 'dict'
@@ -380,6 +400,7 @@ print(sum(purchases))  # TypeError: unsupported operand type(s) for +: 'int' and
 
 The fix is to transform the purchases into a list of numbers first. A comprehension does that job, and the built-in function then reduces the numbers:
 
+<!-- uses: purchases -->
 ```python
 prices = [purchase["price"] for purchase in purchases]
 print(prices)       # [3.5, 2.25, 3.5, 4.0, 3.0]
@@ -393,6 +414,7 @@ These are the "declarative" approaches. Let's look at the "imperative" approach 
 
 The built-in functions cover the most common reductions. When none of them does the job you need, you write the loop yourself imperatively.
 
+<!-- uses: purchases -->
 ```python
 def total(purchases):
     running_total = 0                       # the starting value
@@ -411,6 +433,7 @@ This pattern is the **accumulator pattern**:
 
 A loop that builds a list with `.append()` has this shape too: its starting value is an empty list, and its combining step is `.append()`. We saw this as the imperative approach for transforming a list:
 
+<!-- uses: purchases -->
 ```python
 def get_customer_names(purchases):
     customer_names = []                             # the starting value
@@ -488,6 +511,7 @@ It prints `{'small': 3, 'large': 1}`.
 
 The report shows how many purchases were paid each way. Build a lookup table named `payment_counts` that maps each payment method to the number of purchases paid that way:
 
+<!-- not-runnable -->
 ```python
 payment_counts = {}
 # your loop here
@@ -497,6 +521,7 @@ print(payment_counts)  # {'card': 3, 'cash': 2}
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: purchases -->
 ```python
 payment_counts = {}
 for purchase in purchases:
@@ -540,11 +565,34 @@ print(find_purchase_index(purchases, "juice"))  # 3
 print(find_purchase(purchases, "tea"))          # None
 ```
 
+<!-- setup: find-purchase
+purchases = [
+    {"customer": "Ada", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Zo", "item": "bagel", "price": 2.25, "payment": "cash"},
+    {"customer": "Malik", "item": "coffee", "price": 3.50, "payment": "card"},
+    {"customer": "Priya", "item": "juice", "price": 4.00, "payment": "cash"},
+    {"customer": "Ada", "item": "muffin", "price": 3.00, "payment": "card"},
+]
+
+def find_purchase(purchases, item):
+    for purchase in purchases:
+        if purchase["item"] == item:
+            return purchase
+    return None  # nothing passed the test
+
+def find_purchase_index(purchases, item):
+    for index, purchase in enumerate(purchases):
+        if purchase["item"] == item:
+            return index
+    return -1
+-->
+
 `return` inside the loop is what makes this "first": the loop stops at the first success and never looks at the rest. The line after the loop handles the case where nothing matched. Decide what that case should return before you write the function, because callers will need to check for it.
 
 {% hint style="warning" %}
 **Predict, then run.** `"coffee"` appears in `purchases` twice, at index `0` and at index `2`. What does this print?
 
+<!-- uses: find-purchase -->
 ```python
 print(find_purchase_index(purchases, "coffee"))
 ```
@@ -560,6 +608,7 @@ It prints `0`. The first purchase is a coffee, so the `return` inside the loop r
 
 The report names the first item paid for with each payment method. Complete `first_item_paid_by` so that it returns the item of the first purchase paid with `payment`, or `None` when no purchase was paid that way:
 
+<!-- not-runnable -->
 ```python
 def first_item_paid_by(purchases, payment):
     # return the item of the first purchase paid with payment, or None
@@ -636,6 +685,7 @@ print(sorted(prices, reverse=True))   # [4.0, 3.5, 3.5, 3.0, 2.25]
 
 The report lists every price paid in cash, from highest to lowest. Build the list without changing `purchases`:
 
+<!-- not-runnable -->
 ```python
 cash_prices = ???
 
@@ -644,6 +694,7 @@ print(cash_prices)  # [4.0, 2.25]
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: purchases -->
 ```python
 cash_prices = sorted([purchase["price"] for purchase in purchases if purchase["payment"] == "cash"], reverse=True)
 ```
@@ -656,6 +707,7 @@ The comprehension keeps the cash purchases and turns each one into its price, wh
 
 Because each of these tools takes a list and gives back a list (or a value), the output of one can feed straight into the next. Name the intermediate steps when it helps the reader. This example finds the two highest prices:
 
+<!-- uses: purchases -->
 ```python
 prices = [purchase["price"] for purchase in purchases]  # transform each purchase into its price
 ordered = sorted(prices, reverse=True)                  # put the prices in order, highest first
@@ -667,6 +719,7 @@ print(top_two)
 
 Or fold the steps into one line, which is fine while it stays readable:
 
+<!-- uses: purchases -->
 ```python
 print(sorted([purchase["price"] for purchase in purchases], reverse=True)[:2])
 # [4.0, 3.5]
@@ -676,6 +729,7 @@ print(sorted([purchase["price"] for purchase in purchases], reverse=True)[:2])
 
 Write the code that calculates how much the café made from coffee. Name each job your code does before you write it.
 
+<!-- not-runnable -->
 ```python
 coffee_total = ???
 
@@ -684,6 +738,7 @@ print(coffee_total)  # should print 7.0
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: purchases -->
 ```python
 coffee_prices = [purchase["price"] for purchase in purchases if purchase["item"] == "coffee"]
 coffee_total = sum(coffee_prices)

@@ -50,6 +50,7 @@
             return today < self.date
     ```
   - **Instantiation** is the act of making an instance by invoking the class name. Python invokes the `__init__` method for you:
+    <!-- uses: key-terms-event -->
     ```py
     jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
     ```
@@ -58,6 +59,20 @@
 - **Introspection** is asking an object about itself while the program is running.
   - **`type(obj)`** returns the class an object was made from. `type('hello')` returns `<class 'str'>`.
   - **`dir(obj)`** returns the names of every attribute that can be accessed through the object, including its methods.
+
+<!-- setup: key-terms-event
+# copies: the Event class in Key Terms
+from datetime import date
+
+
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+    def can_refund(self, today):
+        return today < self.date
+-->
 
 ## The Case Study: Venue Tickets
 
@@ -258,6 +273,17 @@ print(type(pottery))     # <class '__main__.Event'>
 print(jazz is pottery)   # False
 ```
 
+<!-- setup: empty-event
+from datetime import date
+
+
+class Event:
+    pass
+
+jazz = Event()
+pottery = Event()
+-->
+
 - `pass` is a placeholder that does nothing. A class body cannot be empty, so `pass` fills it until the class has something in it.
 - `Event()` calls the class, like a function, and the call returns a new instance. Making an instance is called **instantiation**.
 - `type(jazz)` reports that `jazz` was made from `Event`. The `__main__` in front is Python's name for the file you ran, so `__main__.Event` means "the `Event` class defined in this file".
@@ -267,6 +293,7 @@ print(jazz is pottery)   # False
 
 An **attribute** is a piece of data stored on an object, and you reach it with a dot. You could add attributes to each instance one at a time:
 
+<!-- uses: empty-event -->
 ```python
 jazz.name = 'Friday Night Jazz'
 jazz.date = date(2026, 12, 5)
@@ -421,6 +448,32 @@ pottery.sell_ticket()        # Intro to Pottery is sold out.
 print(pottery.seats_left())  # 0
 ```
 
+<!-- setup: event-methods
+from datetime import date
+
+
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.seats_sold = 0
+
+    def seats_left(self):
+        return self.capacity - self.seats_sold
+
+    def sell_ticket(self):
+        if self.seats_left() == 0:
+            print(f'{self.name} is sold out.')
+            return
+        self.seats_sold += 1
+
+
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
+pottery.sell_ticket()
+pottery.sell_ticket()
+-->
+
 - `seats_left()` reads two attributes of the event it was called on (`self.capacity` and `self.seats_sold`) and returns the difference.
 - `sell_ticket()` is the only "official" way to change the `seats_sold` attribute. It refuses to sell a seat when none are left, and says why. Otherwise, it adds one to the event's count.
   - `sell_ticket()` calls `self.seats_left()`. Since `self` is the event, `self.seats_left()` asks the same event how many seats it has left.
@@ -446,6 +499,7 @@ The two lines make the same call. Here is Python's rule for invoking methods: **
 
 The same rule holds for the classes you write. When you call a method on an instance, Python finds the method in the instance's class and passes the instance in as the first argument, `self`:
 
+<!-- uses: event-methods -->
 ```python
 jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 
@@ -488,6 +542,7 @@ Read the message in two parts. `Event.seats_left() takes 0 positional arguments`
 {% hint style="warning" %}
 **Predict, then run.** Using the `Event` class with `seats_left()` and `sell_ticket()` from above, what does this program print?
 
+<!-- uses: event-methods -->
 ```python
 jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
@@ -548,6 +603,34 @@ print(jazz.can_refund(today))          # True
 print(Event.can_refund(jazz, today))   # True
 ```
 
+<!-- setup: event-can-refund
+from datetime import date
+
+
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.seats_sold = 0
+
+    def seats_left(self):
+        return self.capacity - self.seats_sold
+
+    def sell_ticket(self):
+        if self.seats_left() == 0:
+            print(f'{self.name} is sold out.')
+            return
+        self.seats_sold += 1
+
+    def can_refund(self, today):
+        return today < self.date
+
+
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+today = date(2026, 11, 12)
+-->
+
 The venue refunds a ticket on any day before the event. Python compares dates by when they fall, so `today < self.date` is `True` when today comes before the event's date. In `jazz.can_refund(today)`, `jazz` becomes `self` and `today` becomes `today`. Written through the class, the instance takes the first slot and the argument you wrote takes the second.
 
 ### Challenge: Room Rentals
@@ -559,6 +642,7 @@ Riverside Community Hall also rents out its rooms. Write a class `Room` whose `_
 
 Then rewrite one of your method calls in the form `Room.cost(...)`.
 
+<!-- not-runnable -->
 ```python
 studio = Room('Dance Studio', seats=25, hourly_rate=40)
 hall = Room('Main Hall', seats=200, hourly_rate=150)
@@ -649,8 +733,27 @@ sell_ticket(pottery)
 sell_ticket(pottery)    # Intro to Pottery is sold out.
 ```
 
+<!-- setup: dictionary-event
+def make_event(name, capacity):
+    return {'name': name, 'capacity': capacity, 'seats_sold': 0}
+
+def seats_left(event):
+    return event['capacity'] - event['seats_sold']
+
+def sell_ticket(event):
+    if seats_left(event) == 0:
+        print(f"{event['name']} is sold out.")
+        return
+    event['seats_sold'] += 1
+
+pottery = make_event('Intro to Pottery', 2)
+sell_ticket(pottery)
+sell_ticket(pottery)
+-->
+
 The venue's rule, "never sell more seats than the event holds", is written in `sell_ticket()`. But nothing connects the dictionary to that function. Any line anywhere in the program can change the record directly:
 
+<!-- uses: dictionary-event -->
 ```python
 pottery['seats_sold'] += 1
 print(seats_left(pottery))    # -1
@@ -662,6 +765,7 @@ That code bypassed `sell_ticket()`, so the rule never ran, and the workshop is n
 
 **Encapsulation** is bundling data together with the methods that operate on it, so that the class constrains how the rest of the program changes that data. The `Event` class encapsulates an event's name, date, capacity, and seat count together with `seats_left()` and `sell_ticket()`. Compare the two versions:
 
+<!-- uses: dictionary-event, event-can-refund -->
 ```python
 # The dictionary version: data in one place, rules in another
 pottery = make_event('Intro to Pottery', 2)
@@ -672,8 +776,14 @@ pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
 pottery.sell_ticket()
 ```
 
+<!-- setup: class-pottery
+pottery = Event('Intro to Pottery', date(2026, 11, 20), capacity=2)
+pottery.sell_ticket()
+-->
+
 Both lines sell a ticket, but they differ in what a reader needs to know. `sell_ticket(pottery)` only works if you know a function called `sell_ticket` exists somewhere and that it expects this particular shape of dictionary. `pottery.sell_ticket()` is found through the event itself, and introspection can list it:
 
+<!-- uses: event-can-refund, class-pottery -->
 ```python
 print(dir(pottery))
 # ['__class__', '__delattr__', '__dict__', ..., '__weakref__', 'can_refund', 'capacity', 'date', 'name', 'seats_left', 'seats_sold', 'sell_ticket']

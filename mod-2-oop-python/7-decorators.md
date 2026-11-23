@@ -124,6 +124,19 @@ announced_greet('Maya')
 # --- finished ---
 ```
 
+<!-- setup: announce
+def announce(func):                 # takes a function as its parameter
+    def wrapper(name):              # the wrapper, defined inside announce()
+        print('--- starting ---')   # runs before func
+        func(name)                  # wrapper closes over func, so it can call func later
+        print('--- finished ---')   # runs after func
+    return wrapper                  # returns the wrapper without calling it
+
+
+def greet(name):
+    print(f'Hi, {name}!')
+-->
+
 **New Concepts:**
 
 - A function can take another function as a parameter, here `func`, define a **wrapper** that calls `func` with extra code around the call, and return the wrapper.
@@ -133,6 +146,7 @@ announced_greet('Maya')
 {% hint style="warning" %}
 **Predict, then run.** In what order do these four lines print?
 
+<!-- uses: announce -->
 ```python
 announced_greet = announce(greet)
 print('ready')
@@ -354,6 +368,7 @@ print(maya.status)       # refunded
 
 `pay()` still writes its check out by hand. Write a decorator called `requires_reserved` that refuses a call unless the reservation is reserved, and use it on `pay()` so that `pay()` contains only the line that changes the status.
 
+<!-- not-runnable -->
 ```python
 sam = Reservation(1002, 'Sam Lee')
 sam.pay()
@@ -427,6 +442,7 @@ testpaths = tests
 
 `src/reservation.py` holds `requires_reserved`, `requires_paid`, and the `Reservation` class with all three methods decorated. Then write one test for each side of the rule:
 
+<!-- not-runnable -->
 ```python
 from reservation import Reservation
 
@@ -482,6 +498,7 @@ Put the `@requires_paid` line back before moving on.
 {% hint style="warning" %}
 **Check for understanding.** This test is based on one in the case study's `tests/test_reservation.py`, with its objects built inside the test. (In the case study's file, the objects come from shared setup in `tests/conftest.py`, which the case study session explains.)
 
+<!-- not-runnable -->
 ```python
 from datetime import date
 

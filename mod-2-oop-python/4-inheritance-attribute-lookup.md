@@ -97,6 +97,10 @@ print(jazz.ticket_price())      # 30
 print(pottery.ticket_price())   # 25
 ```
 
+<!-- setup: datetime-imports
+from datetime import date, timedelta
+-->
+
 `timedelta(days=7)` is a length of time from the `datetime` module, and subtracting it from a date gives the date one week earlier. So `self.date - timedelta(days=7)` is the last day a concert ticket can be refunded.
 
 **<details><summary>Q: Which lines are the same in both classes, and which are different?</summary>**
@@ -164,6 +168,38 @@ print(isinstance(coco, Screening))   # True
 print(isinstance(coco, Event))       # True
 ```
 
+<!-- setup: event
+from datetime import date
+
+class Event:                # the superclass: holds what every event shares
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    def ticket_price(self):
+        return self.base_price
+
+    def can_refund(self, today):
+        return today < self.date
+
+    def __repr__(self):
+        # type(self).__name__ is the name of the instance's own class, such as 'Screening'
+        return f'{type(self).__name__}({self.name!r}, {self.date})'
+
+    def __eq__(self, other):
+        return self.name == other.name and self.date == other.date
+
+
+class Screening(Event):     # Screening is a subclass of Event
+    pass                    # an empty body: Screening receives every method of Event
+
+
+# Screening receives Event's __init__, so it takes the same four arguments
+coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
+-->
+
 **New Concepts:**
 
 - `Event` holds everything every event shares:
@@ -178,6 +214,7 @@ print(isinstance(coco, Event))       # True
 {% hint style="warning" %}
 **Predict, then run.** `Screening` has no `__repr__` of its own, and the one it receives is written inside `Event`. Does `print(coco)` show `Event('Movie Night: Coco', 2026-12-18)` or `Screening('Movie Night: Coco', 2026-12-18)`?
 
+<!-- uses: event -->
 ```python
 coco = Screening('Movie Night: Coco', date(2026, 12, 18), capacity=30, base_price=8)
 print(coco)
@@ -240,6 +277,7 @@ classDiagram
 
 **Code:**
 
+<!-- uses: event -->
 ```python
 class Concert(Event):
     # Concert's own __init__ replaces the one it would receive from Event
@@ -253,6 +291,17 @@ print(jazz.name)        # Friday Night Jazz, stored by Event's __init__
 print(jazz.performer)   # The Blue Notes, stored by Concert's __init__
 ```
 
+<!-- setup: concert-performer
+class Concert(Event):
+    # Concert's own __init__ replaces the one it would receive from Event
+    def __init__(self, name, date, capacity, base_price, performer):
+        super().__init__(name, date, capacity, base_price)  # runs Event's __init__ on the new instance
+        self.performer = performer                          # stores what only a concert has
+
+
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+-->
+
 **New Concepts:**
 
 - A subclass can define its own `__init__`, which replaces the one it would have received from `Event`.
@@ -262,6 +311,7 @@ print(jazz.performer)   # The Blue Notes, stored by Concert's __init__
 {% hint style="warning" %}
 **Predict, then run.** A concert ticket should cost its base price plus a $5 service fee. Based on how `Concert` is currently written, what does `jazz` charge for a ticket?
 
+<!-- uses: event, concert-performer -->
 ```python
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 print(jazz.ticket_price())
@@ -287,6 +337,7 @@ The concert undercharges by $5. The next two sections give `Concert` a `ticket_p
 
 **Code:**
 
+<!-- uses: event -->
 ```python
 class Screening(Event):
     def can_refund(self, today):    # overrides Event's can_refund(): the same name, so this version runs
@@ -308,6 +359,7 @@ print(board_games.can_refund(date(2026, 12, 1)))   # True, from Event's version
 {% hint style="warning" %}
 **Check for understanding.** Suppose `Screening`'s method had been misspelled when it was written:
 
+<!-- uses: event -->
 ```python
 class Screening(Event):
     def can_refunds(self, today):
@@ -335,6 +387,7 @@ An override has to use exactly the same name as the superclass's method. Python 
 
 **Code:**
 
+<!-- uses: datetime-imports, event -->
 ```python
 class Concert(Event):
     def __init__(self, name, date, capacity, base_price, performer):
@@ -363,6 +416,7 @@ print(jazz.can_refund(date(2026, 11, 30)))     # False: the last day for a refun
 
 Write `Workshop` as a subclass of `Event`. Its `__init__` takes a fifth argument, `materials_fee`, and stores it. Its `ticket_price()` extends `Event`'s version by adding the materials fee, and its `can_refund()` allows a refund until two days before the workshop.
 
+<!-- not-runnable -->
 ```python
 pottery = Workshop('Intro to Pottery', date(2026, 12, 9), capacity=12, base_price=15, materials_fee=10)
 print(pottery)                                # Workshop('Intro to Pottery', 2026-12-09)
@@ -373,6 +427,7 @@ print(pottery.can_refund(date(2026, 12, 8)))  # False
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: event -->
 ```python
 class Workshop(Event):
     def __init__(self, name, date, capacity, base_price, materials_fee):
@@ -413,6 +468,7 @@ class Workshop(Event):
 
 **Code:**
 
+<!-- uses: event -->
 ```python
 class Concert(Event):
     # capital letters mark a constant
@@ -432,6 +488,26 @@ jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=2
 print(jazz.ticket_price())   # 30
 ```
 
+<!-- setup: service-fee
+# copies: the block above, with can_refund() filled in from the Concert before it
+class Concert(Event):
+    # capital letters mark a constant
+    SERVICE_FEE = 5     # a class attribute: assigned in the class body, one copy for every concert
+
+    def __init__(self, name, date, capacity, base_price, performer):
+        super().__init__(name, date, capacity, base_price)
+        self.performer = performer
+
+    def ticket_price(self):
+        return super().ticket_price() + Concert.SERVICE_FEE  # read through the class's name
+
+    def can_refund(self, today):
+        return today <= self.date - timedelta(days=7)   # replaces Event's version, with no super()
+
+
+jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
+-->
+
 **New Concepts:**
 
 - The fee is information about concerts in general, not about one concert, so it belongs to the class.
@@ -442,6 +518,7 @@ print(jazz.ticket_price())   # 30
 {% hint style="warning" %}
 **Predict, then run.** The venue raises the service fee for every concert, including the two already scheduled. What do the last two lines print?
 
+<!-- uses: event, service-fee -->
 ```python
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 choir = Concert('Winter Choir', date(2026, 12, 19), capacity=80, base_price=10, performer='Riverside Singers')
@@ -476,6 +553,7 @@ The program needs a rule that says where to look for a name the instance does no
 
 **Code:**
 
+<!-- uses: event, service-fee -->
 ```python
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
@@ -570,6 +648,7 @@ This is true of instances of built-in data types such as lists, strings, integer
 
 **Code:**
 
+<!-- uses: event, attendee -->
 ```python
 class Concert(Event):          # a concert is an event
     ...
@@ -579,6 +658,17 @@ class Reservation:             # a reservation has an attendee and an event
     attendee: Attendee
     event: Event
 ```
+
+<!-- setup: attendee
+# copies: the case study's src/attendee.py
+from dataclasses import dataclass
+
+
+@dataclass
+class Attendee:
+    name: str
+    email: str
+-->
 
 **New Concepts:**
 
@@ -647,6 +737,7 @@ testpaths = tests
 
 Then write one test per kind of event, each with a base price of `25`:
 
+<!-- not-runnable -->
 ```python
 from datetime import date
 
@@ -733,6 +824,7 @@ If the concert broke, the first `assert` would fail with `assert 25 == 30`, and 
 
 **Code:**
 
+<!-- uses: event -->
 ```python
 class Concert(Event):
     def __init__(self, name, date, capacity, base_price, performer):
@@ -752,6 +844,7 @@ print(jazz.name)    # the error appears here, not on the line that left out supe
 
 Assigning to a class attribute's name through an instance does not change the class attribute. It creates a new instance attribute with the same name on that one instance:
 
+<!-- uses: event, service-fee -->
 ```python
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 jazz.SERVICE_FEE = 0
@@ -769,6 +862,7 @@ print(jazz.ticket_price())   # 30
 
 **Code:**
 
+<!-- uses: event, service-fee -->
 ```python
 jazz = Concert('Friday Night Jazz', date(2026, 12, 5), capacity=40, base_price=25, performer='The Blue Notes')
 
@@ -792,6 +886,7 @@ print(type(jazz) == Event)         # False
 
 **Code:**
 
+<!-- uses: event, service-fee -->
 ```python
 print(Concert.__mro__)   # the classes, in the order attribute lookup searches them
 # (<class '__main__.Concert'>, <class '__main__.Event'>, <class 'object'>)

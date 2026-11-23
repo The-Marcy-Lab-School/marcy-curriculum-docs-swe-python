@@ -104,6 +104,7 @@ In the `tests` directory, create a file called `test_calc.py` (the test file nam
 
 Then, add the following code:
 
+<!-- not-runnable -->
 ```python
 # test_calc.py
 from calc import add
@@ -239,6 +240,7 @@ E        +  where 1 = is_even(2)
 
 When a function returns a decimal number, the test compares with `pytest.approx()`:
 
+<!-- not-runnable -->
 ```python
 import pytest
 from calc import add
@@ -272,10 +274,19 @@ def double_all_purely(items):
     return doubled
 ```
 
+<!-- setup: double-all
+def double_all_purely(items):
+    doubled = list(items)
+    for i in range(len(doubled)):
+        doubled[i] *= 2
+    return doubled
+-->
+
 **<details><summary>Q: Imagine you were given this function and asked to verify that it works. How would you test it? What do you expect to happen when testing?</summary>**
 
 To test this manually, you could invoke the function with some sample data and see if the _output_ matches what you _expect_.
 
+<!-- uses: double-all -->
 ```python
 nums = [1, 2, 3, 4]
 
@@ -298,6 +309,7 @@ In your `testing-practice` project, put this function in a new file, `src/double
 
 Since we are now working with a mutable type (a list), we need to test two different things: that the _contents_ are right, and that the function gave us a _new_ list rather than the one we passed in.
 
+<!-- not-runnable -->
 ```python
 from double_all import double_all_purely
 
@@ -475,6 +487,7 @@ Either way, the failure happens where the mistake is, with a message that says w
 
 An error that a function raises on purpose is part of what the function does, so it deserves a test like any other behavior. In your `testing-practice` project, put `withdraw` in `src/bank.py` and write `tests/test_bank.py`:
 
+<!-- not-runnable -->
 ```python
 import pytest
 from bank import withdraw
@@ -538,6 +551,7 @@ def make_accounts():
 
 **<details><summary>Solution</summary>**
 
+<!-- not-runnable -->
 {% code title="tests/test_bank_accounts.py" overflow="wrap" %}
 
 ```python

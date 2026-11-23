@@ -208,7 +208,7 @@ print_B()
 
 **<details><summary>Answer</summary>**
 
-```py
+```
 A
 C
 B
@@ -301,6 +301,7 @@ The second call never gets inside the function at all. Python checks that the _n
 
 **Challenge:** Refactor the `say_hello` function so that it can print any name and hobby in a message.
 
+<!-- not-runnable -->
 ```python
 say_hello('Ben', 'code')
 # Output: Hi, my name is Ben. I like to code!
@@ -346,8 +347,17 @@ result = add(5, 3)
 print(result)
 ```
 
+<!-- setup: add
+def add(x, y):
+    return x + y
+
+# The value of 5 + 3 is returned, resolving to `result = 8`
+result = add(5, 3)
+-->
+
 **Predict, then run.** What does it print?
 
+<!-- uses: add -->
 ```py
 print(add(12, add(5, 3)))
 ```
@@ -577,9 +587,40 @@ greet_friend('Jane')
 # Output: "Hi, Jane, I'm Jayson. Nice to meet you."
 ```
 
+<!-- setup: scope-example
+# my_name is global. Reachable anywhere in this file.
+my_name = 'Jayson'
+
+def greet():
+    # `my_name` is reachable anywhere within this file, even in lower scopes like in this function
+    print(f"Hi, my name is {my_name}")
+
+greet() # prints "Hi, my name is Jayson"
+
+def greet_friend(friend):
+    # Parameters like `friend` are local. Reachable anywhere in this function.
+
+    if friend == "":
+        # message is local to greet_friend. It can't be accessed outside of the function
+        message = "I can't say hi if I don't know your name!"
+    else:
+        # This is the same variable as the one above, assigned a different value.
+        message = f"Hi, {friend}, I'm {my_name}. Nice to meet you."
+
+    # message is still reachable here, after the if/else is finished.
+    print(message)
+
+greet_friend("")
+# Output: I can't say hi if I don't know your name!
+
+greet_friend('Jane')
+# Output: "Hi, Jane, I'm Jayson. Nice to meet you."
+-->
+
 {% hint style="warning" %}
 **Predict, then run.** What happens if we add this line to the very bottom of the code above?
 
+<!-- uses: scope-example -->
 ```python
 print(message, my_name)
 ```

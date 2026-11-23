@@ -305,6 +305,18 @@ purchases.pop(1)  # the bagel and its price leave together
 print(len(purchases))  # 3
 ```
 
+<!-- setup: purchases
+purchases = [
+    {"item": "coffee", "price": 3.50},
+    {"item": "bagel", "price": 2.25},
+    {"item": "juice", "price": 4.00},
+    {"item": "muffin", "price": 3.00},
+]
+
+# Remove one the same way you remove from any list
+purchases.pop(1)  # the bagel and its price leave together
+-->
+
 Compare `purchases[1]["price"]` with `receipt[1][1]` from the start of the lesson. Both read the second purchase's price, but only `purchases[1]["price"]` says that it is the price.
 
 Giving every dictionary the same keys is what makes the loop work. `purchase['item']` runs once for every dictionary in the list, so a single dictionary without an `"item"` key would stop the loop with a `KeyError`.
@@ -386,6 +398,16 @@ receipt = {
 }
 ```
 
+<!-- setup: receipt
+receipt = {
+    "customer": "Ada",
+    "purchases": [
+        {"item": "coffee", "price": 3.50},
+        {"item": "bagel", "price": 2.25},
+    ],
+}
+-->
+
 Your program should print:
 
 ```
@@ -397,6 +419,7 @@ Total: $8.50
 
 **<details><summary>Solution</summary>**
 
+<!-- uses: receipt -->
 ```python
 receipt["purchases"].append({"item": "muffin", "price": 3.00})
 receipt["purchases"][1]["price"] = 2.00
@@ -431,6 +454,15 @@ menu = {
 print(menu["bagel"])  # 2.25
 ```
 
+<!-- setup: menu
+menu = {
+    "coffee": 3.50,
+    "bagel": 2.25,
+    "juice": 4.00,
+    "muffin": 3.00,
+}
+-->
+
 The keys `"coffee"`, `"bagel"`, `"juice"`, and `"muffin"` are not names the programmer picked to describe a purchase. They are the items the café sells, and when the café adds a new item, the menu gains a new key.
 
 {% hint style="warning" %}
@@ -455,6 +487,7 @@ The keys `"coffee"`, `"bagel"`, `"juice"`, and `"muffin"` are not names the prog
 
 The brackets can hold any expression, and Python works out its value before using it as the key. So the key can be a variable, and Python uses whatever value the variable holds:
 
+<!-- uses: menu -->
 ```python
 item = "bagel"
 print(menu[item])  # 2.25, the value stored under the key 'bagel'
@@ -538,6 +571,7 @@ The menu started with four keys, and the program cannot know which items the own
 
 In the previous examples, we iterated over a list of records, accessing each record one at a time.
 
+<!-- uses: purchases -->
 ```python
 for purchase in purchases:
     print(purchase["item"])  # do something with each purchase record
@@ -566,6 +600,7 @@ Dictionaries also have three methods that give you exactly the part you want to 
 
 For example, `.values()` would help us calculate the total without needing to know the item names:
 
+<!-- uses: menu -->
 ```python
 total = 0
 for price in menu.values():
@@ -576,6 +611,7 @@ print(f"One of everything costs ${total:.2f}")  # One of everything costs $12.75
 
 `.items()` is the one you will reach for most, because it hands you both halves of each pair and you unpack them right in the `for` line:
 
+<!-- uses: menu -->
 ```python
 for item, price in menu.items():
     print(f"{item} costs ${price:.2f}")

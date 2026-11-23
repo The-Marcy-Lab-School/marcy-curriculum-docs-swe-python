@@ -192,6 +192,7 @@ There are three things we can do with variables, each with "technical" language 
 
 2. **Reference** the value held by the variable by writing the variable's name. Variable references are expressions.
 
+   <!-- uses: story-variables -->
    ```python
    print("Story time!")
    print(f"This is a story about {name}.")
@@ -205,6 +206,7 @@ There are three things we can do with variables, each with "technical" language 
 
 3. **Reassign** a new value to a variable by using the `=` operator again. Reassigning a variable changes the value on all _future_ references; it doesn't change any references to that variable before the change.
 
+   <!-- uses: story-variables -->
    ```python
    print("Story time!")
    print(f"This is a story about {name}.")
@@ -220,6 +222,17 @@ There are three things we can do with variables, each with "technical" language 
    print(f"At home, {name} practices {subject} some more before bed.")
    print("The end")
    ```
+
+<!-- setup: story-variables
+# copies: the step 1 block of Assign, Reassign, Reference
+name = "Ralph"
+age = 22
+school = "Marcy Lab School"
+train = "D"
+pronoun = "his"
+subject = "coding"
+borough = "The Bronx"
+-->
 
 ### Reassign Using the Current Value
 
@@ -389,6 +402,7 @@ The output is `"No"`, and this is NOT correct! The generator is running, so the 
 - Resolving the variables first gives us the expression `"Yes" and ("No" or "Yes")`. With booleans, this gave us `True`. With strings, the same rules hand back one of the strings themselves.
 - `or` checks its left side first. If the left side counts as `True`, `or` hands back the left side exactly as it is and never looks at the right side. Otherwise, `or` hands back the right side. Surprisingly, `bool("No")` is `True`, so `"No" or "Yes"` hands back `"No"`.
 
+  <!-- not-runnable -->
   ```py
   # Python3 REPL
   >>> bool("No")
@@ -401,6 +415,7 @@ The output is `"No"`, and this is NOT correct! The generator is running, so the 
 
 - `and` also checks its left side first. However, if the left side counts as `False`, `and` hands it back; otherwise `and` hands back the right side. `bool("Yes")` is `True`, so `"Yes" and "No"` hands back `"No"`.
 
+  <!-- not-runnable -->
   ```py
   # Python3 REPL
   >>> bool("Yes")

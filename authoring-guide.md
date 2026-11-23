@@ -73,10 +73,6 @@ There are three ways to make a block that depends on earlier code run on its own
 
 ### Hidden setup
 
-{% hint style="warning" %}
-The LMS does not read `setup`, `uses` or `not-runnable` comments yet. Until it does, a block that depends on a setup fails in the LMS with a `NameError`.
-{% endhint %}
-
 A setup is a piece of Python code with a name, written inside an HTML comment, so that neither GitBook nor the LMS shows it to fellows. When a fellow runs a block, the LMS runs the setups that the block names first, in the same interpreter, and then runs the block.
 
 **Defining a setup.** Write the setup once on the page:
@@ -97,7 +93,7 @@ class Event:
 - The first line is exactly `<!-- setup: ` followed by the name. A name uses lowercase letters, digits and hyphens.
 - The code starts on the next line, at the left margin, even when the setup sits inside a callout or a dropdown.
 - The setup ends at a line that holds only `-->`. Because `-->` ends the comment, the code inside it can never contain `-->`.
-- A setup prints nothing. The output a fellow sees comes from the block they ran.
+- A setup prints nothing, because the output a fellow sees should come from the block they ran. The one exception is a block whose prompt asks fellows to add a line to the bottom of the code above it. There, the setup copies that code with its `print()` calls, so the block prints what the whole program would print.
 - A setup belongs to its page. Another lesson cannot use it.
 
 **Using a setup.** Put a `uses` comment on the line directly above the block's opening fence, naming one or more setups separated by commas:
@@ -122,7 +118,19 @@ When a block is wrapped in `{% code %}`, put the comment above the `{% code %}` 
 {% endcode %}
 ````
 
+When a block sits inside a list item, indent its `uses` or `not-runnable` comment to the same depth as the fence. Markdown reads a line indented to the item's content as part of the item, so the comment stays directly above its block. The indentation must reach the item's content without going past it: two spaces after a `-` bullet is enough, and eight or more turns the fence into an indented code block with no language, which gets no Run button. A setup never goes inside a list item, because it has to start at the left margin. Put it after the list instead.
+
 **Where to put a setup, and what goes in it.** A setup is a copy of code that fellows have already seen on the page, so place each setup directly after the visible block it copies. Copy the code exactly, with the same names, keyword arguments, values and quotes, and leave out the `print()` lines. Placing the copy beside its original means that whoever next edits the visible block sees the hidden copy directly beneath it and can update both together.
+
+Sometimes a setup cannot copy the block directly above it: the block it copies sits inside a list, the visible class has a `# ...` placeholder that the setup fills in, or the visible block depends on code the page never shows, such as a class from the case study. Then the setup's first line names where its code comes from:
+
+```markdown
+<!-- setup: attendee
+# copies: the case study's src/attendee.py
+from dataclasses import dataclass
+...
+-->
+```
 
 A running example that changes from section to section, such as an `Event` class that gains a method in each section, needs one setup for each version. Name each setup after what that version adds, such as `first-hall` and `find-events`.
 
@@ -149,6 +157,8 @@ Run it with the Python version fellows install, so that the results match what f
 
 - an error that the lesson teaches;
 - an `EOFError` from a block that calls `input()`, because the script gives blocks no keyboard input, although the LMS does.
+
+The script also reports any setup whose code no longer appears, line for line and in the same order, in the visible block directly above it. That warning means someone edited the visible block and not its hidden copy. It ignores comments, blank lines and `import` lines, and it allows the setup to leave lines out, such as `print()` calls. It skips a setup that has a `# copies:` line.
 
 Add `--show` to print every block's output, and compare each output with the block's output comments. The script checks Python blocks only. Run HTML and JavaScript blocks in the LMS.
 

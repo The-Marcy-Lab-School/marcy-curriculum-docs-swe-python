@@ -230,6 +230,7 @@ def get_total():
 
 {% endcode %}
 
+<!-- not-runnable -->
 {% code title="cafe/interface.py" overflow="wrap" lineNumbers="true" %}
 
 ```python
@@ -277,6 +278,7 @@ Every name assigned at the top level of a file, meaning every function and every
 
 To use a module's names, use the `import` statement. A module's name is its filename without the `.py`. When you run `python3 main.py`, Python looks for `orders.py` and `interface.py` in the same folder as `main.py`, so keep the three files side by side. Move `interface.py` into a different folder and `from interface import ask_for_item, ask_for_quantity, print_receipt` stops with `ModuleNotFoundError: No module named 'interface'`.
 
+<!-- not-runnable -->
 {% code title="cafe/main.py" overflow="wrap" lineNumbers="true" %}
 
 ```python
@@ -316,6 +318,7 @@ Each file is concerned with only one aspect of the functionality of the entire p
 
 You can also give a module a shorter name as you import it with `as`:
 
+<!-- not-runnable -->
 ```python
 import orders as o
 
@@ -395,6 +398,7 @@ When a file is imported, its `__name__` is its module name. When a file is the o
 
 That gives us the standard way to finish a Python program:
 
+<!-- not-runnable -->
 {% code title="cafe/main.py" overflow="wrap" lineNumbers="true" %}
 
 ```python
@@ -498,6 +502,7 @@ main()
 
 **<details><summary>Q: Solution</summary>**
 
+<!-- not-runnable -->
 {% code title="main.py" overflow="wrap" lineNumbers="true" %}
 
 ```python

@@ -120,8 +120,34 @@ def report():
 
 {% endcode %}
 
-{% code title="main.py" lineNumbers="true" %}
+<!-- setup: inventory
+stock = {"apples": 5, "bread": 2, "milk": 0}
 
+
+def restock(name, quantity):
+    stock[name] = stock.get(name, 0) + quantity
+    return stock[name]
+
+
+def sell(name, quantity):
+    if name not in stock:
+        return False
+    if stock[name] < quantity:
+        return False
+    stock[name] -= quantity
+    return True
+
+
+def report():
+    lines = []
+    for name, quantity in sorted(stock.items()):
+        marker = "" if quantity > 0 else " (out of stock)"
+        lines.append(f"{name}: {quantity}{marker}")
+    return "\n".join(lines)
+-->
+
+<!-- not-runnable -->
+{% code title="main.py" lineNumbers="true" %}
 ```python
 from inventory import restock, sell, report
 
@@ -223,11 +249,12 @@ That is one complete path through the program. Every other path is shorter or re
 {% hint style="warning" %}
 **Predict, then run.** Write down what each of these returns. Then open the REPL in the folder with `python3`, type `from inventory import *`, and check.
 
+<!-- uses: inventory -->
 ```python
-sell("eggs", 1)
-restock("eggs", 12)
-sell("bread", 1)
-report()
+print(sell("eggs", 1))
+print(restock("eggs", 12))
+print(sell("bread", 1))
+print(report())
 ```
 
 <details><summary>What actually happens</summary>
@@ -236,7 +263,10 @@ report()
 False
 12
 True
-'apples: 5\nbread: 1\neggs: 12\nmilk: 0 (out of stock)'
+apples: 5
+bread: 1
+eggs: 12
+milk: 0 (out of stock)
 ```
 
 `sell("eggs", 1)` is `False` because of the first guard: no such key. `restock("eggs", 12)` shows why the author wrote `stock.get(name, 0)`. `"eggs"` is not in the dictionary, so `.get` returns the default `0`, and `0 + 12` becomes the new entry. Without the default, `stock.get(name)` would return `None`, and `None + 12` raises a `TypeError`. With bracket notation instead, `stock[name] + 12` raises a `KeyError`, because the key is missing. Either way, restocking any new item would crash.

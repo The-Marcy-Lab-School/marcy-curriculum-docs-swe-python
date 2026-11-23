@@ -323,6 +323,7 @@ Yes! In the example above, `'ANA' in 'banana'` resolved to `False`. This is one 
 
 **Question: How would you use `in` to complete this `is_marcy_email` function below?**
 
+<!-- not-runnable -->
 ```py
 def is_marcy_email(email):
     return ???
@@ -487,6 +488,7 @@ else:
 
 **Question: What would you return to complete this `starts_and_ends_with_a` function below?**
 
+<!-- not-runnable -->
 ```py
 def starts_and_ends_with_a(text):
     return ???

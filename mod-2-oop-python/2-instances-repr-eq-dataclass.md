@@ -73,6 +73,33 @@ hall.add_event(pottery)
 hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
 ```
 
+<!-- setup: first-hall
+from datetime import date
+
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+
+class Venue:
+    def __init__(self, name):
+        self.name = name
+        self.events = []
+
+    def add_event(self, event):
+        self.events.append(event)
+
+hall = Venue('Riverside Community Hall')
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 12, 9), capacity=12)
+hall.add_event(jazz)
+hall.add_event(pottery)
+
+# You will often see classes instantiated directly in a method call like this
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
+-->
+
 - `hall` is an instance of `Venue`, and `hall.events` is a list of `Event` instances.
 - `self.events = []` runs once for every venue that is created, so every venue starts with its own empty list.
 - `add_event()` puts an event in that list. The rest of the program adds events by asking the venue, so the venue is the one place that decides what goes into its list.
@@ -83,6 +110,7 @@ One object holding another object as an attribute is called **composition**. The
 
 To read data inside an object that another object holds, write one step for each object you pass through:
 
+<!-- uses: first-hall -->
 ```python
 print(hall.events[0].name)         # Friday Night Jazz
 print(hall.events[1].date.month)   # 12
@@ -101,6 +129,7 @@ Read `hall.events[0].name` from left to right, one step at a time:
 {% hint style="warning" %}
 **Predict, then run.** The jazz concert moves to a bigger room. What do the two `print()` calls show?
 
+<!-- uses: first-hall -->
 ```python
 jazz.capacity = 60
 
@@ -163,6 +192,34 @@ for event in hall.events_on(date(2026, 12, 5)):
 print(len(hall.events_on(date(2026, 12, 25)))) # 0
 ```
 
+<!-- setup: events-on
+from datetime import date
+
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+
+class Venue:
+    def __init__(self, name):
+        self.name = name
+        self.events = []
+
+    def add_event(self, event):
+        self.events.append(event)
+
+    def events_on(self, day):
+        return [event for event in self.events if event.date == day]
+
+hall = Venue('Riverside Community Hall')
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+pottery = Event('Intro to Pottery', date(2026, 12, 9), capacity=12)
+hall.add_event(jazz)
+hall.add_event(pottery)
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
+-->
+
 - `events_on()` asks each event for its date and returns a **new** list of the events whose date matches. A caller who changes the returned list cannot change the venue's own list.
 - A list comprehension is allowed to find no matches, so a day with no events returns `[]` with no special case.
 
@@ -172,6 +229,7 @@ The rest of the program asks the venue for the events on a day instead of loopin
 
 Add a method `events_in_month(month)` to `Venue` that returns a new list of the venue's events whose date falls in that month, where `month` is a number from 1 to 12.
 
+<!-- not-runnable -->
 ```python
 hall.add_event(Event('New Year Concert', date(2027, 1, 2), capacity=60))
 
@@ -224,6 +282,7 @@ The reservation holds a reference to the attendee, so the attendee's details are
 
 The examples above used a `for` loop to show what `events_on()` returned, because printing the list it returns directly gives you this.
 
+<!-- uses: events-on -->
 ```python
 print(hall.events_on(date(2026, 12, 5)))
 # [<__main__.Event object at 0x1027ddfd0>, <__main__.Event object at 0x1027bc410>]
@@ -245,6 +304,7 @@ Python's built-in operations work on your objects through dunder methods. This s
 
 `__repr__` is a dunder method, so you never call it yourself: Python calls it whenever it needs to show an object to a programmer, including when you `print()` one. Whatever string `__repr__` returns is what appears. Here is `Event` with a `__repr__` added, and the venue built again from it:
 
+<!-- uses: events-on -->
 ```python
 class Event:
     def __init__(self, name, date, capacity):
@@ -263,6 +323,21 @@ print(hall.events[0])     # Python calls __repr__ and prints what it returns -> 
 print(hall.events)        # [Event('Friday Night Jazz', 2026-12-05), Event('Holiday Crafts', 2026-12-05)]
 ```
 
+<!-- setup: repr-event
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+
+    def __repr__(self):
+        return f'Event({self.name!r}, {self.date})'
+
+hall = Venue('Riverside Community Hall')
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
+-->
+
 Now each event says which event it is. A list prints each of its elements with that element's `__repr__`, so the venue's whole list becomes readable too.
 
 {% hint style="info" %}
@@ -273,6 +348,7 @@ The convention is to make `__repr__` look like the code that would create the ob
 
 `__repr__` must **return** its string, because Python uses whatever comes back as the text to show. A `__repr__` that prints its string instead hands back `None`, the value every function returns when it reaches its end without a `return` statement:
 
+<!-- uses: events-on, printing-repr -->
 ```python
 def __repr__(self):
     print(f'Event({self.name!r}, {self.date})')    # prints instead of returning
@@ -282,12 +358,29 @@ print(hall.events)
 # TypeError: __repr__ returned non-string (type NoneType)
 ```
 
+<!-- setup: printing-repr
+# copies: the Event class from earlier in this section, with the printing __repr__ from the block above
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+
+    def __repr__(self):
+        print(f'Event({self.name!r}, {self.date})')    # prints instead of returning
+
+hall = Venue('Riverside Community Hall')
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
+hall.add_event(Event('Holiday Crafts', date(2026, 12, 5), capacity=15))
+-->
+
 The text appears first, because `__repr__` printed it. Then Python checks what `__repr__` handed back and stops. Read the message in two parts: `__repr__ returned non-string` says what rule was broken, and `(type NoneType)` names what came back instead.
 
 ### Challenge: A Readable Performer
 
 The venue books performers for its concerts. Write a class `Performer` whose `__init__` takes a name and a genre and stores both. Give it a `__repr__` so that this code:
 
+<!-- not-runnable -->
 ```python
 blue_notes = Performer('The Blue Notes', 'jazz')
 print(blue_notes)
@@ -346,6 +439,7 @@ Event('Board Game Night', 2026-12-18)
 
 The venue's staff add events by typing them into a form. If someone types in Friday Night Jazz a second time, the venue should turn it down instead of listing the concert twice. Here is a first attempt: `add_event()` checks whether the event is already in the list before adding it.
 
+<!-- uses: events-on, repr-event -->
 ```python
 class Venue:
     def __init__(self, name):
@@ -366,10 +460,24 @@ print(hall.events)
 # [Event('Friday Night Jazz', 2026-12-05), Event('Friday Night Jazz', 2026-12-05)]
 ```
 
+<!-- setup: refusing-venue
+class Venue:
+    def __init__(self, name):
+        self.name = name
+        self.events = []
+
+    def add_event(self, event):
+        if event in self.events:
+            print(f'{event.name} on {event.date} is already on the calendar.')
+            return
+        self.events.append(event)
+-->
+
 The check never printed its message, and the concert is now listed twice. Anyone reading the calendar would believe the venue hosts two jazz concerts that night.
 
 The rule behind this: `in` checks each element of the list with `==`, and without an `__eq__` method, `==` on your objects checks **identity**. It asks whether the two names refer to the same object, which is the same question `is` asks. Each call to `Event(...)` creates a new object, so the event the staff typed in a second time is a different object from the one in the list, even though it holds the same data:
 
+<!-- uses: events-on, repr-event -->
 ```python
 jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
 jazz_again = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
@@ -402,10 +510,30 @@ print(jazz == jazz_again)   # Python calls jazz.__eq__(jazz_again) -> True: same
 print(jazz is jazz_again)   # False: still two separate objects
 ```
 
+<!-- setup: eq-event
+from datetime import date
+
+class Event:
+    def __init__(self, name, date, capacity):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+
+    def __repr__(self):
+        return f'Event({self.name!r}, {self.date})'
+
+    def __eq__(self, other):
+        return self.name == other.name and self.date == other.date
+
+jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+jazz_again = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
+-->
+
 Defining `__eq__` changes what `==` means for events. It does not change what `is` means: `jazz` and `jazz_again` are still two objects, so `is` still says `False`. Identity and equality are two different questions, and now they can have two different answers.
 
 `in` uses `==`, so the venue's check now finds the concert. Built again from this `Event` class, the venue turns the second concert down:
 
+<!-- uses: eq-event, refusing-venue -->
 ```python
 hall = Venue('Riverside Community Hall')
 hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
@@ -416,9 +544,15 @@ print(hall.events)
 # [Event('Friday Night Jazz', 2026-12-05)]
 ```
 
+<!-- setup: one-jazz
+hall = Venue('Riverside Community Hall')
+hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
+-->
+
 {% hint style="warning" %}
 **Predict, then run.** The venue holds one Friday Night Jazz, on December 5. A staff member types in the concert again with a capacity of 60, and then a second concert a week later. What does each call print, and how many events does the venue hold at the end?
 
+<!-- uses: eq-event, refusing-venue, one-jazz -->
 ```python
 hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=60))
 hall.add_event(Event('Friday Night Jazz', date(2026, 12, 12), capacity=40))
@@ -449,6 +583,7 @@ Deciding which attributes go into `__eq__` is a design decision. This `__eq__` c
 
 Add an `__eq__` method to your `Performer` class so that two performers are equal when they have the same name and the same genre:
 
+<!-- not-runnable -->
 ```python
 print(Performer('The Blue Notes', 'jazz') == Performer('The Blue Notes', 'jazz'))  # True
 print(Performer('The Blue Notes', 'jazz') == Performer('The Blue Notes', 'blues')) # False
@@ -577,8 +712,61 @@ class Attendee:
     email: str
 ```
 
+<!-- setup: case-study-classes
+# copies: the case study's src/events.py and src/attendee.py
+from datetime import date
+from dataclasses import dataclass
+
+
+class Event:
+    def __init__(self, name, date, capacity, base_price):
+        self.name = name
+        self.date = date
+        self.capacity = capacity
+        self.base_price = base_price
+
+    @property
+    def capacity(self):
+        return self._capacity
+
+    @capacity.setter
+    def capacity(self, value):
+        if value < 1:
+            raise ValueError(f'Capacity must be at least 1, not {value}.')
+        self._capacity = value
+
+    @property
+    def base_price(self):
+        return self._base_price
+
+    @base_price.setter
+    def base_price(self, value):
+        if value < 0:
+            raise ValueError(f'A price cannot be negative, not {value}.')
+        self._base_price = value
+
+    def ticket_price(self):
+        return self.base_price
+
+    def can_refund(self, today):
+        return today < self.date
+
+    def __repr__(self):
+        return f'{type(self).__name__}({self.name!r}, {self.date})'
+
+    def __eq__(self, other):
+        return self.name == other.name and self.date == other.date
+
+
+@dataclass
+class Attendee:
+    name: str
+    email: str
+-->
+
 What do the two `print()` calls show, and why do they give different answers?
 
+<!-- uses: case-study-classes -->
 ```python
 board_games = Event('Board Game Night', date(2026, 12, 18), capacity=25, base_price=5)
 board_games_bigger = Event('Board Game Night', date(2026, 12, 18), capacity=40, base_price=8)
@@ -622,11 +810,26 @@ class Reservation:
     event: Event
 ```
 
+<!-- setup: reservation
+from dataclasses import dataclass
+
+@dataclass
+class Attendee:
+    name: str
+    email: str
+
+@dataclass
+class Reservation:
+    attendee: Attendee
+    event: Event
+-->
+
 `attendee: Attendee` is a type annotation that names one of your own classes, saying that the `attendee` attribute is meant to hold an `Attendee` object.
 
 {% hint style="warning" %}
 **Predict, then run.** What do the four `print()` calls show?
 
+<!-- uses: eq-event, refusing-venue, reservation -->
 ```python
 hall = Venue('Riverside Community Hall')
 hall.add_event(Event('Friday Night Jazz', date(2026, 12, 5), capacity=40))
@@ -665,6 +868,7 @@ Each object answers for its own part: printing a reservation asks each of its ob
 
 Give `Venue` a list of reservations, and a `book(attendee, event)` method that creates a `Reservation`, adds it to the list, and returns it. An attendee may hold only one ticket for an event, so `book()` must refuse a second reservation for the same attendee and event: it prints `<attendee's name> already has a ticket for <event's name>.`, adds nothing, and returns `None`.
 
+<!-- not-runnable -->
 ```python
 hall = Venue('Riverside Community Hall')
 jazz = Event('Friday Night Jazz', date(2026, 12, 5), capacity=40)
@@ -764,6 +968,7 @@ class Venue:
 
 `tests/test_venue.py` holds two tests:
 
+<!-- not-runnable -->
 ```python
 # tests/test_venue.py
 from datetime import date
@@ -857,6 +1062,7 @@ So these tests protect the two methods that `@dataclass` writes beyond `__init__
 
 The `__eq__` written earlier assumes `other` has a `name` and a `date`. Comparing an event with something else, such as a string, breaks that assumption:
 
+<!-- uses: eq-event -->
 ```python
 print(jazz == 'Friday Night Jazz')
 # AttributeError: 'str' object has no attribute 'name'
@@ -877,6 +1083,7 @@ def __eq__(self, other):
 
 A dictionary finds a value by working out a number from its key, called a **hash**, and two keys that are equal must produce the same number. When a class defines `__eq__`, Python can no longer be sure its default hash agrees with the new idea of equality, so it removes the hash altogether:
 
+<!-- uses: eq-event -->
 ```python
 tickets_sold = {jazz: 3}
 # TypeError: cannot use 'Event' as a dict key (unhashable type: 'Event')
